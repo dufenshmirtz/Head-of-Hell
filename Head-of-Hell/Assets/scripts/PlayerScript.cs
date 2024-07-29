@@ -454,6 +454,14 @@ public class PlayerScript : MonoBehaviour
                 animator.SetTrigger("RagerCharge");
                 StartCharge();
             }
+            else if (P1Name.text == "Fin")
+            {
+                knockable = false;
+                charging = true;
+                animator.SetBool("Charging", true);
+                animator.SetTrigger("FinCharge");
+                StartCharge();
+            }
             else
             {
                 knockable = false;
