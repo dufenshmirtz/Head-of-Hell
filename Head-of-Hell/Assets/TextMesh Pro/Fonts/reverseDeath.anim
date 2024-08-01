@@ -104,14 +104,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 1.1166667
-    functionName: BigusKnock
+    functionName: BigusKnockEvent
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 1.6333333
-    functionName: Rejuvenation
+    functionName: RejuvenationEvent
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

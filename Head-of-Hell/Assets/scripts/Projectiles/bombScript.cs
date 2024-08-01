@@ -11,13 +11,19 @@ public class bombScript : MonoBehaviour
     bool exploded = false;
     bool dmgEnd=false;
     PlayerScript playa;
+    Steelager steelager;
+    AudioManager audioManager;
 
     // Start is called before the first frame update
     void Start()
-    {
-        
+    {       
         player = 0;
-        
+        audioManager = FindObjectOfType<AudioManager>(); // Find and assign the AudioManager
+
+        if (audioManager == null)
+        {
+            Debug.LogError("AudioManager not found in the scene!");
+        }
     }
 
     // Update is called once per frame
@@ -69,7 +75,7 @@ public class bombScript : MonoBehaviour
         colliders[2].enabled = true;
         if (player != 0)
         {
-            playa.Boom();
+            audioManager.BoomSound();
         }
         animator.SetTrigger("Explode");
     }
