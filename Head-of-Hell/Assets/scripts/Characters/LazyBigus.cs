@@ -1,10 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 using Transform = UnityEngine.Transform;
 
 public class LazyBigus : Character
@@ -14,16 +9,17 @@ public class LazyBigus : Character
     public float bulletSpeed = 35f; // Speed of the bullet
     bool isShootin = false;
     public KeyCode shoot;
+    float cooldown = 60f;
+    float heal = 30f, healTime;
 
+    #region HeavyAttack
     override public void HeavyAttack()
     {
         animator.SetTrigger("BigusHeavy");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
-
-        ResetQuickPunch();
     }
 
-    override public void DealDmg()
+    override public void DealHeavyDamage()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
 
@@ -44,17 +40,94 @@ public class LazyBigus : Character
             audioManager.PlaySFX(audioManager.swoosh, 1f);
         }
 
-        void Shoot()
-        {
-            audioManager.PlaySFX(audioManager.shoot, audioManager.normalVol);
-            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            rb.velocity = new Vector2(transform.localScale.x * bulletSpeed, 0); // Shoots in the direction the character is facing
+    }
+    #endregion
+    #region Spell
+    override public void Spell()
+    {
+        player.IgnoreUpdate(true);
+        player.UsingAbility(cooldown);
 
-            Destroy(bullet, 2f);
+        healTime = heal / 5f;
+        //Activate abilty function
+
+        audioManager.PauseMusic();
+        audioManager.PlaySFX(audioManager.lullaby, audioManager.lullaVol);
+
+        StartCoroutine(Sleeping(healTime));
+    }
+
+    IEnumerator Sleeping(float duration)
+    {
+        player.DeactivateColliders();
+        player.stayStatic();
+
+        // Set the player as dead
+        animator.SetBool("isDead", true);
+
+
+        // Loop for the specified duration
+        for (int i = 0; i < duration; i++)
+        {
+
+            // Regenerate health
+            player.currHealth += 5;
+            player.healthbar.SetHealth(player.currHealth);
+
+
+            yield return new WaitForSeconds(1f);
         }
+
+        if (player.currHealth > player.maxHealth)
+        {
+            player.currHealth = player.maxHealth;
+        }
+
+        animator.SetBool("isDead", false);
+
+        animator.SetBool("permanentDeath", false);
+
+        player.enabled = true;
+
+        audioManager.StartMusic();
+
+        animator.SetTrigger("Angel");
 
     }
 
-    
+    public void Rejuvenation()
+    {
+
+        player.ActivateColliders();
+        player.stayDynamic();
+
+        player.moveSpeed = player.OGMoveSpeed;
+        player.IgnoreUpdate(false);
+
+        // Start the cooldown timer
+        player.OnCooldown(cooldown);
+
+    }
+
+    public void BigusKnock()
+    {
+        if (IsEnemyClose())
+        {
+            enemy.StopCHarge();
+            enemy.Knockback(10f, .3f, false);
+        }
+    }
+    #endregion
+
+    void Shoot()
+    {
+        audioManager.PlaySFX(audioManager.shoot, audioManager.normalVol);
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        rb.velocity = new Vector2(transform.localScale.x * bulletSpeed, 0); // Shoots in the direction the character is facing
+
+        Destroy(bullet, 2f);
+    }
+
+
 }

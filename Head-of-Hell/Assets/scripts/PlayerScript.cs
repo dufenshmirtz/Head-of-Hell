@@ -1,11 +1,6 @@
 using System.Collections;
-using System.Xml.Linq;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class PlayerScript : MonoBehaviour
@@ -18,11 +13,9 @@ public class PlayerScript : MonoBehaviour
     public int maxHealth = 100;
     public int currHealth;
 
-
-    
     public Animator animator;
-    protected Rigidbody2D rb;
-    
+    public Rigidbody2D rb;
+
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public float ogRange = 0.5f;
@@ -38,11 +31,6 @@ public class PlayerScript : MonoBehaviour
     public GameObject mainMenuButton;
 
 
-    //Steelager ability
-    bool FullGerosActive = false;
-    float fullGerosspeedSaver;
-
-    
     //handling variables
     int grounds = 0;
     private bool isGrounded;
@@ -58,20 +46,8 @@ public class PlayerScript : MonoBehaviour
     public Image cdbarimage;
     public Sprite activeSprite, ogSprite;
 
-    //dash
-    protected float dashingPower = 40f;
-    protected float dashingTime = 0.1f;
-    protected bool dashin = false;
     public PlayerScript enemy;
-    protected bool dashhit = false;
-
-    //counterShiet
-    bool counterOn = false;
-    bool countered = false;
-    bool counterDone = false;
-    bool ignoreCOff = false;
-
-    
+   
 
     //player colors
     public Color SteelagerColor;
@@ -95,28 +71,12 @@ public class PlayerScript : MonoBehaviour
     public KeyCode ability;
     public KeyCode charge;
 
-    //cooldowns
-    public float SteelagerCd=30f;
-    public float FinCd = 15f;
-    public float RagerCd = 20f;
-    public float SkiplerCd = 8f;
-    public float LazyBigusCd = 30f;
-    public float VanderCd = 20f;
-
-    //abilty specifics
-    public int FinDmg=30;
-    public int RagerDmg1 = 2, RagerDmg2=7, RagerDmg3=10; //dmg1*4 , overall 25
-    public float LazyBigusHeal=30f;
-    float LazyBigusHealTime;
-    public int VanderDmg =10,VanderHeal=5;
-    public int SkiplerDmg = 10;
-
     //additional
     bool isStatic = false;
     bool casting = false;
     bool canCast = true;
     bool knocked = false;
-    bool canRotate = true;
+    public bool canRotate = true;
 
     //knockback
 
@@ -125,7 +85,7 @@ public class PlayerScript : MonoBehaviour
     public float KBTotalTime;
     public bool knockfromright;
     bool knockbackXaxis;
-    bool knockable = true;
+    public bool knockable = true;
 
     //charge attack
     bool charged = false;
@@ -134,8 +94,7 @@ public class PlayerScript : MonoBehaviour
     float chargeTime = 0.5f;
     int chargeDmg = 34;
 
-    //bigus
-    bool bigusActive = false;
+    public bool ignoreUpdate = false;
 
     //shootin
     public GameObject bulletPrefab; // The bullet prefab
@@ -144,31 +103,27 @@ public class PlayerScript : MonoBehaviour
     bool isShootin = false;
     public KeyCode shoot;
 
-    //bombin
-    public GameObject bombPrefab; // The bullet prefab
-    public Transform bombPoint; // The point from where the bullet will be instantiated
-    public Transform bombsParent;
-    bool bombCharging = false;
-
-    //katana
-    int katanaDmg=3;
-    bool katanaready = true;
-
     //sword-Dash
-    public float swordDashPower=10f;
+    public float swordDashPower = 10f;
     public float swordDashTime = 0.14f;
     public bool swordDashReady = true;
     public bool swordDashin = false;
     public int swordDashDmg = 5;
 
-    //roll
-    float rollPower = 8f;
-    float rollTime = 0.39f;
-    bool rollReady = true;
-    bool rollin = false;
-
     Character character;
+    Skipler skipler;
+    Rager rager;
+    Fin fin;
+    Steelager steelager;
+    LazyBigus bigus;
+    Vander vander;
 
+    public bool ignoreMovement = false;
+    public bool ignoreDamage = false;
+    public bool ignoreSlow = false;
+
+    public CharacterAnimationEvents animEvents;
+    public CharacterResources resources;
 
     void Start()
     {
@@ -183,7 +138,7 @@ public class PlayerScript : MonoBehaviour
             P1Name.text = PlayerPrefs.GetString("Player1Choice");
             P2Name = PlayerPrefs.GetString("Player2Choice");
 
-             
+
         }
         else
         {
@@ -191,10 +146,9 @@ public class PlayerScript : MonoBehaviour
             P2Name = PlayerPrefs.GetString("Player1Choice");
 
         }
-        Debug.Log(winner.text +" " + player);
 
         winner.gameObject.SetActive(false);
-        
+
         playAgainButton.SetActive(false);
         mainMenuButton.SetActive(false);
 
@@ -207,41 +161,48 @@ public class PlayerScript : MonoBehaviour
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         if (P1Name.text == "Steelager")
         {
-            character = new Steelager();
+            steelager = this.gameObject.AddComponent<Steelager>();
+            character = steelager;
             spriteRenderer.color = SteelagerColor;
         }
         if (P1Name.text == "Vander")
         {
-            character = new Vander();
+            vander = this.gameObject.AddComponent<Vander>();
+            character = vander;
             spriteRenderer.color = VanderColor;
         }
         if (P1Name.text == "Rager")
         {
-            character = new Rager();
+            rager = this.gameObject.AddComponent<Rager>();
+            character = rager;
             spriteRenderer.color = RagerColor;
         }
         if (P1Name.text == "Skipler")
         {
-            character = new Skipler();
+            skipler = this.gameObject.AddComponent<Skipler>();
+            character = skipler;
             spriteRenderer.color = SkiplerColor;
         }
         if (P1Name.text == "Fin")
         {
-            character = new Fin();
+            fin = this.gameObject.AddComponent<Fin>();
+            character = fin;
             spriteRenderer.color = FinColor;
         }
         if (P1Name.text == "Lazy Bigus")
         {
-            character = new LazyBigus();
+            bigus = this.gameObject.AddComponent<LazyBigus>();
+            character = bigus;
             spriteRenderer.color = LazyBigusColor;
         }
 
-        character.InitializeCharacter(this, audiomngr);
+        character.InitializeCharacter(this, audiomngr, resources);
+
+        animEvents.SetCharacter(character);
     }
 
     void Update()
     {
-
         //self knockback mechanic
         if (knockable)
         {
@@ -271,15 +232,12 @@ public class PlayerScript : MonoBehaviour
                 }
 
                 KBCounter -= Time.deltaTime;
-
                 return;
             }
             animator.SetBool("knocked", false);
         }
 
-        
-
-        if (bigusActive)
+        if (ignoreUpdate)
         {
             return;
         }
@@ -294,14 +252,13 @@ public class PlayerScript : MonoBehaviour
             stayStatic();
             if (charged)
             {
-                
                 if (Input.GetKeyUp(charge))
                 {
                     stayDynamic();
                     animator.SetTrigger("ChargedHit");
                     charged = false;
                     animator.SetBool("Casting", true);
-               
+
                 }
                 return;
             }
@@ -312,9 +269,6 @@ public class PlayerScript : MonoBehaviour
                 charging = false;
                 knockable = true;
             }
-
-            
-                
             return;
         }
 
@@ -323,12 +277,10 @@ public class PlayerScript : MonoBehaviour
             return;
         }
 
-
-
         // Running animations...
         if (Input.GetKey(left) || Input.GetKey(right))
         {
-            if ((dashin))
+            if (ignoreMovement)
             {
                 return;
             }
@@ -338,22 +290,10 @@ public class PlayerScript : MonoBehaviour
                 return;
             }
 
-            if (swordDashin)
-            {
-                return;
-            }
-
-            if (rollin)
-            {
-                return;
-            }
-
             if (isGrounded)
             {
                 animator.SetBool("IsRunning", true);
             }
-
-            
 
             float moveDirection = Input.GetKey(left) ? -1f : 1f; // -1 for A, 1 for D
 
@@ -369,60 +309,48 @@ public class PlayerScript : MonoBehaviour
                 rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
                 transform.localScale = new Vector3(Mathf.Sign(moveDirection), 1, 1); // Flip sprite according to movement direction
             }
-
-
-
         }
         else
         {
-            
             animator.SetBool("IsRunning", false);
             rb.velocity = new Vector2(0, rb.velocity.y);
 
             animator.SetBool("cWalk", false);
-
         }
 
         // Jumping
         if (Input.GetKeyDown(up) && isGrounded)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            animator.SetTrigger("Jump");
-            audiomngr.PlaySFX(audiomngr.jump, audiomngr.jumpVolume);
+            character.Jump();
         }
 
         // Heavy Punching
-        if (Input.GetKeyDown(heavyAttack))
+        if (Input.GetKeyDown(heavyAttack) && !casting)
         {
             character.HeavyAttack();
         }
         //Blocking
-        if (Input.GetKeyDown(block))
+        if (Input.GetKeyDown(block) && !casting)
         {
-            
-            animator.SetTrigger("critsi");
-            animator.SetBool("Crouch", true);
-            isBlocking = true;
-
-            ResetQuickPunch();
+            character.Block();
         }
         else if (Input.GetKeyUp(block))
         {
-            animator.SetBool("cWalk", false);
-            animator.SetBool("Crouch", false);
-            isBlocking = false;
+            character.Unblock();
         }
 
         //ChargeAttack
         if (Input.GetKeyDown(charge) && isGrounded)
         {
-            if(P1Name.text == "Skipler"){
+            if (P1Name.text == "Skipler")
+            {
                 knockable = false;
                 charging = true;
                 animator.SetBool("Charging", true);
                 animator.SetTrigger("SkiplerCharge");
                 StartCharge();
-            }else if (P1Name.text == "Vander")
+            }
+            else if (P1Name.text == "Vander")
             {
                 knockable = false;
                 charging = true;
@@ -470,10 +398,10 @@ public class PlayerScript : MonoBehaviour
                 animator.SetTrigger("StartCharge");
                 StartCharge();
             }
-            
+
         }
 
-        //downkey
+        //Get gown from pad
         if (Input.GetKeyDown(down))
         {
             Collider2D[] colliders = GetComponents<Collider2D>();
@@ -481,7 +409,7 @@ public class PlayerScript : MonoBehaviour
             colliders[3].enabled = false;
         }
 
-        //Special attack
+        //LightAttack
         if (Input.GetKeyDown(lightAttack))
         {
 
@@ -496,240 +424,29 @@ public class PlayerScript : MonoBehaviour
                     StartCoroutine(ResetShooting());
                 }
             }
-
-            //Bomb
-            if (P1Name.text == "Steelager")
-            {
-                if (!bombCharging)
-                {
-                    ThrowBomb();
-                }
-            }
-
-            //QuickPunch
-            if (P1Name.text == "Rager")
-            {
-                animator.SetTrigger("Punch2");            
-             
-            }
-
-            //Katana
-            if (P1Name.text == "Vander")
-            {
-                if (katanaready)
-                {
-                    animator.SetTrigger("katana");
-                    katanaready = false;
-                    StartCoroutine(ResetKatana());
-                }
-                
-            }
-
-            //SwordDash
-            if (P1Name.text == "Skipler")
-            {
-                if (swordDashReady)
-                {
-                    StartCoroutine(SwordDash());
-                }
-                
-            }
-
-            //Dodge-Roll
-            if (P1Name.text == "Fin")
-            {
-                if (rollReady)
-                {
-                    StartCoroutine(Roll());
-                }
-
-            }
+            character.LightAttack();
         }
 
         //Spells
-
         if (Input.GetKeyDown(ability) && !onCooldown && canCast && !casting)
         {
-            EnemyAbilityBlock();
-            casting = true;
-            animator.SetBool("Casting", true); 
 
-            //Koubi Nikis
-            if (P1Name.text == "Lazy Bigus")
-            {
-                bigusActive= true;
-                cdbarimage.sprite = activeSprite;
-
-                LazyBigusHealTime = LazyBigusHeal / 5f;
-                //Activate abilty function
-
-                audiomngr.PauseMusic();
-                audiomngr.PlaySFX(audiomngr.lullaby, audiomngr.lullaVol);
-
-                StartCoroutine(LazyBigusStateCoroutine(LazyBigusHealTime));
-
-
-                UpdateCooldownSlider(60);
-            }
-
-            //Full Geros
-            if (P1Name.text == "Steelager")
-            {
-                knockable = false;
-                FullGerosActive = true;
-                moveSpeed += 2f;
-                fullGerosspeedSaver = OGMoveSpeed;
-                OGMoveSpeed = moveSpeed;
-
-
-                animator.SetTrigger("FullGeros");
-
-                cdbarimage.sprite = activeSprite;
-
-                
-                audiomngr.PlaySFX(audiomngr.growl, audiomngr.heavyAttackVolume);
-                
-
-                Invulnerable();
-
-                StartCoroutine(FullGerosDeactivateAfterDelay(10));
-
-                UpdateCooldownSlider(60);
-            }
-            //Dufen-Dash
-            if (P1Name.text == "Skipler")
-            {
-                knockable = false;
-                animator.SetBool("isUsingAbility", true);
-                cdbarimage.sprite = activeSprite;
-                StartCoroutine(DashAnimation());
-                UpdateCooldownSlider(2); // Start cooldown for T key
-            }
-
-            //counter
-            if (P1Name.text == "Fin")
-            {
-                knockable = false;
-                cdbarimage.sprite = activeSprite;
-                audiomngr.PlaySFX(audiomngr.counterScream, audiomngr.counterVol);
-                animator.SetTrigger("counter");
-                counterOn = true;
-
-
-            }
-
-            //Combo
-            if (P1Name.text == "Rager")
-            {
-                knockable = false;
-                animator.SetBool("isUsingAbility", true);
-                animator.SetTrigger("comboInit");
-
-                ResetQuickPunch();
-
-                UpdateCooldownSlider(30);
-            }
-
-            //Lifesteal Stab
-            if (P1Name.text == "Vander")
-            {
-                knockable = false;
-                animator.SetBool("isUsingAbility", true);
-                cdbarimage.sprite = activeSprite;
-                attackRange += 0.5f;
-                animator.SetTrigger("Stab");
-                UpdateCooldownSlider(25);
-            }
-        }
-
-
-
-        if (countered)
-        {
-            Debug.Log("mouni");
-            audiomngr.PlaySFX(audiomngr.counterSucces, audiomngr.doubleVol);
-            enemy.stayStatic();
-            stayStatic();
-            animator.SetTrigger("counterHit");
-            countered = false;
-            UpdateCooldownSlider(2);
+            character.Spell();
         }
 
         // Animation control for jumping, falling, and landing
         animator.SetBool("IsGrounded", isGrounded);
         animator.SetFloat("VerticalSpeed", rb.velocity.y);
-    }
-
-    public virtual void QuickAttack()
-    {
-
-    }
-
-    public virtual void HeavyAttack()
-    {
-        if (P1Name.text == "Skipler")
-        {
-            animator.SetTrigger("skiplaHeavy");
-            audiomngr.PlaySFX(audiomngr.skiplaHeavyCharge, audiomngr.heavySwooshVolume);
-
-        }
-        else if (P1Name.text == "Steelager")
-        {
-            animator.SetTrigger("BombPunch");
-            audiomngr.PlaySFX(audiomngr.heavyswoosh, audiomngr.heavySwooshVolume);
-        }
-        else if (P1Name.text == "Vander")
-        {
-            animator.SetTrigger("VanderHeavy");
-            audiomngr.PlaySFX(audiomngr.heavyswoosh, audiomngr.heavySwooshVolume);
-        }
-        else if (P1Name.text == "Lazy Bigus")
-        {
-            animator.SetTrigger("BigusHeavy");
-            audiomngr.PlaySFX(audiomngr.heavyswoosh, audiomngr.heavySwooshVolume);
-        }
-        else if (P1Name.text == "Rager")
-        {
-            animator.SetTrigger("RagerHeavy");
-            audiomngr.PlaySFX(audiomngr.heavyswoosh, audiomngr.heavySwooshVolume);
-        }
-        else
-        {
-            animator.SetTrigger("Punch");
-            audiomngr.PlaySFX(audiomngr.heavyswoosh, audiomngr.heavySwooshVolume);
-        }
-
-
-        ResetQuickPunch();
-    }
-
-    public virtual void SpecialAttack()
-    {
-
-    }
-
-    public virtual void ChargeAttack()
-    {
 
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (dashin && other.CompareTag("Player") && !dashhit)  //--here
-        {
-            DealDashDmg();
-            dashhit = true;
-            
-        }
-
-        
-
         if (other.CompareTag("Ground"))
         {
             isGrounded = true;
             animator.SetBool("Jump", false);
             grounds++;
-
         }
 
         if (other.CompareTag("Platform"))
@@ -743,23 +460,16 @@ public class PlayerScript : MonoBehaviour
             colliders[3].enabled = true;
         }
 
-        
-
         if (other.CompareTag("Player"))  //--here
         {
             isGrounded = true;
             animator.SetBool("Jump", false);
             grounds++;
-
         }
-
-
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-
-        
 
         if (other.CompareTag("Ground"))
         {
@@ -768,13 +478,11 @@ public class PlayerScript : MonoBehaviour
             if (grounds == 0)
             {
                 isGrounded = false;
-
             }
         }
 
         if (other.CompareTag("Platform"))
         {
-
             isonpad--;
             grounds--;
 
@@ -785,10 +493,7 @@ public class PlayerScript : MonoBehaviour
 
                 colliders[3].enabled = false;
             }
-
         }
-
-        
 
         if (other.CompareTag("Player"))  //--here
         {
@@ -797,10 +502,8 @@ public class PlayerScript : MonoBehaviour
             if (grounds == 0)
             {
                 isGrounded = false;
-
             }
         }
-
     }
 
     private void OnDrawGizmosSelected()
@@ -810,102 +513,7 @@ public class PlayerScript : MonoBehaviour
 
     public void StopPunching()
     {
-        animator.SetBool("isHeavypunching",false);
-    }
-
-    public void DealDashDmg()
-    {
-
-        enemy.StopPunching();
-        enemy.StopCHarge();
-        enemy.TakeDamage(SkiplerDmg);
-        audiomngr.PlaySFX(audiomngr.dashHit, audiomngr.heavyAttackVolume);
-
-
-    }
-
-    public void DealCounterDmg()
-    {
-        enemy.StopPunching();
-        enemy.StopCHarge();
-        audiomngr.PlaySFX(audiomngr.counterClong, audiomngr.doubleVol);
-        enemy.TakeDamage(FinDmg);
-
-        stayDynamic();
-        enemy.stayDynamic();
-
-        enemy.Knockback(10f,.3f, false);
-
-        //end the counter
-        CounterSuccessOff();
-        
-
-    }
-
-    public void DealDmg()
-    {
-        character.DealDmg();
-    }
-
-    public void DealLightDmg()
-    {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
-
-        if (hitEnemy != null)
-        {
-
-            //hitEnemy.GetComponent<PlayerScript>().TakeDamage(lightDMG); //--here
-            enemy.TakeDamage(lightDMG);
-            audiomngr.PlaySFX(audiomngr.lightattack, audiomngr.lightAttackVolume);
-        }
-        else
-        {
-            audiomngr.PlaySFX(audiomngr.swoosh, audiomngr.swooshVolume);
-        }
-
-        animator.SetBool("QuickPunch", false);
-
-    }
-
-    public void DealComboDmg()
-    {
-
-        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
-
-        if (hitEnemy != null)
-        {
-            enemy.StopPunching();
-            enemy.StopCHarge();
-            cdbarimage.sprite = activeSprite;
-            //dmg and sound
-            hitEnemy.GetComponent<PlayerScript>().TakeDamage(0); //--here
-            audiomngr.PlaySFX(audiomngr.lightattack, audiomngr.lightAttackVolume);
-
-            //playerState
-            stayStatic();
-            canRotate = false;
-            //enemystate
-            enemy.stayStatic();
-            enemy.blockBreaker();
-            enemy.AbilityDisabled();
-            enemy.Grabbed();
-
-            animator.SetBool("ComboReady", true);
-        }
-        else
-        {
-            audiomngr.PlaySFX(audiomngr.swoosh, audiomngr.swooshVolume);
-            enemy.AbilityEnabled();
-
-            animator.SetBool("isUsingAbility", false);
-            ResetQuickPunch();
-            //cd
-            cdTimer = RagerCd;
-            onCooldown = true;
-            StartCoroutine(AbilityCooldown(RagerCd));
-
-        }
-
+        animator.SetBool("isHeavypunching", false);
     }
 
     public void DealChargeDmg()
@@ -918,7 +526,7 @@ public class PlayerScript : MonoBehaviour
             enemy.StopCHarge();
             //hitEnemy.GetComponent<PlayerScript>().TakeDamage(lightDMG); //--here
             enemy.TakeDamage(chargeDmg);
-            enemy.Knockback(13f,0.4f,false);
+            enemy.Knockback(13f, 0.4f, false);
             audiomngr.PlaySFX(audiomngr.smash, audiomngr.doubleVol);
         }
         else
@@ -932,149 +540,9 @@ public class PlayerScript : MonoBehaviour
         stayDynamic();
     }
 
-    public void Startcombo()
-    {
-        animator.SetTrigger("Combo");
-    }
-    public void firstHit()
-    {
-        Debug.Log(RagerDmg1);
-        enemy.GetComponent<PlayerScript>().TakeDamage(RagerDmg1); //--here
-        audiomngr.PlaySFX(audiomngr.lightattack, audiomngr.lightAttackVolume);
-    }
-
-    public void secondHit()
-    {
-        enemy.GetComponent<PlayerScript>().TakeDamage(RagerDmg2); //--here
-        audiomngr.PlaySFX(audiomngr.heavyattack, audiomngr.lightAttackVolume);
-    }
-
-    public void thirdHit()
-    {
-        enemy.GetComponent<PlayerScript>().TakeDamage(RagerDmg3); //--here
-        audiomngr.PlaySFX(audiomngr.klong, audiomngr.doubleVol);
-
-        //player state
-        stayDynamic();
-        canRotate = true;
-
-
-        //enemy state
-        enemy.stayDynamic();
-        enemy.AbilityEnabled();
-        enemy.moveSpeed = OGMoveSpeed;
-        enemy.Knockback(8f, .25f, false);
-
-        //cd
-        ResetQuickPunch();
-        animator.SetBool("ComboReady", false);
-        cdTimer = RagerCd;
-        onCooldown = true;
-        StartCoroutine(AbilityCooldown(RagerCd));
-
-    }
-
-    public void Grabbed()
-    {
-        audiomngr.PlaySFX(audiomngr.grab, audiomngr.heavyAttackVolume);
-        animator.SetTrigger("grabbed");
-    }
-
-    public void DealStabDmg()
-    {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
-
-        if (hitEnemy != null)
-        {
-            enemy.StopPunching();
-            enemy.StopCHarge();
-            //hitEnemy.GetComponent<PlayerScript>().TakeDamage(lightDMG); //--here
-            enemy.TakeDamage(VanderDmg);
-            currHealth += VanderHeal;
-            if(currHealth>maxHealth)
-            {
-                currHealth = maxHealth;
-            }
-            healthbar.SetHealth(currHealth);
-            audiomngr.PlaySFX(audiomngr.stabHit, audiomngr.doubleVol);
-        }
-        else
-        {
-            audiomngr.PlaySFX(audiomngr.stab, audiomngr.swooshVolume);
-        }
-
-        attackRange = ogRange;
-
-        enemy.AbilityEnabled();
-        //cd
-        cdTimer = VanderCd;
-        onCooldown = true;
-        StartCoroutine(AbilityCooldown(VanderCd));
-
-    }
-
-    public void DealKatanaDmg1()
-    {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
-
-        if (hitEnemy != null)
-        {
-
-            //hitEnemy.GetComponent<PlayerScript>().TakeDamage(lightDMG); //--here
-            enemy.TakeDamage(katanaDmg);
-            audiomngr.PlaySFX(audiomngr.katanaHit, audiomngr.lightAttackVolume);
-        }
-        else
-        {
-            audiomngr.PlaySFX(audiomngr.katanaSwoosh, audiomngr.swooshVolume);
-        }
-
-    }
-
-    public void DealKatanaDmg2()
-    {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
-
-        if (hitEnemy != null)
-        {
-
-            //hitEnemy.GetComponent<PlayerScript>().TakeDamage(lightDMG); //--here
-            enemy.TakeDamage(katanaDmg);
-            currHealth += katanaDmg;
-            if (currHealth > maxHealth)
-            {
-                currHealth = maxHealth;
-            }
-            healthbar.SetHealth(currHealth);
-            enemy.Knockback(10f, .15f, true);
-            audiomngr.PlaySFX(audiomngr.katanaHit2, 1.5f);
-        }
-        else
-        {
-            audiomngr.PlaySFX(audiomngr.katanaSwoosh, audiomngr.swooshVolume);
-        }
-
-    }
-
-    public void DealSwordDashDmg()
-    {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
-
-        if (hitEnemy != null)
-        {
-            enemy.TakeDamage(swordDashDmg);
-            enemy.Knockback(10f, .15f, true);
-            audiomngr.PlaySFX(audiomngr.sworDashHit, 0.8f);
-        }
-        else
-        {
-            audiomngr.PlaySFX(audiomngr.sworDashMiss, audiomngr.swooshVolume);
-        }
-    }
-
     public void stayStatic()
     {
-        isStatic= true;
+        isStatic = true;
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
@@ -1092,37 +560,49 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    public void ActivateColliders()
+    {
+        Collider2D[] colliders = GetComponents<Collider2D>();
+
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider != colliders[3])
+            {
+                collider.enabled = true;
+            }
+        }
+
+        colliders[4].enabled = false;
+    }
+
+    public void DeactivateColliders()
+    {
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        foreach (Collider2D collider in colliders)
+        {
+            collider.enabled = false;
+        }
+    }
+
     public void TakeDamage(int dmg)
     {
-        if (FullGerosActive)
+        if (ignoreDamage)
         {
             return;
         }
 
-        if (rollin)
+        if (character is Fin)
         {
-            return;
-        }
-
-        if (dashin)
-        {
-            return;
-        }
-
-        if (counterOn)
-        {
-            if (!counterDone) {
-                countered = true;
+            if (fin.DetectCounter())
+            {
+                return;
             }
-            counterDone = true;
-            return;
         }
 
-        ResetQuickPunch();
+        character.ResetQuickPunch();
 
-       if(dmg==chargeDmg)
+        if (dmg == chargeDmg)
         {
-            Debug.Log("asstoass");
             StopCHarge();
         }
 
@@ -1131,31 +611,28 @@ public class PlayerScript : MonoBehaviour
             if (dmg == heavyDMG) //if its heavy attack take half the damage
             {
                 currHealth -= 5;
-                
+
                 healthbar.SetHealth(currHealth);
             }
             //if its light attack take no dmg
 
-            if(dmg== chargeDmg)
+            if (dmg == chargeDmg)
             {
                 currHealth -= dmg;
 
                 healthbar.SetHealth(currHealth);
             }
-
         }
         else
         {
             currHealth -= dmg;
-            Debug.Log(currHealth + " helth");
 
             animator.SetTrigger("tookDmg");
-
-            
 
             healthbar.SetHealth(currHealth);
         }
 
+        print("took " + dmg + " damage!");
 
         if (currHealth <= 0)
         {
@@ -1165,8 +642,6 @@ public class PlayerScript : MonoBehaviour
 
     void Die()
     {
-
-        Debug.Log(player);
         animator.SetBool("isDead", true);
         Collider2D[] colliders = GetComponents<Collider2D>();
         foreach (Collider2D collider in colliders)
@@ -1188,7 +663,7 @@ public class PlayerScript : MonoBehaviour
         {
             winner.text = "FLAWLESS\n" + P2Name + " prevails!";
         }
-        else if(enemy.currHealth<=0)
+        else if (enemy.currHealth <= 0)
         {
             winner.text = "Tie?\nDEATH PREVAILS...";
         }
@@ -1196,16 +671,12 @@ public class PlayerScript : MonoBehaviour
         {
             winner.text = P2Name + " prevails!";
         }
-        
-
 
         winner.gameObject.SetActive(true);
 
         // Enable play again and main menu buttons
         playAgainButton.SetActive(true);
         mainMenuButton.SetActive(true);
-
-        
     }
 
     void PermaDeath()
@@ -1216,13 +687,13 @@ public class PlayerScript : MonoBehaviour
 
     public void HeavyPunchStart()
     {
-        if(!FullGerosActive)
+        if (!ignoreSlow)
         {
             moveSpeed = heavySpeed;
             StartCoroutine(WaitAndSetSpeed());
-        } 
+        }
         animator.SetBool("isHeavypunching", true);
-        
+
     }
 
     public void HeavyPunchEnd()
@@ -1239,10 +710,10 @@ public class PlayerScript : MonoBehaviour
 
     private IEnumerator WaitAndSetSpeed()
     {
-        
+
         yield return new WaitForSeconds(0.49f);  // Waits for 0.49 seconds
         moveSpeed = OGMoveSpeed;
-        
+
     }
 
     private void StartCharge()
@@ -1259,156 +730,45 @@ public class PlayerScript : MonoBehaviour
 
     private IEnumerator Charge()
     {
-        
-
         yield return new WaitForSeconds(chargeTime);  // Waits for 2 seconds
         if (charging)
         {
             charged = true;
             audiomngr.PlaySFX(audiomngr.charged, 0.7f);
         }
-
     }
 
-    IEnumerator LazyBigusStateCoroutine(float duration)
+    public void OnCooldown(float cd)
     {
-        // Disable colliders and set the Rigidbody to Static
-        Collider2D[] colliders = GetComponents<Collider2D>();
-        foreach (Collider2D collider in colliders)
-        {
-            collider.enabled = false;
-        }
-
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
-        {
-            rb.bodyType = RigidbodyType2D.Static;
-        }
-
-        // Set the player as dead
-        animator.SetBool("isDead", true);
-
-
-        // Loop for the specified duration
-        //float elapsedTime = 0f;
-        for (int i = 0; i < duration; i++)
-        {
-
-            // Regenerate health
-            currHealth += 5;
-            healthbar.SetHealth(currHealth);
-
-
-            yield return new WaitForSeconds(1f);
-        }
-
-        if(currHealth>maxHealth)
-        {
-            currHealth = maxHealth;
-        }
-
-        animator.SetBool("isDead", false);
-
-        animator.SetBool("permanentDeath", false);
-
-        this.enabled = true;
-
-        audiomngr.StartMusic();
-
-        animator.SetTrigger("Angel");
-
-        // Enable colliders and restore the Rigidbody
-        //Rejuvenation();
-
-    }
-
-    void Invulnerable()
-    {
-        Collider2D[] colliders = GetComponents<Collider2D>();
-
-        foreach (Collider2D collider in colliders)
-        {
-            collider.enabled = false;
-        }
-
-        if (rb != null)
-        {
-            rb.bodyType = RigidbodyType2D.Static;
-        }
-
-        isStatic = true;
-    }
-
-    private void Rejuvenation()
-    {
-
-        Collider2D[] colliders = GetComponents<Collider2D>();
-
-        foreach (Collider2D collider in colliders)
-        {
-            if (collider != colliders[3])
-            {
-                collider.enabled = true;
-            }
-        }
-
-        colliders[4].enabled = false;
-        if (rb != null)
-        {
-            rb.bodyType = RigidbodyType2D.Dynamic;
-        }
-
-        isStatic = false;
-
-        if (P1Name.text == "Steelager")  //--here
-        {
-            animator.SetTrigger("animationOver");
-        }
-
-        if (P1Name.text == "Lazy Bigus")
-        {
-            moveSpeed = OGMoveSpeed;
-            // Start the cooldown timer
-            onCooldown = true;
-            cdTimer = LazyBigusCd;
-            EnemyAbilityEnable();
-            StartCoroutine(AbilityCooldown(LazyBigusCd));
-            bigusActive = false;
-        }
-    }
-
-    IEnumerator FullGerosDeactivateAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        FullGerosActive = false;
-        OGMoveSpeed = fullGerosspeedSaver;
-        moveSpeed = OGMoveSpeed;
+        ignoreDamage = false;
+        ignoreMovement = false;
+        
         EnemyAbilityEnable();
+        knockable = true;
+        cdbarimage.sprite = ogSprite;
+        animator.SetBool("isUsingAbility", false);
+        animator.SetBool("Casting", false);
+        casting = false;
 
         // Start the cooldown timer
-        cdTimer = SteelagerCd;
+        cdTimer = cd;
         onCooldown = true;
-
-
-        StartCoroutine(AbilityCooldown(SteelagerCd));
+        StartCoroutine(AbilityCooldown(cd));
     }
+
     public IEnumerator AbilityCooldown(float duration)
     {
-            knockable = true;
-            cdbarimage.sprite = ogSprite;  //change the bar appearance to normal
-            animator.SetBool("isUsingAbility", false);
-            animator.SetBool("Casting", false);
-            while (cdTimer > 0)
-            {
-                yield return new WaitForSeconds(1f);
-                cdTimer -= 1f;
-                UpdateCooldownSlider(duration); // Update the cooldown slider every second
-            }
-        
-            // Reset the cooldown flag
-            casting = false;
-            onCooldown = false;
-            cdTimer = 0f;
+
+        while (cdTimer > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            cdTimer -= 1f;
+            UpdateCooldownSlider(duration); // Update the cooldown slider every second
+        }
+
+        // Reset the cooldown flag
+        onCooldown = false;
+        cdTimer = 0f;
     }
 
     void UpdateCooldownSlider(float duration)
@@ -1417,79 +777,8 @@ public class PlayerScript : MonoBehaviour
         cooldownSlider.value = progress;
     }
 
-    IEnumerator DashAnimation()
-    {
-        dashin = true;
-        // Store the original gravity scale
-        float ogGravityScale = rb.gravityScale;
 
-        // Disable gravity while dashing
-        rb.gravityScale = 0f;
-
-        // Store the current velocity
-        Vector2 currentVelocity = rb.velocity;
-
-        // Determine the dash direction based on the input
-        float moveDirection = Input.GetKey(left) ? -1f : 1f; ;
-
-        Collider2D[] colliders = GetComponents<Collider2D>();
-        foreach (Collider2D collider in colliders)
-        {
-            collider.enabled = false;
-        }
-        colliders[3].enabled = true;
-        colliders[4].enabled = true;
-
-
-        audiomngr.PlaySFX(audiomngr.dash, 1);
-        // Calculate the dash velocity
-        Vector2 dashVelocity = new Vector2(moveDirection * dashingPower, currentVelocity.y);
-
-        // Apply the dash velocity
-        rb.velocity = dashVelocity;
-
-        // Trigger the dash animation
-        animator.SetTrigger("Dash");
-
-
-
-        // Wait for the dash duration
-        yield return new WaitForSeconds(dashingTime);
-
-        // Reset the velocity after the dash
-        rb.velocity = currentVelocity;
-
-        // Reset the gravity scale
-        rb.gravityScale = ogGravityScale;
-
-        dashin = false;
-
-
-        foreach (Collider2D collider in colliders)
-        {
-            if (collider != colliders[3])
-            {
-                collider.enabled = true;
-            }
-        }
-        colliders[3].enabled = false;
-        colliders[4].enabled = false;
-
-        dashhit = false;
-
-        // Start the cooldown timer
-        cdTimer = SkiplerCd;
-        onCooldown = true;
-
-        EnemyAbilityEnable();
-
-        StartCoroutine(AbilityCooldown(SkiplerCd));
-
-        
-
-    }
-
-    public void Knockback(float force,float time,bool axis)
+    public void Knockback(float force, float time, bool axis)
     {
         if (knockable)
         {
@@ -1500,15 +789,8 @@ public class PlayerScript : MonoBehaviour
             KBCounter = time;
             knockfromright = enemyOnRight;
             animator.SetBool("knocked", true);
-            Debug.Log(enemyOnRight + " knockback!");
         }
     }
-
-   
-
-
-
-
 
     private IEnumerator ResetKnockedAfterDelay(float delay)
     {
@@ -1517,8 +799,6 @@ public class PlayerScript : MonoBehaviour
 
         // Reset the knocked variable
         knocked = false;
-
-        
     }
 
     public void EnemyAbilityBlock()
@@ -1541,54 +821,8 @@ public class PlayerScript : MonoBehaviour
         canCast = true;
     }
 
-    public void CounterOff()
-    {
-
-        
-        if (!ignoreCOff)
-        {
-            
-            // Start the cooldown timer
-            cdTimer = FinCd-5;
-            onCooldown = true;
-            EnemyAbilityEnable();
-            StartCoroutine(AbilityCooldown(FinCd-5));
-        }
-        else
-        {
-            ignoreCOff = false;
-        }
-        counterDone = false;
-        counterOn = false;
-        cdbarimage.sprite = ogSprite;
-
-        
-
-    }
-
-    public void CounterSuccessOff()
-    {
-        
-        
-
-        ignoreCOff = true;
-
-        counterDone = false;
-        counterOn = false;
-        cdbarimage.sprite = ogSprite;
-
-        cdTimer = FinCd;
-        onCooldown = true;
-        EnemyAbilityEnable();
-        StartCoroutine(AbilityCooldown(FinCd));
-
-        
-
-    }
-
     public void StopCHarge()
     {
-        Debug.Log(player + " jojo");
         stayDynamic();
         animator.SetBool("Charging", false);
         charging = false;
@@ -1608,15 +842,6 @@ public class PlayerScript : MonoBehaviour
         isBlocking = false;
     }
 
-    public void BigusKnock()
-    {
-        if (IsEnemyClose())
-        {
-            enemy.StopCHarge();
-            enemy.Knockback(10f, .3f, false);
-        }
-    }
-
     void Shoot()
     {
         audiomngr.PlaySFX(audiomngr.shoot, audiomngr.normalVol);
@@ -1634,190 +859,82 @@ public class PlayerScript : MonoBehaviour
 
     IEnumerator ResetShooting()
     {
-        
+
         yield return new WaitForSeconds(2f);
         audiomngr.PlaySFX(audiomngr.reload, audiomngr.normalVol);
         isShootin = false;
     }
 
-    void ThrowBomb()
-    {
-        bombCharging = true;
-        audiomngr.PlaySFX(audiomngr.fuse, audiomngr.normalVol);
-        GameObject bomb = Instantiate(bombPrefab, bombPoint.position, firePoint.rotation);
-        Rigidbody2D rb = bomb.GetComponent<Rigidbody2D>();
-        bomb.transform.SetParent(bombsParent);
-        StartCoroutine(ResetBomb());
+    
 
+    public void Knockable(bool update)
+    {
+        knockable = update;
     }
 
-    public void Boom()
+    public void UsingAbility(float cd)
     {
-        audiomngr.PlaySFX(audiomngr.explosion, audiomngr.lessVol);
-    }
-
-    IEnumerator ResetBomb()
-    {
-
-        yield return new WaitForSeconds(2f);
-        audiomngr.PlaySFX(audiomngr.lighter, audiomngr.normalVol);
-        bombCharging = false;
-    }
-
-    IEnumerator ResetKatana()
-    {
-
-        yield return new WaitForSeconds(2f);
-        audiomngr.PlaySFX(audiomngr.katanaSeath, audiomngr.doubleVol);
-        katanaready = true;
-    }
-
-    IEnumerator SwordDash()
-    {
-        swordDashin = true;
-        
-        // Store the original gravity scale
-        float ogGravityScale = rb.gravityScale;
-
-        // Disable gravity while dashing
-        rb.gravityScale = 0f;
-
-        // Store the current velocity
-        Vector2 currentVelocity = rb.velocity;
-
-        // Determine the dash direction based on the input
-        float moveDirection = Input.GetKey(left) ? -1f : 1f; ;
-
-
-        audiomngr.PlaySFX(audiomngr.sworDashin, 1);
-        // Calculate the dash velocity
-        Vector2 sworddashVelocity = new Vector2(moveDirection * swordDashPower, currentVelocity.y);
-
-        // Apply the dash velocity
-        rb.velocity = sworddashVelocity;
-
-        // Trigger the dash animation
-        animator.SetTrigger("swordDash");
-
-
-
-        // Wait for the dash duration
-        yield return new WaitForSeconds(swordDashTime);
-
-        // Reset the velocity after the dash
-        rb.velocity = currentVelocity;
-
-        // Reset the gravity scale
-        rb.gravityScale = ogGravityScale;
-
-        swordDashReady = false;
-
-        swordDashin = false;
-
-        StartCoroutine(ResetSwordDash());
-
-        
-    }
-
-    IEnumerator ResetSwordDash()
-    {
-
-        yield return new WaitForSeconds(3f);
-        audiomngr.PlaySFX(audiomngr.sworDashTada, audiomngr.lessVol);
-        swordDashReady = true;
-    }
-
-    IEnumerator Roll()
-    {
-        rollin = true;
+        casting = true;
+        animator.SetBool("Casting", true);
+        EnemyAbilityBlock();
         knockable = false;
+        animator.SetBool("isUsingAbility", true);
+        cdbarimage.sprite = activeSprite;
+        UpdateCooldownSlider(cd);
+    }
 
-        // Store the original gravity scale
-        float ogGravityScale = rb.gravityScale;
-
-        // Disable gravity while dashing
-        rb.gravityScale = 0f;
-
-        // Store the current velocity
-        Vector2 currentVelocity = rb.velocity;
-
+    public Collider2D[] GetColliders()
+    {
         Collider2D[] colliders = GetComponents<Collider2D>();
-        foreach (Collider2D collider in colliders)
+        return colliders;
+    }
+    public Character GetCharacter()
+    {
+        if (character != null)
         {
-            collider.enabled = false;
+            return character;
         }
-        colliders[3].enabled = true;
-        colliders[4].enabled = true;
-
-        // Determine the dash direction based on the input
-        float moveDirection = Input.GetKey(left) ? -1f : 1f; ;
-
-
-        audiomngr.PlaySFX(audiomngr.roll, 1);
-        // Calculate the dash velocity
-        Vector2 rollVelocity = new Vector2(moveDirection * rollPower, currentVelocity.y);
-
-        // Apply the dash velocity
-        rb.velocity = rollVelocity;
-
-        // Trigger the dash animation
-        animator.SetTrigger("roll");
-
-
-
-        // Wait for the dash duration
-        yield return new WaitForSeconds(rollTime);
-
-        // Reset the velocity after the dash
-        rb.velocity = currentVelocity;
-
-        foreach (Collider2D collider in colliders)
+        else
         {
-            if (collider != colliders[3])
-            {
-                collider.enabled = true;
-            }
+            return null;
         }
-        colliders[3].enabled = false;
-        colliders[4].enabled = false;
-
-        
-
-        // Reset the gravity scale
-        rb.gravityScale = ogGravityScale;
-
-        rollReady = false;
-
-        rollin = false;
-
-        knockable = true;
-
-        StartCoroutine(ResetRoll());
-
-
+    }
+    public void IgnoreDamage(bool boolean)
+    {
+        ignoreDamage = boolean;
     }
 
-    IEnumerator ResetRoll()
+    public void IgnoreMovement(bool boolean)
     {
-
-        yield return new WaitForSeconds(2f);
-        audiomngr.PlaySFX(audiomngr.rollReady, audiomngr.lessVol);
-        rollReady = true;
+        ignoreMovement = boolean;
     }
 
-    public void QuickPunchStart()
+    public void IgnoreSlow(bool boolean)
     {
-        animator.SetBool("QuickPunch", true);
-
+        ignoreSlow = boolean;
     }
 
-    public void ResetQuickPunch()
+    public void IgnoreUpdate(bool boolean)
     {
-        animator.SetBool("QuickPunch", false);
+        ignoreUpdate = boolean;
     }
 
-    public void FuseSound()
+    public void ChangeSpeed(float speed)
     {
-        audiomngr.PlaySFX(audiomngr.fuse, 1f);
+        moveSpeed = speed;
+    }
+
+    public void ChangeOGSpeed(float speed)
+    {
+        OGMoveSpeed = speed;
+    }
+    public void PlayerBlock(bool blck)
+    {
+        isBlocking=blck;
+    }
+
+    public void Casting(bool castin)
+    {
+        casting=castin;
     }
 }

@@ -145,4 +145,8 @@ public class AudioManager : MonoBehaviour
         SFX.PlayOneShot(buttonClick, 0.2f);
     }
 
+    public void BoomSound()
+    {
+        SFX.PlayOneShot(explosion, lessVol);
+    }
 }
