@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,7 +6,7 @@ using UnityEngine.UI;
 public class CharacterChoiceMenu : MonoBehaviour
 {
     public Button[] characterButtons;
-    
+
     private int currentPlayer = 1;
 
     Button p1b;
@@ -16,7 +15,7 @@ public class CharacterChoiceMenu : MonoBehaviour
 
     public TextMeshProUGUI p2characterNameText;
 
-    public Button startButton;
+    public Button startButton, randomButton;
 
     bool picked = false;
 
@@ -42,64 +41,72 @@ public class CharacterChoiceMenu : MonoBehaviour
         {
             return;
         }
+
         // Get the character index or identifier from the button
         int characterIndex = System.Array.IndexOf(characterButtons, button);
 
-        
+
 
         // Assign the character to the current player
         if (currentPlayer == 1)
         {
-            Debug.Log("Player 1 chose character " + characterIndex);
 
-            
             Transform childP1 = button.transform.Find("P1");
             childP1.gameObject.SetActive(true);
             currentPlayer = 2;
-            p1b= button;
+            p1b = button;
+
             p1characterNameText.text = button.name;
 
             CharacterSound(button.name);
 
-            PlayerPrefs.SetString("Player1Choice",button.name);
-
+            if (button.name == "Random")
+            {
+                randomButton = GetRandomCharacterButton();
+                PlayerPrefs.SetString("Player1Choice", randomButton.name);
+            }
+            else
+            {
+                PlayerPrefs.SetString("Player1Choice", button.name);
+            }
         }
         else
         {
-            Debug.Log("Player 2 chose character " + characterIndex);
-            // TODO: Assign character to Player 2
-            // TODO: Update UI to indicate Player 2's choice
             Transform childP1 = button.transform.Find("P2");
             childP1.gameObject.SetActive(true);
             button.Select();
             p2characterNameText.text = button.name;
 
-            PlayerPrefs.SetString("Player2Choice", button.name);
+            if (button.name == "Random")
+            {
+                randomButton = GetRandomCharacterButton();
+                PlayerPrefs.SetString("Player2Choice", randomButton.name);
+            }
+            else
+            {
+                PlayerPrefs.SetString("Player2Choice", button.name);
+            }
 
             CharacterSound(button.name);
 
-            
+
             foreach (Button butt in characterButtons)
             {
-                
 
-                if (butt!=p1b && butt != button)
+
+                if (butt != p1b && butt != button)
                 {
-                    
+
                     butt.interactable = false;
                 }
             }
 
-            picked=true;
+            picked = true;
 
             cscript.BothPicked(true);
 
             startButton.gameObject.SetActive(true);
         }
-
-        
-
-        
     }
 
     public void ResetCharacterSelection()
@@ -124,7 +131,7 @@ public class CharacterChoiceMenu : MonoBehaviour
         // Reset current player to 1
         currentPlayer = 1;
 
-        picked=false;
+        picked = false;
 
         cscript.BothPicked(false);
 
@@ -136,7 +143,8 @@ public class CharacterChoiceMenu : MonoBehaviour
 
     public void HoveringIn(string name)
     {
-        if (picked){
+        if (picked)
+        {
             return;
         }
 
@@ -177,6 +185,10 @@ public class CharacterChoiceMenu : MonoBehaviour
         {
             audiomanager.PlaySFX(audiomanager.grab, 1f);
         }
+        if (name == "Random")
+        {
+            audiomanager.PlaySFX(audiomanager.random, 1f);
+        }
     }
     public void HoveringOut()
     {
@@ -200,6 +212,15 @@ public class CharacterChoiceMenu : MonoBehaviour
     {
         Debug.Log("-0-");
         OnCharacterButtonClicked(button);
+    }
+
+    private Button GetRandomCharacterButton()
+    {
+        List<Button> availableButtons = new List<Button>(characterButtons);
+        availableButtons.RemoveAll(button => button.name == "Random");
+
+        int randomIndex = Random.Range(0, availableButtons.Count);
+        return availableButtons[randomIndex];
     }
 
 }

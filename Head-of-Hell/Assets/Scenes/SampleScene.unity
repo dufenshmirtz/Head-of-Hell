@@ -497,7 +497,7 @@ GameObject:
   - component: {fileID: 119301200}
   m_Layer: 0
   m_Name: Square
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4869,6 +4869,7 @@ MonoBehaviour:
   winner: {fileID: 368958338}
   playAgainButton: {fileID: 675885515}
   mainMenuButton: {fileID: 1593568637}
+  isGrounded: 0
   cooldownSlider: {fileID: 1828624454}
   cdbarimage: {fileID: 28257689}
   activeSprite: {fileID: 21300000, guid: f5a0909d982b8bf48ba6b638394980ba, type: 3}
@@ -4880,6 +4881,7 @@ MonoBehaviour:
   SkiplerColor: {r: 0, g: 0, b: 1, a: 1}
   VanderColor: {r: 0.08627451, g: 1, b: 0, a: 1}
   LazyBigusColor: {r: 0.9294118, g: 0, b: 0.9725491, a: 1}
+  lithraColor: {r: 0.4862745, g: 0, b: 1, a: 1}
   player: 1
   up: 119
   down: 115
@@ -4896,6 +4898,8 @@ MonoBehaviour:
   KBTotalTime: 0
   knockfromright: 0
   knockable: 1
+  charged: 0
+  charging: 0
   ignoreUpdate: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 299338751}
@@ -7041,6 +7045,7 @@ MonoBehaviour:
   winner: {fileID: 368958338}
   playAgainButton: {fileID: 675885515}
   mainMenuButton: {fileID: 1593568637}
+  isGrounded: 0
   cooldownSlider: {fileID: 1423674119}
   cdbarimage: {fileID: 705920684}
   activeSprite: {fileID: 21300000, guid: f5a0909d982b8bf48ba6b638394980ba, type: 3}
@@ -7052,6 +7057,7 @@ MonoBehaviour:
   SkiplerColor: {r: 0, g: 0, b: 1, a: 1}
   VanderColor: {r: 0.08627451, g: 1, b: 0, a: 1}
   LazyBigusColor: {r: 0.9294118, g: 0, b: 0.9725491, a: 1}
+  lithraColor: {r: 0.4862745, g: 0, b: 1, a: 1}
   player: 2
   up: 273
   down: 274
@@ -7068,6 +7074,8 @@ MonoBehaviour:
   KBTotalTime: 0
   knockfromright: 0
   knockable: 1
+  charged: 0
+  charging: 0
   ignoreUpdate: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 269056860}
@@ -7190,6 +7198,8 @@ MonoBehaviour:
   bombSpawner: {fileID: 1033126951}
   bombParent: {fileID: 2100796710}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
+  shootinPoint: {fileID: 269056860}
+  bulletParent: {fileID: 2100796710}
 --- !u!1 &1996188179
 GameObject:
   m_ObjectHideFlags: 0
@@ -7898,6 +7908,8 @@ MonoBehaviour:
   bombSpawner: {fileID: 534169255}
   bombParent: {fileID: 2100796710}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
+  shootinPoint: {fileID: 299338751}
+  bulletParent: {fileID: 2100796710}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

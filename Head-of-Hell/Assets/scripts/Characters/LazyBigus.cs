@@ -6,6 +6,7 @@ public class LazyBigus : Character
 {
     public GameObject bulletPrefab; // The bullet prefab
     public Transform firePoint; // The point from where the bullet will be instantiated
+    public Transform bulletParent; 
     public float bulletSpeed = 35f; // Speed of the bullet
     bool isShootin = false;
     public KeyCode shoot;
@@ -42,6 +43,7 @@ public class LazyBigus : Character
 
     }
     #endregion
+
     #region Spell
     override public void Spell()
     {
@@ -113,14 +115,29 @@ public class LazyBigus : Character
     {
         if (IsEnemyClose())
         {
-            enemy.StopCHarge();
+            enemy.BreakCharge();
             enemy.Knockback(10f, .3f, false);
         }
     }
     #endregion
 
-    void Shoot()
+    #region LightAttack
+
+    public override void LightAttack()
     {
+        if (!isShootin)
+        {
+            animator.SetTrigger("Shoot");
+            StartCoroutine(ResetShooting());
+        }
+    }
+
+    public void Shoot()
+    {
+        bulletPrefab = resources.bullet;
+        firePoint = resources.shootinPoint;
+        bulletParent = resources.bulletParent;
+
         audioManager.PlaySFX(audioManager.shoot, audioManager.normalVol);
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
@@ -129,5 +146,26 @@ public class LazyBigus : Character
         Destroy(bullet, 2f);
     }
 
+    public void firstShootFrame()
+    {
+        isShootin = true;
+    }
 
+    IEnumerator ResetShooting()
+    {
+
+        yield return new WaitForSeconds(2f);
+        audioManager.PlaySFX(audioManager.reload, audioManager.normalVol);
+        isShootin = false;
+    }
+
+    #endregion
+
+    #region ChargeAttack
+    public override void ChargeAttack()
+    {
+        base.ChargeAttack();
+        animator.SetTrigger("GunCharge");
+    }
+    #endregion
 }

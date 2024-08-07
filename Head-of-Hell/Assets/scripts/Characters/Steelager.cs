@@ -56,6 +56,7 @@ public class Steelager : Character
         audioManager.PlaySFX(audioManager.growl, audioManager.heavyAttackVolume);
 
         player.UsingAbility(cooldown);
+
         player.stayStatic();
         StartCoroutine(Invulnerable(10));
     }
@@ -112,6 +113,14 @@ public class Steelager : Character
     public void FuseSound()
     {
         audioManager.PlaySFX(audioManager.fuse, 1f); 
+    }
+    #endregion
+
+    #region ChargeAttack
+    public override void ChargeAttack()
+    {
+        base.ChargeAttack();
+        animator.SetTrigger("TNTCharge");
     }
     #endregion
 }
