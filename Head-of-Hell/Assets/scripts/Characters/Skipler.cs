@@ -73,7 +73,7 @@ public class Skipler : Character
         Vector2 currentVelocity = rb.velocity;
 
         // Determine the dash direction based on the input
-        float moveDirection = Input.GetKey(player.left) ? -1f : 1f; ;
+        float moveDirection = Input.GetKey(player.left) ? -1f : 1f; 
 
         Collider2D[] colliders = player.GetColliders();
         foreach (Collider2D collider in colliders)
@@ -128,7 +128,7 @@ public class Skipler : Character
     public void DealDashDmg()
     {
         enemy.StopPunching();
-        enemy.StopCHarge();
+        enemy.BreakCharge();
         enemy.TakeDamage(DashDamage);
         audioManager.PlaySFX(audioManager.dashHit, audioManager.heavyAttackVolume);
     }
@@ -217,6 +217,14 @@ public class Skipler : Character
         {
             audioManager.PlaySFX(audioManager.sworDashMiss, audioManager.swooshVolume);
         }
+    }
+    #endregion
+
+    #region ChargeAttack
+    public override void ChargeAttack()
+    {
+        base.ChargeAttack();
+        animator.SetTrigger("SkiplerCharge");
     }
     #endregion
 }

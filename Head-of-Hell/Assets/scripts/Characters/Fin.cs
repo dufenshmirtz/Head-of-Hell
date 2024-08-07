@@ -101,7 +101,7 @@ public class Fin : Character
     public void DealCounterDmg()
     {
         enemy.StopPunching();
-        enemy.StopCHarge();
+        enemy.BreakCharge();
 
         audioManager.PlaySFX(audioManager.counterClong, audioManager.doubleVol);
 
@@ -209,6 +209,14 @@ public class Fin : Character
         yield return new WaitForSeconds(2f);
         audioManager.PlaySFX(audioManager.rollReady, audioManager.lessVol);
         rollReady = true;
+    }
+    #endregion
+
+    #region ChargeAttack
+    public override void ChargeAttack()
+    {
+        base.ChargeAttack();
+        animator.SetTrigger("FinCharge");
     }
     #endregion
 }

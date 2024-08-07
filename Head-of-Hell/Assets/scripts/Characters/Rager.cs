@@ -11,6 +11,10 @@ public class Rager : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
+        if (usingAbility)
+        {
+            return;
+        }
         animator.SetTrigger("RagerHeavy");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
         ResetQuickPunch();
@@ -57,7 +61,7 @@ public class Rager : Character
         if (hitEnemy != null)
         {
             enemy.StopPunching();
-            enemy.StopCHarge();
+            enemy.BreakCharge();
             player.cdbarimage.sprite = player.activeSprite;
             //dmg and sound
             hitEnemy.GetComponent<PlayerScript>().TakeDamage(0); //--here
@@ -155,6 +159,14 @@ public class Rager : Character
     {
         animator.SetBool("QuickPunch", true);
 
+    }
+    #endregion
+
+    #region ChargeAttack
+    public override void ChargeAttack()
+    {
+        base.ChargeAttack();
+        animator.SetTrigger("RagerCharge");
     }
     #endregion
 }

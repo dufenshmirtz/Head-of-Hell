@@ -20,6 +20,11 @@ public class CharacterAnimationEvents : MonoBehaviour
     {
         character.DealHeavyDamage();
     }
+
+    public void DealChargeDamageEvent()
+    {
+        character.DealChargeDmg();
+    }
     //Vander
     public void StabDamageEvent()
     {
@@ -73,6 +78,18 @@ public class CharacterAnimationEvents : MonoBehaviour
     {
         bigus = (LazyBigus)character;
         bigus.Rejuvenation();
+    }
+
+    public void ShootEvent()
+    {
+        bigus = (LazyBigus)character;
+        bigus.Shoot();
+    }
+
+    public void FirstFrameShootEvent()
+    {
+        bigus = (LazyBigus)character;
+        bigus.firstShootFrame();
     }
 
     //Steelager

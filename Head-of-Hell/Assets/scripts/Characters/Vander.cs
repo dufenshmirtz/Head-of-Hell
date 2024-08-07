@@ -56,7 +56,7 @@ public class Vander : Character
         if (hitEnemy != null)
         {
             enemy.StopPunching();
-            enemy.StopCHarge();
+            enemy.BreakCharge();
             enemy.TakeDamage(stabDamage);
             player.currHealth += stabHeal;
 
@@ -135,6 +135,14 @@ public class Vander : Character
         yield return new WaitForSeconds(2f);
         audioManager.PlaySFX(audioManager.katanaSeath, audioManager.doubleVol);
         katanaready = true;
+    }
+    #endregion
+
+    #region ChargeAttack
+    public override void ChargeAttack()
+    {
+        base.ChargeAttack();
+        animator.SetTrigger("VanderCharge");
     }
     #endregion
 }

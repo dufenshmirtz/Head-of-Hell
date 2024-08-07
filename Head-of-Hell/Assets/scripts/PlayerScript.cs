@@ -33,7 +33,7 @@ public class PlayerScript : MonoBehaviour
 
     //handling variables
     int grounds = 0;
-    private bool isGrounded;
+    public bool isGrounded;
     private bool isCrouching;
     int isonpad = 0;
 
@@ -56,6 +56,7 @@ public class PlayerScript : MonoBehaviour
     public Color SkiplerColor;
     public Color VanderColor;
     public Color LazyBigusColor;
+    public Color lithraColor;
 
     //player number
     public int player;
@@ -88,8 +89,8 @@ public class PlayerScript : MonoBehaviour
     public bool knockable = true;
 
     //charge attack
-    bool charged = false;
-    bool charging = false;
+    public bool charged = false;
+    public bool charging = false;
     private Coroutine chargeCoroutine;
     float chargeTime = 0.5f;
     int chargeDmg = 34;
@@ -117,6 +118,7 @@ public class PlayerScript : MonoBehaviour
     Steelager steelager;
     LazyBigus bigus;
     Vander vander;
+    Lithra lithra;
 
     public bool ignoreMovement = false;
     public bool ignoreDamage = false;
@@ -137,14 +139,11 @@ public class PlayerScript : MonoBehaviour
         {
             P1Name.text = PlayerPrefs.GetString("Player1Choice");
             P2Name = PlayerPrefs.GetString("Player2Choice");
-
-
         }
         else
         {
             P1Name.text = PlayerPrefs.GetString("Player2Choice");
             P2Name = PlayerPrefs.GetString("Player1Choice");
-
         }
 
         winner.gameObject.SetActive(false);
@@ -194,6 +193,12 @@ public class PlayerScript : MonoBehaviour
             bigus = this.gameObject.AddComponent<LazyBigus>();
             character = bigus;
             spriteRenderer.color = LazyBigusColor;
+        }
+        if (P1Name.text == "Lithra")
+        {
+            lithra = this.gameObject.AddComponent<Lithra>();
+            character = lithra;
+            spriteRenderer.color = lithraColor;
         }
 
         character.InitializeCharacter(this, audiomngr, resources);
@@ -247,28 +252,8 @@ public class PlayerScript : MonoBehaviour
             return;
         }
         //charge attack specifics
-        if (charging)
+        if (character.ChargeCheck(charge))
         {
-            stayStatic();
-            if (charged)
-            {
-                if (Input.GetKeyUp(charge))
-                {
-                    stayDynamic();
-                    animator.SetTrigger("ChargedHit");
-                    charged = false;
-                    animator.SetBool("Casting", true);
-
-                }
-                return;
-            }
-            if (Input.GetKeyUp(charge))
-            {
-                stayDynamic();
-                animator.SetBool("Charging", false);
-                charging = false;
-                knockable = true;
-            }
             return;
         }
 
@@ -325,7 +310,7 @@ public class PlayerScript : MonoBehaviour
         }
 
         // Heavy Punching
-        if (Input.GetKeyDown(heavyAttack) && !casting)
+        if (Input.GetKeyDown(heavyAttack))
         {
             character.HeavyAttack();
         }
@@ -342,62 +327,7 @@ public class PlayerScript : MonoBehaviour
         //ChargeAttack
         if (Input.GetKeyDown(charge) && isGrounded)
         {
-            if (P1Name.text == "Skipler")
-            {
-                knockable = false;
-                charging = true;
-                animator.SetBool("Charging", true);
-                animator.SetTrigger("SkiplerCharge");
-                StartCharge();
-            }
-            else if (P1Name.text == "Vander")
-            {
-                knockable = false;
-                charging = true;
-                animator.SetBool("Charging", true);
-                animator.SetTrigger("VanderCharge");
-                StartCharge();
-            }
-            else if (P1Name.text == "Steelager")
-            {
-                knockable = false;
-                charging = true;
-                animator.SetBool("Charging", true);
-                animator.SetTrigger("TNTCharge");
-                StartCharge();
-            }
-            else if (P1Name.text == "Lazy Bigus")
-            {
-                knockable = false;
-                charging = true;
-                animator.SetBool("Charging", true);
-                animator.SetTrigger("GunCharge");
-                StartCharge();
-            }
-            else if (P1Name.text == "Rager")
-            {
-                knockable = false;
-                charging = true;
-                animator.SetBool("Charging", true);
-                animator.SetTrigger("RagerCharge");
-                StartCharge();
-            }
-            else if (P1Name.text == "Fin")
-            {
-                knockable = false;
-                charging = true;
-                animator.SetBool("Charging", true);
-                animator.SetTrigger("FinCharge");
-                StartCharge();
-            }
-            else
-            {
-                knockable = false;
-                charging = true;
-                animator.SetBool("Charging", true);
-                animator.SetTrigger("StartCharge");
-                StartCharge();
-            }
+            character.ChargeAttack();
 
         }
 
@@ -412,18 +342,7 @@ public class PlayerScript : MonoBehaviour
         //LightAttack
         if (Input.GetKeyDown(lightAttack))
         {
-
             moveSpeed = OGMoveSpeed;
-
-            //Shoot
-            if (P1Name.text == "Lazy Bigus")
-            {
-                if (!isShootin)
-                {
-                    animator.SetTrigger("Shoot");
-                    StartCoroutine(ResetShooting());
-                }
-            }
             character.LightAttack();
         }
 
@@ -516,30 +435,6 @@ public class PlayerScript : MonoBehaviour
         animator.SetBool("isHeavypunching", false);
     }
 
-    public void DealChargeDmg()
-    {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
-
-        if (hitEnemy != null)
-        {
-            enemy.StopPunching();
-            enemy.StopCHarge();
-            //hitEnemy.GetComponent<PlayerScript>().TakeDamage(lightDMG); //--here
-            enemy.TakeDamage(chargeDmg);
-            enemy.Knockback(13f, 0.4f, false);
-            audiomngr.PlaySFX(audiomngr.smash, audiomngr.doubleVol);
-        }
-        else
-        {
-            audiomngr.PlaySFX(audiomngr.swoosh, audiomngr.swooshVolume);
-        }
-        knockable = true;
-        charging = false;
-        animator.SetBool("Casting", false);
-        animator.SetBool("Charging", false);
-        stayDynamic();
-    }
-
     public void stayStatic()
     {
         isStatic = true;
@@ -595,15 +490,15 @@ public class PlayerScript : MonoBehaviour
         {
             if (fin.DetectCounter())
             {
+                print("fin");
                 return;
             }
         }
-
         character.ResetQuickPunch();
 
         if (dmg == chargeDmg)
         {
-            StopCHarge();
+            character.StopCHarge();
         }
 
         if (isBlocking)
@@ -621,6 +516,7 @@ public class PlayerScript : MonoBehaviour
                 currHealth -= dmg;
 
                 healthbar.SetHealth(currHealth);
+                moveSpeed = OGMoveSpeed;
             }
         }
         else
@@ -712,30 +608,9 @@ public class PlayerScript : MonoBehaviour
     {
 
         yield return new WaitForSeconds(0.49f);  // Waits for 0.49 seconds
+        print("speedy");
         moveSpeed = OGMoveSpeed;
 
-    }
-
-    private void StartCharge()
-    {
-        // If there is an existing charge coroutine, stop it
-        if (chargeCoroutine != null)
-        {
-            StopCoroutine(chargeCoroutine);
-        }
-
-        // Start a new charge coroutine
-        chargeCoroutine = StartCoroutine(Charge());
-    }
-
-    private IEnumerator Charge()
-    {
-        yield return new WaitForSeconds(chargeTime);  // Waits for 2 seconds
-        if (charging)
-        {
-            charged = true;
-            audiomngr.PlaySFX(audiomngr.charged, 0.7f);
-        }
     }
 
     public void OnCooldown(float cd)
@@ -821,17 +696,6 @@ public class PlayerScript : MonoBehaviour
         canCast = true;
     }
 
-    public void StopCHarge()
-    {
-        stayDynamic();
-        animator.SetBool("Charging", false);
-        charging = false;
-        knockable = true;
-        charged = false;
-        animator.SetBool("Casting", false);
-        animator.ResetTrigger("ChargedHit");
-    }
-
     public bool IsEnemyClose()
     {
         return Vector3.Distance(this.transform.position, enemy.transform.position) <= 3f;
@@ -841,31 +705,6 @@ public class PlayerScript : MonoBehaviour
     {
         isBlocking = false;
     }
-
-    void Shoot()
-    {
-        audiomngr.PlaySFX(audiomngr.shoot, audiomngr.normalVol);
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        rb.velocity = new Vector2(transform.localScale.x * bulletSpeed, 0); // Shoots in the direction the character is facing
-
-        Destroy(bullet, 2f);
-    }
-
-    public void firstShootFrame()
-    {
-        isShootin = true;
-    }
-
-    IEnumerator ResetShooting()
-    {
-
-        yield return new WaitForSeconds(2f);
-        audiomngr.PlaySFX(audiomngr.reload, audiomngr.normalVol);
-        isShootin = false;
-    }
-
-    
 
     public void Knockable(bool update)
     {
@@ -936,5 +775,21 @@ public class PlayerScript : MonoBehaviour
     public void Casting(bool castin)
     {
         casting=castin;
+    }
+
+    public void BreakCharge()
+    {
+        character.StopCHarge();
+    }
+
+    public IEnumerator InterruptMovement(float time)
+    {
+        print("heyyyy");
+        rb.velocity = Vector2.zero; // Stop the enemy's movement
+        ignoreMovement = true;
+
+        yield return new WaitForSeconds(time);
+
+        ignoreMovement = false;
     }
 }

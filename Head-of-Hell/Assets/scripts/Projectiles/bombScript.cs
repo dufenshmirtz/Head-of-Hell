@@ -44,7 +44,6 @@ public class bombScript : MonoBehaviour
                 player = 1;
                 enemy = player2Layer;
                 playa = other.GetComponent<PlayerScript>();
-                Debug.Log("asssssssssllal");
             }
             if (other.gameObject.layer == player2Layer)
             {

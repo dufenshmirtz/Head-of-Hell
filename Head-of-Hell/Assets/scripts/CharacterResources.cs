@@ -9,6 +9,7 @@ public class CharacterResources : MonoBehaviour
     public Transform bombParent;
 
     public GameObject bullet;
-    
+    public Transform shootinPoint;
+    public Transform bulletParent;
 
 }
