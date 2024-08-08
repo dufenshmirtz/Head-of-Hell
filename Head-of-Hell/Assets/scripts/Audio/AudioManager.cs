@@ -54,6 +54,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip skiplaHeavyHit;
     public AudioClip skiplaHeavyCharge;
     public AudioClip BigusHeavy;
+    public AudioClip bellPunch;
+    public AudioClip bellDash;
+    public AudioClip bellDashHit;
 
     //volumes
     public float deathVolume = 1.0f;

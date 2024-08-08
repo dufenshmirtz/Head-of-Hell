@@ -1312,6 +1312,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8743021658900068881, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1033126951}
+    - targetCorrespondingSourceObject: {fileID: 8743021658900068881, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1415450843}
+    - targetCorrespondingSourceObject: {fileID: 8743021658900068881, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1618495935}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8315773558336349349, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
       insertIndex: 4
@@ -1902,6 +1908,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &486851315
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 486851316}
+  m_Layer: 8
+  m_Name: BellPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &486851316
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486851315}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.54, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5304811635095438058}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
@@ -3454,6 +3491,9 @@ MonoBehaviour:
   skiplaHeavyHit: {fileID: 8300000, guid: 61c278f38ea9d484c9968edf886a0702, type: 3}
   skiplaHeavyCharge: {fileID: 8300000, guid: fff305545481e3b418b300eba618a892, type: 3}
   BigusHeavy: {fileID: 8300000, guid: b76d73cffeb6b6d4498179a3e4f4f9cc, type: 3}
+  bellPunch: {fileID: 8300000, guid: e79780db77cf1be4b9a85e63b7ed0692, type: 3}
+  bellDash: {fileID: 8300000, guid: bcad5fac8e942784fbd369d3e400541d, type: 3}
+  bellDashHit: {fileID: 8300000, guid: 09efd9d06a4056242ad125c29d3a3160, type: 3}
   deathVolume: 3
   heavyAttackVolume: 1
   lightAttackVolume: 1
@@ -4858,6 +4898,8 @@ MonoBehaviour:
   attackPoint: {fileID: 1471577603}
   attackRange: 0.52
   ogRange: 0.5
+  bellPoint: {fileID: 486851316}
+  bellStunPoint: {fileID: 1990490738}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -5349,6 +5391,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 832730748}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1415450842
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1415450843}
+  m_Layer: 8
+  m_Name: BellPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1415450843
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415450842}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.54, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1960178342}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1423674116
 GameObject:
@@ -6305,6 +6378,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1612885764}
   m_CullTransparentMesh: 1
+--- !u!1 &1618495934
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1618495935}
+  m_Layer: 8
+  m_Name: BellStunPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1618495935
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618495934}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.94, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1960178342}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1654380596
 GameObject:
   m_ObjectHideFlags: 0
@@ -7034,6 +7138,8 @@ MonoBehaviour:
   attackPoint: {fileID: 1873468213}
   attackRange: 0.52
   ogRange: 0.5
+  bellPoint: {fileID: 1415450843}
+  bellStunPoint: {fileID: 1618495935}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -7200,6 +7306,37 @@ MonoBehaviour:
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 269056860}
   bulletParent: {fileID: 2100796710}
+--- !u!1 &1990490737
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1990490738}
+  m_Layer: 8
+  m_Name: BellStunPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1990490738
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990490737}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.94, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5304811635095438058}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1996188179
 GameObject:
   m_ObjectHideFlags: 0
@@ -7846,6 +7983,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8743021658900068881, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
       insertIndex: -1
       addedObject: {fileID: 534169255}
+    - targetCorrespondingSourceObject: {fileID: 8743021658900068881, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 486851316}
+    - targetCorrespondingSourceObject: {fileID: 8743021658900068881, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1990490738}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8315773558336349349, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
       insertIndex: 4
