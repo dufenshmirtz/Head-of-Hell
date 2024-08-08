@@ -9,6 +9,7 @@ public class CharacterAnimationEvents : MonoBehaviour
     Steelager steelager;
     LazyBigus bigus;
     Vander vander;
+    Lithra lithra;
 
     //General
     public void SetCharacter(Character characterio)
@@ -123,5 +124,12 @@ public class CharacterAnimationEvents : MonoBehaviour
     {
         skipler = (Skipler)character;
         skipler.DealSwordDashDmg();
+    }
+
+    //Lithra
+    public void BellDamageEvent()
+    {
+        lithra = (Lithra)character;
+        lithra.DealBellDmg();
     }
 }

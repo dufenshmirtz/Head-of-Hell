@@ -19,6 +19,10 @@ public class PlayerScript : MonoBehaviour
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public float ogRange = 0.5f;
+
+    public Transform bellPoint;
+    public Transform bellStunPoint;
+
     public LayerMask enemyLayer;
     public bool isBlocking = false;
     public helthbarscript healthbar;
@@ -126,6 +130,7 @@ public class PlayerScript : MonoBehaviour
 
     public CharacterAnimationEvents animEvents;
     public CharacterResources resources;
+    private bool stunned=false;
 
     void Start()
     {
@@ -244,6 +249,16 @@ public class PlayerScript : MonoBehaviour
 
         if (ignoreUpdate)
         {
+            return;
+        }
+
+        if (stunned)
+        {
+            animator.SetBool("IsRunning", false);
+            rb.velocity = new Vector2(0, rb.velocity.y);
+
+            animator.SetBool("cWalk", false);
+            animator.SetTrigger("tookDmg");
             return;
         }
 
@@ -428,6 +443,9 @@ public class PlayerScript : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere(bellPoint.position, attackRange*2);
+        Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
+
     }
 
     public void StopPunching()
@@ -784,12 +802,21 @@ public class PlayerScript : MonoBehaviour
 
     public IEnumerator InterruptMovement(float time)
     {
-        print("heyyyy");
         rb.velocity = Vector2.zero; // Stop the enemy's movement
         ignoreMovement = true;
 
         yield return new WaitForSeconds(time);
 
         ignoreMovement = false;
+    }
+
+    public IEnumerator Stun(float time)
+    {
+        rb.velocity = Vector2.zero; // Stop the enemy's movement
+        stunned = true;
+
+        yield return new WaitForSeconds(time);
+
+        stunned = false;
     }
 }
