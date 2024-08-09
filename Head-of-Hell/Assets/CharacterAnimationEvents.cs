@@ -10,6 +10,7 @@ public class CharacterAnimationEvents : MonoBehaviour
     LazyBigus bigus;
     Vander vander;
     Lithra lithra;
+    Chiback chiback;
 
     //General
     public void SetCharacter(Character characterio)
@@ -131,5 +132,12 @@ public class CharacterAnimationEvents : MonoBehaviour
     {
         lithra = (Lithra)character;
         lithra.DealBellDmg();
+    }
+
+    //Lithra
+    public void FireDamageEvent()
+    {
+        chiback = (Chiback)character;
+        chiback.DealFireDamage();
     }
 }

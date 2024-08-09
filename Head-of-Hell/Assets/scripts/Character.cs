@@ -29,6 +29,7 @@ public abstract class Character : MonoBehaviour
         usingAbility = false;
     }
 
+    #region Purely Virtual
     public virtual void HeavyAttack() { }
 
     public virtual void DealHeavyDamage() { }
@@ -36,6 +37,7 @@ public abstract class Character : MonoBehaviour
     public virtual void Spell() { }
 
     public virtual void LightAttack() { }
+    #endregion
 
     #region ChargeAttack
     public virtual void ChargeAttack() {
@@ -131,6 +133,7 @@ public abstract class Character : MonoBehaviour
     }
     #endregion
 
+    #region Block
     public void Block()
     {
         animator.SetTrigger("critsi");
@@ -147,6 +150,7 @@ public abstract class Character : MonoBehaviour
 
         ResetQuickPunch();
     }
+    #endregion
 
     public void Jump()
     {

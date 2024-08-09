@@ -57,6 +57,10 @@ public class AudioManager : MonoBehaviour
     public AudioClip bellPunch;
     public AudioClip bellDash;
     public AudioClip bellDashHit;
+    public AudioClip sytheDash;
+    public AudioClip sytheSlash;
+    public AudioClip sytheHit;
+    public AudioClip fireblast;
 
     //volumes
     public float deathVolume = 1.0f;

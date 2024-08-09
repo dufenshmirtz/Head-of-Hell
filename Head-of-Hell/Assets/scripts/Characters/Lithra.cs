@@ -10,7 +10,7 @@ public class Lithra : Character
     public float jumpHeight = 5f; // Initial jump height
     private bool airSpinready = true;
     float cooldown = 10f;
-    int bellDamage = 5;
+    int bellDamage = 10;
 
 
     #region HeavyAttack
@@ -64,7 +64,7 @@ public class Lithra : Character
             {
                 StartCoroutine(enemy.Stun(0.8f));
             }
-            audioManager.PlaySFX(audioManager.stabHit, audioManager.doubleVol);
+            audioManager.PlaySFX(audioManager.heavyattack, audioManager.heavyAttackVolume);
             audioManager.PlaySFX(audioManager.bellPunch, audioManager.doubleVol);
         }
         else
