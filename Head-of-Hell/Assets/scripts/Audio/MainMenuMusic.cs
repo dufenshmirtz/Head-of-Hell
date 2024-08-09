@@ -24,6 +24,8 @@ public class MainMenuMusic : MonoBehaviour
     public AudioClip sleep;
     public AudioClip stab;
     public AudioClip random;
+    public AudioClip bell;
+    public AudioClip fire;
 
     public AudioClip buttonClick;
     public AudioClip startClick;

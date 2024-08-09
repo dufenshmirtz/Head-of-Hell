@@ -187,7 +187,15 @@ public class CharacterChoiceMenu : MonoBehaviour
         }
         if (name == "Random")
         {
-            audiomanager.PlaySFX(audiomanager.random, 1f);
+            audiomanager.PlaySFX(audiomanager.random, 1.5f);
+        }
+        if (name == "Lithra")
+        {
+            audiomanager.PlaySFX(audiomanager.bell, 1.5f);
+        }
+        if (name == "Chiback")
+        {
+            audiomanager.PlaySFX(audiomanager.fire, 1f);
         }
     }
     public void HoveringOut()

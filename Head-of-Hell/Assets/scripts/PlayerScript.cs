@@ -22,6 +22,7 @@ public class PlayerScript : MonoBehaviour
 
     public Transform bellPoint;
     public Transform bellStunPoint;
+    public Transform MirrorAttackPoint;
 
     public LayerMask enemyLayer;
     public bool isBlocking = false;
@@ -61,6 +62,7 @@ public class PlayerScript : MonoBehaviour
     public Color VanderColor;
     public Color LazyBigusColor;
     public Color lithraColor;
+    public Color chibackColor;
 
     //player number
     public int player;
@@ -123,6 +125,7 @@ public class PlayerScript : MonoBehaviour
     LazyBigus bigus;
     Vander vander;
     Lithra lithra;
+    Chiback chiback;
 
     public bool ignoreMovement = false;
     public bool ignoreDamage = false;
@@ -204,6 +207,12 @@ public class PlayerScript : MonoBehaviour
             lithra = this.gameObject.AddComponent<Lithra>();
             character = lithra;
             spriteRenderer.color = lithraColor;
+        }
+        if (P1Name.text == "Chiback")
+        {
+            chiback = this.gameObject.AddComponent<Chiback>();
+            character = chiback;
+            spriteRenderer.color = chibackColor;
         }
 
         character.InitializeCharacter(this, audiomngr, resources);

@@ -903,6 +903,37 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 92049289}
   m_SourcePrefab: {fileID: 100100000, guid: a1ca33235a8bbac47ad82e4a9ff8b033, type: 3}
+--- !u!1 &223723071
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 223723072}
+  m_Layer: 8
+  m_Name: MirrorAttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &223723072
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223723071}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.6, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5304811635095438058}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &228655665
 GameObject:
   m_ObjectHideFlags: 0
@@ -1318,6 +1349,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8743021658900068881, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1618495935}
+    - targetCorrespondingSourceObject: {fileID: 8743021658900068881, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 306429568}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8315773558336349349, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
       insertIndex: 4
@@ -1707,6 +1741,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 301188927}
   m_CullTransparentMesh: 1
+--- !u!1 &306429567
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 306429568}
+  m_Layer: 8
+  m_Name: MirrorAttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &306429568
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306429567}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.6, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1960178342}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &368958336
 GameObject:
   m_ObjectHideFlags: 0
@@ -3494,6 +3559,10 @@ MonoBehaviour:
   bellPunch: {fileID: 8300000, guid: e79780db77cf1be4b9a85e63b7ed0692, type: 3}
   bellDash: {fileID: 8300000, guid: bcad5fac8e942784fbd369d3e400541d, type: 3}
   bellDashHit: {fileID: 8300000, guid: 09efd9d06a4056242ad125c29d3a3160, type: 3}
+  sytheDash: {fileID: 8300000, guid: 60cb94893b8ae0649aa26a01deee0881, type: 3}
+  sytheSlash: {fileID: 8300000, guid: 550fde3fd77a551408a9fec2f673aefa, type: 3}
+  sytheHit: {fileID: 8300000, guid: 88517911ae1b34c4185eb4b718c325f4, type: 3}
+  fireblast: {fileID: 8300000, guid: f2d758e6c9d69d74f86a7ca36df2d3b7, type: 3}
   deathVolume: 3
   heavyAttackVolume: 1
   lightAttackVolume: 1
@@ -4900,6 +4969,7 @@ MonoBehaviour:
   ogRange: 0.5
   bellPoint: {fileID: 486851316}
   bellStunPoint: {fileID: 1990490738}
+  MirrorAttackPoint: {fileID: 223723072}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -4924,6 +4994,7 @@ MonoBehaviour:
   VanderColor: {r: 0.08627451, g: 1, b: 0, a: 1}
   LazyBigusColor: {r: 0.9294118, g: 0, b: 0.9725491, a: 1}
   lithraColor: {r: 0.4862745, g: 0, b: 1, a: 1}
+  chibackColor: {r: 1, g: 1, b: 1, a: 1}
   player: 1
   up: 119
   down: 115
@@ -7140,6 +7211,7 @@ MonoBehaviour:
   ogRange: 0.5
   bellPoint: {fileID: 1415450843}
   bellStunPoint: {fileID: 1618495935}
+  MirrorAttackPoint: {fileID: 306429568}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -7164,6 +7236,7 @@ MonoBehaviour:
   VanderColor: {r: 0.08627451, g: 1, b: 0, a: 1}
   LazyBigusColor: {r: 0.9294118, g: 0, b: 0.9725491, a: 1}
   lithraColor: {r: 0.4862745, g: 0, b: 1, a: 1}
+  chibackColor: {r: 1, g: 1, b: 1, a: 1}
   player: 2
   up: 273
   down: 274
@@ -7850,11 +7923,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2134591707857671299, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
       propertyPath: m_Size.x
-      value: 4
+      value: 2.4
       objectReference: {fileID: 0}
     - target: {fileID: 2134591707857671299, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
       propertyPath: m_Size.y
-      value: 3.2
+      value: 2.4
       objectReference: {fileID: 0}
     - target: {fileID: 2134591707857671299, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
       propertyPath: m_Color.a
@@ -7977,6 +8050,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8743021658900068881, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1471577603}
+    - targetCorrespondingSourceObject: {fileID: 8743021658900068881, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 223723072}
     - targetCorrespondingSourceObject: {fileID: 8743021658900068881, guid: 5c5b83c02d37cfe49ae5b6a95bb2b136, type: 3}
       insertIndex: -1
       addedObject: {fileID: 299338751}
