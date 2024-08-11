@@ -22,7 +22,8 @@ public class PlayerScript : MonoBehaviour
 
     public Transform bellPoint;
     public Transform bellStunPoint;
-    public Transform MirrorAttackPoint;
+    public Transform mirrorFireAttackPoint;
+    public Transform fireAttackPoint;
 
     public LayerMask enemyLayer;
     public bool isBlocking = false;
@@ -213,6 +214,10 @@ public class PlayerScript : MonoBehaviour
             chiback = this.gameObject.AddComponent<Chiback>();
             character = chiback;
             spriteRenderer.color = chibackColor;
+        }
+        if (P1Name.text == "Random")
+        {
+            PickRandomCharacter(spriteRenderer);
         }
 
         character.InitializeCharacter(this, audiomngr, resources);
@@ -827,5 +832,31 @@ public class PlayerScript : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         stunned = false;
+    }
+
+    public void PickRandomCharacter(SpriteRenderer spriteRenderer)
+    {
+        // Array of possible character types
+        System.Type[] characterTypes = {
+        typeof(Steelager), typeof(Vander), typeof(Rager),
+        typeof(Skipler), typeof(Fin), typeof(LazyBigus),
+        typeof(Lithra), typeof(Chiback)
+    };
+
+        // Corresponding colors
+        Color[] colors = {
+        SteelagerColor, VanderColor, RagerColor,
+        SkiplerColor, FinColor, LazyBigusColor,
+        lithraColor, chibackColor
+    };
+
+        // Randomly select an index
+        int randomIndex = UnityEngine.Random.Range(0, characterTypes.Length);
+
+        // Add the randomly selected character component
+        character = this.gameObject.AddComponent(characterTypes[randomIndex]) as Character; 
+
+        // Set the corresponding color
+        spriteRenderer.color = colors[randomIndex];
     }
 }

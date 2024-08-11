@@ -14,7 +14,6 @@ public class Skipler : Character
     bool lightReady = true;
     public float swordDashPower = 10f;
     public float swordDashTime = 0.14f;
-    public bool swordDashReady = true;
     public int swordDashDmg = 5;
 
     #region HeavyAttack
@@ -188,7 +187,7 @@ public class Skipler : Character
         // Reset the gravity scale
         rb.gravityScale = ogGravityScale;
 
-        swordDashReady = false;
+        lightReady = false;
 
         player.IgnoreMovement(false);
 
@@ -200,7 +199,7 @@ public class Skipler : Character
     {
         yield return new WaitForSeconds(3f);
         audioManager.PlaySFX(audioManager.sworDashTada, audioManager.lessVol);
-        swordDashReady = true;
+        lightReady = true;
     }
 
     public void DealSwordDashDmg()
