@@ -43,9 +43,9 @@ public class Chiback : Character
     override public void Spell()
     {
         animator.SetTrigger("AwsomeSpell");
-        StartCoroutine(ScytheJump());
         player.UsingAbility(cooldown);
         audioManager.PlaySFX(audioManager.sytheDash, audioManager.normalVol);
+        StartCoroutine(ScytheJump());
     }
 
     private IEnumerator ScytheJump()
@@ -59,6 +59,7 @@ public class Chiback : Character
         if (moveDirection == 0f)
         {
             player.IgnoreUpdate(false);
+            player.OnCooldown(cooldown);
             yield break;
         }
 
@@ -88,7 +89,21 @@ public class Chiback : Character
                 animator.SetTrigger("SytheHit");
                 audioManager.PlaySFX(audioManager.sytheHit, 1f);
                 audioManager.PlaySFX(audioManager.sytheSlash, 1f);
-                enemy.TakeDamage(10);
+                if(elapsedTime < 0.33f) {
+                    enemy.TakeDamage(5);
+                    print("5 demege $$");
+                }
+                if (0.33 <= elapsedTime && elapsedTime < 0.66)
+                {
+                    enemy.TakeDamage(10);
+                    print("10 demege $$");
+                }
+                if (0.66 <= elapsedTime)
+                {
+                    enemy.TakeDamage(15);
+                    print("15 demege $$");
+                }
+
                 enemy.Knockback(11f,0.25f,false);
                
 
@@ -120,8 +135,8 @@ public class Chiback : Character
 
     public void DealFireDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
-        Collider2D hitEnemy2 = Physics2D.OverlapCircle(player.MirrorAttackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(player.mirrorFireAttackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy2 = Physics2D.OverlapCircle(player.fireAttackPoint.position, player.attackRange, player.enemyLayer);
 
         if (hitEnemy != null || hitEnemy2!=null)
         {

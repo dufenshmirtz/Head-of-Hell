@@ -60,15 +60,8 @@ public class CharacterChoiceMenu : MonoBehaviour
 
             CharacterSound(button.name);
 
-            if (button.name == "Random")
-            {
-                randomButton = GetRandomCharacterButton();
-                PlayerPrefs.SetString("Player1Choice", randomButton.name);
-            }
-            else
-            {
-                PlayerPrefs.SetString("Player1Choice", button.name);
-            }
+            PlayerPrefs.SetString("Player1Choice", button.name);
+            
         }
         else
         {
@@ -77,15 +70,7 @@ public class CharacterChoiceMenu : MonoBehaviour
             button.Select();
             p2characterNameText.text = button.name;
 
-            if (button.name == "Random")
-            {
-                randomButton = GetRandomCharacterButton();
-                PlayerPrefs.SetString("Player2Choice", randomButton.name);
-            }
-            else
-            {
-                PlayerPrefs.SetString("Player2Choice", button.name);
-            }
+            PlayerPrefs.SetString("Player2Choice", button.name);           
 
             CharacterSound(button.name);
 

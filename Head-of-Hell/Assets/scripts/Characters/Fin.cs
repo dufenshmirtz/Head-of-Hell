@@ -59,6 +59,7 @@ public class Fin : Character
         {
             if (!counterDone)
             {
+                ignoreCounterOff = true;
                 Countered();
                 counterDone = true;
                 return true;
@@ -72,15 +73,15 @@ public class Fin : Character
     {
         if (!ignoreCounterOff)
         {
-
             // Start the cooldown timer
             player.OnCooldown(missCooldown);
+            CounterVariablesOff();
         }
         else
         {
             ignoreCounterOff = false;
         }
-        CounterVariablesOff();
+        
     }
 
     public void CounterSuccessOff()
@@ -91,7 +92,6 @@ public class Fin : Character
 
     public void Countered()
     {
-        ignoreCounterOff = true;
         audioManager.PlaySFX(audioManager.counterSucces, audioManager.doubleVol);
         enemy.stayStatic();
         player.stayStatic();
