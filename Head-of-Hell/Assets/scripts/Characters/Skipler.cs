@@ -31,7 +31,7 @@ public class Skipler : Character
         {
 
             audioManager.PlaySFX(audioManager.skiplaHeavyHit, 1f);
-            enemy.TakeDamage(21);
+            enemy.TakeDamage(heavyDamage);
 
             if (!player.enemy.isBlocking)
             {
@@ -58,7 +58,7 @@ public class Skipler : Character
     {
 
         player.ignoreMovement = true;
-        player.IgnoreDamage(true);
+        ignoreDamage=true;
 
         dashing = true;
 
@@ -104,7 +104,7 @@ public class Skipler : Character
         // Reset the gravity scale
         rb.gravityScale = ogGravityScale;
 
-        player.IgnoreDamage(false);
+        ignoreDamage=false;
 
 
         foreach (Collider2D collider in colliders)

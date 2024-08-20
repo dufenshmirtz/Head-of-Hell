@@ -28,7 +28,7 @@ public class LazyBigus : Character
         {
 
             audioManager.PlaySFX(audioManager.BigusHeavy, 1f);
-            enemy.TakeDamage(21);
+            enemy.TakeDamage(heavyDamage);
 
             if (!player.enemy.isBlocking)
             {

@@ -11,6 +11,8 @@ public class Steelager : Character
     public Transform bombsParent;
     bool bombCharging = false;
 
+    bool ignoreSlow=false;
+
     #region HeavyAttack
     override public void HeavyAttack()
     {
@@ -26,7 +28,7 @@ public class Steelager : Character
         {
 
             audioManager.PlaySFX(audioManager.explosion, audioManager.lessVol);
-            enemy.TakeDamage(21);
+            enemy.TakeDamage(heavyDamage);
 
             if (!player.enemy.isBlocking)
             {
@@ -40,13 +42,24 @@ public class Steelager : Character
         }
 
     }
+
+    override public void HeavyAttackStart()
+    {
+        if(ignoreSlow){
+            animator.SetBool("isHeavypunching", true);
+            return;
+        }
+
+        base.HeavyAttackStart();
+    }
     #endregion
 
     #region Spell
     public override void Spell()
     {
-        player.IgnoreDamage(true);
+        ignoreDamage=true;
         player.IgnoreSlow(true);
+        ignoreSlow=true;
 
         player.ChangeSpeed(player.moveSpeed + 2f);
         speedSaver = player.OGMoveSpeed;
@@ -71,8 +84,9 @@ public class Steelager : Character
     IEnumerator Invulnerable(float delay)
     {
         yield return new WaitForSeconds(delay);
-        player.IgnoreDamage(false);
+        ignoreDamage=false;
         player.IgnoreSlow(false);
+        ignoreSlow=false;
 
         player.ChangeOGSpeed(speedSaver);
         player.ChangeSpeed(speedSaver);

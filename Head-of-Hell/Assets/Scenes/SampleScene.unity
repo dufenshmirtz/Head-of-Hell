@@ -5041,7 +5041,7 @@ MonoBehaviour:
     m_Bits: 128
   isBlocking: 0
   healthbar: {fileID: 166080018}
-  heavyDMG: 16
+  heavyDMG: 14
   lightDMG: 5
   P1Name: {fileID: 301188929}
   winner: {fileID: 368958338}
@@ -7284,7 +7284,7 @@ MonoBehaviour:
     m_Bits: 256
   isBlocking: 0
   healthbar: {fileID: 1397015383}
-  heavyDMG: 16
+  heavyDMG: 14
   lightDMG: 5
   P1Name: {fileID: 1369490561}
   winner: {fileID: 368958338}

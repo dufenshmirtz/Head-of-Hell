@@ -25,7 +25,7 @@ public class Vander : Character
         {
 
             audioManager.PlaySFX(audioManager.katanaHit, 1f);
-            enemy.TakeDamage(21);
+            enemy.TakeDamage(heavyDamage);
 
             if (!player.enemy.isBlocking)
             {

@@ -28,7 +28,7 @@ public class PlayerScript : MonoBehaviour
     public LayerMask enemyLayer;
     public bool isBlocking = false;
     public helthbarscript healthbar;
-    public int heavyDMG = 21;
+    public int heavyDMG = 14;
     public int lightDMG = 5;
     AudioManager audiomngr;
     public TextMeshProUGUI P1Name, winner;
@@ -167,6 +167,10 @@ public class PlayerScript : MonoBehaviour
 
         //character choice
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        if (P1Name.text == "Random")
+        {
+            PickRandomCharacter(spriteRenderer);
+        }
         if (P1Name.text == "Steelager")
         {
             steelager = this.gameObject.AddComponent<Steelager>();
@@ -215,10 +219,7 @@ public class PlayerScript : MonoBehaviour
             character = chiback;
             spriteRenderer.color = chibackColor;
         }
-        if (P1Name.text == "Random")
-        {
-            PickRandomCharacter(spriteRenderer);
-        }
+        
 
         character.InitializeCharacter(this, audiomngr, resources);
 
@@ -511,64 +512,7 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int dmg)
-    {
-        if (ignoreDamage)
-        {
-            return;
-        }
-
-        if (character is Fin)
-        {
-            if (fin.DetectCounter())
-            {
-                print("fin");
-                return;
-            }
-        }
-        character.ResetQuickPunch();
-
-        if (dmg == chargeDmg)
-        {
-            character.StopCHarge();
-        }
-
-        if (isBlocking)
-        {
-            if (dmg == heavyDMG) //if its heavy attack take half the damage
-            {
-                currHealth -= 5;
-
-                healthbar.SetHealth(currHealth);
-            }
-            //if its light attack take no dmg
-
-            if (dmg == chargeDmg)
-            {
-                currHealth -= dmg;
-
-                healthbar.SetHealth(currHealth);
-                moveSpeed = OGMoveSpeed;
-            }
-        }
-        else
-        {
-            currHealth -= dmg;
-
-            animator.SetTrigger("tookDmg");
-
-            healthbar.SetHealth(currHealth);
-        }
-
-        print("took " + dmg + " damage!");
-
-        if (currHealth <= 0)
-        {
-            Die();
-        }
-    }
-
-    void Die()
+    public void Die()
     {
         animator.SetBool("isDead", true);
         Collider2D[] colliders = GetComponents<Collider2D>();
@@ -613,36 +557,9 @@ public class PlayerScript : MonoBehaviour
         this.enabled = false;
     }
 
-    public void HeavyPunchStart()
-    {
-        if (!ignoreSlow)
-        {
-            moveSpeed = heavySpeed;
-            StartCoroutine(WaitAndSetSpeed());
-        }
-        animator.SetBool("isHeavypunching", true);
-
-    }
-
-    public void HeavyPunchEnd()
-    {
-        moveSpeed = OGMoveSpeed;
-        animator.SetBool("isHeavypunching", false);
-    }
-
-
     private void Awake()
     {
         audiomngr = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
-    }
-
-    private IEnumerator WaitAndSetSpeed()
-    {
-
-        yield return new WaitForSeconds(0.49f);  // Waits for 0.49 seconds
-        print("speedy");
-        moveSpeed = OGMoveSpeed;
-
     }
 
     public void OnCooldown(float cd)
@@ -770,10 +687,6 @@ public class PlayerScript : MonoBehaviour
             return null;
         }
     }
-    public void IgnoreDamage(bool boolean)
-    {
-        ignoreDamage = boolean;
-    }
 
     public void IgnoreMovement(bool boolean)
     {
@@ -836,27 +749,20 @@ public class PlayerScript : MonoBehaviour
 
     public void PickRandomCharacter(SpriteRenderer spriteRenderer)
     {
-        // Array of possible character types
-        System.Type[] characterTypes = {
-        typeof(Steelager), typeof(Vander), typeof(Rager),
-        typeof(Skipler), typeof(Fin), typeof(LazyBigus),
-        typeof(Lithra), typeof(Chiback)
-    };
-
-        // Corresponding colors
-        Color[] colors = {
-        SteelagerColor, VanderColor, RagerColor,
-        SkiplerColor, FinColor, LazyBigusColor,
-        lithraColor, chibackColor
-    };
+        // Array of possible character type names
+        string[] characterTypeNames = {
+            "Steelager", "Vander", "Rager",
+            "Skipler", "Fin", "Lazy Bigus",
+            "Lithra", "Chiback"
+        };
 
         // Randomly select an index
-        int randomIndex = UnityEngine.Random.Range(0, characterTypes.Length);
+        int randomIndex = UnityEngine.Random.Range(0, characterTypeNames.Length);
 
-        // Add the randomly selected character component
-        character = this.gameObject.AddComponent(characterTypes[randomIndex]) as Character; 
+        P1Name.text=characterTypeNames[randomIndex];
+    }
 
-        // Set the corresponding color
-        spriteRenderer.color = colors[randomIndex];
+    public void TakeDamage(int dmg){
+        character.TakeDamage(dmg);
     }
 }

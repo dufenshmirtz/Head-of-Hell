@@ -27,6 +27,14 @@ public class CharacterAnimationEvents : MonoBehaviour
     {
         character.DealChargeDmg();
     }
+
+    public void StartHeavyAttackEvent(){
+        character.HeavyAttackStart();
+    }
+
+    public void EndHeavyAttackEvent(){
+        character.HeavyAttackEnd();
+    }
     //Vander
     public void StabDamageEvent()
     {
