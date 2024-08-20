@@ -28,7 +28,7 @@ public class Lithra : Character
         {
             audioManager.PlaySFX(audioManager.bellPunch, 1.8f);
             audioManager.PlaySFX(audioManager.lightattack, 0.5f);
-            enemy.TakeDamage(21);
+            enemy.TakeDamage(heavyDamage);
 
             if (!player.enemy.isBlocking)
             {

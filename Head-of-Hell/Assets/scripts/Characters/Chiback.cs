@@ -25,7 +25,7 @@ public class Chiback : Character
         if (hitEnemy != null)
         {
             audioManager.PlaySFX(audioManager.katanaHit, 1.8f);
-            enemy.TakeDamage(21);
+            enemy.TakeDamage(heavyDamage);
 
             if (!player.enemy.isBlocking)
             {
@@ -85,7 +85,7 @@ public class Chiback : Character
             Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
             if (hitEnemy != null)
             {
-
+                enemy.BreakCharge();
                 animator.SetTrigger("SytheHit");
                 audioManager.PlaySFX(audioManager.sytheHit, 1f);
                 audioManager.PlaySFX(audioManager.sytheSlash, 1f);

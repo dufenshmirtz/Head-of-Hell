@@ -1,0 +1,34 @@
+{
+    "name": "ControllerInput",
+    "maps": [
+        {
+            "name": "GamePlay",
+            "id": "ddc24b19-c5bb-4f0c-beb0-c93f7ddd6bc2",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "7c44d3c9-c8db-4f1a-b1e1-e4d854b3e399",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "8ed2c324-0656-48f2-a71f-a3bea11534c5",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

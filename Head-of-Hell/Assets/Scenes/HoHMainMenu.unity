@@ -10082,7 +10082,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Special Attack
+  m_text: Quick Attack
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ca68c96531b663f409f99cc0f3298091, type: 2}
   m_sharedMaterial: {fileID: -1117074530133824481, guid: ca68c96531b663f409f99cc0f3298091, type: 2}

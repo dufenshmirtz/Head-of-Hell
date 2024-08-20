@@ -17,6 +17,10 @@ public abstract class Character : MonoBehaviour
     private Coroutine chargeCoroutine;
     float chargeTime = 0.5f;
     int chargeDmg = 34;
+    bool isBlocking=false;
+    protected bool ignoreDamage=false;
+
+    protected int heavyDamage = 14;
 
     public void InitializeCharacter(PlayerScript playa, AudioManager audio, CharacterResources res)
     {
@@ -139,7 +143,7 @@ public abstract class Character : MonoBehaviour
         animator.SetTrigger("critsi");
         animator.SetBool("Crouch", true);
         player.PlayerBlock(true);
-
+        isBlocking=true;
         ResetQuickPunch();
     }
     public void Unblock()
@@ -147,11 +151,13 @@ public abstract class Character : MonoBehaviour
         animator.SetBool("cWalk", false);
         animator.SetBool("Crouch", false);
         player.PlayerBlock(false);
+        isBlocking=false;
 
         ResetQuickPunch();
     }
     #endregion
 
+    #region General
     public void Jump()
     {
         player.rb.velocity = new Vector2(player.rb.velocity.x, player.jumpForce);
@@ -171,6 +177,75 @@ public abstract class Character : MonoBehaviour
     {
         return Vector3.Distance(this.transform.position, enemy.transform.position) <= 3f;
     }
+
+    virtual public void HeavyAttackStart()
+    {
+        player.moveSpeed = player.heavySpeed;
+        StartCoroutine(WaitAndSetSpeed());
+        animator.SetBool("isHeavypunching", true);
+    }
+
+    public void HeavyAttackEnd()
+    {
+        player.moveSpeed = player.OGMoveSpeed;
+        animator.SetBool("isHeavypunching", false);
+    }
+
+    private IEnumerator WaitAndSetSpeed()
+    {
+
+        yield return new WaitForSeconds(0.49f);  // Waits for 0.49 seconds
+        player.moveSpeed = player.OGMoveSpeed;
+
+    }
+
+    virtual public void TakeDamage(int dmg)
+    {
+        if (ignoreDamage)
+        {
+            return;
+        }
+
+        ResetQuickPunch();
+
+        if (dmg == chargeDmg)
+        {
+            StopCHarge();
+        }
+
+        if (isBlocking)
+        {
+            if (dmg == heavyDamage) //if its heavy attack take half the damage
+            {
+                player.currHealth -= 5;
+
+                player.healthbar.SetHealth(player.currHealth);
+            }
+            //if its light attack take no dmg
+
+            if (dmg == chargeDmg)
+            {
+                player.currHealth -= dmg;
+
+                player.healthbar.SetHealth(player.currHealth);
+                player.moveSpeed = player.OGMoveSpeed;
+            }
+        }
+        else
+        {
+            player.currHealth -= dmg;
+
+            animator.SetTrigger("tookDmg");
+
+            player.healthbar.SetHealth(player.currHealth);
+        }
+
+        if (player.currHealth <= 0)
+        {
+            player.Die();
+        }
+    }
+    #endregion
 
     #region Special Functions
     //Rager

@@ -28,7 +28,7 @@ public class Fin : Character
         {
 
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
-            enemy.TakeDamage(21);
+            enemy.TakeDamage(heavyDamage);
 
             if (!player.enemy.isBlocking)
             {
@@ -64,6 +64,7 @@ public class Fin : Character
                 counterDone = true;
                 return true;
             }
+            return true;
         }
 
         return false;
@@ -120,6 +121,15 @@ public class Fin : Character
         counterIsOn = false;
     }
 
+    override public void TakeDamage(int dmg)
+    {
+        if(DetectCounter()){
+            return;
+        }
+
+        base.TakeDamage(dmg);
+    }
+
     #endregion
 
     #region LightAttack
@@ -135,7 +145,7 @@ public class Fin : Character
     IEnumerator Roll()
     {
         player.IgnoreMovement(true);
-        player.IgnoreDamage(true);
+        ignoreDamage=true;
         player.knockable = false;
 
         // Store the original gravity scale
@@ -194,7 +204,7 @@ public class Fin : Character
 
 
         player.IgnoreMovement(false);
-        player.IgnoreDamage(false);
+        ignoreDamage=false;
 
         player.knockable = true;
 

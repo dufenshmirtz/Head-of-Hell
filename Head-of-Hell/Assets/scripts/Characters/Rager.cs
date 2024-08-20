@@ -28,7 +28,7 @@ public class Rager : Character
         {
 
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
-            enemy.TakeDamage(21);
+            enemy.TakeDamage(heavyDamage);
 
             if (!player.enemy.isBlocking)
             {
