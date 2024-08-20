@@ -136,6 +136,9 @@ public class PlayerScript : MonoBehaviour
     public CharacterResources resources;
     private bool stunned=false;
 
+    public GameObject[] stages;
+    string stageName;
+
     void Start()
     {
         //basic variables assignment
@@ -143,6 +146,15 @@ public class PlayerScript : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         currHealth = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
+
+        stageName=PlayerPrefs.GetString("SelectedStage");
+        if(stageName=="Stage 1"){
+            stages[0].SetActive(true);
+        }else if(stageName=="Stage 2"){
+            stages[1].SetActive(true);
+        }else if(stageName=="Stage 3"){
+            stages[2].SetActive(true);
+        }
 
         if (player == 1)  //player name assignment
         {

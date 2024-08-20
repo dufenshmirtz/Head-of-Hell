@@ -148,4 +148,5 @@ public class CharacterAnimationEvents : MonoBehaviour
         chiback = (Chiback)character;
         chiback.DealFireDamage();
     }
+    //sth
 }
