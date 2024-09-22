@@ -32,7 +32,7 @@ public class PlayerScript : MonoBehaviour
     public int lightDMG = 5;
     AudioManager audiomngr;
     public TextMeshProUGUI P1Name, winner;
-    private string P2Name;
+    public string P2Name;
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
 
@@ -159,12 +159,10 @@ public class PlayerScript : MonoBehaviour
         if (player == 1)  //player name assignment
         {
             P1Name.text = PlayerPrefs.GetString("Player1Choice");
-            P2Name = PlayerPrefs.GetString("Player2Choice");
         }
         else
         {
             P1Name.text = PlayerPrefs.GetString("Player2Choice");
-            P2Name = PlayerPrefs.GetString("Player1Choice");
         }
 
         winner.gameObject.SetActive(false);
@@ -231,7 +229,7 @@ public class PlayerScript : MonoBehaviour
             character = chiback;
             spriteRenderer.color = chibackColor;
         }
-        
+        enemy.P2Name=P1Name.text;
 
         character.InitializeCharacter(this, audiomngr, resources);
 
