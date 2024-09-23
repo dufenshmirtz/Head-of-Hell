@@ -146,6 +146,7 @@ public class Skipler : Character
     override public void LightAttack() {
         if (lightReady)
         {
+            QuickAttackIndicatorDisable();
             StartCoroutine(SwordDash());
         }
     }
@@ -200,6 +201,7 @@ public class Skipler : Character
         yield return new WaitForSeconds(3f);
         audioManager.PlaySFX(audioManager.sworDashTada, audioManager.lessVol);
         lightReady = true;
+        QuickAttackIndicatorEnable();
     }
 
     public void DealSwordDashDmg()

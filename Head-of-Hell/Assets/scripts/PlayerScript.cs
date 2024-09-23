@@ -138,6 +138,9 @@ public class PlayerScript : MonoBehaviour
 
     public GameObject[] stages;
     string stageName;
+    //Indicators
+    public GameObject blockDisabled;
+    public GameObject quickAttackIndicator;
 
     void Start()
     {
@@ -774,5 +777,17 @@ public class PlayerScript : MonoBehaviour
 
     public void TakeDamage(int dmg){
         character.TakeDamage(dmg);
+    }
+
+    public void DisableBlock(bool whileKnocked)
+    {
+        character.blockDisabled=true;
+        blockDisabled.gameObject.SetActive(true);
+    }
+
+    public void EnableBlock()
+    {
+        character.blockDisabled = false;
+        blockDisabled.gameObject.SetActive(false);
     }
 }

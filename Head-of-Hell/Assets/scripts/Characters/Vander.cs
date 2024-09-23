@@ -84,6 +84,7 @@ public class Vander : Character
     {
         if (katanaready)
         {
+            QuickAttackIndicatorDisable();
             animator.SetTrigger("katana");
             katanaready = false;
             StartCoroutine(ResetKatana());
@@ -135,6 +136,7 @@ public class Vander : Character
         yield return new WaitForSeconds(2f);
         audioManager.PlaySFX(audioManager.katanaSeath, audioManager.doubleVol);
         katanaready = true;
+        QuickAttackIndicatorEnable();
     }
     #endregion
 

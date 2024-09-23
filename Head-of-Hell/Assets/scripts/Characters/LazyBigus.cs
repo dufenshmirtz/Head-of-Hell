@@ -127,6 +127,7 @@ public class LazyBigus : Character
     {
         if (!isShootin)
         {
+            QuickAttackIndicatorDisable();
             animator.SetTrigger("Shoot");
             StartCoroutine(ResetShooting());
         }
@@ -157,6 +158,7 @@ public class LazyBigus : Character
         yield return new WaitForSeconds(2f);
         audioManager.PlaySFX(audioManager.reload, audioManager.normalVol);
         isShootin = false;
+        QuickAttackIndicatorEnable();
     }
 
     #endregion
