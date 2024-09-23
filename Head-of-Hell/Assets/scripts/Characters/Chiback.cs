@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public class Chiback : Character
 {
@@ -126,6 +127,7 @@ public class Chiback : Character
     {
         if(fireReady)
         {
+            QuickAttackIndicatorDisable();
             animator.SetTrigger("Fire");
             fireReady = false;
             audioManager.PlaySFX(audioManager.fireblast, 1f);
@@ -146,6 +148,8 @@ public class Chiback : Character
             if (!player.enemy.isBlocking)
             {
                 enemy.Knockback(15f, 0.5f, true);
+                enemy.DisableBlock(true);
+                StartCoroutine(ResetBlockability());
             }
         }
         else
@@ -159,6 +163,16 @@ public class Chiback : Character
         yield return new WaitForSeconds(3f);
         audioManager.PlaySFX(audioManager.sworDashTada, audioManager.lessVol);
         fireReady = true;
+        QuickAttackIndicatorEnable();
+    }
+
+    private IEnumerator ResetBlockability()
+    {
+
+        // Wait for 1.1 seconds before enabling the block
+        yield return new WaitForSeconds(jumpDuration+0.1f);
+
+        enemy.EnableBlock();
     }
 
     #endregion

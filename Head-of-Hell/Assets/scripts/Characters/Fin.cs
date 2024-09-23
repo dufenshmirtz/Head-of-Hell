@@ -137,6 +137,7 @@ public class Fin : Character
     {
         if (rollReady)
         {
+            QuickAttackIndicatorDisable();
             rollReady = false;
             StartCoroutine(Roll());
         }
@@ -219,6 +220,7 @@ public class Fin : Character
         yield return new WaitForSeconds(2f);
         audioManager.PlaySFX(audioManager.rollReady, audioManager.lessVol);
         rollReady = true;
+        QuickAttackIndicatorEnable();
     }
     #endregion
 

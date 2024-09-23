@@ -19,8 +19,8 @@ public abstract class Character : MonoBehaviour
     int chargeDmg = 34;
     bool isBlocking=false;
     protected bool ignoreDamage=false;
-
     protected int heavyDamage = 14;
+    public bool blockDisabled = false;
 
     public void InitializeCharacter(PlayerScript playa, AudioManager audio, CharacterResources res)
     {
@@ -140,6 +140,10 @@ public abstract class Character : MonoBehaviour
     #region Block
     public void Block()
     {
+        if (blockDisabled)
+        {
+            return;
+        }
         animator.SetTrigger("critsi");
         animator.SetBool("Crouch", true);
         player.PlayerBlock(true);
@@ -244,6 +248,16 @@ public abstract class Character : MonoBehaviour
         {
             player.Die();
         }
+    }
+
+    protected void QuickAttackIndicatorEnable()
+    {
+        player.quickAttackIndicator.SetActive(true);
+    }
+
+    protected void QuickAttackIndicatorDisable()
+    {
+        player.quickAttackIndicator?.SetActive(false);
     }
     #endregion
 

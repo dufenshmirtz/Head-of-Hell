@@ -84,6 +84,7 @@ public class Lithra : Character
     {
         if (airSpinready && (Input.GetKey(player.left) || Input.GetKey(player.right)))
         {
+            QuickAttackIndicatorDisable();
             StartCoroutine(PerformLightAttack());
         }
     }
@@ -165,6 +166,7 @@ public class Lithra : Character
         yield return new WaitForSeconds(3f);
         audioManager.PlaySFX(audioManager.sworDashTada, audioManager.lessVol);
         airSpinready = true;
+        QuickAttackIndicatorEnable();
     }
     #endregion
 

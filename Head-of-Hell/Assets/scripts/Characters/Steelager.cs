@@ -100,6 +100,7 @@ public class Steelager : Character
     {
         if (!bombCharging)
         {
+            QuickAttackIndicatorDisable();
             ThrowBomb();
         }
     }
@@ -122,6 +123,7 @@ public class Steelager : Character
         yield return new WaitForSeconds(2f);
         audioManager.PlaySFX(audioManager.lighter, audioManager.normalVol);
         bombCharging = false;
+        QuickAttackIndicatorEnable();
     }
 
     public void FuseSound()
