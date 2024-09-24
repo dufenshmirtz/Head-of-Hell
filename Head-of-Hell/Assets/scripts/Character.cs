@@ -217,7 +217,7 @@ public abstract class Character : MonoBehaviour
             StopCHarge();
         }
 
-        if (isBlocking && !blockable)
+        if (isBlocking && blockable)
         {
             if (dmg == heavyDamage) //if its heavy attack take half the damage
             {

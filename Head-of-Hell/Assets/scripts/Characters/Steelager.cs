@@ -1,9 +1,10 @@
 using System.Collections;
+using UnityEditor.Build;
 using UnityEngine;
 
 public class Steelager : Character
 {
-    float cooldown = 15f;
+    float cooldown = 16f;
     int damage = 20;
     float speedSaver = 4f;
     //bombin
@@ -71,9 +72,9 @@ public class Steelager : Character
 
         if (hitEnemy != null)
         {
+            enemy.BreakCharge();
             enemy.TakeDamage(damage, true);
             enemy.Knockback(10f, 0.8f, false);
-
         }
     }
 
@@ -81,6 +82,7 @@ public class Steelager : Character
     {
         player.OnCooldown(cooldown);
         player.stayDynamic();
+        ignoreDamage = false;
     }
 
     #endregion

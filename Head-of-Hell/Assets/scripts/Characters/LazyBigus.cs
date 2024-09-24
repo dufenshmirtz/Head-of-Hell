@@ -57,6 +57,8 @@ public class LazyBigus : Character
 
     public void BeamHitEnemy()
     {
+        print("negada");
+        enemy.BreakCharge();
         enemy.TakeDamage(10,true);
         enemy.Knockback(13f, 0.5f, true);
         audioManager.PlaySFX(audioManager.beamHit, 1.8f);
