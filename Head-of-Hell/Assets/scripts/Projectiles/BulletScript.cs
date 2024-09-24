@@ -27,7 +27,7 @@ public class BulletScript : MonoBehaviour
             PlayerScript playerScript = other.GetComponent<PlayerScript>();
             if (playerScript != null)
             {
-                playerScript.TakeDamage(3);
+                playerScript.TakeDamage(3, true);
 
             }
         }

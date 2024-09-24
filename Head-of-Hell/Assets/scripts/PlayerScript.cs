@@ -24,6 +24,7 @@ public class PlayerScript : MonoBehaviour
     public Transform bellStunPoint;
     public Transform mirrorFireAttackPoint;
     public Transform fireAttackPoint;
+    public Transform explosionPoint;
 
     public LayerMask enemyLayer;
     public bool isBlocking = false;
@@ -111,13 +112,6 @@ public class PlayerScript : MonoBehaviour
     bool isShootin = false;
     public KeyCode shoot;
 
-    //sword-Dash
-    public float swordDashPower = 10f;
-    public float swordDashTime = 0.14f;
-    public bool swordDashReady = true;
-    public bool swordDashin = false;
-    public int swordDashDmg = 5;
-
     Character character;
     Skipler skipler;
     Rager rager;
@@ -138,9 +132,13 @@ public class PlayerScript : MonoBehaviour
 
     public GameObject[] stages;
     string stageName;
+
+    public GameObject beam;
     //Indicators
     public GameObject blockDisabled;
+    public GameObject poison;
     public GameObject quickAttackIndicator;
+    public GameObject stun;
 
     void Start()
     {
@@ -470,9 +468,9 @@ public class PlayerScript : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        Gizmos.DrawWireSphere(explosionPoint.position, attackRange*4);
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
-        Gizmos.DrawWireSphere(bellPoint.position, attackRange*2);
-        Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
+        //Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
 
     }
 
@@ -752,12 +750,14 @@ public class PlayerScript : MonoBehaviour
 
     public IEnumerator Stun(float time)
     {
+        stun.gameObject.SetActive(true);
         rb.velocity = Vector2.zero; // Stop the enemy's movement
         stunned = true;
 
         yield return new WaitForSeconds(time);
 
         stunned = false;
+        stun.gameObject.SetActive(false);
     }
 
     public void PickRandomCharacter(SpriteRenderer spriteRenderer)
@@ -775,8 +775,8 @@ public class PlayerScript : MonoBehaviour
         P1Name.text=characterTypeNames[randomIndex];
     }
 
-    public void TakeDamage(int dmg){
-        character.TakeDamage(dmg);
+    public void TakeDamage(int dmg,bool blockable){
+        character.TakeDamage(dmg,blockable);
     }
 
     public void DisableBlock(bool whileKnocked)
@@ -789,5 +789,11 @@ public class PlayerScript : MonoBehaviour
     {
         character.blockDisabled = false;
         blockDisabled.gameObject.SetActive(false);
+    }
+
+    public void BeamHit()
+    {
+        bigus.BeamHitEnemy();
+        print("@@@1");
     }
 }

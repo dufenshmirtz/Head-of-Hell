@@ -10,7 +10,7 @@ public class LazyBigus : Character
     public float bulletSpeed = 35f; // Speed of the bullet
     bool isShootin = false;
     public KeyCode shoot;
-    float cooldown = 60f;
+    float cooldown = 20f;
     float heal = 30f, healTime;
 
     #region HeavyAttack
@@ -28,7 +28,7 @@ public class LazyBigus : Character
         {
 
             audioManager.PlaySFX(audioManager.BigusHeavy, 1f);
-            enemy.TakeDamage(heavyDamage);
+            enemy.TakeDamage(heavyDamage, true);
 
             if (!player.enemy.isBlocking)
             {
@@ -48,77 +48,41 @@ public class LazyBigus : Character
     override public void Spell()
     {
         player.IgnoreUpdate(true);
-        player.UsingAbility(cooldown);
-
-        healTime = heal / 5f;
-        //Activate abilty function
-
-        audioManager.PauseMusic();
-        audioManager.PlaySFX(audioManager.lullaby, audioManager.lullaVol);
-
-        StartCoroutine(Sleeping(healTime));
-    }
-
-    IEnumerator Sleeping(float duration)
-    {
-        player.DeactivateColliders();
         player.stayStatic();
-
-        // Set the player as dead
-        animator.SetBool("isDead", true);
-
-
-        // Loop for the specified duration
-        for (int i = 0; i < duration; i++)
-        {
-
-            // Regenerate health
-            player.currHealth += 5;
-            player.healthbar.SetHealth(player.currHealth);
-
-
-            yield return new WaitForSeconds(1f);
-        }
-
-        if (player.currHealth > player.maxHealth)
-        {
-            player.currHealth = player.maxHealth;
-        }
-
-        animator.SetBool("isDead", false);
-
-        animator.SetBool("permanentDeath", false);
-
-        player.enabled = true;
-
-        audioManager.StartMusic();
-
-        animator.SetTrigger("Angel");
-
+        player.UsingAbility(cooldown);
+        player.beam.SetActive(true);
+        animator.SetTrigger("Beam");
+        audioManager.PlaySFX(audioManager.beam, audioManager.doubleVol);
     }
 
-    public void Rejuvenation()
+    public void BeamHitEnemy()
     {
+        enemy.TakeDamage(10,true);
+        enemy.Knockback(13f, 0.5f, true);
+        audioManager.PlaySFX(audioManager.beamHit, 1.8f);
+        enemy.poison.SetActive(true);
+        StartCoroutine(Poison(2,2f,5));
+    }
 
-        player.ActivateColliders();
-        player.stayDynamic();
+    private IEnumerator Poison(int damageAmount, float interval, int times)
+    {
+        for (int i = 0; i < times; i++)
+        {
+            yield return new WaitForSeconds(interval);
 
-        player.moveSpeed = player.OGMoveSpeed;
-        player.IgnoreUpdate(false);
+            // Deal damage to the enemy
+            enemy.TakeDamage(damageAmount,false);
+        }
+        enemy.poison.SetActive(false);
+    }
 
-        // Start the cooldown timer
+    public void BeamEnd()
+    {
         player.OnCooldown(cooldown);
-
+        player.IgnoreUpdate(false);
+        player.stayDynamic();
     }
-
-    public void BigusKnock()
-    {
-        if (IsEnemyClose())
-        {
-            enemy.BreakCharge();
-            enemy.Knockback(10f, .3f, false);
-        }
-    }
+    
     #endregion
 
     #region LightAttack

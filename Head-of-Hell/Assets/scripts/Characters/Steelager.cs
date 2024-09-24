@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class Steelager : Character
 {
-    float cooldown = 30f;
+    float cooldown = 15f;
+    int damage = 20;
     float speedSaver = 4f;
     //bombin
     public GameObject bombPrefab; // The bullet prefab
@@ -28,7 +29,7 @@ public class Steelager : Character
         {
 
             audioManager.PlaySFX(audioManager.explosion, audioManager.lessVol);
-            enemy.TakeDamage(heavyDamage);
+            enemy.TakeDamage(heavyDamage, true);
 
             if (!player.enemy.isBlocking)
             {
@@ -58,41 +59,30 @@ public class Steelager : Character
     public override void Spell()
     {
         ignoreDamage=true;
-        player.IgnoreSlow(true);
-        ignoreSlow=true;
-
-        player.ChangeSpeed(player.moveSpeed + 2f);
-        speedSaver = player.OGMoveSpeed;
-        player.ChangeOGSpeed(player.moveSpeed);
-
         animator.SetTrigger("FullGeros");
-        audioManager.PlaySFX(audioManager.growl, audioManager.heavyAttackVolume);
-
+        audioManager.PlaySFX(audioManager.bigExplosion, audioManager.doubleVol);
         player.UsingAbility(cooldown);
-
         player.stayStatic();
-        StartCoroutine(Invulnerable(10));
     }
 
-    public void ReActivate()
+    public void DealExplosionDamage()
     {
-        player.ActivateColliders();
-        player.stayDynamic();
-        animator.SetTrigger("animationOver");
+        Collider2D hitEnemy = Physics2D.OverlapCircle(player.explosionPoint.position, player.attackRange*4, player.enemyLayer);
+
+        if (hitEnemy != null)
+        {
+            enemy.TakeDamage(damage, true);
+            enemy.Knockback(10f, 0.8f, false);
+
+        }
     }
 
-    IEnumerator Invulnerable(float delay)
+    public void ExplosionReset()
     {
-        yield return new WaitForSeconds(delay);
-        ignoreDamage=false;
-        player.IgnoreSlow(false);
-        ignoreSlow=false;
-
-        player.ChangeOGSpeed(speedSaver);
-        player.ChangeSpeed(speedSaver);
-
         player.OnCooldown(cooldown);
+        player.stayDynamic();
     }
+
     #endregion
 
     #region LightAttack

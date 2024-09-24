@@ -62,7 +62,7 @@ public class bombScript : MonoBehaviour
             if (playerScript != null)
             {
                 Explode();
-                playerScript.TakeDamage(6);
+                playerScript.TakeDamage(6, true);
                 exploded = true;
             }
         }

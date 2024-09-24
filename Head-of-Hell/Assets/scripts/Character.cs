@@ -81,7 +81,7 @@ public abstract class Character : MonoBehaviour
         {
             enemy.StopPunching();
             enemy.BreakCharge();
-            enemy.TakeDamage(chargeDmg);
+            enemy.TakeDamage(chargeDmg,false);
             enemy.Knockback(13f, 0.4f, false);
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
         }
@@ -203,7 +203,7 @@ public abstract class Character : MonoBehaviour
 
     }
 
-    virtual public void TakeDamage(int dmg)
+    virtual public void TakeDamage(int dmg,bool blockable)
     {
         if (ignoreDamage)
         {
@@ -217,7 +217,7 @@ public abstract class Character : MonoBehaviour
             StopCHarge();
         }
 
-        if (isBlocking)
+        if (isBlocking && !blockable)
         {
             if (dmg == heavyDamage) //if its heavy attack take half the damage
             {

@@ -25,7 +25,7 @@ public class Vander : Character
         {
 
             audioManager.PlaySFX(audioManager.katanaHit, 1f);
-            enemy.TakeDamage(heavyDamage);
+            enemy.TakeDamage(heavyDamage, true);
 
             if (!player.enemy.isBlocking)
             {
@@ -57,7 +57,7 @@ public class Vander : Character
         {
             enemy.StopPunching();
             enemy.BreakCharge();
-            enemy.TakeDamage(stabDamage);
+            enemy.TakeDamage(stabDamage, true);
             player.currHealth += stabHeal;
 
             if (player.currHealth > player.maxHealth)
@@ -97,7 +97,7 @@ public class Vander : Character
 
         if (hitEnemy != null)
         {
-            enemy.TakeDamage(katanaDmg);
+            enemy.TakeDamage(katanaDmg, true);
             audioManager.PlaySFX(audioManager.katanaHit, audioManager.lightAttackVolume);
         }
         else
@@ -113,7 +113,7 @@ public class Vander : Character
 
         if (hitEnemy != null)
         {
-            enemy.TakeDamage(katanaDmg);
+            enemy.TakeDamage(katanaDmg, true);
             player.currHealth += katanaDmg;
             if (player.currHealth > player.maxHealth)
             {

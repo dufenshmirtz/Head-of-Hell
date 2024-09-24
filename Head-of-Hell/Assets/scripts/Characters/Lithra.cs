@@ -28,7 +28,7 @@ public class Lithra : Character
         {
             audioManager.PlaySFX(audioManager.bellPunch, 1.8f);
             audioManager.PlaySFX(audioManager.lightattack, 0.5f);
-            enemy.TakeDamage(heavyDamage);
+            enemy.TakeDamage(heavyDamage, true);
 
             if (!player.enemy.isBlocking)
             {
@@ -58,7 +58,7 @@ public class Lithra : Character
         {
             enemy.StopPunching();
             enemy.BreakCharge();
-            enemy.TakeDamage(bellDamage);
+            enemy.TakeDamage(bellDamage, true);
             Collider2D bellStunPoint = Physics2D.OverlapCircle(player.bellStunPoint.position, player.attackRange/3, player.enemyLayer);
             if (bellStunPoint != null)
             {
@@ -131,8 +131,8 @@ public class Lithra : Character
             if (hitEnemy != null)
             {
                 audioManager.PlaySFX(audioManager.bellDashHit, 1f);
-                enemy.TakeDamage(3);
-                StartCoroutine(enemy.InterruptMovement(0.5f));
+                enemy.TakeDamage(3,true);
+                StartCoroutine(enemy.Stun(0.5f));
                 float moveDirection2 = Input.GetKey(player.left) ? -1f : (Input.GetKey(player.right) ? 1f : 0f);
 
                 // Jump back after hitting the enemy

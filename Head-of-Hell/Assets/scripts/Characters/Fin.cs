@@ -28,7 +28,7 @@ public class Fin : Character
         {
 
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
-            enemy.TakeDamage(heavyDamage);
+            enemy.TakeDamage(heavyDamage, true);
 
             if (!player.enemy.isBlocking)
             {
@@ -80,6 +80,7 @@ public class Fin : Character
         }
         else
         {
+            print("&&89");
             ignoreCounterOff = false;
         }
         
@@ -106,7 +107,7 @@ public class Fin : Character
 
         audioManager.PlaySFX(audioManager.counterClong, audioManager.doubleVol);
 
-        enemy.TakeDamage(damage);
+        enemy.TakeDamage(damage,true);
 
         player.stayDynamic();
         enemy.stayDynamic();
@@ -121,13 +122,13 @@ public class Fin : Character
         counterIsOn = false;
     }
 
-    override public void TakeDamage(int dmg)
+    override public void TakeDamage(int dmg, bool blockable)
     {
         if(DetectCounter()){
             return;
         }
 
-        base.TakeDamage(dmg);
+        base.TakeDamage(dmg, blockable);
     }
 
     #endregion

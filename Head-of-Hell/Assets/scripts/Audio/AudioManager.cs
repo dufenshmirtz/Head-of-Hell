@@ -61,6 +61,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip sytheSlash;
     public AudioClip sytheHit;
     public AudioClip fireblast;
+    public AudioClip beam;
+    public AudioClip beamHit;
+    public AudioClip bigExplosion;
 
     //volumes
     public float deathVolume = 1.0f;
