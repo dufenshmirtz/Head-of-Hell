@@ -28,7 +28,7 @@ public class Rager : Character
         {
 
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
-            enemy.TakeDamage(heavyDamage);
+            enemy.TakeDamage(heavyDamage, true);
 
             if (!player.enemy.isBlocking)
             {
@@ -64,7 +64,7 @@ public class Rager : Character
             enemy.BreakCharge();
             player.cdbarimage.sprite = player.activeSprite;
             //dmg and sound
-            hitEnemy.GetComponent<PlayerScript>().TakeDamage(0); //--here
+            hitEnemy.GetComponent<PlayerScript>().TakeDamage(0, true); //--here
             audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
 
             //playerState
@@ -96,19 +96,19 @@ public class Rager : Character
     }
     public void FirstHit()
     {
-        enemy.GetComponent<PlayerScript>().TakeDamage(hit1Damage); //--here
+        enemy.GetComponent<PlayerScript>().TakeDamage(hit1Damage, true); //--here
         audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
     }
 
     public void SecondHit()
     {
-        enemy.GetComponent<PlayerScript>().TakeDamage(hit2Damage); //--here
+        enemy.GetComponent<PlayerScript>().TakeDamage(hit2Damage, true); //--here
         audioManager.PlaySFX(audioManager.heavyattack, audioManager.lightAttackVolume);
     }
 
     public void ThirdHit()
     {
-        enemy.GetComponent<PlayerScript>().TakeDamage(hit3Damage); //--here
+        enemy.GetComponent<PlayerScript>().TakeDamage(hit3Damage,true); //--here
         audioManager.PlaySFX(audioManager.klong, audioManager.doubleVol);
 
         //player state reset
@@ -144,7 +144,7 @@ public class Rager : Character
         {
 
             //hitEnemy.GetComponent<PlayerScript>().TakeDamage(lightDMG); //--here
-            enemy.TakeDamage(lightDamage);
+            enemy.TakeDamage(lightDamage, true);
             audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
         }
         else

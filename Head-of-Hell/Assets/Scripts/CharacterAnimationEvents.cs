@@ -78,18 +78,11 @@ public class CharacterAnimationEvents : MonoBehaviour
         rager.QuickPunchStart();
     }
     //Bigus
-    public void BigusKnockEvent()
+    public void BeamEndEvent()
     {
         bigus = (LazyBigus)character;
-        bigus.BigusKnock();
+        bigus.BeamEnd();
     }
-
-    public void RejuvenationEvent()
-    {
-        bigus = (LazyBigus)character;
-        bigus.Rejuvenation();
-    }
-
     public void ShootEvent()
     {
         bigus = (LazyBigus)character;
@@ -103,10 +96,16 @@ public class CharacterAnimationEvents : MonoBehaviour
     }
 
     //Steelager
-    public void ReActivateEvent()
+    public void ResetExplosionEvent()
     {
         steelager = (Steelager)character;
-        steelager.ReActivate();
+        steelager.ExplosionReset();
+    }
+
+    public void ExplosionDamageEvent()
+    {
+        steelager = (Steelager)character;
+        steelager.DealExplosionDamage();
     }
 
     //Fin

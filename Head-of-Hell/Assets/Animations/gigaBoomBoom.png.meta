@@ -1,0 +1,312 @@
+fileFormatVersion: 2
+guid: 5fa3a4d09fafbc442873ee5261eb8aa3
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: gigaBoomBoom_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 92
+        height: 200
+      alignment: 9
+      pivot: {x: 0.64589167, y: 0.48541072}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15cf57f6d3def8549823e244f7dcdc96
+      internalID: -2049597078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gigaBoomBoom_1
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 0
+        width: 106
+        height: 200
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49124637}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 266917c056d2b20408b554cf77708781
+      internalID: -196114176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gigaBoomBoom_2
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 0
+        width: 111
+        height: 200
+      alignment: 9
+      pivot: {x: 0.5157718, y: 0.49124637}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4b62b82dfb476a45954e49bde011236
+      internalID: 792718206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gigaBoomBoom_3
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 0
+        width: 111
+        height: 200
+      alignment: 9
+      pivot: {x: 0.4842271, y: 0.49999988}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a61a415986da0a940ad076f396bcc2d0
+      internalID: 332913107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gigaBoomBoom_4
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 0
+        width: 111
+        height: 200
+      alignment: 9
+      pivot: {x: 0.49474218, y: 0.48832855}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f0a8cb38110f504a864fc6e15c6ea6a
+      internalID: -1715063291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gigaBoomBoom_5
+      rect:
+        serializedVersion: 2
+        x: 524
+        y: 0
+        width: 111
+        height: 200
+      alignment: 9
+      pivot: {x: 0.42673308, y: 0.49124637}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b99e1107a056e6a4088ae730140c838b
+      internalID: -1861890852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gigaBoomBoom_6
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 0
+        width: 111
+        height: 200
+      alignment: 9
+      pivot: {x: 0.45794073, y: 0.4824929}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa65ef3067ab48d4a98dc559ad844879
+      internalID: -2043576107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gigaBoomBoom_7
+      rect:
+        serializedVersion: 2
+        x: 709
+        y: 0
+        width: 111
+        height: 200
+      alignment: 9
+      pivot: {x: 0.5210291, y: 0.47957504}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d8cca5cd1ad14c4d8cbfe8d2c4682c9
+      internalID: 970586005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gigaBoomBoom_8
+      rect:
+        serializedVersion: 2
+        x: 802
+        y: 0
+        width: 111
+        height: 200
+      alignment: 9
+      pivot: {x: 0.5157718, y: 0.4824929}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57e6ba2c1b1af8b4bb1bef67274ca34d
+      internalID: 984806605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      gigaBoomBoom_0: -2049597078
+      gigaBoomBoom_1: -196114176
+      gigaBoomBoom_2: 792718206
+      gigaBoomBoom_3: 332913107
+      gigaBoomBoom_4: -1715063291
+      gigaBoomBoom_5: -1861890852
+      gigaBoomBoom_6: -2043576107
+      gigaBoomBoom_7: 970586005
+      gigaBoomBoom_8: 984806605
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

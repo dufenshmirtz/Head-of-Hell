@@ -26,7 +26,7 @@ public class Chiback : Character
         if (hitEnemy != null)
         {
             audioManager.PlaySFX(audioManager.katanaHit, 1.8f);
-            enemy.TakeDamage(heavyDamage);
+            enemy.TakeDamage(heavyDamage,true);
 
             if (!player.enemy.isBlocking)
             {
@@ -91,17 +91,17 @@ public class Chiback : Character
                 audioManager.PlaySFX(audioManager.sytheHit, 1f);
                 audioManager.PlaySFX(audioManager.sytheSlash, 1f);
                 if(elapsedTime < 0.33f) {
-                    enemy.TakeDamage(5);
+                    enemy.TakeDamage(5,true);
                     print("5 demege $$");
                 }
                 if (0.33 <= elapsedTime && elapsedTime < 0.66)
                 {
-                    enemy.TakeDamage(10);
+                    enemy.TakeDamage(10,true);
                     print("10 demege $$");
                 }
                 if (0.66 <= elapsedTime)
                 {
-                    enemy.TakeDamage(15);
+                    enemy.TakeDamage(15, true);
                     print("15 demege $$");
                 }
 
@@ -143,7 +143,7 @@ public class Chiback : Character
         if (hitEnemy != null || hitEnemy2!=null)
         {
             audioManager.PlaySFX(audioManager.lightattack, 0.5f);
-            enemy.TakeDamage(5);
+            enemy.TakeDamage(5, true);
 
             if (!player.enemy.isBlocking)
             {

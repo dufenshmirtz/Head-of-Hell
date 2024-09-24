@@ -31,7 +31,7 @@ public class Skipler : Character
         {
 
             audioManager.PlaySFX(audioManager.skiplaHeavyHit, 1f);
-            enemy.TakeDamage(heavyDamage);
+            enemy.TakeDamage(heavyDamage, true);
 
             if (!player.enemy.isBlocking)
             {
@@ -128,7 +128,7 @@ public class Skipler : Character
     {
         enemy.StopPunching();
         enemy.BreakCharge();
-        enemy.TakeDamage(DashDamage);
+        enemy.TakeDamage(DashDamage, true);
         audioManager.PlaySFX(audioManager.dashHit, audioManager.heavyAttackVolume);
     }
 
@@ -210,7 +210,7 @@ public class Skipler : Character
 
         if (hitEnemy != null)
         {
-            enemy.TakeDamage(swordDashDmg);
+            enemy.TakeDamage(swordDashDmg, true);
             enemy.Knockback(10f, .15f, true);
             audioManager.PlaySFX(audioManager.sworDashHit, 0.8f);
         }
