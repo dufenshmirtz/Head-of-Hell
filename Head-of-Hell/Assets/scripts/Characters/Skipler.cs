@@ -51,6 +51,7 @@ public class Skipler : Character
     override public void Spell()
     {
         player.UsingAbility(cooldown);
+        ignoreDamage = true;
         StartCoroutine(Dash());
     }
 
@@ -121,6 +122,7 @@ public class Skipler : Character
         dashing = false;
 
         player.OnCooldown(cooldown);
+        ignoreDamage = false;
 
     }
 

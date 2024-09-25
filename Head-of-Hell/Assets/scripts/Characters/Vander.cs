@@ -47,6 +47,7 @@ public class Vander : Character
         player.attackRange += 0.5f;
         animator.SetTrigger("Stab");
         player.UsingAbility(cooldown);
+        ignoreDamage = true;
     }
 
     public void DealStabDmg()
@@ -75,6 +76,7 @@ public class Vander : Character
         player.attackRange = player.ogRange;
 
         player.OnCooldown(cooldown);
+        ignoreDamage = false;
 
     }
     #endregion

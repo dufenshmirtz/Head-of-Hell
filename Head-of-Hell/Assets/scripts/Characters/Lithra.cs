@@ -47,6 +47,7 @@ public class Lithra : Character
     {
         animator.SetTrigger("BellSpell");
         player.UsingAbility(cooldown);
+        ignoreDamage = true;
         audioManager.PlaySFX(audioManager.swoosh, audioManager.doubleVol);
     }
 
@@ -75,6 +76,7 @@ public class Lithra : Character
         player.attackRange = player.ogRange;
 
         player.OnCooldown(cooldown);
+        ignoreDamage = false;
 
     }
     #endregion
