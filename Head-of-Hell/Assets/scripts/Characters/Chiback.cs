@@ -10,6 +10,9 @@ public class Chiback : Character
     float jumpSpeed = 10f;
     float jumpDuration = 1f;
     bool fireReady = true;
+    int timesHit = 0;
+    int shortJumpDamage = 5, MedJumpDamage = 10, wideJumpDamage = 15;
+    bool roarPlayed = false;
 
 
     #region HeavyAttack
@@ -92,19 +95,21 @@ public class Chiback : Character
                 audioManager.PlaySFX(audioManager.sytheHit, 1f);
                 audioManager.PlaySFX(audioManager.sytheSlash, 1f);
                 if(elapsedTime < 0.33f) {
-                    enemy.TakeDamage(5,true);
-                    print("5 demege $$");
+                    enemy.TakeDamage(shortJumpDamage,true);
+                    Enraged(shortJumpDamage);
                 }
                 if (0.33 <= elapsedTime && elapsedTime < 0.66)
                 {
-                    enemy.TakeDamage(10,true);
-                    print("10 demege $$");
+                    enemy.TakeDamage(MedJumpDamage,true);
+                    Enraged(MedJumpDamage);
                 }
                 if (0.66 <= elapsedTime)
                 {
-                    enemy.TakeDamage(15, true);
-                    print("15 demege $$");
+                    enemy.TakeDamage(wideJumpDamage, true);
+                    Enraged(wideJumpDamage);
                 }
+
+                timesHit = 0;
 
                 enemy.Knockback(11f,0.25f,false);
                
@@ -184,6 +189,32 @@ public class Chiback : Character
     {
         base.ChargeAttack();
         animator.SetTrigger("AwsomeCharge");
+    }
+    #endregion
+
+    #region Passive
+    override public void TakeDamage(int dmg, bool blockable)
+    {
+        if (timesHit < 4 && !isBlocking)
+        {
+            timesHit++;
+        }
+
+        if(timesHit == 4 && !roarPlayed)
+        {
+            audioManager.PlaySFX(audioManager.growl, 0.5f);
+            roarPlayed = true;
+        }
+        base.TakeDamage(dmg, blockable);
+    }
+
+    void Enraged(int jumpDamage)
+    {
+        if (timesHit == 4)
+        {
+            enemy.TakeDamage(jumpDamage / 2,true);
+            roarPlayed = false;
+        }
     }
     #endregion
 }

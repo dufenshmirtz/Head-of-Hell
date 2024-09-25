@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Lithra : Character
 {
@@ -29,7 +30,7 @@ public class Lithra : Character
             audioManager.PlaySFX(audioManager.bellPunch, 1.8f);
             audioManager.PlaySFX(audioManager.lightattack, 0.5f);
             enemy.TakeDamage(heavyDamage, true);
-
+            LuckyBell();
             if (!player.enemy.isBlocking)
             {
                 enemy.Knockback(11f, 0.15f, true);
@@ -176,7 +177,23 @@ public class Lithra : Character
     public override void ChargeAttack()
     {
         base.ChargeAttack();
+        LuckyBell();
         animator.SetTrigger("bellCharge");
+    }
+    #endregion
+
+    #region Passive
+
+    void LuckyBell()
+    {
+        if (StunChance())
+        {
+            StartCoroutine(enemy.Stun(0.8f));
+        }
+    }
+    bool StunChance()
+    {
+        return Random.value < 0.20f;
     }
     #endregion
 }

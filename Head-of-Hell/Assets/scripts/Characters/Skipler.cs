@@ -215,6 +215,7 @@ public class Skipler : Character
             enemy.TakeDamage(swordDashDmg, true);
             enemy.Knockback(10f, .15f, true);
             audioManager.PlaySFX(audioManager.sworDashHit, 0.8f);
+            ReduceCD();
         }
         else
         {
@@ -228,6 +229,13 @@ public class Skipler : Character
     {
         base.ChargeAttack();
         animator.SetTrigger("SkiplerCharge");
+    }
+    #endregion
+
+    #region Passive
+    void ReduceCD()
+    {
+        player.cdTimer -= 1f;
     }
     #endregion
 }

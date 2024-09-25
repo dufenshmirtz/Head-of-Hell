@@ -12,6 +12,7 @@ public class Steelager : Character
     public Transform bombPoint; // The point from where the bullet will be instantiated
     public Transform bombsParent;
     bool bombCharging = false;
+    bombScript bomba;
 
     bool ignoreSlow=false;
 
@@ -95,6 +96,10 @@ public class Steelager : Character
             QuickAttackIndicatorDisable();
             ThrowBomb();
         }
+        else
+        {
+            bomba.Explode();
+        }
     }
     void ThrowBomb()
     {
@@ -105,6 +110,7 @@ public class Steelager : Character
         bombCharging = true;
         audioManager.PlaySFX(audioManager.fuse, audioManager.normalVol);
         GameObject bomb = Instantiate(bombPrefab, bombPoint.position, player.firePoint.rotation);
+        bomba=bomb.GetComponent<bombScript>();
         Rigidbody2D rb = bomb.GetComponent<Rigidbody2D>();
         bomb.transform.SetParent(bombsParent);
         StartCoroutine(ResetBomb());

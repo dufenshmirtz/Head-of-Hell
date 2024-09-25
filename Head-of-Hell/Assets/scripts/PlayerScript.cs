@@ -47,7 +47,7 @@ public class PlayerScript : MonoBehaviour
     //cd
     protected bool onCooldown = false;
     public Slider cooldownSlider;
-    protected float cdTimer = 0f;
+    public float cdTimer = 0f;
 
     //bar images
     public Image cdbarimage;
@@ -137,6 +137,9 @@ public class PlayerScript : MonoBehaviour
     //Indicators
     public GameObject blockDisabled;
     public GameObject poison;
+    public GameObject Stack1Poison;
+    public GameObject Stack2Poison;
+    public GameObject Stack3Poison;
     public GameObject quickAttackIndicator;
     public GameObject stun;
 
@@ -620,10 +623,19 @@ public class PlayerScript : MonoBehaviour
             knockbackXaxis = axis;
             audiomngr.PlaySFX(audiomngr.knockback, audiomngr.deathVolume);
             bool enemyOnRight = enemy.transform.position.x > this.transform.position.x;
+            //This if must be removed when knockback tranfers to playerscript, its used for a Stellger Passive Function
+            if (time == 0.3333f)
+            {
+                enemyOnRight=!enemyOnRight;
+            }
+            else
+            {
+                animator.SetBool("knocked", true);
+            }
             KBForce = force;
             KBCounter = time;
             knockfromright = enemyOnRight;
-            animator.SetBool("knocked", true);
+            
         }
     }
 
@@ -794,6 +806,14 @@ public class PlayerScript : MonoBehaviour
     public void BeamHit()
     {
         bigus.BeamHitEnemy();
-        print("@@@1");
+    }
+
+    public void StackPoison()
+    {
+        if(!enemy.isBlocking)
+        {
+            bigus.AddPoison();
+        }
+        
     }
 }

@@ -13,11 +13,11 @@ public abstract class Character : MonoBehaviour
     protected bool usingAbility;
     //Charge
     bool charged = false;
-    bool charging = false;
+    protected bool charging = false;
     private Coroutine chargeCoroutine;
     float chargeTime = 0.5f;
-    int chargeDmg = 34;
-    bool isBlocking=false;
+    protected int chargeDmg = 34;
+    protected bool isBlocking=false;
     protected bool ignoreDamage=false;
     protected int heavyDamage = 14;
     public bool blockDisabled = false;
@@ -73,7 +73,7 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    public void DealChargeDmg()
+    public virtual void DealChargeDmg()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
 
@@ -222,7 +222,7 @@ public abstract class Character : MonoBehaviour
             if (dmg == heavyDamage) //if its heavy attack take half the damage
             {
                 player.currHealth -= 5;
-
+                print("Took 5 damage");
                 player.healthbar.SetHealth(player.currHealth);
             }
             //if its light attack take no dmg
@@ -240,6 +240,8 @@ public abstract class Character : MonoBehaviour
             player.currHealth -= dmg;
 
             animator.SetTrigger("tookDmg");
+
+            print("Took " + dmg + " damage");
 
             player.healthbar.SetHealth(player.currHealth);
         }
