@@ -8,6 +8,7 @@ public class Vander : Character
     float cooldown = 12f;
     //katana
     int katanaDmg = 3;
+    int smallLifesteal = 3;
     bool katanaready = true;
 
     #region HeavyAttack
@@ -26,7 +27,7 @@ public class Vander : Character
 
             audioManager.PlaySFX(audioManager.katanaHit, 1f);
             enemy.TakeDamage(heavyDamage, true);
-
+            Lifesteal(smallLifesteal);
             if (!player.enemy.isBlocking)
             {
                 enemy.Knockback(11f, 0.15f, true);
@@ -59,12 +60,7 @@ public class Vander : Character
             enemy.StopPunching();
             enemy.BreakCharge();
             enemy.TakeDamage(stabDamage, true);
-            player.currHealth += stabHeal;
-
-            if (player.currHealth > player.maxHealth)
-            {
-                player.currHealth = player.maxHealth;
-            }
+            Lifesteal(stabHeal);
             player.healthbar.SetHealth(player.currHealth);
             audioManager.PlaySFX(audioManager.stabHit, audioManager.doubleVol);
         }
@@ -116,12 +112,7 @@ public class Vander : Character
         if (hitEnemy != null)
         {
             enemy.TakeDamage(katanaDmg, true);
-            player.currHealth += katanaDmg;
-            if (player.currHealth > player.maxHealth)
-            {
-                player.currHealth = player.maxHealth;
-            }
-            player.healthbar.SetHealth(player.currHealth);
+            Lifesteal(smallLifesteal);
             enemy.Knockback(10f, .15f, true);
             audioManager.PlaySFX(audioManager.katanaHit2, 1.5f);
         }
@@ -147,6 +138,18 @@ public class Vander : Character
     {
         base.ChargeAttack();
         animator.SetTrigger("VanderCharge");
+    }
+    #endregion
+
+    #region Passive
+    void Lifesteal(int amount)
+    {
+        player.currHealth += amount;
+        if (player.currHealth > player.maxHealth)
+        {
+            player.currHealth = player.maxHealth;
+        }
+        player.healthbar.SetHealth(player.currHealth);
     }
     #endregion
 }

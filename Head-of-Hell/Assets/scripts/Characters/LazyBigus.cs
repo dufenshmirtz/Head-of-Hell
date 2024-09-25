@@ -12,6 +12,7 @@ public class LazyBigus : Character
     public KeyCode shoot;
     float cooldown = 20f;
     float heal = 30f, healTime;
+    int poisonCounter = 0;
 
     #region HeavyAttack
     override public void HeavyAttack()
@@ -29,6 +30,7 @@ public class LazyBigus : Character
 
             audioManager.PlaySFX(audioManager.BigusHeavy, 1f);
             enemy.TakeDamage(heavyDamage, true);
+            ToxicTouch();
 
             if (!player.enemy.isBlocking)
             {
@@ -63,12 +65,15 @@ public class LazyBigus : Character
         enemy.TakeDamage(10,true);
         enemy.Knockback(13f, 0.5f, true);
         audioManager.PlaySFX(audioManager.beamHit, 1.8f);
-        enemy.poison.SetActive(true);
         StartCoroutine(Poison(2,2f,5));
     }
 
     private IEnumerator Poison(int damageAmount, float interval, int times)
     {
+        ResetPoisonStacks();
+        enemy.poison.SetActive(true);
+
+        audioManager.PlaySFX(audioManager.poison, 2.5f);
         for (int i = 0; i < times; i++)
         {
             yield return new WaitForSeconds(interval);
@@ -136,6 +141,77 @@ public class LazyBigus : Character
     {
         base.ChargeAttack();
         animator.SetTrigger("GunCharge");
+    }
+    #endregion
+
+    #region Passive
+
+    void ToxicTouch()
+    {
+        if(poisonCounter == 3)
+        {
+            StartCoroutine(Poison(2,2f,2));
+            poisonCounter = 0;
+            return;
+        }
+
+        AddPoison();
+    }
+
+    public void AddPoison()
+    {
+        if (!enemy.poison.gameObject.activeSelf)
+        {
+            if(poisonCounter < 3)
+            {
+                if(poisonCounter==0)
+                {
+                    enemy.Stack1Poison.gameObject.SetActive(true);
+                }
+                if (poisonCounter == 1)
+                {
+                    enemy.Stack1Poison.gameObject.SetActive(false);
+                    enemy.Stack2Poison.gameObject.SetActive(true);
+                }
+                if (poisonCounter == 2)
+                {
+                    enemy.Stack2Poison.gameObject.SetActive(false);
+                    enemy.Stack3Poison.gameObject.SetActive(true);
+                }
+                poisonCounter++;
+            }
+        }
+    }
+
+    override public void DealChargeDmg()
+    {
+        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+
+        if (hitEnemy != null)
+        {
+            enemy.StopPunching();
+            enemy.BreakCharge();
+            enemy.TakeDamage(chargeDmg, false);
+            enemy.Knockback(13f, 0.4f, false);
+            audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
+            ToxicTouch();
+        }
+        else
+        {
+            audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
+        }
+        player.knockable = true;
+        charging = false;
+        animator.SetBool("Casting", false);
+        animator.SetBool("Charging", false);
+        player.stayDynamic();
+    }
+
+    private void ResetPoisonStacks()
+    {
+        enemy.Stack1Poison.SetActive(false);
+        enemy.Stack2Poison.SetActive(false);
+        enemy.Stack3Poison.SetActive(false);
     }
     #endregion
 }

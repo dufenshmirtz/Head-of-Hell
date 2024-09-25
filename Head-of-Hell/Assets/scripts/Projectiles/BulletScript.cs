@@ -28,7 +28,7 @@ public class BulletScript : MonoBehaviour
             if (playerScript != null)
             {
                 playerScript.TakeDamage(3, true);
-
+                playerScript.enemy.StackPoison();
             }
         }
     }

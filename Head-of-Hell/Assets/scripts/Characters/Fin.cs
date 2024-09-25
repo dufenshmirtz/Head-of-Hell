@@ -12,6 +12,7 @@ public class Fin : Character
     float rollPower = 8f;
     float rollTime = 0.39f;
     bool rollReady = true;
+    int passiveDamage = 4;
 
     #region HeavyAttack
     override public void HeavyAttack()
@@ -28,7 +29,7 @@ public class Fin : Character
         {
 
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
-            enemy.TakeDamage(heavyDamage, true);
+            enemy.TakeDamage(heavyDamage+passiveDamage, true);
 
             if (!player.enemy.isBlocking)
             {

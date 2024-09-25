@@ -10,9 +10,11 @@ public class bombScript : MonoBehaviour
     int enemy;
     bool exploded = false;
     bool dmgEnd=false;
+    bool damageDealt = false;
     PlayerScript playa;
     Steelager steelager;
     AudioManager audioManager;
+    bool jumpDone = false;
 
     // Start is called before the first frame update
     void Start()
@@ -54,8 +56,19 @@ public class bombScript : MonoBehaviour
             
             return;
         }
-        
-        if (other.gameObject.layer == enemy && !exploded && !dmgEnd)
+
+        if (other.gameObject.layer == enemy && exploded && !dmgEnd && !damageDealt)
+        {
+
+            PlayerScript playerScript = other.GetComponent<PlayerScript>();
+            if (playerScript != null)
+            {
+                playerScript.TakeDamage(6, true);
+                damageDealt = true;
+            }
+        }
+
+        if (other.gameObject.layer == enemy && !exploded && !dmgEnd && !damageDealt)
         {
             
             PlayerScript playerScript = other.GetComponent<PlayerScript>();
@@ -63,20 +76,37 @@ public class bombScript : MonoBehaviour
             {
                 Explode();
                 playerScript.TakeDamage(6, true);
-                exploded = true;
+                damageDealt = true;
+            }
+        }
+
+        if (other.gameObject.layer != enemy && exploded && !dmgEnd && !jumpDone)
+        {
+
+            PlayerScript playerScript = other.GetComponent<PlayerScript>();
+            if (playerScript != null)
+            {
+
+                playerScript.Knockback(13f, 0.3333f, true);
+                jumpDone = true;
             }
         }
     }
 
     public void Explode()
     {
-        Collider2D[] colliders = GetComponents<Collider2D>();
-        colliders[2].enabled = true;
-        if (player != 0)
+        if(!exploded)
         {
-            audioManager.BoomSound();
+            exploded = true;
+            Collider2D[] colliders = GetComponents<Collider2D>();
+            colliders[2].enabled = true;
+            if (player != 0)
+            {
+                audioManager.BoomSound();
+            }
+            animator.SetTrigger("Explode");
+ 
         }
-        animator.SetTrigger("Explode");
     }
 
     public void DestroyBomb()
