@@ -80,7 +80,6 @@ public class Fin : Character
         }
         else
         {
-            print("&&89");
             ignoreCounterOff = false;
         }
         

@@ -51,6 +51,7 @@ public class Rager : Character
     {
         animator.SetTrigger("comboInit");
         player.UsingAbility(cooldown);
+        ignoreDamage = true;
     }
 
     public void DealComboDmg()
@@ -75,17 +76,15 @@ public class Rager : Character
             enemy.blockBreaker();
             enemy.AbilityDisabled();
             enemy.GetCharacter().Grabbed();
-
             animator.SetBool("ComboReady", true);
         }
         else
         {
             audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
-
             animator.SetBool("isUsingAbility", false);
             ResetQuickPunch();
             player.OnCooldown(cooldown);
-
+            ignoreDamage = false;
         }
 
     }
@@ -127,6 +126,7 @@ public class Rager : Character
         animator.SetBool("ComboReady", false);
 
         player.OnCooldown(cooldown);
+        ignoreDamage = false;
 
     }
     #endregion

@@ -46,6 +46,7 @@ public class Chiback : Character
         animator.SetTrigger("AwsomeSpell");
         player.UsingAbility(cooldown);
         audioManager.PlaySFX(audioManager.sytheDash, audioManager.normalVol);
+        ignoreDamage = true;
         StartCoroutine(ScytheJump());
     }
 
@@ -119,6 +120,7 @@ public class Chiback : Character
         }
         player.IgnoreUpdate(false);
         player.OnCooldown(cooldown);
+        ignoreDamage = false;
     }
     #endregion
 
