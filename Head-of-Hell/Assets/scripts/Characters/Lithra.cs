@@ -177,8 +177,31 @@ public class Lithra : Character
     public override void ChargeAttack()
     {
         base.ChargeAttack();
-        LuckyBell();
         animator.SetTrigger("bellCharge");
+    }
+
+    public override void DealChargeDmg()
+    {
+        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+
+        if (hitEnemy != null)
+        {
+            enemy.StopPunching();
+            enemy.BreakCharge();
+            enemy.TakeDamage(chargeDmg, false);
+            LuckyBell();
+            enemy.Knockback(13f, 0.4f, false);
+            audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
+        }
+        else
+        {
+            audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
+        }
+        player.knockable = true;
+        charging = false;
+        animator.SetBool("Casting", false);
+        animator.SetBool("Charging", false);
+        player.stayDynamic();
     }
     #endregion
 
