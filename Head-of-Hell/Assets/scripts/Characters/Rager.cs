@@ -142,8 +142,6 @@ public class Rager : Character
 
         if (hitEnemy != null)
         {
-
-            //hitEnemy.GetComponent<PlayerScript>().TakeDamage(lightDMG); //--here
             enemy.TakeDamage(lightDamage, true);
             audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
         }
