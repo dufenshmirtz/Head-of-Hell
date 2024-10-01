@@ -141,11 +141,19 @@ public class CharacterAnimationEvents : MonoBehaviour
         lithra.DealBellDmg();
     }
 
-    //Lithra
+    public void SipEvent()
+    {
+        lithra = (Lithra)character;
+        lithra.Sip();
+    }
+
+    //Chiback
     public void FireDamageEvent()
     {
         chiback = (Chiback)character;
         chiback.DealFireDamage();
     }
+
+    
     //sth
 }

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0a1201d622892dc40b265839e59555c9
+guid: 08e064c0f85142e459dac219db8adac6
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,169 +97,169 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_0
+      name: gabaneir_Run_Correct (1)_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 53
+        width: 57
         height: 48
       alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0.8336857, y: 0.51}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bb19d9eaff88b0449bd177abf949e530
-      internalID: -328486534
+      spriteID: e04158ef90f39544e96b9bfb6f4441f2
+      internalID: 1579509951
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_1
+      name: gabaneir_Run_Correct (1)_1
       rect:
         serializedVersion: 2
         x: 57
         y: 0
-        width: 60
+        width: 61
         height: 48
       alignment: 9
-      pivot: {x: 0.54201686, y: 0.5}
+      pivot: {x: 0.82799655, y: 0.51}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cecba3126a607284086349c3c83d0f2e
-      internalID: -883781530
+      spriteID: 6643d6cd9c9781441a1230613ded911c
+      internalID: 737688577
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_2
+      name: gabaneir_Run_Correct (1)_2
       rect:
         serializedVersion: 2
-        x: 120
-        y: 0
-        width: 60
-        height: 48
-      alignment: 9
-      pivot: {x: 0.6213819, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dd7ffbe488b8b0e40aadf88359fccd14
-      internalID: -544779092
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_3
-      rect:
-        serializedVersion: 2
-        x: 190
+        x: 118
         y: 0
         width: 59
         height: 48
       alignment: 9
-      pivot: {x: 0.49525246, y: 0.5}
+      pivot: {x: 0.81847316, y: 0.51}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3ecfa65f984942a4d9657e7bd40027ee
-      internalID: -1081998494
+      spriteID: 625d8a47349c72a4eb4c3bc7f5a95039
+      internalID: -1284627628
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_4
+      name: gabaneir_Run_Correct (1)_3
       rect:
         serializedVersion: 2
-        x: 257
+        x: 178
         y: 0
-        width: 60
+        width: 57
         height: 48
       alignment: 9
-      pivot: {x: 0.50933784, y: 0.47}
+      pivot: {x: 0.7655495, y: 0.51}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 373c402bd6c63c749aeffdfe20358fc8
-      internalID: 2016109085
+      spriteID: 46d3a95811602a4458ca1aee44fa7395
+      internalID: 146255152
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_5
+      name: gabaneir_Run_Correct (1)_4
       rect:
         serializedVersion: 2
-        x: 318
+        x: 237
         y: 0
-        width: 60
+        width: 58
         height: 48
       alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0.78496844, y: 0.51}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b2e5cf5193fb43b40805a6a99debee1c
-      internalID: -276133025
+      spriteID: 7165cad6febf20d4a9756075e8186e46
+      internalID: -1970189160
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_6
+      name: gabaneir_Run_Correct (1)_5
       rect:
         serializedVersion: 2
-        x: 378
+        x: 296
         y: 0
-        width: 44
+        width: 57
         height: 48
       alignment: 9
-      pivot: {x: 0.6726511, y: 0.5}
+      pivot: {x: 0.76618826, y: 0.51}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9f4af5efdfe181a4d960957a32f7825b
-      internalID: -639224958
+      spriteID: a8185199bbf34484493460ffe394188c
+      internalID: -121443069
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_7
+      name: gabaneir_Run_Correct (1)_6
       rect:
         serializedVersion: 2
-        x: 431
+        x: 354
         y: 0
-        width: 49
+        width: 66
         height: 48
       alignment: 9
-      pivot: {x: 0.56859916, y: 0.5}
+      pivot: {x: 0.8138876, y: 0.51}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4a4f6a3db7e94714bacaf5a5db827cc5
-      internalID: 599256853
+      spriteID: f2cae48a3f266e94f87e46367847215a
+      internalID: -1593756460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gabaneir_Run_Correct (1)_7
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 0
+        width: 64
+        height: 48
+      alignment: 9
+      pivot: {x: 0.77810526, y: 0.51}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84a2e4a960fdced4c8724aa03eb19163
+      internalID: -1689762703
       vertices: []
       indices: 
       edges: []
@@ -275,14 +275,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Gabaneiro_Idle48x48_0: -328486534
-      Gabaneiro_Idle48x48_1: -883781530
-      Gabaneiro_Idle48x48_2: -544779092
-      Gabaneiro_Idle48x48_3: -1081998494
-      Gabaneiro_Idle48x48_4: 2016109085
-      Gabaneiro_Idle48x48_5: -276133025
-      Gabaneiro_Idle48x48_6: -639224958
-      Gabaneiro_Idle48x48_7: 599256853
+      gabaneir_Run_Correct (1)_0: 1579509951
+      gabaneir_Run_Correct (1)_1: 737688577
+      gabaneir_Run_Correct (1)_2: -1284627628
+      gabaneir_Run_Correct (1)_3: 146255152
+      gabaneir_Run_Correct (1)_4: -1970189160
+      gabaneir_Run_Correct (1)_5: -121443069
+      gabaneir_Run_Correct (1)_6: -1593756460
+      gabaneir_Run_Correct (1)_7: -1689762703
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

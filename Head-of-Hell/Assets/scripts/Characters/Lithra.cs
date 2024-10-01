@@ -55,13 +55,14 @@ public class Lithra : Character
     public void DealBellDmg()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle(player.bellPoint.position, player.attackRange*2, player.enemyLayer);
+        Collider2D bellStunPoint = Physics2D.OverlapCircle(player.bellStunPoint.position, player.attackRange / 3, player.enemyLayer);
 
-        if (hitEnemy != null)
+        if (hitEnemy != null || bellStunPoint!=null)
         {
             enemy.StopPunching();
             enemy.BreakCharge();
             enemy.TakeDamage(bellDamage, true);
-            Collider2D bellStunPoint = Physics2D.OverlapCircle(player.bellStunPoint.position, player.attackRange/3, player.enemyLayer);
+            
             if (bellStunPoint != null)
             {
                 StartCoroutine(enemy.Stun(0.8f));
@@ -217,6 +218,13 @@ public class Lithra : Character
     bool StunChance()
     {
         return Random.value < 0.20f;
+    }
+    #endregion
+
+    #region Extra
+    public void Sip()
+    {
+        audioManager.PlaySFX(audioManager.sip, 2f);
     }
     #endregion
 }
