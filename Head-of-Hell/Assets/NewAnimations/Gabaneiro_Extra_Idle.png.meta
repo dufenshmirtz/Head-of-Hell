@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0a1201d622892dc40b265839e59555c9
+guid: 10d420076647f664d8d67145b89fe86c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_0
+      name: Gabaneiro_Extra_Idle_0
       rect:
         serializedVersion: 2
         x: 0
@@ -105,161 +105,119 @@ TextureImporter:
         width: 53
         height: 48
       alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0.5000001, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bb19d9eaff88b0449bd177abf949e530
-      internalID: -328486534
+      spriteID: aa21df661425ff244b7361ae1daf7fa3
+      internalID: 96476998
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_1
+      name: Gabaneiro_Extra_Idle_1
       rect:
         serializedVersion: 2
-        x: 57
-        y: 0
-        width: 60
-        height: 48
-      alignment: 9
-      pivot: {x: 0.54201686, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cecba3126a607284086349c3c83d0f2e
-      internalID: -883781530
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_2
-      rect:
-        serializedVersion: 2
-        x: 120
-        y: 0
-        width: 60
-        height: 48
-      alignment: 9
-      pivot: {x: 0.6213819, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dd7ffbe488b8b0e40aadf88359fccd14
-      internalID: -544779092
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_3
-      rect:
-        serializedVersion: 2
-        x: 190
-        y: 0
-        width: 59
-        height: 48
-      alignment: 9
-      pivot: {x: 0.49525246, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3ecfa65f984942a4d9657e7bd40027ee
-      internalID: -1081998494
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_4
-      rect:
-        serializedVersion: 2
-        x: 257
-        y: 0
-        width: 60
-        height: 48
-      alignment: 9
-      pivot: {x: 0.50933784, y: 0.47}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 373c402bd6c63c749aeffdfe20358fc8
-      internalID: 2016109085
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_5
-      rect:
-        serializedVersion: 2
-        x: 318
-        y: 0
-        width: 60
-        height: 48
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b2e5cf5193fb43b40805a6a99debee1c
-      internalID: -276133025
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_6
-      rect:
-        serializedVersion: 2
-        x: 378
-        y: 0
-        width: 44
-        height: 48
-      alignment: 9
-      pivot: {x: 0.6726511, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9f4af5efdfe181a4d960957a32f7825b
-      internalID: -639224958
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_7
-      rect:
-        serializedVersion: 2
-        x: 431
+        x: 65
         y: 0
         width: 49
         height: 48
       alignment: 9
-      pivot: {x: 0.56859916, y: 0.5}
+      pivot: {x: 0.5000006, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4a4f6a3db7e94714bacaf5a5db827cc5
-      internalID: 599256853
+      spriteID: 6a082b42db2a1e847b0060d6ec09d519
+      internalID: 1154772046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gabaneiro_Extra_Idle_2
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 0
+        width: 49
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5000003, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc53820ff24f3c44498cf89c081cb22a
+      internalID: 1861724644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gabaneiro_Extra_Idle_3
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 0
+        width: 49
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5000003, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7db521d116dc13e47bde4b4a8234c52a
+      internalID: -2112639975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gabaneiro_Extra_Idle_4
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 0
+        width: 55
+        height: 48
+      alignment: 9
+      pivot: {x: 0.50000054, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cca352dbc50cb594480b63d73b1c373c
+      internalID: -1381500153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gabaneiro_Extra_Idle_5
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 0
+        width: 55
+        height: 48
+      alignment: 9
+      pivot: {x: 0.50666445, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2a15a277d6590e4e84f01840d0e42c6
+      internalID: -737531826
       vertices: []
       indices: 
       edges: []
@@ -275,14 +233,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Gabaneiro_Idle48x48_0: -328486534
-      Gabaneiro_Idle48x48_1: -883781530
-      Gabaneiro_Idle48x48_2: -544779092
-      Gabaneiro_Idle48x48_3: -1081998494
-      Gabaneiro_Idle48x48_4: 2016109085
-      Gabaneiro_Idle48x48_5: -276133025
-      Gabaneiro_Idle48x48_6: -639224958
-      Gabaneiro_Idle48x48_7: 599256853
+      Gabaneiro_Extra_Idle_0: 96476998
+      Gabaneiro_Extra_Idle_1: 1154772046
+      Gabaneiro_Extra_Idle_2: 1861724644
+      Gabaneiro_Extra_Idle_3: -2112639975
+      Gabaneiro_Extra_Idle_4: -1381500153
+      Gabaneiro_Extra_Idle_5: -737531826
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -133,6 +133,8 @@ public class PlayerScript : MonoBehaviour
     public GameObject[] stages;
     string stageName;
 
+    string playerEnemysString;
+
     public GameObject beam;
     //Indicators
     public GameObject blockDisabled;
@@ -145,6 +147,32 @@ public class PlayerScript : MonoBehaviour
 
     void Start()
     {
+
+        if (player == 1)  //player name assignment
+        {
+            P1Name.text = PlayerPrefs.GetString("Player1Choice");
+            playerEnemysString = "P2 Characters";
+            P2Name = PlayerPrefs.GetString("Player2Choice");
+        }
+        else
+        {
+            P1Name.text = PlayerPrefs.GetString("Player2Choice");
+            playerEnemysString = "P1 Characters";
+            P2Name = PlayerPrefs.GetString("Player1Choice");
+        }
+
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        if (P1Name.text == "Random")
+        {
+            PickRandomCharacter(spriteRenderer);
+        }
+
+        if (P1Name.text != gameObject.name)
+        {
+            gameObject.SetActive(false);
+        }
+
+
         //basic variables assignment
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
@@ -160,15 +188,6 @@ public class PlayerScript : MonoBehaviour
             stages[2].SetActive(true);
         }
 
-        if (player == 1)  //player name assignment
-        {
-            P1Name.text = PlayerPrefs.GetString("Player1Choice");
-        }
-        else
-        {
-            P1Name.text = PlayerPrefs.GetString("Player2Choice");
-        }
-
         winner.gameObject.SetActive(false);
 
         playAgainButton.SetActive(false);
@@ -180,11 +199,7 @@ public class PlayerScript : MonoBehaviour
         cooldownSlider.maxValue = 1f;
 
         //character choice
-        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        if (P1Name.text == "Random")
-        {
-            PickRandomCharacter(spriteRenderer);
-        }
+        
         if (P1Name.text == "Steelager")
         {
             steelager = this.gameObject.AddComponent<Steelager>();
@@ -225,7 +240,6 @@ public class PlayerScript : MonoBehaviour
         {
             lithra = this.gameObject.AddComponent<Lithra>();
             character = lithra;
-            spriteRenderer.color = lithraColor;
         }
         if (P1Name.text == "Chiback")
         {
@@ -233,7 +247,20 @@ public class PlayerScript : MonoBehaviour
             character = chiback;
             spriteRenderer.color = chibackColor;
         }
-        enemy.P2Name=P1Name.text;
+
+        GameObject parentObject = GameObject.Find(playerEnemysString);
+
+        if (parentObject != null)
+        {
+            // Find the child object by name within the parent
+            Transform childTransform = parentObject.transform.Find(P2Name);
+
+            if (childTransform != null)
+            {
+                // Get the GameObject and retrieve the PlayerScript component
+                enemy = childTransform.GetComponent<PlayerScript>();
+            }
+        }
 
         character.InitializeCharacter(this, audiomngr, resources);
 
@@ -322,6 +349,13 @@ public class PlayerScript : MonoBehaviour
             if (isGrounded)
             {
                 animator.SetBool("IsRunning", true);
+            }
+            else
+            {
+                animator.SetBool("IsRunning", false);
+                animator.SetBool("IsJumping", false);
+                animator.SetTrigger("Jump");
+                print("9-9");
             }
 
             float moveDirection = Input.GetKey(left) ? -1f : 1f; // -1 for A, 1 for D
@@ -471,8 +505,8 @@ public class PlayerScript : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawWireSphere(explosionPoint.position, attackRange*4);
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere(bellPoint.position, attackRange*2);
+        Gizmos.DrawWireSphere(bellStunPoint.position, attackRange/3);
         //Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
 
     }

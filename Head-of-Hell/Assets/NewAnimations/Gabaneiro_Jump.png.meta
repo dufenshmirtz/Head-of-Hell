@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0a1201d622892dc40b265839e59555c9
+guid: 12dc22a15fa1e174492326127403994b
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,169 +97,148 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_0
+      name: Gabaneiro_Jump_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 22
         y: 0
-        width: 53
+        width: 57
         height: 48
       alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0.49590483, y: 0.49999997}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bb19d9eaff88b0449bd177abf949e530
-      internalID: -328486534
+      spriteID: 4402bd24913889a46afebd023a5157da
+      internalID: 1183815360
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_1
+      name: Gabaneiro_Jump_1
       rect:
         serializedVersion: 2
-        x: 57
+        x: 69
         y: 0
-        width: 60
+        width: 57
         height: 48
-      alignment: 9
-      pivot: {x: 0.54201686, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cecba3126a607284086349c3c83d0f2e
-      internalID: -883781530
+      spriteID: b5d0d8d1427a3d14f82cd4d81788588c
+      internalID: 110243393
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_2
+      name: Gabaneiro_Jump_2
       rect:
         serializedVersion: 2
-        x: 120
+        x: 118
         y: 0
-        width: 60
+        width: 57
         height: 48
-      alignment: 9
-      pivot: {x: 0.6213819, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dd7ffbe488b8b0e40aadf88359fccd14
-      internalID: -544779092
+      spriteID: c5a1d7342ee9f0844b97bde91abc860b
+      internalID: -984241413
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_3
+      name: Gabaneiro_Jump_3
       rect:
         serializedVersion: 2
-        x: 190
+        x: 167
         y: 0
-        width: 59
+        width: 57
         height: 48
-      alignment: 9
-      pivot: {x: 0.49525246, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3ecfa65f984942a4d9657e7bd40027ee
-      internalID: -1081998494
+      spriteID: 574a3cdaaec706a47b6b0f311143ac0f
+      internalID: 645457625
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_4
+      name: Gabaneiro_Jump_4
       rect:
         serializedVersion: 2
-        x: 257
+        x: 215
         y: 0
-        width: 60
+        width: 57
         height: 48
-      alignment: 9
-      pivot: {x: 0.50933784, y: 0.47}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 373c402bd6c63c749aeffdfe20358fc8
-      internalID: 2016109085
+      spriteID: ac39ca94cd6f6c34094b2d910d23ee7f
+      internalID: -765755058
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_5
+      name: Gabaneiro_Jump_5
       rect:
         serializedVersion: 2
-        x: 318
+        x: 262
         y: 0
-        width: 60
+        width: 57
         height: 48
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b2e5cf5193fb43b40805a6a99debee1c
-      internalID: -276133025
+      spriteID: adf0f1e6708d66645a7a3677e6f91c11
+      internalID: 1521433034
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_6
+      name: Gabaneiro_Jump_6
       rect:
         serializedVersion: 2
-        x: 378
+        x: 309
         y: 0
-        width: 44
+        width: 57
         height: 48
-      alignment: 9
-      pivot: {x: 0.6726511, y: 0.5}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9f4af5efdfe181a4d960957a32f7825b
-      internalID: -639224958
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gabaneiro_Idle48x48_7
-      rect:
-        serializedVersion: 2
-        x: 431
-        y: 0
-        width: 49
-        height: 48
-      alignment: 9
-      pivot: {x: 0.56859916, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4a4f6a3db7e94714bacaf5a5db827cc5
-      internalID: 599256853
+      spriteID: 2f14a1b1d4c62f54a851b40a3919cbad
+      internalID: -1478047474
       vertices: []
       indices: 
       edges: []
@@ -275,14 +254,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Gabaneiro_Idle48x48_0: -328486534
-      Gabaneiro_Idle48x48_1: -883781530
-      Gabaneiro_Idle48x48_2: -544779092
-      Gabaneiro_Idle48x48_3: -1081998494
-      Gabaneiro_Idle48x48_4: 2016109085
-      Gabaneiro_Idle48x48_5: -276133025
-      Gabaneiro_Idle48x48_6: -639224958
-      Gabaneiro_Idle48x48_7: 599256853
+      Gabaneiro_Jump_0: 1183815360
+      Gabaneiro_Jump_1: 110243393
+      Gabaneiro_Jump_2: -984241413
+      Gabaneiro_Jump_3: 645457625
+      Gabaneiro_Jump_4: -765755058
+      Gabaneiro_Jump_5: 1521433034
+      Gabaneiro_Jump_6: -1478047474
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
