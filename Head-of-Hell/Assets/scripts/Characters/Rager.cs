@@ -15,7 +15,7 @@ public class Rager : Character
         {
             return;
         }
-        animator.SetTrigger("RagerHeavy");
+        animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
         ResetQuickPunch();
     }
@@ -49,7 +49,7 @@ public class Rager : Character
     #region Spell
     override public void Spell()
     {
-        animator.SetTrigger("comboInit");
+        animator.SetTrigger("Spell");
         player.UsingAbility(cooldown);
         ignoreDamage = true;
     }
@@ -134,7 +134,7 @@ public class Rager : Character
     #region LightAttack
     public override void LightAttack()
     {
-        animator.SetTrigger("Punch2");
+        animator.SetTrigger("QuickAttack");
     }
     public void QuickPunchDamage()
     {

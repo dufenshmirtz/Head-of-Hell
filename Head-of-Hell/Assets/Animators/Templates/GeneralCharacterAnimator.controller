@@ -333,7 +333,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: dfa8125cc69401547bc5c2e5f1ad75e6, type: 2}
+  m_Motion: {fileID: 7400000, guid: 5987f5ed56c1d774780275b9b9512b4f, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -405,7 +405,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 7211195e8316a2046b04007194fe1e55, type: 2}
+  m_Motion: {fileID: 7400000, guid: 6f0d69e9f4a489349b96bd9e4eb77a98, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -784,7 +784,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VanderAnimator
+  m_Name: GeneralCharacterAnimator
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Speed
@@ -1305,7 +1305,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 4dc1a81eb99349d478ac5dc0d40a9170, type: 2}
+  m_Motion: {fileID: 7400000, guid: 9dec2cad6a768ab4e9cae5d5d99a13c4, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -1332,7 +1332,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: e76e70bd808ade84784859079b2cdcce, type: 2}
+  m_Motion: {fileID: 7400000, guid: fb50572119df7ed43afd3b156150a4c1, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

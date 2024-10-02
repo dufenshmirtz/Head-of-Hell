@@ -17,7 +17,7 @@ public class LazyBigus : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
-        animator.SetTrigger("BigusHeavy");
+        animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
     }
 
@@ -53,7 +53,7 @@ public class LazyBigus : Character
         player.stayStatic();
         player.UsingAbility(cooldown);
         player.beam.SetActive(true);
-        animator.SetTrigger("Beam");
+        animator.SetTrigger("Spell");
         audioManager.PlaySFX(audioManager.beam, audioManager.doubleVol);
         enemy.BreakCharge();
         ignoreDamage = true;
@@ -61,7 +61,6 @@ public class LazyBigus : Character
 
     public void BeamHitEnemy()
     {
-        print("negada");
         enemy.TakeDamage(10,true);
         enemy.Knockback(13f, 0.5f, true);
         audioManager.PlaySFX(audioManager.beamHit, 1.8f);
@@ -101,7 +100,7 @@ public class LazyBigus : Character
         if (!isShootin)
         {
             QuickAttackIndicatorDisable();
-            animator.SetTrigger("Shoot");
+            animator.SetTrigger("QuickAttack");
             StartCoroutine(ResetShooting());
         }
     }
@@ -140,7 +139,7 @@ public class LazyBigus : Character
     public override void ChargeAttack()
     {
         base.ChargeAttack();
-        animator.SetTrigger("GunCharge");
+        animator.SetTrigger("Charge");
     }
     #endregion
 

@@ -18,7 +18,7 @@ public class Chiback : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
-        animator.SetTrigger("AwsomeHeavy");
+        animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
     }
 
@@ -46,7 +46,7 @@ public class Chiback : Character
     #region Spell
     override public void Spell()
     {
-        animator.SetTrigger("AwsomeSpell");
+        animator.SetTrigger("Spell");
         player.UsingAbility(cooldown);
         audioManager.PlaySFX(audioManager.sytheDash, audioManager.normalVol);
         ignoreDamage = true;
@@ -91,7 +91,7 @@ public class Chiback : Character
             if (hitEnemy != null)
             {
                 enemy.BreakCharge();
-                animator.SetTrigger("SytheHit");
+                animator.SetTrigger("SpellHit");
                 audioManager.PlaySFX(audioManager.sytheHit, 1f);
                 audioManager.PlaySFX(audioManager.sytheSlash, 1f);
                 if(elapsedTime < 0.33f) {
@@ -135,7 +135,7 @@ public class Chiback : Character
         if(fireReady)
         {
             QuickAttackIndicatorDisable();
-            animator.SetTrigger("Fire");
+            animator.SetTrigger("QuickAttack");
             fireReady = false;
             audioManager.PlaySFX(audioManager.fireblast, 1f);
             StartCoroutine(ResetFire());
@@ -188,7 +188,7 @@ public class Chiback : Character
     public override void ChargeAttack()
     {
         base.ChargeAttack();
-        animator.SetTrigger("AwsomeCharge");
+        animator.SetTrigger("Charge");
     }
     #endregion
 

@@ -17,7 +17,7 @@ public class Fin : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
-        animator.SetTrigger("Punch");
+        animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
     }
 
@@ -49,7 +49,7 @@ public class Fin : Character
     public override void Spell()
     {
         audioManager.PlaySFX(audioManager.counterScream, audioManager.counterVol);
-        animator.SetTrigger("counter");
+        animator.SetTrigger("Spell");
         counterIsOn = true;
         player.UsingAbility(cooldown);
     }
@@ -179,7 +179,7 @@ public class Fin : Character
         rb.velocity = rollVelocity;
 
         // Trigger the dash animation
-        animator.SetTrigger("roll");
+        animator.SetTrigger("QuickAttack");
 
 
 
@@ -229,7 +229,7 @@ public class Fin : Character
     public override void ChargeAttack()
     {
         base.ChargeAttack();
-        animator.SetTrigger("FinCharge");
+        animator.SetTrigger("Charge");
     }
     #endregion
 }
