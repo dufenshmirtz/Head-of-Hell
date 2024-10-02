@@ -19,7 +19,7 @@ public class Steelager : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
-        animator.SetTrigger("BombPunch");
+        animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
     }
 
@@ -45,23 +45,13 @@ public class Steelager : Character
         }
 
     }
-
-    override public void HeavyAttackStart()
-    {
-        if(ignoreSlow){
-            animator.SetBool("isHeavypunching", true);
-            return;
-        }
-
-        base.HeavyAttackStart();
-    }
     #endregion
 
     #region Spell
     public override void Spell()
     {
         ignoreDamage=true;
-        animator.SetTrigger("FullGeros");
+        animator.SetTrigger("Spell");
         audioManager.PlaySFX(audioManager.bigExplosion, audioManager.doubleVol);
         player.UsingAbility(cooldown);
         player.stayStatic();
@@ -134,7 +124,7 @@ public class Steelager : Character
     public override void ChargeAttack()
     {
         base.ChargeAttack();
-        animator.SetTrigger("TNTCharge");
+        animator.SetTrigger("Charge");
     }
     #endregion
 }

@@ -14,7 +14,7 @@ public class Vander : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
-        animator.SetTrigger("VanderHeavy");
+        animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
     }
 
@@ -46,7 +46,7 @@ public class Vander : Character
     override public void Spell()
     {
         player.attackRange += 0.5f;
-        animator.SetTrigger("Stab");
+        animator.SetTrigger("Spell");
         player.UsingAbility(cooldown);
         ignoreDamage = true;
     }
@@ -83,7 +83,7 @@ public class Vander : Character
         if (katanaready)
         {
             QuickAttackIndicatorDisable();
-            animator.SetTrigger("katana");
+            animator.SetTrigger("QuickAttack");
             katanaready = false;
             StartCoroutine(ResetKatana());
         }
@@ -137,7 +137,7 @@ public class Vander : Character
     public override void ChargeAttack()
     {
         base.ChargeAttack();
-        animator.SetTrigger("VanderCharge");
+        animator.SetTrigger("Charge");
     }
     #endregion
 

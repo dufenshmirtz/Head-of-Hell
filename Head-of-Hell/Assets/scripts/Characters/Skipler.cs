@@ -19,7 +19,7 @@ public class Skipler : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
-        animator.SetTrigger("skiplaHeavy");
+        animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.skiplaHeavyCharge, audioManager.heavySwooshVolume);
     }
 
@@ -92,7 +92,7 @@ public class Skipler : Character
         rb.velocity = dashVelocity;
 
         // Trigger the dash animation
-        animator.SetTrigger("Dash");
+        animator.SetTrigger("Spell");
 
 
 
@@ -178,7 +178,7 @@ public class Skipler : Character
         rb.velocity = sworddashVelocity;
 
         // Trigger the dash animation
-        animator.SetTrigger("swordDash");
+        animator.SetTrigger("QuickAttack");
 
 
         // Wait for the dash duration
@@ -228,7 +228,7 @@ public class Skipler : Character
     public override void ChargeAttack()
     {
         base.ChargeAttack();
-        animator.SetTrigger("SkiplerCharge");
+        animator.SetTrigger("Charge");
     }
     #endregion
 

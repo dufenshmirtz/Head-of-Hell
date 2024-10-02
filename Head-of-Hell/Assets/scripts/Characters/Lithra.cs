@@ -17,7 +17,7 @@ public class Lithra : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
-        animator.SetTrigger("bellPunch");
+        animator.SetTrigger("heavyAttack");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
     }
 
@@ -46,7 +46,7 @@ public class Lithra : Character
     #region Spell
     override public void Spell()
     {
-        animator.SetTrigger("BellSpell");
+        animator.SetTrigger("Spell");
         player.UsingAbility(cooldown);
         ignoreDamage = true;
         audioManager.PlaySFX(audioManager.swoosh, audioManager.doubleVol);
@@ -120,7 +120,7 @@ public class Lithra : Character
             player.rb.AddForce(new Vector2(moveDirection * airSpinSpeed , jumpHeight), ForceMode2D.Impulse);
         }
 
-        animator.SetTrigger("AirSpin");
+        animator.SetTrigger("QuickAttack");
 
         // Duration of the attack
         float elapsedTime = 0f;
@@ -149,7 +149,7 @@ public class Lithra : Character
                     player.rb.AddForce(new Vector2(moveDirection2 * airSpinSpeed/2, jumpHeight), ForceMode2D.Impulse);
                 }
                 
-                animator.SetTrigger("reverseTime");
+                animator.SetTrigger("Reverse");
                 break; // Exit the loop after hitting an enemy
             }
 
@@ -178,7 +178,7 @@ public class Lithra : Character
     public override void ChargeAttack()
     {
         base.ChargeAttack();
-        animator.SetTrigger("bellCharge");
+        animator.SetTrigger("Charge");
     }
 
     public override void DealChargeDmg()
