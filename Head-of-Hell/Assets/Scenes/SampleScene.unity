@@ -1311,6 +1311,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 675885515}
     - target: {fileID: 5341404983514887946, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: enemyLayer.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 5341404983514887946, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: quickAttackIndicator
       value: 
       objectReference: {fileID: 854344816}
@@ -34885,6 +34889,10 @@ PrefabInstance:
       propertyPath: playAgainButton
       value: 
       objectReference: {fileID: 675885515}
+    - target: {fileID: 5020299007731939445, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: enemyLayer.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     - target: {fileID: 5020299007731939445, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: quickAttackIndicator
       value: 
