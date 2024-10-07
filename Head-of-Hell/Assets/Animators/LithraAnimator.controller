@@ -449,6 +449,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Charge
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: isUsingAbility
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3231083961984130555}
   m_Solo: 0
@@ -722,7 +725,7 @@ AnimatorStateMachine:
     m_Position: {x: 770, y: -400, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8092823326419998864}
-    m_Position: {x: -500, y: 100, z: 0}
+    m_Position: {x: -490, y: 100, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4505429084493441646}
     m_Position: {x: -380, y: 310, z: 0}

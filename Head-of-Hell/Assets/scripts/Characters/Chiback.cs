@@ -11,9 +11,20 @@ public class Chiback : Character
     float jumpDuration = 1f;
     bool fireReady = true;
     int timesHit = 0;
+    int enragingNum = 4;
     int shortJumpDamage = 5, MedJumpDamage = 10, wideJumpDamage = 15;
     bool roarPlayed = false;
 
+    public Transform mirrorFireAttackPoint;
+    public Transform fireAttackPoint;
+
+    public override void Start()
+    {
+        base.Start();
+
+        mirrorFireAttackPoint=resources.mirrorFireAttackPoint;
+        fireAttackPoint=resources.fireAttackPoint;
+    }
 
     #region HeavyAttack
     override public void HeavyAttack()
@@ -24,14 +35,14 @@ public class Chiback : Character
 
     override public void DealHeavyDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
             audioManager.PlaySFX(audioManager.katanaHit, 1.8f);
             enemy.TakeDamage(heavyDamage,true);
 
-            if (!player.enemy.isBlocking)
+            if (! enemy.isBlocking)
             {
                 enemy.Knockback(11f, 0.15f, true);
             }
@@ -47,7 +58,7 @@ public class Chiback : Character
     override public void Spell()
     {
         animator.SetTrigger("Spell");
-        player.UsingAbility(cooldown);
+        UsingAbility(cooldown);
         audioManager.PlaySFX(audioManager.sytheDash, audioManager.normalVol);
         ignoreDamage = true;
         StartCoroutine(ScytheJump());
@@ -55,27 +66,27 @@ public class Chiback : Character
 
     private IEnumerator ScytheJump()
     {
-        player.IgnoreUpdate(true);
+         IgnoreUpdate(true);
 
         // Calculate the movement direction
-        float moveDirection = Input.GetKey(player.left) ? -1f : (Input.GetKey(player.right) ? 1f : 0f);
+        float moveDirection = Input.GetKey( left) ? -1f : (Input.GetKey( right) ? 1f : 0f);
 
         // Only proceed if a direction is given
         if (moveDirection == 0f)
         {
-            player.IgnoreUpdate(false);
-            player.OnCooldown(cooldown);
+             IgnoreUpdate(false);
+             OnCooldown(cooldown);
             yield break;
         }
 
-        if (!Input.GetKey(KeyCode.W) && player.isGrounded)
+        if (!Input.GetKey(KeyCode.W) &&  isGrounded)
         {
-            player.rb.AddForce(new Vector2(moveDirection * jumpSpeed, jumpHeight), ForceMode2D.Impulse);
+             rb.AddForce(new Vector2(moveDirection * jumpSpeed, jumpHeight), ForceMode2D.Impulse);
         }
         else
         {
-            player.rb.velocity = new Vector2(player.rb.velocity.x, 0);
-            player.rb.AddForce(new Vector2(moveDirection * jumpSpeed, jumpHeight), ForceMode2D.Impulse);
+             rb.velocity = new Vector2( rb.velocity.x, 0);
+             rb.AddForce(new Vector2(moveDirection * jumpSpeed, jumpHeight), ForceMode2D.Impulse);
         }
 
         // Duration of the attack
@@ -84,10 +95,10 @@ public class Chiback : Character
         while (elapsedTime < jumpDuration)
         {
             // Perform the air spin movement
-            //player.transform.Translate(Vector2.right * moveDirection * airSpinSpeed * Time.deltaTime);
+            // transform.Translate(Vector2.right * moveDirection * airSpinSpeed * Time.deltaTime);
 
             // Check for enemy collision
-            Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+            Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
             if (hitEnemy != null)
             {
                 enemy.BreakCharge();
@@ -109,13 +120,16 @@ public class Chiback : Character
                     Enraged(wideJumpDamage);
                 }
 
-                timesHit = 0;
+                if(timesHit>=enragingNum)
+                {
+                    timesHit = 0;
+                }
 
                 enemy.Knockback(11f,0.25f,false);
                
 
                 // Jump back after hitting the enemy
-                player.rb.velocity = Vector2.zero; // Reset current velocity
+                 rb.velocity = Vector2.zero; // Reset current velocity
                 
                 break; // Exit the loop after hitting an enemy
             }
@@ -123,8 +137,8 @@ public class Chiback : Character
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        player.IgnoreUpdate(false);
-        player.OnCooldown(cooldown);
+         IgnoreUpdate(false);
+         OnCooldown(cooldown);
         ignoreDamage = false;
     }
     #endregion
@@ -144,15 +158,15 @@ public class Chiback : Character
 
     public void DealFireDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.mirrorFireAttackPoint.position, player.attackRange, player.enemyLayer);
-        Collider2D hitEnemy2 = Physics2D.OverlapCircle(player.fireAttackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( mirrorFireAttackPoint.position,  attackRange,  enemyLayer);
+        Collider2D hitEnemy2 = Physics2D.OverlapCircle( fireAttackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null || hitEnemy2!=null)
         {
             audioManager.PlaySFX(audioManager.lightattack, 0.5f);
             enemy.TakeDamage(5, true);
 
-            if (!player.enemy.isBlocking)
+            if (! enemy.isBlocking)
             {
                 enemy.Knockback(15f, 0.5f, true);
                 enemy.DisableBlock(true);
@@ -195,12 +209,12 @@ public class Chiback : Character
     #region Passive
     override public void TakeDamage(int dmg, bool blockable)
     {
-        if (timesHit < 4 && !isBlocking)
+        if (timesHit < enragingNum && !isBlocking)
         {
             timesHit++;
         }
 
-        if(timesHit == 4 && !roarPlayed)
+        if(timesHit == enragingNum && !roarPlayed)
         {
             audioManager.PlaySFX(audioManager.growl, 0.5f);
             roarPlayed = true;
@@ -210,7 +224,7 @@ public class Chiback : Character
 
     void Enraged(int jumpDamage)
     {
-        if (timesHit == 4)
+        if (timesHit == enragingNum)
         {
             enemy.TakeDamage(jumpDamage / 2,true);
             roarPlayed = false;

@@ -3,18 +3,18 @@ using UnityEngine;
 
 public class Skipler : Character
 {
-    public float cooldown = 8f;
+    protected float cooldown = 8f;
     //Spell
     protected float dashingPower = 40f;
     protected float dashingTime = 0.1f;
-    public int DashDamage = 10;
+    protected int DashDamage = 10;
     bool dashing = false;
     bool dashHit = false;
     //LightAttack
     bool lightReady = true;
-    public float swordDashPower = 10f;
-    public float swordDashTime = 0.14f;
-    public int swordDashDmg = 5;
+    protected float swordDashPower = 10f;
+    protected float swordDashTime = 0.14f;
+    protected int swordDashDmg = 5;
 
     #region HeavyAttack
     override public void HeavyAttack()
@@ -25,7 +25,7 @@ public class Skipler : Character
 
     override public void DealHeavyDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -33,7 +33,7 @@ public class Skipler : Character
             audioManager.PlaySFX(audioManager.skiplaHeavyHit, 1f);
             enemy.TakeDamage(heavyDamage, true);
 
-            if (!player.enemy.isBlocking)
+            if (!enemy.isBlocking)
             {
                 enemy.Knockback(11f, 0.15f, true);
             }
@@ -50,7 +50,7 @@ public class Skipler : Character
     #region Spell
     override public void Spell()
     {
-        player.UsingAbility(cooldown);
+        UsingAbility(cooldown);
         ignoreDamage = true;
         StartCoroutine(Dash());
     }
@@ -58,8 +58,8 @@ public class Skipler : Character
     IEnumerator Dash()
     {
 
-        player.ignoreMovement = true;
-        ignoreDamage=true;
+        ignoreMovement = true;
+        ignoreDamage = true;
 
         dashing = true;
 
@@ -73,9 +73,9 @@ public class Skipler : Character
         Vector2 currentVelocity = rb.velocity;
 
         // Determine the dash direction based on the input
-        float moveDirection = Input.GetKey(player.left) ? -1f : 1f; 
+        float moveDirection = Input.GetKey(left) ? -1f : 1f;
 
-        Collider2D[] colliders = player.GetColliders();
+        Collider2D[] colliders = GetColliders();
         foreach (Collider2D collider in colliders)
         {
             collider.enabled = false;
@@ -105,7 +105,7 @@ public class Skipler : Character
         // Reset the gravity scale
         rb.gravityScale = ogGravityScale;
 
-        ignoreDamage=false;
+        ignoreDamage = false;
 
 
         foreach (Collider2D collider in colliders)
@@ -121,7 +121,7 @@ public class Skipler : Character
         dashHit = false;
         dashing = false;
 
-        player.OnCooldown(cooldown);
+        OnCooldown(cooldown);
         ignoreDamage = false;
 
     }
@@ -134,18 +134,21 @@ public class Skipler : Character
         audioManager.PlaySFX(audioManager.dashHit, audioManager.heavyAttackVolume);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    override protected void OnTriggerEnter2D(Collider2D other)
     {
         if (dashing && other.CompareTag("Player") && !dashHit)  //--here
         {
             DealDashDmg();
             dashHit = true;
         }
+
+        base.OnTriggerEnter2D(other);
     }
     #endregion
 
     #region LightAttack
-    override public void LightAttack() {
+    override public void LightAttack()
+    {
         if (lightReady)
         {
             QuickAttackIndicatorDisable();
@@ -155,7 +158,7 @@ public class Skipler : Character
 
     IEnumerator SwordDash()
     {
-        player.IgnoreMovement(true);
+        IgnoreMovement(true);
 
         // Store the original gravity scale
         float ogGravityScale = rb.gravityScale;
@@ -167,7 +170,7 @@ public class Skipler : Character
         Vector2 currentVelocity = rb.velocity;
 
         // Determine the dash direction based on the input
-        float moveDirection = Input.GetKey(player.left) ? -1f : 1f; ;
+        float moveDirection = Input.GetKey(left) ? -1f : 1f; ;
 
 
         audioManager.PlaySFX(audioManager.sworDashin, 1);
@@ -192,7 +195,7 @@ public class Skipler : Character
 
         lightReady = false;
 
-        player.IgnoreMovement(false);
+        IgnoreMovement(false);
 
         StartCoroutine(ResetSwordDash());
 
@@ -208,7 +211,7 @@ public class Skipler : Character
 
     public void DealSwordDashDmg()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -235,7 +238,7 @@ public class Skipler : Character
     #region Passive
     void ReduceCD()
     {
-        player.cdTimer -= 1f;
+        cdTimer -= 1f;
     }
     #endregion
 }

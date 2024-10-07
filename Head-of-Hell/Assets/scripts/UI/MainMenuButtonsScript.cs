@@ -19,7 +19,7 @@ public class MainMenuNavigation : MonoBehaviour
         // Navigate through the buttons with the arrow keys
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            if(notSelected)
+            if (notSelected)
             {
                 AutoSelectButton();
                 return;

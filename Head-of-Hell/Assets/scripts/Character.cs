@@ -1,11 +1,19 @@
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Xml.Linq;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEditor.Playables;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
+using UnityEngine.UI;
+using static Unity.Collections.AllocatorManager;
 
 public abstract class Character : MonoBehaviour
 {
-    protected PlayerScript player, enemy;
+    protected Character enemy;
     protected Animator animator;
     protected AudioManager audioManager;
     protected Rigidbody2D rb;
@@ -17,21 +25,459 @@ public abstract class Character : MonoBehaviour
     private Coroutine chargeCoroutine;
     float chargeTime = 0.5f;
     protected int chargeDmg = 34;
-    protected bool isBlocking=false;
+    public bool isBlocking=false;
     protected bool ignoreDamage=false;
     protected int heavyDamage = 14;
-    public bool blockDisabled = false;
 
-    public void InitializeCharacter(PlayerScript playa, AudioManager audio, CharacterResources res)
+    //ps------------------------------------------
+    protected TextMeshProUGUI P1Name, winner;
+    protected string P2Name;
+    string playerEnemysString;
+    protected GameObject playAgainButton;
+    protected GameObject mainMenuButton;
+    protected Slider cooldownSlider;
+
+    //basic stats
+    public float moveSpeed = 4f; // Initialize moveSpeed
+    protected float heavySpeed;
+    protected float OGMoveSpeed;
+    protected float jumpForce = 10f;
+    protected int maxHealth = 100;
+    protected int currHealth;
+    protected bool isGrounded;
+
+    protected int playerNum;
+
+    protected helthbarscript healthbar;
+
+    string stageName;
+    protected GameObject[] stages;
+
+    //additional
+    bool isStatic = false;
+    bool casting = false;
+    bool canCast = true;
+    bool knocked = false;
+    protected bool canRotate = true;
+
+    //knockback
+
+    protected float KBForce;
+    protected float KBCounter;
+    protected float KBTotalTime;
+    protected bool knockfromright;
+    bool knockbackXaxis;
+    protected bool knockable = true;
+
+    protected Transform attackPoint;
+
+    protected float attackRange = 0.5f;
+    protected float ogRange = 0.5f;
+
+    protected LayerMask enemyLayer;
+
+    protected bool ignoreMovement = false;
+    protected bool ignoreSlow = false;
+    public bool blockDisabled;
+
+    //bar images
+    protected Image cdbarimage;
+    protected Sprite activeSprite, ogSprite;
+
+    //cd
+    protected bool onCooldown = false;
+    protected float cdTimer = 0f;
+
+    public bool ignoreUpdate = false;
+
+    //Indicators
+    protected GameObject blockDisabledIndicator;
+    protected GameObject poison;
+    protected GameObject Stack1Poison;
+    protected GameObject Stack2Poison;
+    protected GameObject Stack3Poison;
+    protected GameObject quickAttackIndicator;
+    protected GameObject stun;
+    private bool stunned = false;
+
+    //movement keys
+    protected KeyCode up;
+    protected KeyCode down;
+    protected KeyCode left;
+    protected KeyCode right;
+    protected KeyCode lightAttack;
+    protected KeyCode heavyAttack;
+    protected KeyCode block;
+    protected KeyCode ability;
+    protected KeyCode charge;
+
+    protected CharacterSetup characterSetup;
+    protected CharacterChoiceHandler characterChoiceHandler;
+
+    //handling variables
+    int grounds = 0;
+    int isonpad = 0;
+
+    #region PlayerScript
+    public virtual void Start()
     {
-        player = playa;
-        animator = player.animator;
-        audioManager = audio;
-        enemy = player.enemy;
-        rb=player.rb;
-        resources = res;
-        usingAbility = false;
+        characterSetup = GetComponent<CharacterSetup>();
+        characterChoiceHandler = GetComponent<CharacterChoiceHandler>();
+
+        InitializeCharacter();
+
+        //basic variables assignment
+        rb = GetComponent<Rigidbody2D>();
+        resources = GetComponent<CharacterResources>();
+        currHealth = maxHealth;
+        healthbar.SetMaxHealth(maxHealth);
+
+        winner.gameObject.SetActive(false);
+
+        playAgainButton.SetActive(false);
+        mainMenuButton.SetActive(false);
+
+        OGMoveSpeed = moveSpeed;
+        heavySpeed = moveSpeed / 2;
+
+        cooldownSlider.maxValue = 1f;
+        
     }
+
+    void Update()
+    {
+        //self knockback mechanic
+        if (knockable)
+        {
+            if (KBCounter > 0)
+            {
+                if (knockfromright == true)
+                {
+                    if (!knockbackXaxis)
+                    {
+                        rb.velocity = new Vector2(-KBForce, KBForce);
+                    }
+                    else
+                    {
+                        rb.velocity = new Vector2(-KBForce, rb.velocity.y);
+                    }
+                }
+                else
+                {
+                    if (!knockbackXaxis)
+                    {
+                        rb.velocity = new Vector2(KBForce, KBForce);
+                    }
+                    else
+                    {
+                        rb.velocity = new Vector2(KBForce, rb.velocity.y);
+                    }
+                }
+
+                KBCounter -= Time.deltaTime;
+                return;
+            }
+            animator.SetBool("knocked", false);
+        }
+
+        if (ignoreUpdate)
+        {
+            return;
+        }
+
+        if (stunned)
+        {
+            animator.SetBool("IsRunning", false);
+            rb.velocity = new Vector2(0, rb.velocity.y);
+
+            animator.SetBool("cWalk", false);
+            animator.SetTrigger("tookDmg");
+            return;
+        }
+
+        if (!canRotate)
+        {
+            return;
+        }
+        //charge attack specifics
+        if ( ChargeCheck(charge))
+        {
+            return;
+        }
+
+        if (isStatic)
+        {
+            return;
+        }
+
+        // Running animations...
+        if (Input.GetKey(left) || Input.GetKey(right))
+        {
+            if (ignoreMovement)
+            {
+                return;
+            }
+
+            if (knocked)
+            {
+                return;
+            }
+
+            if (isGrounded)
+            {
+                animator.SetBool("IsRunning", true);
+            }
+            else
+            {
+                animator.SetBool("IsRunning", false);
+                animator.SetBool("IsJumping", false);
+                animator.SetTrigger("Jump");
+            }
+
+            float moveDirection = Input.GetKey(left) ? -1f : 1f; // -1 for A, 1 for D
+
+            if (isBlocking)
+            {
+                animator.SetBool("cWalk", true);
+                rb.velocity = new Vector2(moveDirection * heavySpeed, rb.velocity.y);
+                transform.localScale = new Vector3(Mathf.Sign(moveDirection), 1, 1); // Flip sprite according to movement direction
+
+            }
+            else
+            {
+                rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
+                transform.localScale = new Vector3(Mathf.Sign(moveDirection), 1, 1); // Flip sprite according to movement direction
+            }
+        }
+        else
+        {
+            animator.SetBool("IsRunning", false);
+            rb.velocity = new Vector2(0, rb.velocity.y);
+
+            animator.SetBool("cWalk", false);
+        }
+
+        // Jumping
+        if (Input.GetKeyDown(up) && isGrounded)
+        {
+             Jump();
+        }
+
+        // Heavy Punching
+        if (Input.GetKeyDown(heavyAttack))
+        {
+             HeavyAttack();
+        }
+        //Blocking
+        if (Input.GetKeyDown(block) && !casting)
+        {
+             Block();
+        }
+        else if (Input.GetKeyUp(block))
+        {
+             Unblock();
+        }
+
+        //ChargeAttack
+        if (Input.GetKeyDown(charge) && isGrounded)
+        {
+             ChargeAttack();
+
+        }
+
+        //Get gown from pad
+        if (Input.GetKeyDown(down))
+        {
+            Collider2D[] colliders = GetComponents<Collider2D>();
+
+            colliders[3].enabled = false;
+        }
+
+        //LightAttack
+        if (Input.GetKeyDown(lightAttack))
+        {
+            moveSpeed = OGMoveSpeed;
+             LightAttack();
+        }
+
+        //Spells
+        if (Input.GetKeyDown(ability) && !onCooldown && canCast && !casting)
+        {
+
+             Spell();
+        }
+
+        // Animation control for jumping, falling, and landing
+        animator.SetBool("IsGrounded", isGrounded);
+        animator.SetFloat("VerticalSpeed", rb.velocity.y);
+
+    }
+
+    protected virtual void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Ground"))
+        {
+            isGrounded = true;
+            animator.SetBool("Jump", false);
+            grounds++;
+        }
+
+        if (other.CompareTag("Platform"))
+        {
+            isGrounded = true;
+            animator.SetBool("Jump", false);
+            isonpad++;
+            grounds++;
+            Collider2D[] colliders = GetComponents<Collider2D>();
+
+            colliders[3].enabled = true;
+        }
+
+        if (other.CompareTag("Player"))  //--here
+        {
+            isGrounded = true;
+            animator.SetBool("Jump", false);
+            grounds++;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+
+        if (other.CompareTag("Ground"))
+        {
+            grounds--;
+
+            if (grounds == 0)
+            {
+                isGrounded = false;
+            }
+        }
+
+        if (other.CompareTag("Platform"))
+        {
+            isonpad--;
+            grounds--;
+
+            if (isonpad == 0)
+            {
+                isGrounded = false;
+                Collider2D[] colliders = GetComponents<Collider2D>();
+
+                colliders[3].enabled = false;
+            }
+        }
+
+        if (other.CompareTag("Player"))  //--here
+        {
+            grounds--;
+
+            if (grounds == 0)
+            {
+                isGrounded = false;
+            }
+        }
+    }
+
+    /*private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(bellPoint.position, attackRange * 2);
+        Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
+        //Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
+
+    }*/
+
+    public void StopPunching()
+    {
+        animator.SetBool("isHeavyAttacking", false);
+    }
+
+    public void stayStatic()
+    {
+        isStatic = true;
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.bodyType = RigidbodyType2D.Static;
+        }
+    }
+
+    public void stayDynamic()
+    {
+        isStatic = false;
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+    }
+
+    public void ActivateColliders()
+    {
+        Collider2D[] colliders = GetComponents<Collider2D>();
+
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider != colliders[3])
+            {
+                collider.enabled = true;
+            }
+        }
+
+        colliders[4].enabled = false;
+    }
+
+    public void DeactivateColliders()
+    {
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        foreach (Collider2D collider in colliders)
+        {
+            collider.enabled = false;
+        }
+    }
+
+    public void InitializeCharacter()
+    {
+        up=characterSetup.up;
+        down=characterSetup.down;
+        left=characterSetup.left;
+        right=characterSetup.right;
+        lightAttack = characterSetup.lightAttack;
+        heavyAttack = characterSetup.heavyAttack;
+        block=characterSetup.block;
+        ability=characterSetup.ability;
+        charge=characterSetup.charge;   
+        stages=characterSetup.stages;
+        attackPoint=characterSetup.attackPoint;
+        blockDisabledIndicator=characterSetup.blockDisabledIndicator;
+        poison=characterSetup.poison;
+        Stack1Poison = characterSetup.Stack1Poison;
+        Stack2Poison= characterSetup.Stack2Poison;
+        Stack3Poison= characterSetup.Stack3Poison;
+        stun=characterSetup.stun;
+        enemyLayer=characterSetup.enemyLayer;
+
+        cdbarimage =characterSetup.cdbarimage;
+        activeSprite=characterSetup.activeSprite;
+        ogSprite=characterSetup.ogSprite;
+        playerNum=characterSetup.playerNum;
+        healthbar = characterSetup.healthbar;
+        P1Name = characterSetup.P1Name;
+        winner = characterSetup.winner;
+        playAgainButton = characterSetup.playAgainButton;
+        mainMenuButton = characterSetup.mainMenuButton;
+        cooldownSlider = characterSetup.cooldownSlider;
+        audioManager = characterSetup.audioManager;
+        quickAttackIndicator = characterSetup.quickAttackIndicator;
+
+
+        P1Name.text = characterChoiceHandler.GetCharacterName(1);
+        P2Name = characterChoiceHandler.GetCharacterName(2);
+        enemy = characterChoiceHandler.CharacterChoice(2);
+
+        animator = GetComponent<Animator>();
+    }
+    #endregion
 
     #region Purely Virtual
     public virtual void HeavyAttack() { }
@@ -45,7 +491,7 @@ public abstract class Character : MonoBehaviour
 
     #region ChargeAttack
     public virtual void ChargeAttack() {
-        player.knockable = false;
+         knockable = false;
         charging = true;
         animator.SetBool("Charging", true);
         StartCharge();
@@ -75,7 +521,7 @@ public abstract class Character : MonoBehaviour
 
     public virtual void DealChargeDmg()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -89,23 +535,23 @@ public abstract class Character : MonoBehaviour
         {
             audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
         }
-        player.knockable = true;
+         knockable = true;
         charging = false;
         animator.SetBool("Casting", false);
         animator.SetBool("Charging", false);
-        player.stayDynamic();
+         stayDynamic();
     }
 
     public bool ChargeCheck(KeyCode charge)
     {
         if (charging)
         {
-            player.stayStatic();
+             stayStatic();
             if (charged)
             {
                 if (Input.GetKeyUp(charge))
                 {
-                    player.stayDynamic();
+                     stayDynamic();
                     animator.SetTrigger("ChargedHit");
                     charged = false;
                     animator.SetBool("Casting", true);
@@ -115,10 +561,10 @@ public abstract class Character : MonoBehaviour
             }
             if (Input.GetKeyUp(charge))
             {
-                player.stayDynamic();
+                 stayDynamic();
                 animator.SetBool("Charging", false);
                 charging = false;
-                player.knockable = true;
+                 knockable = true;
             }
             return true;
         }
@@ -127,10 +573,10 @@ public abstract class Character : MonoBehaviour
 
     public void StopCHarge()
     {
-        player.stayDynamic();
+         stayDynamic();
         animator.SetBool("Charging", false);
         charging = false;
-        player.knockable = true;
+         knockable = true;
         charged = false;
         animator.SetBool("Casting", false);
         animator.ResetTrigger("ChargedHit");
@@ -146,7 +592,7 @@ public abstract class Character : MonoBehaviour
         }
         animator.SetTrigger("critsi");
         animator.SetBool("Crouch", true);
-        player.PlayerBlock(true);
+         PlayerBlock(true);
         isBlocking=true;
         ResetQuickPunch();
     }
@@ -154,17 +600,272 @@ public abstract class Character : MonoBehaviour
     {
         animator.SetBool("cWalk", false);
         animator.SetBool("Crouch", false);
-        player.PlayerBlock(false);
+         PlayerBlock(false);
         isBlocking=false;
 
         ResetQuickPunch();
     }
+
+    public void Die()
+    {
+        animator.SetBool("isDead", true);
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        foreach (Collider2D collider in colliders)
+        {
+            collider.enabled = false;
+        }
+
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.bodyType = RigidbodyType2D.Static;
+        }
+
+        enemy.stayStatic();
+
+        audioManager.StopMusic();
+        audioManager.PlaySFX(audioManager.death, audioManager.deathVolume);
+        if (enemy.currHealth == maxHealth)
+        {
+            winner.text = "FLAWLESS\n" + P2Name + " prevails!";
+        }
+        else if (enemy.currHealth <= 0)
+        {
+            winner.text = "Tie?\nDEATH PREVAILS...";
+        }
+        else
+        {
+            winner.text = P2Name + " prevails!";
+        }
+
+        winner.gameObject.SetActive(true);
+
+        // Enable play again and main menu buttons
+        playAgainButton.SetActive(true);
+        mainMenuButton.SetActive(true);
+    }
+
+    void PermaDeath()
+    {
+        animator.SetBool("permanentDeath", true);
+        this.enabled = false;
+    }
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
+    public void OnCooldown(float cd)
+    {
+        ignoreDamage = false;
+        ignoreMovement = false;
+
+        EnemyAbilityEnable();
+        knockable = true;
+        cdbarimage.sprite = ogSprite;
+        animator.SetBool("isUsingAbility", false);
+        animator.SetBool("Casting", false);
+        casting = false;
+
+        // Start the cooldown timer
+        cdTimer = cd;
+        onCooldown = true;
+        StartCoroutine(AbilityCooldown(cd));
+    }
+
+    public IEnumerator AbilityCooldown(float duration)
+    {
+
+        while (cdTimer > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            cdTimer -= 1f;
+            UpdateCooldownSlider(duration); // Update the cooldown slider every second
+        }
+
+        // Reset the cooldown flag
+        onCooldown = false;
+        cdTimer = 0f;
+    }
+
+    void UpdateCooldownSlider(float duration)
+    {
+        float progress = Mathf.Clamp01(1f - cdTimer / duration);
+        cooldownSlider.value = progress;
+    }
+
+
+    public void Knockback(float force, float time, bool axis)
+    {
+        if (knockable)
+        {
+            knockbackXaxis = axis;
+            audioManager.PlaySFX(audioManager.knockback, audioManager.deathVolume);
+            bool enemyOnRight = enemy.transform.position.x > this.transform.position.x;
+            //This if must be removed when knockback tranfers to playerscript, its used for a Stellger Passive Function
+            if (time == 0.3333f)
+            {
+                enemyOnRight = !enemyOnRight;
+            }
+            else
+            {
+                animator.SetBool("knocked", true);
+            }
+            KBForce = force;
+            KBCounter = time;
+            knockfromright = enemyOnRight;
+
+        }
+    }
+
+    private IEnumerator ResetKnockedAfterDelay(float delay)
+    {
+        // Wait for the specified delay
+        yield return new WaitForSeconds(delay);
+
+        // Reset the knocked variable
+        knocked = false;
+    }
+
+    public void EnemyAbilityBlock()
+    {
+        enemy.AbilityDisabled();
+    }
+
+    public void EnemyAbilityEnable()
+    {
+        enemy.AbilityEnabled();
+    }
+
+    public void AbilityDisabled()
+    {
+        canCast = false;
+    }
+
+    public void AbilityEnabled()
+    {
+        canCast = true;
+    }
+
+    public bool IsEnemyClose()
+    {
+        return Vector3.Distance(this.transform.position, enemy.transform.position) <= 3f;
+    }
+
+    public void blockBreaker()
+    {
+        isBlocking = false;
+    }
+
+    public void Knockable(bool update)
+    {
+        knockable = update;
+    }
+
+    public void UsingAbility(float cd)
+    {
+        casting = true;
+        animator.SetBool("Casting", true);
+        EnemyAbilityBlock();
+        knockable = false;
+        animator.SetBool("isUsingAbility", true);
+        cdbarimage.sprite = activeSprite;
+        UpdateCooldownSlider(cd);
+    }
+
+    public Collider2D[] GetColliders()
+    {
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        return colliders;
+    }
+
+    public void IgnoreMovement(bool boolean)
+    {
+        ignoreMovement = boolean;
+    }
+
+    public void IgnoreSlow(bool boolean)
+    {
+        ignoreSlow = boolean;
+    }
+
+    public void IgnoreUpdate(bool boolean)
+    {
+        ignoreUpdate = boolean;
+    }
+
+    public void ChangeSpeed(float speed)
+    {
+        moveSpeed = speed;
+    }
+
+    public void ChangeOGSpeed(float speed)
+    {
+        OGMoveSpeed = speed;
+    }
+    public void PlayerBlock(bool blck)
+    {
+        isBlocking = blck;
+    }
+
+    public void Casting(bool castin)
+    {
+        casting = castin;
+    }
+
+    public void BreakCharge()
+    {
+        StopCHarge();
+    }
+
+    public IEnumerator InterruptMovement(float time)
+    {
+        rb.velocity = Vector2.zero; // Stop the enemy's movement
+        ignoreMovement = true;
+
+        yield return new WaitForSeconds(time);
+
+        ignoreMovement = false;
+    }
+
+    public IEnumerator Stun(float time)
+    {
+        stun.gameObject.SetActive(true);
+        rb.velocity = Vector2.zero; // Stop the enemy's movement
+        stunned = true;
+
+        yield return new WaitForSeconds(time);
+
+        stunned = false;
+        stun.gameObject.SetActive(false);
+    }
+
+
+    public void DisableBlock(bool whileKnocked)
+    {
+         blockDisabled = true;
+         blockDisabledIndicator.gameObject.SetActive(true);
+    }
+
+    public void EnableBlock()
+    {
+        blockDisabled = false;
+        blockDisabledIndicator.gameObject.SetActive(false);
+    }
+
+    public Character GetEnemy()
+    {
+        return enemy;
+    }
+
+    
     #endregion
 
     #region General
     public void Jump()
     {
-        player.rb.velocity = new Vector2(player.rb.velocity.x, player.jumpForce);
+        rb.velocity = new Vector2( rb.velocity.x,  jumpForce);
         animator.SetTrigger("Jump");
         audioManager.PlaySFX(audioManager.jump, audioManager.jumpVolume);
 
@@ -173,33 +874,28 @@ public abstract class Character : MonoBehaviour
 
     public Collider2D HitEnemy()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
         return hitEnemy;
-    }
-
-    public bool IsEnemyClose()
-    {
-        return Vector3.Distance(this.transform.position, enemy.transform.position) <= 3f;
     }
 
     virtual public void HeavyAttackStart()
     {
-        player.moveSpeed = player.heavySpeed;
+        moveSpeed =  heavySpeed;
         StartCoroutine(WaitAndSetSpeed());
-        animator.SetBool("isHeavypunching", true);
+        animator.SetBool("isHeavyAttacking", true);
     }
 
     public void HeavyAttackEnd()
     {
-        player.moveSpeed = player.OGMoveSpeed;
-        animator.SetBool("isHeavypunching", false);
+         moveSpeed =  OGMoveSpeed;
+        animator.SetBool("isHeavyAttacking", false);
     }
 
     private IEnumerator WaitAndSetSpeed()
     {
 
         yield return new WaitForSeconds(0.49f);  // Waits for 0.49 seconds
-        player.moveSpeed = player.OGMoveSpeed;
+         moveSpeed =  OGMoveSpeed;
 
     }
 
@@ -221,45 +917,45 @@ public abstract class Character : MonoBehaviour
         {
             if (dmg == heavyDamage) //if its heavy attack take half the damage
             {
-                player.currHealth -= 5;
+                 currHealth -= 5;
                 print("Took 5 damage");
-                player.healthbar.SetHealth(player.currHealth);
+                 healthbar.SetHealth( currHealth);
             }
             //if its light attack take no dmg
 
             if (dmg == chargeDmg)
             {
-                player.currHealth -= dmg;
+                 currHealth -= dmg;
 
-                player.healthbar.SetHealth(player.currHealth);
-                player.moveSpeed = player.OGMoveSpeed;
+                 healthbar.SetHealth( currHealth);
+                 moveSpeed =  OGMoveSpeed;
             }
         }
         else
         {
-            player.currHealth -= dmg;
+             currHealth -= dmg;
 
             animator.SetTrigger("tookDmg");
 
             print("Took " + dmg + " damage");
 
-            player.healthbar.SetHealth(player.currHealth);
+             healthbar.SetHealth( currHealth);
         }
 
-        if (player.currHealth <= 0)
+        if ( currHealth <= 0)
         {
-            player.Die();
+             Die();
         }
     }
 
     protected void QuickAttackIndicatorEnable()
     {
-        player.quickAttackIndicator.SetActive(true);
+         quickAttackIndicator.SetActive(true);
     }
 
     protected void QuickAttackIndicatorDisable()
     {
-        player.quickAttackIndicator?.SetActive(false);
+         quickAttackIndicator?.SetActive(false);
     }
     #endregion
 
@@ -268,13 +964,45 @@ public abstract class Character : MonoBehaviour
     public void ResetQuickPunch()
     {
         animator.ResetTrigger("punch2");
-        player.animator.SetBool("QuickPunch", false);
+         animator.SetBool("QuickPunch", false);
     }
 
     public void Grabbed()
     {
         audioManager.PlaySFX(audioManager.grab, audioManager.heavyAttackVolume);
         animator.SetTrigger("grabbed");
+    }
+
+    public void StackPoison1(bool on)
+    {
+        Stack1Poison.gameObject.SetActive(on);
+    }
+    public void StackPoison2(bool on)
+    {
+        Stack2Poison.gameObject.SetActive(on);
+    }
+    public void StackPoison3(bool on)
+    {
+        Stack3Poison.gameObject.SetActive(on);
+    }
+
+    public bool IsPoisoned()
+    {
+        return poison.gameObject.activeSelf;
+    }
+
+    public void ActivatePoison(bool on)
+    {
+        poison.gameObject.SetActive(on);
+    }
+
+    public void ActivateStun(bool on)
+    {
+        poison.gameObject.SetActive(on);
+    }
+    public void ActivateblockBreaker(bool on)
+    {
+        blockDisabledIndicator.gameObject.SetActive(on);
     }
 
     #endregion

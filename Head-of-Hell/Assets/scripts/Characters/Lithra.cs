@@ -12,18 +12,27 @@ public class Lithra : Character
     private bool airSpinready = true;
     float cooldown = 10f;
     int bellDamage = 10;
+    public Transform bellPoint;
+    public Transform bellStunPointTransf;
 
+    public override void Start()
+    {
+        base.Start();
+
+        bellPoint=resources.bellPoint;
+        bellStunPointTransf = resources.bellStunPoint;
+    }
 
     #region HeavyAttack
     override public void HeavyAttack()
     {
-        animator.SetTrigger("heavyAttack");
+        animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
     }
 
     override public void DealHeavyDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -31,7 +40,7 @@ public class Lithra : Character
             audioManager.PlaySFX(audioManager.lightattack, 0.5f);
             enemy.TakeDamage(heavyDamage, true);
             LuckyBell();
-            if (!player.enemy.isBlocking)
+            if (! enemy.isBlocking)
             {
                 enemy.Knockback(11f, 0.15f, true);
             }
@@ -47,15 +56,15 @@ public class Lithra : Character
     override public void Spell()
     {
         animator.SetTrigger("Spell");
-        player.UsingAbility(cooldown);
+         UsingAbility(cooldown);
         ignoreDamage = true;
         audioManager.PlaySFX(audioManager.swoosh, audioManager.doubleVol);
     }
 
     public void DealBellDmg()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.bellPoint.position, player.attackRange*2, player.enemyLayer);
-        Collider2D bellStunPoint = Physics2D.OverlapCircle(player.bellStunPoint.position, player.attackRange / 3, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( bellPoint.position,  attackRange*2,  enemyLayer);
+        Collider2D bellStunPoint = Physics2D.OverlapCircle(bellStunPointTransf.position,  attackRange / 3,  enemyLayer);
 
         if (hitEnemy != null || bellStunPoint!=null)
         {
@@ -75,9 +84,9 @@ public class Lithra : Character
             audioManager.PlaySFX(audioManager.bellPunch, audioManager.swooshVolume);
         }
 
-        player.attackRange = player.ogRange;
+         attackRange =  ogRange;
 
-        player.OnCooldown(cooldown);
+         OnCooldown(cooldown);
         ignoreDamage = false;
 
     }
@@ -86,7 +95,7 @@ public class Lithra : Character
     #region LightAttack
     public override void LightAttack()
     {
-        if (airSpinready && (Input.GetKey(player.left) || Input.GetKey(player.right)))
+        if (airSpinready && (Input.GetKey( left) || Input.GetKey( right)))
         {
             QuickAttackIndicatorDisable();
             StartCoroutine(PerformLightAttack());
@@ -96,28 +105,28 @@ public class Lithra : Character
     private IEnumerator PerformLightAttack()
     {
         airSpinready=false;
-        player.IgnoreUpdate(true);
+         IgnoreUpdate(true);
 
         audioManager.PlaySFX(audioManager.bellDash, 1f);
         // Calculate the movement direction
-        float moveDirection = Input.GetKey(player.left) ? -1f : (Input.GetKey(player.right) ? 1f : 0f);
+        float moveDirection = Input.GetKey( left) ? -1f : (Input.GetKey( right) ? 1f : 0f);
 
         // Only proceed if a direction is given
         if (moveDirection == 0f)
         {
-            player.IgnoreUpdate(false);
+             IgnoreUpdate(false);
             airSpinready=true;
             yield break;
         }
 
-        if (!Input.GetKey(KeyCode.W) && player.isGrounded)
+        if (!Input.GetKey(KeyCode.W) &&  isGrounded)
         {
-            player.rb.AddForce(new Vector2(moveDirection * airSpinSpeed , jumpHeight), ForceMode2D.Impulse);
+             rb.AddForce(new Vector2(moveDirection * airSpinSpeed , jumpHeight), ForceMode2D.Impulse);
         }
         else
         {   
-            player.rb.velocity = new Vector2(player.rb.velocity.x, 0);
-            player.rb.AddForce(new Vector2(moveDirection * airSpinSpeed , jumpHeight), ForceMode2D.Impulse);
+             rb.velocity = new Vector2( rb.velocity.x, 0);
+             rb.AddForce(new Vector2(moveDirection * airSpinSpeed , jumpHeight), ForceMode2D.Impulse);
         }
 
         animator.SetTrigger("QuickAttack");
@@ -128,25 +137,25 @@ public class Lithra : Character
         while (elapsedTime < lightAttackDuration)
         {
             // Perform the air spin movement
-            //player.transform.Translate(Vector2.right * moveDirection * airSpinSpeed * Time.deltaTime);
+            // transform.Translate(Vector2.right * moveDirection * airSpinSpeed * Time.deltaTime);
 
             // Check for enemy collision
-            Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+            Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
             if (hitEnemy != null)
             {
                 audioManager.PlaySFX(audioManager.bellDashHit, 1f);
                 enemy.TakeDamage(3,true);
                 StartCoroutine(enemy.Stun(0.5f));
-                float moveDirection2 = Input.GetKey(player.left) ? -1f : (Input.GetKey(player.right) ? 1f : 0f);
+                float moveDirection2 = Input.GetKey( left) ? -1f : (Input.GetKey( right) ? 1f : 0f);
 
                 // Jump back after hitting the enemy
-                player.rb.velocity = Vector2.zero; // Reset current velocity
+                 rb.velocity = Vector2.zero; // Reset current velocity
                 if(moveDirection2 == moveDirection) {
-                    player.rb.AddForce(new Vector2(-moveDirection2 * airSpinSpeed/2, jumpHeight), ForceMode2D.Impulse);
+                     rb.AddForce(new Vector2(-moveDirection2 * airSpinSpeed/2, jumpHeight), ForceMode2D.Impulse);
                 }
                 else
                 {
-                    player.rb.AddForce(new Vector2(moveDirection2 * airSpinSpeed/2, jumpHeight), ForceMode2D.Impulse);
+                     rb.AddForce(new Vector2(moveDirection2 * airSpinSpeed/2, jumpHeight), ForceMode2D.Impulse);
                 }
                 
                 animator.SetTrigger("Reverse");
@@ -157,11 +166,11 @@ public class Lithra : Character
             yield return null;
         }
         // Wait until the player is grounded
-        while (!player.isGrounded)
+        while (! isGrounded)
         {
             yield return null;
         }
-        player.IgnoreUpdate(false);
+         IgnoreUpdate(false);
         StartCoroutine(ResetAirSpin());
     }
 
@@ -183,7 +192,7 @@ public class Lithra : Character
 
     public override void DealChargeDmg()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -198,11 +207,11 @@ public class Lithra : Character
         {
             audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
         }
-        player.knockable = true;
+         knockable = true;
         charging = false;
         animator.SetBool("Casting", false);
         animator.SetBool("Charging", false);
-        player.stayDynamic();
+         stayDynamic();
     }
     #endregion
 

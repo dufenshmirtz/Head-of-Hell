@@ -78,7 +78,6 @@ public class CharacterChoiceMenu : MonoBehaviour
             foreach (Button butt in characterButtons)
             {
 
-
                 if (butt != p1b && butt != button)
                 {
 
@@ -96,7 +95,6 @@ public class CharacterChoiceMenu : MonoBehaviour
 
     public void ResetCharacterSelection()
     {
-        Debug.Log("--00--00--");
         // Reactivate all character buttons
         foreach (Button button in characterButtons)
         {

@@ -22,7 +22,7 @@ public class Rager : Character
 
     override public void DealHeavyDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -30,7 +30,7 @@ public class Rager : Character
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
             enemy.TakeDamage(heavyDamage, true);
 
-            if (!player.enemy.isBlocking)
+            if (! enemy.isBlocking)
             {
                 enemy.Knockback(11f, 0.15f, true);
             }
@@ -50,32 +50,32 @@ public class Rager : Character
     override public void Spell()
     {
         animator.SetTrigger("Spell");
-        player.UsingAbility(cooldown);
+         UsingAbility(cooldown);
         ignoreDamage = true;
     }
 
     public void DealComboDmg()
     {
 
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
             enemy.StopPunching();
             enemy.BreakCharge();
-            player.cdbarimage.sprite = player.activeSprite;
+             cdbarimage.sprite =  activeSprite;
             //dmg and sound
             hitEnemy.GetComponent<PlayerScript>().TakeDamage(0, true); //--here
             audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
 
             //playerState
-            player.stayStatic();
-            player.canRotate = false;
+             stayStatic();
+             canRotate = false;
             //enemystate
             enemy.stayStatic();
             enemy.blockBreaker();
             enemy.AbilityDisabled();
-            enemy.GetCharacter().Grabbed();
+            enemy.Grabbed();
             animator.SetBool("ComboReady", true);
         }
         else
@@ -83,7 +83,7 @@ public class Rager : Character
             audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
             animator.SetBool("isUsingAbility", false);
             ResetQuickPunch();
-            player.OnCooldown(cooldown);
+             OnCooldown(cooldown);
             ignoreDamage = false;
         }
 
@@ -111,21 +111,21 @@ public class Rager : Character
         audioManager.PlaySFX(audioManager.klong, audioManager.doubleVol);
 
         //player state reset
-        player.stayDynamic();
-        player.canRotate = true;
+         stayDynamic();
+         canRotate = true;
 
 
         //enemy state
         enemy.stayDynamic();
         enemy.AbilityEnabled();
-        enemy.moveSpeed = player.OGMoveSpeed;
+        enemy.moveSpeed =  OGMoveSpeed;
         enemy.Knockback(8f, .25f, false);
 
         //cd
         ResetQuickPunch();
         animator.SetBool("ComboReady", false);
 
-        player.OnCooldown(cooldown);
+         OnCooldown(cooldown);
         ignoreDamage = false;
 
     }
@@ -138,7 +138,7 @@ public class Rager : Character
     }
     public void QuickPunchDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -164,7 +164,7 @@ public class Rager : Character
     public override void ChargeAttack()
     {
         base.ChargeAttack();
-        animator.SetTrigger("RagerCharge");
+        animator.SetTrigger("Charge");
     }
     #endregion
 }

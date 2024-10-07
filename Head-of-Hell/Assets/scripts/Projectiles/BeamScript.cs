@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class BeamScript : MonoBehaviour
 {
-    // Reference to the PlayerScript
-    public PlayerScript playa;
+    public LazyBigus playa;
 
     // Reference to the Collider2D on this object (assuming it's 2D)
     private Collider2D beamCollider;

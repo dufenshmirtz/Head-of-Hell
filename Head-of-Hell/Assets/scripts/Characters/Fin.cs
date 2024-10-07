@@ -23,7 +23,7 @@ public class Fin : Character
 
     override public void DealHeavyDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -31,7 +31,7 @@ public class Fin : Character
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
             enemy.TakeDamage(heavyDamage+passiveDamage, true);
 
-            if (!player.enemy.isBlocking)
+            if (! enemy.isBlocking)
             {
                 enemy.Knockback(11f, 0.15f, true);
             }
@@ -51,7 +51,7 @@ public class Fin : Character
         audioManager.PlaySFX(audioManager.counterScream, audioManager.counterVol);
         animator.SetTrigger("Spell");
         counterIsOn = true;
-        player.UsingAbility(cooldown);
+        UsingAbility(cooldown);
     }
 
     public bool DetectCounter()
@@ -60,8 +60,8 @@ public class Fin : Character
         {
             if (!counterDone)
             {
-                ignoreCounterOff = true;
                 Countered();
+                ignoreCounterOff = true;
                 counterDone = true;
                 return true;
             }
@@ -76,7 +76,7 @@ public class Fin : Character
         if (!ignoreCounterOff)
         {
             // Start the cooldown timer
-            player.OnCooldown(missCooldown);
+            OnCooldown(missCooldown);
             CounterVariablesOff();
         }
         else
@@ -89,14 +89,14 @@ public class Fin : Character
     public void CounterSuccessOff()
     {
         CounterVariablesOff();
-        player.OnCooldown(cooldown);
+         OnCooldown(cooldown);
     }
 
     public void Countered()
     {
         audioManager.PlaySFX(audioManager.counterSucces, audioManager.doubleVol);
         enemy.stayStatic();
-        player.stayStatic();
+        stayStatic();
         animator.SetTrigger("counterHit");
     }
 
@@ -109,7 +109,7 @@ public class Fin : Character
 
         enemy.TakeDamage(damage,true);
 
-        player.stayDynamic();
+         stayDynamic();
         enemy.stayDynamic();
 
         enemy.Knockback(10f, .3f, false);
@@ -146,9 +146,9 @@ public class Fin : Character
 
     IEnumerator Roll()
     {
-        player.IgnoreMovement(true);
+         IgnoreMovement(true);
         ignoreDamage=true;
-        player.knockable = false;
+         knockable = false;
 
         // Store the original gravity scale
         float ogGravityScale = rb.gravityScale;
@@ -168,7 +168,7 @@ public class Fin : Character
         colliders[4].enabled = true;
 
         // Determine the dash direction based on the input
-        float moveDirection = Input.GetKey(player.left) ? -1f : 1f; ;
+        float moveDirection = Input.GetKey( left) ? -1f : 1f; ;
 
 
         audioManager.PlaySFX(audioManager.roll, 1);
@@ -205,10 +205,10 @@ public class Fin : Character
         rb.gravityScale = ogGravityScale;
 
 
-        player.IgnoreMovement(false);
+         IgnoreMovement(false);
         ignoreDamage=false;
 
-        player.knockable = true;
+         knockable = true;
 
         StartCoroutine(ResetRoll());
 
