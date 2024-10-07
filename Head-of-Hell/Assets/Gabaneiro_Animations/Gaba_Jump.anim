@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GabaneiroChargeHit
+  m_Name: Gaba_Jump
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,9 +21,21 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 476945790, guid: 08c1c486120ddec41bd188b6a158491b, type: 3}
-    - time: 0.6666667
-      value: {fileID: 476945790, guid: 08c1c486120ddec41bd188b6a158491b, type: 3}
+      value: {fileID: 574913732, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
+    - time: 0.1
+      value: {fileID: -678463830, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
+    - time: 0.2
+      value: {fileID: -267084683, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
+    - time: 0.3
+      value: {fileID: 571145202, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
+    - time: 0.41666666
+      value: {fileID: -370603254, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
+    - time: 0.51666665
+      value: {fileID: 2125167535, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
+    - time: 0.6166667
+      value: {fileID: 1213027318, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
+    - time: 0.71666664
+      value: {fileID: 1213027318, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -46,14 +58,20 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 476945790, guid: 08c1c486120ddec41bd188b6a158491b, type: 3}
-    - {fileID: 476945790, guid: 08c1c486120ddec41bd188b6a158491b, type: 3}
+    - {fileID: 574913732, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
+    - {fileID: -678463830, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
+    - {fileID: -267084683, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
+    - {fileID: 571145202, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
+    - {fileID: -370603254, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
+    - {fileID: 2125167535, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
+    - {fileID: 1213027318, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
+    - {fileID: 1213027318, guid: b787eb0b8509cf54b833e4f5077ec84b, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.68333334
+    m_StopTime: 0.7333333
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -72,11 +90,4 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events:
-  - time: 0.06666667
-    functionName: DealChargeDamageEvent
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
+  m_Events: []
