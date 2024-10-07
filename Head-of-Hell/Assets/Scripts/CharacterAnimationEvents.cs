@@ -13,9 +13,9 @@ public class CharacterAnimationEvents : MonoBehaviour
     Chiback chiback;
 
     //General
-    public void SetCharacter(Character characterio)
+    void Start()
     {
-        character = characterio;
+        character = GetComponent<Character>();
     }
 
     public void DealDamageEvent()

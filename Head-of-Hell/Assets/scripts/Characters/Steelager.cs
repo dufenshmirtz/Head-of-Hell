@@ -13,8 +13,16 @@ public class Steelager : Character
     public Transform bombsParent;
     bool bombCharging = false;
     bombScript bomba;
+    public Transform firePoint;
+    public Transform explosionPoint;
 
-    bool ignoreSlow=false;
+    public override void Start()
+    {
+        base.Start();
+
+        firePoint=resources.firePoint;
+        explosionPoint=resources.explosionPoint;
+    }
 
     #region HeavyAttack
     override public void HeavyAttack()
@@ -25,15 +33,14 @@ public class Steelager : Character
 
     override public void DealHeavyDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
-
             audioManager.PlaySFX(audioManager.explosion, audioManager.lessVol);
             enemy.TakeDamage(heavyDamage, true);
 
-            if (!player.enemy.isBlocking)
+            if (!enemy.isBlocking)
             {
                 enemy.Knockback(11f, 0.15f, true);
             }
@@ -53,13 +60,13 @@ public class Steelager : Character
         ignoreDamage=true;
         animator.SetTrigger("Spell");
         audioManager.PlaySFX(audioManager.bigExplosion, audioManager.doubleVol);
-        player.UsingAbility(cooldown);
-        player.stayStatic();
+         UsingAbility(cooldown);
+         stayStatic();
     }
 
     public void DealExplosionDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.explosionPoint.position, player.attackRange*4, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( explosionPoint.position,  attackRange*4,  enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -71,8 +78,8 @@ public class Steelager : Character
 
     public void ExplosionReset()
     {
-        player.OnCooldown(cooldown);
-        player.stayDynamic();
+         OnCooldown(cooldown);
+         stayDynamic();
         ignoreDamage = false;
     }
 
@@ -99,7 +106,7 @@ public class Steelager : Character
 
         bombCharging = true;
         audioManager.PlaySFX(audioManager.fuse, audioManager.normalVol);
-        GameObject bomb = Instantiate(bombPrefab, bombPoint.position, player.firePoint.rotation);
+        GameObject bomb = Instantiate(bombPrefab, bombPoint.position,  firePoint.rotation);
         bomba=bomb.GetComponent<bombScript>();
         Rigidbody2D rb = bomb.GetComponent<Rigidbody2D>();
         bomb.transform.SetParent(bombsParent);

@@ -6,13 +6,21 @@ public class LazyBigus : Character
 {
     public GameObject bulletPrefab; // The bullet prefab
     public Transform firePoint; // The point from where the bullet will be instantiated
-    public Transform bulletParent; 
+    Transform bulletParent; 
     public float bulletSpeed = 35f; // Speed of the bullet
     bool isShootin = false;
-    public KeyCode shoot;
     float cooldown = 20f;
-    float heal = 30f, healTime;
     int poisonCounter = 0;
+    public GameObject beam;
+    public BeamScript bScript;
+
+    public override void Start()
+    {
+        base.Start();
+
+        firePoint = resources.firePoint;
+        beam = resources.beam;
+    }
 
     #region HeavyAttack
     override public void HeavyAttack()
@@ -23,7 +31,7 @@ public class LazyBigus : Character
 
     override public void DealHeavyDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -32,7 +40,7 @@ public class LazyBigus : Character
             enemy.TakeDamage(heavyDamage, true);
             ToxicTouch();
 
-            if (!player.enemy.isBlocking)
+            if (! enemy.isBlocking)
             {
                 enemy.Knockback(11f, 0.15f, true);
             }
@@ -49,10 +57,12 @@ public class LazyBigus : Character
     #region Spell
     override public void Spell()
     {
-        player.IgnoreUpdate(true);
-        player.stayStatic();
-        player.UsingAbility(cooldown);
-        player.beam.SetActive(true);
+        IgnoreUpdate(true);
+        stayStatic();
+        UsingAbility(cooldown);
+        beam.SetActive(true);
+        bScript = beam.GetComponent<BeamScript>();
+        bScript.playa = this;
         animator.SetTrigger("Spell");
         audioManager.PlaySFX(audioManager.beam, audioManager.doubleVol);
         enemy.BreakCharge();
@@ -70,7 +80,7 @@ public class LazyBigus : Character
     private IEnumerator Poison(int damageAmount, float interval, int times)
     {
         ResetPoisonStacks();
-        enemy.poison.SetActive(true);
+        enemy.ActivatePoison(true);
 
         audioManager.PlaySFX(audioManager.poison, 2.5f);
         for (int i = 0; i < times; i++)
@@ -80,14 +90,14 @@ public class LazyBigus : Character
             // Deal damage to the enemy
             enemy.TakeDamage(damageAmount,false);
         }
-        enemy.poison.SetActive(false);
+        enemy.ActivatePoison(false);
     }
 
     public void BeamEnd()
     {
-        player.OnCooldown(cooldown);
-        player.IgnoreUpdate(false);
-        player.stayDynamic();
+         OnCooldown(cooldown);
+         IgnoreUpdate(false);
+         stayDynamic();
         ignoreDamage=false;
     }
     
@@ -159,23 +169,23 @@ public class LazyBigus : Character
 
     public void AddPoison()
     {
-        if (!enemy.poison.gameObject.activeSelf)
+        if (!enemy.IsPoisoned())
         {
             if(poisonCounter < 3)
             {
                 if(poisonCounter==0)
                 {
-                    enemy.Stack1Poison.gameObject.SetActive(true);
+                    enemy.StackPoison1(true);
                 }
                 if (poisonCounter == 1)
                 {
-                    enemy.Stack1Poison.gameObject.SetActive(false);
-                    enemy.Stack2Poison.gameObject.SetActive(true);
+                    enemy.StackPoison1(false);
+                    enemy.StackPoison2(true);
                 }
                 if (poisonCounter == 2)
                 {
-                    enemy.Stack2Poison.gameObject.SetActive(false);
-                    enemy.Stack3Poison.gameObject.SetActive(true);
+                    enemy.StackPoison2(false);
+                    enemy.StackPoison3(true);
                 }
                 poisonCounter++;
             }
@@ -184,7 +194,7 @@ public class LazyBigus : Character
 
     override public void DealChargeDmg()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -199,18 +209,32 @@ public class LazyBigus : Character
         {
             audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
         }
-        player.knockable = true;
+         knockable = true;
         charging = false;
         animator.SetBool("Casting", false);
         animator.SetBool("Charging", false);
-        player.stayDynamic();
+         stayDynamic();
     }
 
     private void ResetPoisonStacks()
     {
-        enemy.Stack1Poison.SetActive(false);
-        enemy.Stack2Poison.SetActive(false);
-        enemy.Stack3Poison.SetActive(false);
+        enemy.StackPoison1(false);
+        enemy.StackPoison2(false);
+        enemy.StackPoison3(false);
+    }
+
+    public void BeamHit()
+    {
+        BeamHitEnemy();
+    }
+
+    public void StackPoison()
+    {
+        if (!enemy.isBlocking)
+        {
+            AddPoison();
+        }
+
     }
     #endregion
 }

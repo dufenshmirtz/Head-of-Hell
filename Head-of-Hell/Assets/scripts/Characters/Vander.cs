@@ -20,7 +20,7 @@ public class Vander : Character
 
     override public void DealHeavyDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -28,7 +28,7 @@ public class Vander : Character
             audioManager.PlaySFX(audioManager.katanaHit, 1f);
             enemy.TakeDamage(heavyDamage, true);
             Lifesteal(smallLifesteal);
-            if (!player.enemy.isBlocking)
+            if (! enemy.isBlocking)
             {
                 enemy.Knockback(11f, 0.15f, true);
             }
@@ -45,15 +45,15 @@ public class Vander : Character
     #region Spell
     override public void Spell()
     {
-        player.attackRange += 0.5f;
+         attackRange += 0.5f;
         animator.SetTrigger("Spell");
-        player.UsingAbility(cooldown);
+         UsingAbility(cooldown);
         ignoreDamage = true;
     }
 
     public void DealStabDmg()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -61,7 +61,7 @@ public class Vander : Character
             enemy.BreakCharge();
             enemy.TakeDamage(stabDamage, true);
             Lifesteal(stabHeal);
-            player.healthbar.SetHealth(player.currHealth);
+             healthbar.SetHealth( currHealth);
             audioManager.PlaySFX(audioManager.stabHit, audioManager.doubleVol);
         }
         else
@@ -69,9 +69,9 @@ public class Vander : Character
             audioManager.PlaySFX(audioManager.stab, audioManager.swooshVolume);
         }
 
-        player.attackRange = player.ogRange;
+         attackRange =  ogRange;
 
-        player.OnCooldown(cooldown);
+         OnCooldown(cooldown);
         ignoreDamage = false;
 
     }
@@ -91,7 +91,7 @@ public class Vander : Character
 
     public void DealKatanaDmg1()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -107,7 +107,7 @@ public class Vander : Character
 
     public void DealKatanaDmg2()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(player.attackPoint.position, player.attackRange, player.enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -144,12 +144,12 @@ public class Vander : Character
     #region Passive
     void Lifesteal(int amount)
     {
-        player.currHealth += amount;
-        if (player.currHealth > player.maxHealth)
+         currHealth += amount;
+        if ( currHealth >  maxHealth)
         {
-            player.currHealth = player.maxHealth;
+             currHealth =  maxHealth;
         }
-        player.healthbar.SetHealth(player.currHealth);
+         healthbar.SetHealth( currHealth);
     }
     #endregion
 }

@@ -12,4 +12,15 @@ public class CharacterResources : MonoBehaviour
     public Transform shootinPoint;
     public Transform bulletParent;
 
+    public Transform bellPoint;
+    public Transform bellStunPoint;
+
+    public Transform mirrorFireAttackPoint;
+    public Transform fireAttackPoint;
+
+    public Transform explosionPoint;
+
+    public Transform firePoint;
+    public GameObject beam;
+
 }

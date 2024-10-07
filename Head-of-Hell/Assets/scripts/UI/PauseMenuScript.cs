@@ -4,8 +4,7 @@ using UnityEngine.UI;
 public class PauseMenuScript : MonoBehaviour
 {
     public GameObject menu;  // Assign your menu panel in the Inspector
-    public PlayerScript player1;
-    public PlayerScript player2;
+    public CharacterChoiceHandler cChoice;
     public AudioManager sfx;
 
 
@@ -32,13 +31,13 @@ public class PauseMenuScript : MonoBehaviour
         menu.SetActive(!menu.activeSelf);
         if (!menu.activeSelf)
         {
-            player1.stayDynamic();
-            player2.stayDynamic();
+            cChoice.CharacterChoice(1).stayDynamic();
+            cChoice.CharacterChoice(2).stayDynamic();
         }
         else
         {
-            player1.stayStatic();
-            player2.stayStatic();
+            cChoice.CharacterChoice(1).stayStatic();
+            cChoice.CharacterChoice(2).stayStatic();
         }
     }
 

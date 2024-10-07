@@ -262,9 +262,9 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
-        character.InitializeCharacter(this, audiomngr, resources);
+        //character.InitializeCharacter(this, audiomngr, resources);
 
-        animEvents.SetCharacter(character);
+        //animEvents.SetCharacter(character);
     }
 
     void Update()
@@ -510,7 +510,7 @@ public class PlayerScript : MonoBehaviour
         //Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
 
     }
-
+    //copied started here
     public void StopPunching()
     {
         animator.SetBool("isHeavypunching", false);
@@ -560,6 +560,7 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    //copied till here
     public void Die()
     {
         animator.SetBool("isDead", true);
@@ -805,6 +806,8 @@ public class PlayerScript : MonoBehaviour
         stunned = false;
         stun.gameObject.SetActive(false);
     }
+
+    //till here copied
 
     public void PickRandomCharacter(SpriteRenderer spriteRenderer)
     {

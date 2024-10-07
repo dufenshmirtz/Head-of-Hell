@@ -11,7 +11,7 @@ public class bombScript : MonoBehaviour
     bool exploded = false;
     bool dmgEnd=false;
     bool damageDealt = false;
-    PlayerScript playa;
+    Character playa;
     Steelager steelager;
     AudioManager audioManager;
     bool jumpDone = false;
@@ -45,13 +45,13 @@ public class bombScript : MonoBehaviour
             {
                 player = 1;
                 enemy = player2Layer;
-                playa = other.GetComponent<PlayerScript>();
+                playa = other.GetComponent<Character>();
             }
             if (other.gameObject.layer == player2Layer)
             {
                 player = 2;
                 enemy = player1Layer;
-                playa = other.GetComponent<PlayerScript>();
+                playa = other.GetComponent<Character>();
             }
             
             return;
@@ -60,10 +60,10 @@ public class bombScript : MonoBehaviour
         if (other.gameObject.layer == enemy && exploded && !dmgEnd && !damageDealt)
         {
 
-            PlayerScript playerScript = other.GetComponent<PlayerScript>();
-            if (playerScript != null)
+            Character character = other.GetComponent<Character>();
+            if (character != null)
             {
-                playerScript.TakeDamage(6, true);
+                character.TakeDamage(6, true);
                 damageDealt = true;
             }
         }
@@ -71,11 +71,11 @@ public class bombScript : MonoBehaviour
         if (other.gameObject.layer == enemy && !exploded && !dmgEnd && !damageDealt)
         {
             
-            PlayerScript playerScript = other.GetComponent<PlayerScript>();
-            if (playerScript != null)
+            Character character = other.GetComponent<Character>();
+            if (character != null)
             {
                 Explode();
-                playerScript.TakeDamage(6, true);
+                character.TakeDamage(6, true);
                 damageDealt = true;
             }
         }
@@ -83,11 +83,11 @@ public class bombScript : MonoBehaviour
         if (other.gameObject.layer != enemy && exploded && !dmgEnd && !jumpDone)
         {
 
-            PlayerScript playerScript = other.GetComponent<PlayerScript>();
-            if (playerScript != null)
+            Character character = other.GetComponent<Character>();
+            if (character != null)
             {
 
-                playerScript.Knockback(13f, 0.3333f, true);
+                character.Knockback(13f, 0.3333f, true);
                 jumpDone = true;
             }
         }

@@ -24,11 +24,13 @@ public class BulletScript : MonoBehaviour
             hasHit = true;
             Destroy(gameObject);
             Debug.Log("BDestroyed");
-            PlayerScript playerScript = other.GetComponent<PlayerScript>();
-            if (playerScript != null)
+            Character character = other.GetComponent<Character>();
+            LazyBigus enemy;
+            if (character != null)
             {
-                playerScript.TakeDamage(3, true);
-                playerScript.enemy.StackPoison();
+                character.TakeDamage(3, true);
+                enemy = (LazyBigus)character.GetEnemy();
+                enemy.StackPoison();
             }
         }
     }
