@@ -1167,6 +1167,13 @@ MonoBehaviour:
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 797260943911005277}
   bulletParent: {fileID: 0}
+  bellPoint: {fileID: 0}
+  bellStunPoint: {fileID: 0}
+  mirrorFireAttackPoint: {fileID: 0}
+  fireAttackPoint: {fileID: 0}
+  explosionPoint: {fileID: 0}
+  firePoint: {fileID: 0}
+  beam: {fileID: 0}
 --- !u!114 &5341404983514887946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1200,7 +1207,18 @@ MonoBehaviour:
   animator: {fileID: 2553929291879454509}
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
+  cdbarimage: {fileID: 0}
+  activeSprite: {fileID: 0}
+  ogSprite: {fileID: 0}
+  cooldownSlider: {fileID: 0}
+  audioManager: {fileID: 0}
+  healthbar: {fileID: 0}
+  P1Name: {fileID: 0}
+  winner: {fileID: 0}
+  playAgainButton: {fileID: 0}
+  mainMenuButton: {fileID: 0}
+  quickAttackIndicator: {fileID: 0}
   playerNum: 1
 --- !u!114 &2584085071129299450
 MonoBehaviour:
