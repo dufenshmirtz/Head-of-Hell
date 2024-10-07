@@ -35,7 +35,9 @@
       {
         "name": "Lazy Bigus",
         "abilities": {
-          "passive": "After Bigus has hit an enemy three times, his next heavy or charge attack poisons them."
+            "passive": "After Bigus has hit an enemy three times, his next heavy or charge attack poisons them.",
+            "quick_attack": "Bigus fires a gunshot that deals 3 damage.",
+            "spell": "Bigus fires a huge lazer charge that deals 10 damage and poisons the opponent for 10 damage over 10 soconds."
         }
       },
       {
