@@ -98,6 +98,7 @@ public abstract class Character : MonoBehaviour
     protected GameObject Stack3Poison;
     protected GameObject quickAttackIndicator;
     protected GameObject stun;
+    protected GameObject shield;
     private bool stunned = false;
 
     //movement keys
@@ -113,6 +114,8 @@ public abstract class Character : MonoBehaviour
 
     protected CharacterSetup characterSetup;
     protected CharacterChoiceHandler characterChoiceHandler;
+
+    bool damageShield = false;
 
     //handling variables
     int grounds = 0;
@@ -456,6 +459,7 @@ public abstract class Character : MonoBehaviour
         Stack3Poison= characterSetup.Stack3Poison;
         stun=characterSetup.stun;
         enemyLayer=characterSetup.enemyLayer;
+        shield=characterSetup.shield;
 
         cdbarimage =characterSetup.cdbarimage;
         activeSprite=characterSetup.activeSprite;
@@ -620,6 +624,8 @@ public abstract class Character : MonoBehaviour
         {
             rb.bodyType = RigidbodyType2D.Static;
         }
+
+        ignoreDamage = true;
 
         enemy.stayStatic();
 
@@ -933,13 +939,19 @@ public abstract class Character : MonoBehaviour
         }
         else
         {
-             currHealth -= dmg;
+            if (damageShield)
+            {
+                damageShield = false;
+                shield.gameObject.SetActive(false);
+                return;
+            }
+            currHealth -= dmg;
 
             animator.SetTrigger("tookDmg");
 
             print("Took " + dmg + " damage");
 
-             healthbar.SetHealth( currHealth);
+            healthbar.SetHealth( currHealth);
         }
 
         if ( currHealth <= 0)
@@ -1005,5 +1017,59 @@ public abstract class Character : MonoBehaviour
         blockDisabledIndicator.gameObject.SetActive(on);
     }
 
+    public void Heal(int amount)
+    {
+        currHealth += amount;
+        if (currHealth > maxHealth)
+        {
+            currHealth = maxHealth;
+        }
+        healthbar.SetHealth(currHealth);
+    }
+
+    #endregion
+
+    #region PowerUps
+    public void SpeedBoost()
+    {
+        moveSpeed = moveSpeed +2;
+
+        StartCoroutine(SpeedBoostCoroutine());
+    }
+
+    private IEnumerator SpeedBoostCoroutine()
+    {
+        yield return new WaitForSeconds(5f);
+
+        moveSpeed = OGMoveSpeed;
+    }
+
+    public void DamageShield()
+    {
+        damageShield = true;
+        shield.gameObject.SetActive(true);
+    }
+
+    public void RefreshCD()
+    {
+        cdTimer -= 5f;
+    }
+
+    public void HealUp()
+    {
+        StartCoroutine(HealCoroutine(2, 2f, 5));
+    }
+
+    private IEnumerator HealCoroutine(int amount, float interval, int times)
+    {
+
+        for (int i = 0; i < times; i++)
+        {
+            yield return new WaitForSeconds(interval);
+
+            Heal(amount);
+        }
+        
+    }
     #endregion
 }
