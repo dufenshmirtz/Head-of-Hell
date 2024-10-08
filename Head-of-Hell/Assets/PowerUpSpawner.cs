@@ -31,10 +31,14 @@ public class PowerUpSpawner : MonoBehaviour
     {
         Vector3 spawnPosition = GetValidSpawnPosition();
 
-        if (spawnPosition != Vector3.zero)
+        if (spawnPosition != Vector3.zero && CanSpawnMorePowerUps())
         {
             int randomIndex = Random.Range(0, powerUpPrefabs.Length);
-            Instantiate(powerUpPrefabs[randomIndex], spawnPosition, Quaternion.identity);
+            GameObject parentObject = GameObject.Find("PowerUps");
+
+            // Instantiate the power-up as a child of "Powerups"
+            Instantiate(powerUpPrefabs[randomIndex], spawnPosition, Quaternion.identity, parentObject.transform);
+
             audioManager.PlaySFX(audioManager.powerupSpawned, audioManager.lessVol);
         }
     }
@@ -58,5 +62,23 @@ public class PowerUpSpawner : MonoBehaviour
         }
 
         return Vector3.zero; // If the position is invalid, return zero
+    }
+
+    bool CanSpawnMorePowerUps()
+    {
+        // Find the parent object "Powerups"
+        GameObject parentObject = GameObject.Find("PowerUps");
+
+        if (parentObject != null)
+        {
+            // Count the number of child objects under "Powerups"
+            int childCount = parentObject.transform.childCount;
+
+            // Return true if there are less than 4 children
+            return childCount < 4;
+        }
+
+        // If the "Powerups" object doesn't exist, return false or handle accordingly
+        return false;
     }
 }
