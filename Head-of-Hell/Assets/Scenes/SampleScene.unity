@@ -42324,7 +42324,8 @@ MonoBehaviour:
   - {fileID: 1614312282225385129, guid: fc524550918ef0c49adf4109dbb776a0, type: 3}
   - {fileID: 2648620573486637723, guid: 310c2e1dcd262fd4dac6d968fe008873, type: 3}
   - {fileID: 5132908266287835077, guid: 33dc5b8c311922b468ad840642697fe8, type: 3}
-  spawnInterval: 10
+  - {fileID: 4733512625317529551, guid: 7da8449afbc51764cbf82206a57dcc0d, type: 3}
+  spawnInterval: 5
   platformMask:
     serializedVersion: 2
     m_Bits: 896
@@ -42652,9 +42653,9 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 1100116391}
+  - {fileID: 2144866981}
   - {fileID: 55097439}
   - {fileID: 1656577412}
-  - {fileID: 2144866981}
   - {fileID: 102424235}
   - {fileID: 484805716}
   - {fileID: 2100796710}
