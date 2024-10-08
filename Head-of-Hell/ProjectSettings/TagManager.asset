@@ -8,6 +8,7 @@ TagManager:
   - Platform
   - Audio
   - Bullet
+  - PowerUp
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Player1layer
   - PlatformLayer
   - PlayerLayer
-  - 
+  - PowerUps
   - 
   - 
   - 
