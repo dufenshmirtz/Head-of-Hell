@@ -1,8 +1,9 @@
+using System.Collections;
 using UnityEngine;
 
 public class PowerUpManager : MonoBehaviour
 {
-    public enum PowerUpType { SpeedBoost, DamageBoost, RefreshCD, Heal }
+    public enum PowerUpType { SpeedBoost, DamageBoost, RefreshCD, Heal , Toxic}
     public PowerUpType type;
     AudioManager audioManager;
 
@@ -18,7 +19,14 @@ public class PowerUpManager : MonoBehaviour
 
             if (player != null)
             {
-                audioManager.PlaySFX(audioManager.powerup, audioManager.normalVol);
+                if(type== PowerUpType.Toxic)
+                {
+                    audioManager.PlaySFX(audioManager.poison, audioManager.normalVol);
+                }
+                else
+                {
+                    audioManager.PlaySFX(audioManager.powerup, audioManager.normalVol);
+                }
                 ApplyPowerUp(player);
                 Destroy(gameObject); // Destroy the power-up after it's collected
             }
@@ -41,6 +49,16 @@ public class PowerUpManager : MonoBehaviour
             case PowerUpType.Heal:
                 player.HealUp();
                 break;
+            case PowerUpType.Toxic:
+                player.TakeDamage(5,false);
+                break;
         }
+    }
+
+    private IEnumerator LifeTime()
+    {
+        yield return new WaitForSeconds(20f);
+
+        Destroy(gameObject);
     }
 }

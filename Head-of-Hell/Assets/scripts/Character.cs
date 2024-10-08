@@ -923,9 +923,9 @@ public abstract class Character : MonoBehaviour
         {
             if (dmg == heavyDamage) //if its heavy attack take half the damage
             {
-                 currHealth -= 5;
+                currHealth -= 5;
                 print("Took 5 damage");
-                 healthbar.SetHealth( currHealth);
+                healthbar.SetHealth( currHealth);
             }
             //if its light attack take no dmg
 
@@ -948,8 +948,6 @@ public abstract class Character : MonoBehaviour
             currHealth -= dmg;
 
             animator.SetTrigger("tookDmg");
-
-            print("Took " + dmg + " damage");
 
             healthbar.SetHealth( currHealth);
         }

@@ -262,9 +262,6 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
-        //character.InitializeCharacter(this, audiomngr, resources);
-
-        //animEvents.SetCharacter(character);
     }
 
     void Update()
