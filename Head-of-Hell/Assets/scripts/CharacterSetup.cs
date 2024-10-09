@@ -28,6 +28,7 @@ public class CharacterSetup : MonoBehaviour
     public GameObject Stack2Poison;
     public GameObject Stack3Poison;
     public GameObject stun;
+    public GameObject shield;
 
     public Rigidbody2D rb;
     public Animator animator;
