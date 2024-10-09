@@ -65,7 +65,7 @@ public class Rager : Character
             enemy.BreakCharge();
              cdbarimage.sprite =  activeSprite;
             //dmg and sound
-            hitEnemy.GetComponent<PlayerScript>().TakeDamage(0, true); //--here
+            hitEnemy.GetComponent<Character>().TakeDamage(0, true); 
             audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
 
             //playerState
@@ -92,22 +92,23 @@ public class Rager : Character
     public void Startcombo()
     {
         animator.SetTrigger("Combo");
+        print("asskol");
     }
     public void FirstHit()
     {
-        enemy.GetComponent<PlayerScript>().TakeDamage(hit1Damage, true); //--here
+        enemy.GetComponent<Character>().TakeDamage(hit1Damage, true); //--here
         audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
     }
 
     public void SecondHit()
     {
-        enemy.GetComponent<PlayerScript>().TakeDamage(hit2Damage, true); //--here
+        enemy.GetComponent<Character>().TakeDamage(hit2Damage, true); //--here
         audioManager.PlaySFX(audioManager.heavyattack, audioManager.lightAttackVolume);
     }
 
     public void ThirdHit()
     {
-        enemy.GetComponent<PlayerScript>().TakeDamage(hit3Damage,true); //--here
+        enemy.GetComponent<Character>().TakeDamage(hit3Damage,true); //--here
         audioManager.PlaySFX(audioManager.klong, audioManager.doubleVol);
 
         //player state reset
