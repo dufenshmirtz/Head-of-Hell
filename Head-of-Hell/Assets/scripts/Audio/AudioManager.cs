@@ -66,6 +66,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip bigExplosion;
     public AudioClip poison;
     public AudioClip sip;
+    public AudioClip powerup;
+    public AudioClip powerupSpawned;
 
     //volumes
     public float deathVolume = 1.0f;
