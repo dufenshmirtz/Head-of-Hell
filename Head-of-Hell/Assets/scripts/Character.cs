@@ -651,7 +651,7 @@ public abstract class Character : MonoBehaviour
         mainMenuButton.SetActive(true);
     }
 
-    void PermaDeath()
+    public void PermaDeath()
     {
         animator.SetBool("permanentDeath", true);
         this.enabled = false;

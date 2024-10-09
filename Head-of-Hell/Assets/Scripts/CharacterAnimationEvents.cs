@@ -35,6 +35,11 @@ public class CharacterAnimationEvents : MonoBehaviour
     public void EndHeavyAttackEvent(){
         character.HeavyAttackEnd();
     }
+
+    public void PermanentDeathEvent()
+    {
+        character.PermaDeath();
+    }
     //Vander
     public void StabDamageEvent()
     {
