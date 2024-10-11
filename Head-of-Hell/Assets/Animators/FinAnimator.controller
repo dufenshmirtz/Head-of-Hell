@@ -262,6 +262,32 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1102 &-5592322522132126850
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Skip_Run
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: ce9e0f0b03a44b34fa9c8e757078d332, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &-5234957128391898788
 AnimatorState:
   serializedVersion: 6
@@ -871,6 +897,9 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: 8744746387304361069}
     m_Position: {x: -450, y: 830, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -5592322522132126850}
+    m_Position: {x: -415, y: 895, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: -2553592537410993878}
