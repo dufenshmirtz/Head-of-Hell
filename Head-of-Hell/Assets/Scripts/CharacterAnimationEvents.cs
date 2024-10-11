@@ -57,6 +57,18 @@ public class CharacterAnimationEvents : MonoBehaviour
         vander.DealKatanaDmg2();
     }
     //Rager
+
+    public void ComboGrabEvent()
+    {
+        rager = (Rager)character;
+        rager.DealComboDmg();
+    }
+
+    public void StartComboEvent()
+    {
+        rager = (Rager)character;
+        rager.Startcombo();
+    }
     public void FirstHitEvent()
     {
         rager = (Rager)character;
