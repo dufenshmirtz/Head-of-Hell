@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI finalWinner;
     string p1, p2;
     static int roundNumber;
-    static int roundCounter;
+    static int roundCounter=1;
     public CharacterManager p1Manager, p2Manager;
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
@@ -61,7 +61,6 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(this.gameObject);
-            roundCounter++;
         }
     }
 
@@ -107,11 +106,11 @@ public class GameManager : MonoBehaviour
             finalWinner.text = "Victory belongs to " + winnerName + "!\n Chan Chan smiles...";
             winner.gameObject.SetActive(false);
             finalWinner.gameObject.SetActive(true);
-            roundCounter = 0;
+            roundCounter = 1;
             player1Wins = 0;
             player2Wins = 0;
 
-            audioManager.PlaySFX(audioManager.dramaticDrums, audioManager.normalVol);
+            audioManager.PlaySFX(audioManager.dramaticDrums, audioManager.doubleVol);
 
             playAgainButton.SetActive(true);
             mainMenuButton.SetActive(true);
@@ -119,7 +118,6 @@ public class GameManager : MonoBehaviour
         else
         {
             roundCounter++;
-            print("op "+roundCounter);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
