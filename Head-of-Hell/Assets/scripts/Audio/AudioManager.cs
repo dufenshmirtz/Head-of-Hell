@@ -68,6 +68,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip sip;
     public AudioClip powerup;
     public AudioClip powerupSpawned;
+    public AudioClip trailerSound;
+    public AudioClip dearth;
+    public AudioClip dramaticDrums;
 
     //volumes
     public float deathVolume = 1.0f;
@@ -97,26 +100,7 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        if (playlist.Count > 0)
-        {
-            // Select a random index from the playlist
-            int randomIndex = Random.Range(0, playlist.Count);
-
-            // Get the randomly selected AudioClip
-            AudioClip selectedSong = playlist[randomIndex];
-
-            // Assign the selected song to the music AudioSource
-            music.clip = selectedSong;
-
-            // Play the selected song
-            music.Play();
-        }
-        else
-        {
-            Debug.LogError("Playlist is empty. Add AudioClips to the playlist in the Inspector.");
-        }
-
-        
+              
     }
 
     public void StopMusic()
@@ -162,5 +146,27 @@ public class AudioManager : MonoBehaviour
     public void BoomSound()
     {
         SFX.PlayOneShot(explosion, lessVol);
+    }
+
+    public void PlayMusic()
+    {
+        if (playlist.Count > 0)
+        {
+            // Select a random index from the playlist
+            int randomIndex = Random.Range(0, playlist.Count);
+
+            // Get the randomly selected AudioClip
+            AudioClip selectedSong = playlist[randomIndex];
+
+            // Assign the selected song to the music AudioSource
+            music.clip = selectedSong;
+
+            // Play the selected song
+            music.Play();
+        }
+        else
+        {
+            Debug.LogError("Playlist is empty. Add AudioClips to the playlist in the Inspector.");
+        }
     }
 }

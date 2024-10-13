@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterChoiceHandler : MonoBehaviour
+public class CharacterManager : MonoBehaviour
 {
     public string characterName;
 
@@ -37,7 +37,7 @@ public class CharacterChoiceHandler : MonoBehaviour
     Chiback chiback;
     Animator animator;
 
-    public CharacterChoiceHandler enemyHandler;
+    public CharacterManager enemyHandler;
 
     public int playerNum;
 
@@ -178,5 +178,17 @@ public class CharacterChoiceHandler : MonoBehaviour
     public Animator GetAnimator()
     {
         return animator;
+    }
+
+    public void Pause()
+    {
+        character.stayStatic();
+        character.ignoreUpdate = true;
+    }
+
+    public void Resume()
+    {
+        character.stayDynamic();
+        character.ignoreUpdate = false;
     }
 }

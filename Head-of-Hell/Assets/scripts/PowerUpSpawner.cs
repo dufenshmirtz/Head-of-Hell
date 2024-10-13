@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PowerUpSpawner : MonoBehaviour
@@ -15,6 +16,23 @@ public class PowerUpSpawner : MonoBehaviour
     void Start()
     {
         audioManager = FindObjectOfType<AudioManager>();
+
+        string json = PlayerPrefs.GetString("SelectedRuleset", null);
+
+        if (!string.IsNullOrEmpty(json))
+        {
+            // Convert the JSON string back to a CustomRuleset object
+            CustomRuleset loadedRuleset = JsonUtility.FromJson<CustomRuleset>(json);
+
+            if (!loadedRuleset.powerupsEnabled)
+            {
+                this.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No ruleset found in PlayerPrefs.");
+        }
     }
     void Update()
     {
