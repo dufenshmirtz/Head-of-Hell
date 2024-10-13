@@ -23,13 +23,13 @@ public class CountdownManager : MonoBehaviour
 
         DisableGamePlay();
 
-        audioManager.PlaySFX(audioManager.trailerSound, audioManager.normalVol);
+        audioManager.PlaySFX(audioManager.trailerSound, audioManager.doubleVol);
         countdownText.text = "Round " + gameManager.GetRoundCounter().ToString();
 
         // Wait for a brief moment to let the player see the round number
         yield return new WaitForSeconds(3); // Adjust this delay as needed
 
-        audioManager.PlaySFX(audioManager.trailerSound, audioManager.normalVol);
+        audioManager.PlaySFX(audioManager.trailerSound, audioManager.doubleVol);
 
         // After countdown, show "Fight!"
         countdownText.text = "Serve Chan Chan!";
