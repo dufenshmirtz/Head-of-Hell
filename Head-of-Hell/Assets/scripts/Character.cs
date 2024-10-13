@@ -652,7 +652,7 @@ public abstract class Character : MonoBehaviour
         }
         else if (enemy.currHealth <= 0)
         {
-            gameManager.RoundEndTie();
+            gameManager.RoundEndTie(playerNum);
         }
         else
         {
