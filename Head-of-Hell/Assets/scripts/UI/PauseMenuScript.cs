@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class PauseMenuScript : MonoBehaviour
 {
     public GameObject menu;  // Assign your menu panel in the Inspector
-    public CharacterChoiceHandler cChoice;
+    public CharacterManager cChoice;
     public AudioManager sfx;
 
 

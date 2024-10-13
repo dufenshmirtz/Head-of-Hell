@@ -61,8 +61,6 @@ public class Fin : Character
             if (!counterDone)
             {
                 Countered();
-                ignoreCounterOff = true;
-                counterDone = true;
                 return true;
             }
             return true;
@@ -89,15 +87,17 @@ public class Fin : Character
     public void CounterSuccessOff()
     {
         CounterVariablesOff();
-         OnCooldown(cooldown);
+        OnCooldown(cooldown);
     }
 
     public void Countered()
     {
+        animator.SetTrigger("counterHit");
         audioManager.PlaySFX(audioManager.counterSucces, audioManager.doubleVol);
         enemy.stayStatic();
         stayStatic();
-        animator.SetTrigger("counterHit");
+        ignoreCounterOff = true;
+        counterDone = true;
     }
 
     public void DealCounterDmg()
