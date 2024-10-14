@@ -23,4 +23,7 @@ public class CharacterResources : MonoBehaviour
     public Transform firePoint;
     public GameObject beam;
 
+    public GameObject skiplerDouble;
+    public Transform skiplerPoint;
+
 }

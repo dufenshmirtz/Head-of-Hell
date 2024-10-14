@@ -16,6 +16,9 @@ public class Skipler : Character
     protected float swordDashTime = 0.14f;
     protected int swordDashDmg = 5;
 
+    public Transform skiplerPoint;
+    public GameObject skiplerDouble;
+
     #region HeavyAttack
     override public void HeavyAttack()
     {
@@ -57,6 +60,14 @@ public class Skipler : Character
 
     IEnumerator Dash()
     {
+
+        skiplerDouble=resources.skiplerDouble;
+        skiplerPoint=resources.skiplerPoint;
+
+        GameObject skipDouble = Instantiate(skiplerDouble, skiplerPoint.position,skiplerPoint.rotation);
+        Vector3 newScale = skipDouble.transform.localScale;  // Get the current scale
+        newScale.x = this.transform.localScale.x;            // Set the x scale to match the player's x scale
+        skipDouble.transform.localScale = newScale;
 
         ignoreMovement = true;
         ignoreDamage = true;

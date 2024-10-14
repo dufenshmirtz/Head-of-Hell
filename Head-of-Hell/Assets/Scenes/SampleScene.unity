@@ -1155,6 +1155,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.572
       objectReference: {fileID: 0}
@@ -1359,9 +1367,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100796710}
     - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: skiplerPoint
+      value: 
+      objectReference: {fileID: 100841901}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: bellStunPoint
       value: 
       objectReference: {fileID: 1210506028}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: skiplerDouble
+      value: 
+      objectReference: {fileID: 921728830203355918, guid: 5d8157ef0b0558a4c94334da787915a5, type: 3}
     - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: explosionPoint
       value: 
@@ -1379,8 +1395,8 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1951991089}
+      insertIndex: 8
+      addedObject: {fileID: 100841901}
     - targetCorrespondingSourceObject: {fileID: 8850850641682188571, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: 2
       addedObject: {fileID: 1346476726}
@@ -1934,6 +1950,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1609535755}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &100841900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 100841901}
+  m_Layer: 8
+  m_Name: SkiplerPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &100841901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100841900}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 221568191}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &102424231
 GameObject:
@@ -3727,6 +3774,8 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  skiplerPoint: {fileID: 0}
+  skiplerDouble: {fileID: 0}
 --- !u!114 &184793119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3800,6 +3849,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &184793121
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -7612,6 +7663,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &355700675
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -8496,6 +8549,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &371476604
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -9934,6 +9989,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &448782100
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -11068,6 +11125,8 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  skiplerPoint: {fileID: 0}
+  skiplerDouble: {fileID: 0}
 --- !u!114 &541449327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11141,6 +11200,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &541449330
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -12063,6 +12124,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &559944329
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -13831,6 +13894,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &627431773
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -15256,6 +15321,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &677239677
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -16363,6 +16430,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &770792717
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -19493,6 +19562,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &892172698
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -21773,6 +21844,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &989350882
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 989350883}
+  m_Layer: 8
+  m_Name: SkiplerPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &989350883
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989350882}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1367423837}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &992956484
 GameObject:
   m_ObjectHideFlags: 0
@@ -26338,6 +26440,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &1228552614
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -27763,6 +27867,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &1300380416
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -29212,6 +29318,11 @@ MonoBehaviour:
   ChibackAnimatorController: {fileID: 9100000, guid: f1876437b15d78f4dbf917bee5810972, type: 2}
   enemyHandler: {fileID: 221568179}
   playerNum: 2
+--- !u!4 &1367423837 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+  m_PrefabInstance: {fileID: 1656577412}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1369490559
 GameObject:
   m_ObjectHideFlags: 0
@@ -30942,6 +31053,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!114 &1478511392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32193,6 +32306,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &1531342475
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -34337,6 +34452,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &1609535762
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -35514,6 +35631,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9100000, guid: 930962c0636204849bd44dff8f6ed763, type: 2}
     - target: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.61
       objectReference: {fileID: 0}
@@ -35570,9 +35695,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100796710}
     - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: skiplerPoint
+      value: 
+      objectReference: {fileID: 989350883}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: bellStunPoint
       value: 
       objectReference: {fileID: 1848710170}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: skiplerDouble
+      value: 
+      objectReference: {fileID: 921728830203355918, guid: 5d8157ef0b0558a4c94334da787915a5, type: 3}
     - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: explosionPoint
       value: 
@@ -35677,6 +35810,9 @@ PrefabInstance:
     - {fileID: -2415709111268102098, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: 8
+      addedObject: {fileID: 989350883}
     - targetCorrespondingSourceObject: {fileID: 4307065134795609038, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: 2
       addedObject: {fileID: 246258982}
@@ -37624,6 +37760,8 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
 --- !u!70 &1753174037
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -40074,90 +40212,6 @@ Transform:
   - {fileID: 259882295}
   m_Father: {fileID: 895786754}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1951991088
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1951991089}
-  - component: {fileID: 1951991090}
-  m_Layer: 8
-  m_Name: SkiplerDashSelf
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1951991089
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1951991088}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 221568191}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1951991090
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1951991088}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!1 &1961157081
 GameObject:
   m_ObjectHideFlags: 0
@@ -40357,6 +40411,8 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  skiplerPoint: {fileID: 0}
+  skiplerDouble: {fileID: 0}
 --- !u!1 &1988288838 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2378293063446369796, guid: a1ca33235a8bbac47ad82e4a9ff8b033, type: 3}
@@ -41645,6 +41701,8 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  skiplerPoint: {fileID: 0}
+  skiplerDouble: {fileID: 0}
 --- !u!1001 &2041432792
 PrefabInstance:
   m_ObjectHideFlags: 0
