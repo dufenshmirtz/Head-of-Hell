@@ -113,7 +113,8 @@ public abstract class Character : MonoBehaviour
     protected KeyCode charge;
 
     protected CharacterSetup characterSetup;
-    protected CharacterChoiceHandler characterChoiceHandler;
+    protected CharacterManager characterChoiceHandler;
+    protected GameManager gameManager;
 
     bool damageShield = false;
 
@@ -125,9 +126,23 @@ public abstract class Character : MonoBehaviour
     public virtual void Start()
     {
         characterSetup = GetComponent<CharacterSetup>();
-        characterChoiceHandler = GetComponent<CharacterChoiceHandler>();
+        characterChoiceHandler = GetComponent<CharacterManager>();
 
         InitializeCharacter();
+
+        string json = PlayerPrefs.GetString("SelectedRuleset", null);
+
+        if (!string.IsNullOrEmpty(json))
+        {
+            // Convert the JSON string back to a CustomRuleset object
+            CustomRuleset loadedRuleset = JsonUtility.FromJson<CustomRuleset>(json);
+
+            maxHealth =loadedRuleset.health;
+        }
+        else
+        {
+            Debug.LogWarning("No ruleset found in PlayerPrefs.");
+        }
 
         //basic variables assignment
         rb = GetComponent<Rigidbody2D>();
@@ -460,7 +475,7 @@ public abstract class Character : MonoBehaviour
         stun=characterSetup.stun;
         enemyLayer=characterSetup.enemyLayer;
         shield=characterSetup.shield;
-
+        gameManager = characterSetup.gameManager;
         cdbarimage =characterSetup.cdbarimage;
         activeSprite=characterSetup.activeSprite;
         ogSprite=characterSetup.ogSprite;
@@ -630,25 +645,20 @@ public abstract class Character : MonoBehaviour
         enemy.stayStatic();
 
         audioManager.StopMusic();
-        audioManager.PlaySFX(audioManager.death, audioManager.deathVolume);
+        audioManager.PlaySFX(audioManager.dearth, audioManager.doubleVol);
         if (enemy.currHealth == maxHealth)
         {
-            winner.text = "FLAWLESS\n" + P2Name + " prevails!";
+            gameManager.RoundEndFlawless(playerNum, P2Name);
         }
         else if (enemy.currHealth <= 0)
         {
-            winner.text = "Tie?\nDEATH PREVAILS...";
+            gameManager.RoundEndTie(playerNum);
         }
         else
         {
-            winner.text = P2Name + " prevails!";
+            gameManager.RoundEnd(playerNum,P2Name);
         }
-
-        winner.gameObject.SetActive(true);
-
-        // Enable play again and main menu buttons
-        playAgainButton.SetActive(true);
-        mainMenuButton.SetActive(true);
+       
     }
 
     public void PermaDeath()
@@ -772,9 +782,9 @@ public abstract class Character : MonoBehaviour
     public void UsingAbility(float cd)
     {
         casting = true;
-        animator.SetBool("Casting", true);
-        EnemyAbilityBlock();
         knockable = false;
+        animator.SetBool("Casting", true);
+        EnemyAbilityBlock();      
         animator.SetBool("isUsingAbility", true);
         cdbarimage.sprite = activeSprite;
         UpdateCooldownSlider(cd);
