@@ -158,8 +158,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            CheckForRandomCharacters();
             roundCounter++;
+            CheckForRandomCharacters();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
@@ -217,25 +217,31 @@ public class GameManager : MonoBehaviour
         }
         if (player1Wins == 2)
         {
+            p1R1.SetActive(true);
             p1R2.SetActive(true);
         }
         if (player2Wins == 2)
         {
+            p2R1.SetActive(true);
             p2R2.SetActive(true);
         }
         if (player1Wins == 3)
         {
+            p1R1.SetActive(true);
+            p1R2.SetActive(true);
             p1R3.SetActive(true);
         }
         if (player2Wins == 3)
         {
+            p2R1.SetActive(true);
+            p2R2.SetActive(true);
             p2R3.SetActive(true);
         }
     }
 
     public void CheckForRandomCharacters()
     {
-        print(roundCounter);
+        print(roundCounter+" rc");
         if(PlayerPrefs.GetString("Player1Choice")=="Random"  && roundCounter>1)
         {
             c1Name = p1Manager.GetCharacterName(1);
@@ -266,5 +272,12 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void ResetStatics()
+    {
+        roundCounter = 1;
+        player1Wins = 0;
+        player2Wins = 0;
     }
 }
