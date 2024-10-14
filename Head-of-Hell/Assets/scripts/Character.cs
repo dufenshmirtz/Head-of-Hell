@@ -118,7 +118,9 @@ public abstract class Character : MonoBehaviour
 
     bool preserveJump = false;
 
-    bool damageShield = false;
+    protected bool damageShield = false;
+
+    protected AudioClip blockSound;
 
     //handling variables
     int grounds = 0;
@@ -942,6 +944,10 @@ public abstract class Character : MonoBehaviour
 
         if (isBlocking && blockable)
         {
+            if (blockSound != null)
+            {
+                audioManager.PlaySFX(blockSound, audioManager.normalVol);
+            }
             if (dmg == heavyDamage) //if its heavy attack take half the damage
             {
                 currHealth -= 5;
