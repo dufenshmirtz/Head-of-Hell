@@ -116,6 +116,8 @@ public abstract class Character : MonoBehaviour
     protected CharacterManager characterChoiceHandler;
     protected GameManager gameManager;
 
+    bool preserveJump = false;
+
     bool damageShield = false;
 
     //handling variables
@@ -329,6 +331,15 @@ public abstract class Character : MonoBehaviour
         animator.SetBool("IsGrounded", isGrounded);
         animator.SetFloat("VerticalSpeed", rb.velocity.y);
 
+        if(rb.velocity.y != 0)
+        {
+            preserveJump = true;
+            animator.SetBool("IsGrounded", !preserveJump);
+        }
+        else
+        {
+            preserveJump = false;
+        }
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
@@ -882,7 +893,7 @@ public abstract class Character : MonoBehaviour
     public void Jump()
     {
         rb.velocity = new Vector2( rb.velocity.x,  jumpForce);
-        animator.SetTrigger("Jump");
+        animator.SetBool("Jump",true);
         audioManager.PlaySFX(audioManager.jump, audioManager.jumpVolume);
 
         ResetQuickPunch();
