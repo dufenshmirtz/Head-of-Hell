@@ -21,6 +21,8 @@ public class Lithra : Character
 
         bellPoint=resources.bellPoint;
         bellStunPointTransf = resources.bellStunPoint;
+
+        blockSound = audioManager.bellPunch;
     }
 
     #region HeavyAttack
@@ -235,5 +237,6 @@ public class Lithra : Character
     {
         audioManager.PlaySFX(audioManager.sip, 2f);
     }
+
     #endregion
 }
