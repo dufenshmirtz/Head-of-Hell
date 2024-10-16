@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4d85cac6cbba3a34eb0a39da72867851
+guid: 86d2b169742c76e40b084f65d3ec929c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,12 +97,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: skpplacharge_0
+      name: Skip_Spell_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -111,19 +111,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eec02e8faa7d8cd44ad734a6aa9091f1
-      internalID: 1454436258
+      spriteID: f5e594bb73697f84cb6322c00097b35f
+      internalID: 851965320
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_1
+      name: Skip_Spell_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 100
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -132,19 +132,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a70fb242d1daf424697034fc2ff9ab0c
-      internalID: -1334777981
+      spriteID: 42ead2cc12c4f6d4a9cec397bc0482e9
+      internalID: 833665316
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_2
+      name: Skip_Spell_2
       rect:
         serializedVersion: 2
-        x: 128
+        x: 200
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -153,19 +153,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 04189ae5598783c4a89818eb9071ea8c
-      internalID: -2146318954
+      spriteID: ee6f7e16efb3e1c49b29a4f026696e58
+      internalID: 713294431
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_3
+      name: Skip_Spell_3
       rect:
         serializedVersion: 2
-        x: 192
+        x: 300
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -174,19 +174,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5aaa4b7a7726e6b499a9331ec04b6c19
-      internalID: -696586281
+      spriteID: da60e5fdd1ff4564c97b2f8a92c43139
+      internalID: -1010082095
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_4
+      name: Skip_Spell_4
       rect:
         serializedVersion: 2
-        x: 256
+        x: 400
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -195,19 +195,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3e8e4b3fd194ee74e9cfdbaca1b1d708
-      internalID: 1085868614
+      spriteID: d10fa8b90a943af4eb0cbc190a006003
+      internalID: -1237335969
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_5
+      name: Skip_Spell_5
       rect:
         serializedVersion: 2
-        x: 423
+        x: 500
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -216,8 +216,113 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 07ac84d8b6322a946990a6adddaa1fe1
-      internalID: 1577505064
+      spriteID: 9fd4bb0e28f88be4f94fbcdf99d4d392
+      internalID: 1251891341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skip_Spell_6
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 0
+        width: 100
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22b61d39cb4878942819bf7585b21628
+      internalID: -479894012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skip_Spell_7
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 0
+        width: 100
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 804cf9be668901443824ed0495fabb5b
+      internalID: 1410447976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skip_Spell_8
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 0
+        width: 100
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c4f1acc06f1bb4429e137b6239c403f
+      internalID: -1737556948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skip_Spell_9
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 0
+        width: 100
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b97378f02707b140a584f36cc8525a9
+      internalID: -1314677868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skip_Spell_10
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 0
+        width: 100
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5044db986ee90046aa58b48742d7565
+      internalID: -1225526130
       vertices: []
       indices: 
       edges: []
@@ -233,12 +338,17 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      skpplacharge_0: 1454436258
-      skpplacharge_1: -1334777981
-      skpplacharge_2: -2146318954
-      skpplacharge_3: -696586281
-      skpplacharge_4: 1085868614
-      skpplacharge_5: 1577505064
+      Skip_Spell_0: 851965320
+      Skip_Spell_1: 833665316
+      Skip_Spell_10: -1225526130
+      Skip_Spell_2: 713294431
+      Skip_Spell_3: -1010082095
+      Skip_Spell_4: -1237335969
+      Skip_Spell_5: 1251891341
+      Skip_Spell_6: -479894012
+      Skip_Spell_7: 1410447976
+      Skip_Spell_8: -1737556948
+      Skip_Spell_9: -1314677868
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
