@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4d85cac6cbba3a34eb0a39da72867851
+guid: 0d6f066d68f451044b6ccb7dbdfd9cc4
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,12 +97,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: skpplacharge_0
+      name: Skip_Charge 1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -111,19 +111,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eec02e8faa7d8cd44ad734a6aa9091f1
-      internalID: 1454436258
+      spriteID: 903b600c7a9f1d14bbaef9dc04ecbb94
+      internalID: -671431523
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_1
+      name: Skip_Charge 1_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 100
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -132,19 +132,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a70fb242d1daf424697034fc2ff9ab0c
-      internalID: -1334777981
+      spriteID: 75462fef3c54efe40993373170aee994
+      internalID: -1180821057
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_2
+      name: Skip_Charge 1_2
       rect:
         serializedVersion: 2
-        x: 128
+        x: 200
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -153,19 +153,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 04189ae5598783c4a89818eb9071ea8c
-      internalID: -2146318954
+      spriteID: be9217b1f6504d244aef40ebda9328d8
+      internalID: 1232370169
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_3
+      name: Skip_Charge 1_3
       rect:
         serializedVersion: 2
-        x: 192
+        x: 300
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -174,19 +174,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5aaa4b7a7726e6b499a9331ec04b6c19
-      internalID: -696586281
+      spriteID: 78f8aa62bd722e64795388b5c4a923d4
+      internalID: -613682713
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_4
+      name: Skip_Charge 1_4
       rect:
         serializedVersion: 2
-        x: 256
+        x: 400
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -195,19 +195,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3e8e4b3fd194ee74e9cfdbaca1b1d708
-      internalID: 1085868614
+      spriteID: 2242b075fe0fb7641ae661dd2b4fcf84
+      internalID: 1391061506
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_5
+      name: Skip_Charge 1_5
       rect:
         serializedVersion: 2
-        x: 423
+        x: 500
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -216,8 +216,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 07ac84d8b6322a946990a6adddaa1fe1
-      internalID: 1577505064
+      spriteID: a0ab1c0307bbc124494ad9ee7467b76a
+      internalID: 1316697857
       vertices: []
       indices: 
       edges: []
@@ -233,12 +233,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      skpplacharge_0: 1454436258
-      skpplacharge_1: -1334777981
-      skpplacharge_2: -2146318954
-      skpplacharge_3: -696586281
-      skpplacharge_4: 1085868614
-      skpplacharge_5: 1577505064
+      Skip_Charge 1_0: -671431523
+      Skip_Charge 1_1: -1180821057
+      Skip_Charge 1_2: 1232370169
+      Skip_Charge 1_3: -613682713
+      Skip_Charge 1_4: 1391061506
+      Skip_Charge 1_5: 1316697857
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

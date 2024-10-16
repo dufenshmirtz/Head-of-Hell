@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4d85cac6cbba3a34eb0a39da72867851
+guid: 6f4a65ed3a3751f40ae01b421b8ce06e
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,12 +97,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: skpplacharge_0
+      name: Skip_Death_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -111,19 +111,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eec02e8faa7d8cd44ad734a6aa9091f1
-      internalID: 1454436258
+      spriteID: dde4750bea71e034e89f8a999db12852
+      internalID: -1520163912
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_1
+      name: Skip_Death_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 100
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -132,19 +132,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a70fb242d1daf424697034fc2ff9ab0c
-      internalID: -1334777981
+      spriteID: cb030ac71498d9e4ba7397f2e537fe27
+      internalID: -1685271292
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_2
+      name: Skip_Death_2
       rect:
         serializedVersion: 2
-        x: 128
+        x: 200
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -153,19 +153,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 04189ae5598783c4a89818eb9071ea8c
-      internalID: -2146318954
+      spriteID: a715c408b3fcc114a8b97bc71c1271be
+      internalID: 1253975090
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_3
+      name: Skip_Death_3
       rect:
         serializedVersion: 2
-        x: 192
+        x: 300
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -174,19 +174,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5aaa4b7a7726e6b499a9331ec04b6c19
-      internalID: -696586281
+      spriteID: 8e09cea2e61645f418834a614a447986
+      internalID: 891349255
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_4
+      name: Skip_Death_4
       rect:
         serializedVersion: 2
-        x: 256
+        x: 400
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -195,19 +195,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3e8e4b3fd194ee74e9cfdbaca1b1d708
-      internalID: 1085868614
+      spriteID: 732e462dbe39a834e85cdb4e7720292a
+      internalID: -296799
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_5
+      name: Skip_Death_5
       rect:
         serializedVersion: 2
-        x: 423
+        x: 500
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -216,8 +216,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 07ac84d8b6322a946990a6adddaa1fe1
-      internalID: 1577505064
+      spriteID: b1f781197f16aaf49850318dbadd5256
+      internalID: 1273458598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skip_Death_6
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 0
+        width: 100
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3a473994936b5249b122f6b1254f7f9
+      internalID: -537911045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skip_Death_7
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 0
+        width: 100
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 900569a2c201fad4eb466688d0f927ff
+      internalID: -1321219214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skip_Death_8
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 0
+        width: 100
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56dd0ae5ee34a294386d3f9dc94c7672
+      internalID: 1466380956
       vertices: []
       indices: 
       edges: []
@@ -233,12 +296,15 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      skpplacharge_0: 1454436258
-      skpplacharge_1: -1334777981
-      skpplacharge_2: -2146318954
-      skpplacharge_3: -696586281
-      skpplacharge_4: 1085868614
-      skpplacharge_5: 1577505064
+      Skip_Death_0: -1520163912
+      Skip_Death_1: -1685271292
+      Skip_Death_2: 1253975090
+      Skip_Death_3: 891349255
+      Skip_Death_4: -296799
+      Skip_Death_5: 1273458598
+      Skip_Death_6: -537911045
+      Skip_Death_7: -1321219214
+      Skip_Death_8: 1466380956
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
