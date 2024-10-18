@@ -121,6 +121,8 @@ public abstract class Character : MonoBehaviour
     protected bool damageShield = false;
 
     protected AudioClip blockSound;
+    protected AudioClip characterJump;
+    protected AudioClip chargeHitSound;
 
     //handling variables
     int grounds = 0;
@@ -166,7 +168,7 @@ public abstract class Character : MonoBehaviour
         
     }
 
-    void Update()
+    public virtual void Update()
     {
         //self knockback mechanic
         if (knockable)
@@ -523,7 +525,7 @@ public abstract class Character : MonoBehaviour
 
     #region ChargeAttack
     public virtual void ChargeAttack() {
-         knockable = false;
+        knockable = false;
         charging = true;
         animator.SetBool("Charging", true);
         StartCharge();
@@ -562,10 +564,22 @@ public abstract class Character : MonoBehaviour
             enemy.TakeDamage(chargeDmg,false);
             enemy.Knockback(13f, 0.4f, false);
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
+            if (chargeHitSound != null)
+            {
+                audioManager.PlaySFX(chargeHitSound, 1.5f);
+            }
         }
         else
         {
-            audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
+            if (chargeHitSound != null)
+            {
+                audioManager.PlaySFX(chargeHitSound, 1.5f);
+            }
+            else
+            {
+                audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
+            }
+            
         }
          knockable = true;
         charging = false;
@@ -579,11 +593,12 @@ public abstract class Character : MonoBehaviour
         if (charging)
         {
              stayStatic();
+            ignoreMovement = true;
             if (charged)
             {
                 if (Input.GetKeyUp(charge))
                 {
-                     stayDynamic();
+                    //stayDynamic();
                     animator.SetTrigger("ChargedHit");
                     charged = false;
                     animator.SetBool("Casting", true);
@@ -591,14 +606,17 @@ public abstract class Character : MonoBehaviour
                 }
                 return true;
             }
-            if (Input.GetKeyUp(charge))
+            else
             {
-                 stayDynamic();
-                animator.SetBool("Charging", false);
-                charging = false;
-                 knockable = true;
-            }
-            return true;
+                if (Input.GetKeyUp(charge))
+                {
+                    stayDynamic();
+                    animator.SetBool("Charging", false);
+                    charging = false;
+                    knockable = true;
+                }
+                return true;
+            } 
         }
         return false;
     }
@@ -655,6 +673,7 @@ public abstract class Character : MonoBehaviour
 
         ignoreDamage = true;
 
+        enemy.Win();
         enemy.stayStatic();
 
         audioManager.StopMusic();
@@ -662,6 +681,7 @@ public abstract class Character : MonoBehaviour
         if (enemy.currHealth == maxHealth)
         {
             gameManager.RoundEndFlawless(playerNum, P2Name);
+            enemy.Win();
         }
         else if (enemy.currHealth <= 0)
         {
@@ -670,6 +690,7 @@ public abstract class Character : MonoBehaviour
         else
         {
             gameManager.RoundEnd(playerNum,P2Name);
+            
         }
        
     }
@@ -678,6 +699,11 @@ public abstract class Character : MonoBehaviour
     {
         animator.SetBool("permanentDeath", true);
         this.enabled = false;
+    }
+
+    public void Win()
+    {
+        animator.SetTrigger("Win");
     }
 
     private void Awake()
@@ -896,7 +922,15 @@ public abstract class Character : MonoBehaviour
     {
         rb.velocity = new Vector2( rb.velocity.x,  jumpForce);
         animator.SetBool("Jump",true);
-        audioManager.PlaySFX(audioManager.jump, audioManager.jumpVolume);
+        if (characterJump != null)
+        {
+            audioManager.PlaySFX(characterJump, audioManager.normalVol);
+        }
+        else
+        {
+            audioManager.PlaySFX(audioManager.jump, audioManager.jumpVolume);
+        }
+        
 
         ResetQuickPunch();
     }
