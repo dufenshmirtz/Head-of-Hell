@@ -15,6 +15,7 @@ public class Abilities
 public class GameCharacter
 {
     public string name;
+    public string lore; // To pass on the characterLore script
     public Abilities abilities;
 }
 
@@ -30,6 +31,7 @@ public class characterInfoChoice : MonoBehaviour
     public TextMeshProUGUI title;
     private string parentName;
     private CharacterList characterList;
+    private CharacterLore characterLoreScript; // Reference to the CharacterLore script
 
     // Start is called before the first frame update
     void Start()
@@ -66,6 +68,16 @@ public class characterInfoChoice : MonoBehaviour
         }
     }
 
+    // Get lore text for the specified character name
+    public string GetCharacterLore(string characterName)
+    {
+        GameCharacter character = characterList?.characters.Find(c => c.name == characterName);
+        if (character != null)
+        {
+            return character.lore; // Return the lore for the character
+        }
+        return "No lore found.";
+    }
 
     public void InfoProceedure()
     {
@@ -107,6 +119,17 @@ public class characterInfoChoice : MonoBehaviour
             // Set the info text
             info.text = characterInfo;
 
+            // Find the CharacterLore script and pass the lore
+            characterLoreScript = FindObjectOfType<CharacterLore>();
+            if (characterLoreScript != null)
+            {
+                characterLoreScript.SetLore(character.lore); // Pass the lore to CharacterLore
+            }
+            else
+            {
+                Debug.LogError("CharacterLore script not found in the scene!");
+            }
+
             // Debugging: Log the character info
             Debug.Log("Character Info: " + characterInfo);
         }
@@ -122,6 +145,6 @@ public class characterInfoChoice : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+
     }
 }

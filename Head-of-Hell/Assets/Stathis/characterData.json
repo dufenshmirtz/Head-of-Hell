@@ -6,7 +6,8 @@
             "passive": "Fin's heavy attacks deal 4 more damage.",
             "quick_attack": "Fin rolls towards a direction and becomes untargetable.",
             "spell": "Fin enters counter stance, if hit deals 25 damage."
-        }
+        },
+        "lore": "This character doesn't currently have a lore."
       },   
       {
         "name": "Vander",
@@ -14,7 +15,8 @@
           "passive": "Vander has lifesteal.",
           "quick_attack": "Vander makes two swift hits with his katana each dealing 3 damage. The first also heals for 3 damage, while the second knocks the enemy back.",
           "spell": "Vander stabs forward with his long sword dealing 10 damage and healing for 5 health."
-        }
+        },
+        "lore": "This character doesn't currently have a lore."
       },
       {
         "name": "Chiback",
@@ -22,7 +24,8 @@
           "passive": "When Chiback is hit 4 times, he becomes enraged and his next ability deals 150% damage.",
           "quick_attack": "Chiback creates fireblasts behind and in front of him that strongly knock back the enemy and disable his block for 1.1 second.",
           "spell": "Chiback takes a huge leap forward and hits the first enemy in his path. Depending on the distance covered before hitting the enemy, Chiback can deal 5, 10 or 15 damage."
-        }
+        },
+        "lore": "This character doesn't currently have a lore."
       },
       {
         "name": "Steelager",
@@ -30,7 +33,8 @@
           "passive": "Steelager's bombs can hit him but cannot deal damage to him. Instead, they knock him towards the enemy.",
           "quick_attack": "Steelager throws bombs that explode after 1.15 seconds or if they collide with an enemy. Steelager can also detonate them manually by pressing the quick attack button again.",
           "spell": "Steelager's body explodes dealing 20 damage around him, and then reassembles."
-        }
+        },
+        "lore": "This character doesn't currently have a lore."
       },
       {
         "name": "Lazy Bigus",
@@ -38,7 +42,8 @@
             "passive": "After Bigus has hit an enemy three times, his next heavy or charge attack poisons them.",
             "quick_attack": "Bigus fires a gunshot that deals 3 damage.",
             "spell": "Bigus fires a huge lazer charge that deals 10 damage and poisons the opponent for 10 damage over 10 soconds."
-        }
+        },
+        "lore": "This character doesn't currently have a lore."
       },
       {
         "name": "Skipler",
@@ -46,7 +51,8 @@
           "passive": "Every time Skipler hits an enemy with his quick attack, his Spell cooldown is reduced by 1 second.",
           "quick_attack": "Skipler leaps forward in the direction of movement and hits an enemy in front of him dealing 5 damage.",
           "spell": "Skipler swiftly dashes in the direction of movement, passing through units and dealing 10 damage."
-        }
+        },
+        "lore": "Skipler was an unconventional scientist funding his extravagant work by using a complex computer he manufactured that made stock predictions (it could also override any gaming anti-cheat system, except for ours of course), until some government agents found him out and tried to force him to work for the state, using a list of federal crimes he commited in the name of science as leverage. When Skipler secretly disposed of them (they were found forging in a medow two years later),he put a target on his back and armies of policemen and federal agents went after him. Little did they know that Skipler had just found the way to traverse to alternate dimensions using a rear and powerful \"Interdimentional Crystal\" that he may or may not have stolen from an alien species. He build a mechanical arm that would contain and control the enormous power of the crystal, that was connected with his nervous system so he can bend it to his will.Thus, he disappeared along with all evidence of his work, and went on roaming across universes collecting data and experiences that intensifi."
       },
       {
         "name": "Rager",
@@ -54,7 +60,8 @@
           "passive": "Rager's ability is unblockable.",
           "quick_attack": "Rager has an infinite, almost instantly hitting attack that can be spammed and deals 5 damage.",
           "spell": "Rager grabs his opponent and performs a combo that ultimately deals 25 damage."
-        }
+        },
+        "lore": "This character doesn't currently have a lore."
       },
       {
         "name": "Lithra",
@@ -62,7 +69,8 @@
           "passive": "Lithra's attacks have a 25% chance to trigger a 0.8 second stun on the enemy.",
           "quick_attack": "Lithra leaps forward. If he hits an enemy, he deals 3 damage and stuns them for 0.5 seconds, and then leaps back.",
           "spell": "Lithra throws his rope tied bell towards the enemy dealing 10 damage. If the enemy is hit at max range, he is stunned for 1 second."
-        }
+        },
+        "lore": "Lithra was a legend of the fighting pits, he never lost a duel. At a certain point he was banned from every fighting event(especially cockfighting which he misinterpreted), on account betting against him had no point anymore. Heartbroken, as destroying opponents was the only thing he lived for, he went on a two year bender and almost drowned himself in booze dozens of times. One night, two former rivals, who's careers ended when they faced him, spotted him hammered in a tavern and tried to take the opportunity to take revenge on him. They followed him to a belfry, where he sometimes climbed to gaze while drunk, and when they tried to corner him at the top, Lithra uprooted the bell and beat them to death and in a mad rage ran back to the tavern and went on a psychotic rampage, recking everything and everyone with his rope tied bell."
       }
     ]
   }
