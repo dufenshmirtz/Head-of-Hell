@@ -40,6 +40,16 @@ public class CharacterAnimationEvents : MonoBehaviour
     {
         character.PermaDeath();
     }
+
+    public void StayDynamicEvent()
+    {
+        character.stayDynamic();
+        character.IgnoreMovement(false);
+    }
+    public void StayStaticEvent()
+    {
+        character.stayStatic();
+    }
     //Vander
     public void StabDamageEvent()
     {
@@ -149,6 +159,12 @@ public class CharacterAnimationEvents : MonoBehaviour
     {
         skipler = (Skipler)character;
         skipler.DealSwordDashDmg();
+    }
+
+    public void IdleGlitchEvent()
+    {
+        skipler = (Skipler)character;
+        skipler.IdleGlitch();
     }
 
     //Lithra
