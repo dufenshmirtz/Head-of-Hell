@@ -168,7 +168,7 @@ public class Chiback : Character
 
             if (! enemy.isBlocking)
             {
-                enemy.Knockback(15f, 0.5f, true);
+                enemy.Knockback(15f, 0.8f, true);
                 enemy.DisableBlock(true);
                 StartCoroutine(ResetBlockability());
             }
