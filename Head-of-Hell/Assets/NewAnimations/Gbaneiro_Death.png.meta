@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4d85cac6cbba3a34eb0a39da72867851
+guid: 5569d137f2a34e048b1e250efdfe70b1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,12 +97,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: skpplacharge_0
+      name: Gbaneiro_Death_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -111,19 +111,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eec02e8faa7d8cd44ad734a6aa9091f1
-      internalID: 1454436258
+      spriteID: 80c71ddf73c8f82498525460bf8c3458
+      internalID: -1607215895
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_1
+      name: Gbaneiro_Death_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 100
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -132,19 +132,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a70fb242d1daf424697034fc2ff9ab0c
-      internalID: -1334777981
+      spriteID: f3dd7ecfbec30a14a92423d462bf5764
+      internalID: 1462303068
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_2
+      name: Gbaneiro_Death_2
       rect:
         serializedVersion: 2
-        x: 128
+        x: 200
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -153,19 +153,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 04189ae5598783c4a89818eb9071ea8c
-      internalID: -2146318954
+      spriteID: 4a018d2e21e66de4e960165fed84b194
+      internalID: 1346064910
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_3
+      name: Gbaneiro_Death_3
       rect:
         serializedVersion: 2
-        x: 192
+        x: 300
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -174,19 +174,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5aaa4b7a7726e6b499a9331ec04b6c19
-      internalID: -696586281
+      spriteID: 6ac67615bd8f63d4ba3286b30b2efb2c
+      internalID: -1151682334
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_4
+      name: Gbaneiro_Death_4
       rect:
         serializedVersion: 2
-        x: 256
+        x: 400
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -195,19 +195,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3e8e4b3fd194ee74e9cfdbaca1b1d708
-      internalID: 1085868614
+      spriteID: 21f90ceb0a2b5aa458168163553af214
+      internalID: -407567794
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_5
+      name: Gbaneiro_Death_5
       rect:
         serializedVersion: 2
-        x: 423
+        x: 500
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -216,8 +216,113 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 07ac84d8b6322a946990a6adddaa1fe1
-      internalID: 1577505064
+      spriteID: e0aaab0b6977a1f46a50f0e188617cc4
+      internalID: -1016431674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gbaneiro_Death_6
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 0
+        width: 100
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25daeca06ee105745b90fe3f6dc82314
+      internalID: 1214540931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gbaneiro_Death_7
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 0
+        width: 100
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e85a3f4cec1cff4b8b2302a6ebf497a
+      internalID: 1501957837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gbaneiro_Death_8
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 0
+        width: 100
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06cf87a747c84a94e893d22231d2b997
+      internalID: -325834095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gbaneiro_Death_9
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 0
+        width: 100
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c21194793d432884fb739806fe46e9ae
+      internalID: 1762732931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gbaneiro_Death_10
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 0
+        width: 100
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e2600a32b9772c41933a90b916d2954
+      internalID: -1791278917
       vertices: []
       indices: 
       edges: []
@@ -233,12 +338,17 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      skpplacharge_0: 1454436258
-      skpplacharge_1: -1334777981
-      skpplacharge_2: -2146318954
-      skpplacharge_3: -696586281
-      skpplacharge_4: 1085868614
-      skpplacharge_5: 1577505064
+      Gbaneiro_Death_0: -1607215895
+      Gbaneiro_Death_1: 1462303068
+      Gbaneiro_Death_10: -1791278917
+      Gbaneiro_Death_2: 1346064910
+      Gbaneiro_Death_3: -1151682334
+      Gbaneiro_Death_4: -407567794
+      Gbaneiro_Death_5: -1016431674
+      Gbaneiro_Death_6: 1214540931
+      Gbaneiro_Death_7: 1501957837
+      Gbaneiro_Death_8: -325834095
+      Gbaneiro_Death_9: 1762732931
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

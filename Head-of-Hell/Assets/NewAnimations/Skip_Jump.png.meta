@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4d85cac6cbba3a34eb0a39da72867851
+guid: 0d1250b7b45983e488761117a82b99b5
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,12 +97,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: skpplacharge_0
+      name: Skip_Jump_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -111,19 +111,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eec02e8faa7d8cd44ad734a6aa9091f1
-      internalID: 1454436258
+      spriteID: 7f18af76d92984f4884853124df91609
+      internalID: 1772329930
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_1
+      name: Skip_Jump_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 100
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -132,19 +132,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a70fb242d1daf424697034fc2ff9ab0c
-      internalID: -1334777981
+      spriteID: 61c3a8ed895409546ac207537d29621d
+      internalID: 2035194271
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_2
+      name: Skip_Jump_2
       rect:
         serializedVersion: 2
-        x: 128
+        x: 200
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -153,19 +153,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 04189ae5598783c4a89818eb9071ea8c
-      internalID: -2146318954
+      spriteID: 4fa9989e136b94d41972138557be2a2a
+      internalID: 1333503541
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skpplacharge_3
+      name: Skip_Jump_3
       rect:
         serializedVersion: 2
-        x: 192
+        x: 300
         y: 0
-        width: 64
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -174,50 +174,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5aaa4b7a7726e6b499a9331ec04b6c19
-      internalID: -696586281
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: skpplacharge_4
-      rect:
-        serializedVersion: 2
-        x: 256
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3e8e4b3fd194ee74e9cfdbaca1b1d708
-      internalID: 1085868614
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: skpplacharge_5
-      rect:
-        serializedVersion: 2
-        x: 423
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 07ac84d8b6322a946990a6adddaa1fe1
-      internalID: 1577505064
+      spriteID: 226f3c8020e47b1468022496f2305ad0
+      internalID: -1155527063
       vertices: []
       indices: 
       edges: []
@@ -233,12 +191,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      skpplacharge_0: 1454436258
-      skpplacharge_1: -1334777981
-      skpplacharge_2: -2146318954
-      skpplacharge_3: -696586281
-      skpplacharge_4: 1085868614
-      skpplacharge_5: 1577505064
+      Skip_Jump_0: 1772329930
+      Skip_Jump_1: 2035194271
+      Skip_Jump_2: 1333503541
+      Skip_Jump_3: -1155527063
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
