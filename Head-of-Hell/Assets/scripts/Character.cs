@@ -611,6 +611,7 @@ public abstract class Character : MonoBehaviour
                 if (Input.GetKeyUp(charge))
                 {
                     stayDynamic();
+                    ignoreMovement = false;
                     animator.SetBool("Charging", false);
                     charging = false;
                     knockable = true;
