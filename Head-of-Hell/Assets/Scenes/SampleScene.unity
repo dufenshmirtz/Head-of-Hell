@@ -1205,7 +1205,7 @@ PrefabInstance:
     - target: {fileID: 2553929291879454509, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 4472bf1853d25b646b8a7a447194f823, type: 2}
+      objectReference: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
     - target: {fileID: 2584085071129299450, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: P1Name
       value: 
@@ -17987,7 +17987,7 @@ MonoBehaviour:
   powerupSpawned: {fileID: 8300000, guid: c3cfd3e6825805b4c9309a86df9c4b28, type: 3}
   trailerSound: {fileID: 8300000, guid: cf5a2cad4b2ac534a9f8ae6d99a2029b, type: 3}
   dearth: {fileID: 8300000, guid: dba8536210e58df48b3a725d9fca5f4f, type: 3}
-  dramaticDrums: {fileID: 8300000, guid: 8c251824ce7d4b2449b83ec0adc1642f, type: 3}
+  dramaticDrums: {fileID: 8300000, guid: b0844b189ccdfee4b8854bc16ef2b6cf, type: 3}
   idleGlitch: {fileID: 8300000, guid: d76ca7ec51010f3489deed14512d71c1, type: 3}
   jumpGlitch: {fileID: 8300000, guid: 4d695d839ecafad40a8cd019f180b81a, type: 3}
   dashGlitch: {fileID: 8300000, guid: b36218a6abf238b4aa13102e1c68e623, type: 3}
