@@ -128,7 +128,7 @@ public abstract class Character : MonoBehaviour
     int grounds = 0;
     int isonpad = 0;
 
-    #region PlayerScript
+    #region Base
     public virtual void Start()
     {
         characterSetup = GetComponent<CharacterSetup>();
@@ -168,6 +168,49 @@ public abstract class Character : MonoBehaviour
         
     }
 
+    public void InitializeCharacter()
+    {
+        up = characterSetup.up;
+        down = characterSetup.down;
+        left = characterSetup.left;
+        right = characterSetup.right;
+        lightAttack = characterSetup.lightAttack;
+        heavyAttack = characterSetup.heavyAttack;
+        block = characterSetup.block;
+        ability = characterSetup.ability;
+        charge = characterSetup.charge;
+        stages = characterSetup.stages;
+        attackPoint = characterSetup.attackPoint;
+        blockDisabledIndicator = characterSetup.blockDisabledIndicator;
+        poison = characterSetup.poison;
+        Stack1Poison = characterSetup.Stack1Poison;
+        Stack2Poison = characterSetup.Stack2Poison;
+        Stack3Poison = characterSetup.Stack3Poison;
+        stun = characterSetup.stun;
+        enemyLayer = characterSetup.enemyLayer;
+        shield = characterSetup.shield;
+        gameManager = characterSetup.gameManager;
+        cdbarimage = characterSetup.cdbarimage;
+        activeSprite = characterSetup.activeSprite;
+        ogSprite = characterSetup.ogSprite;
+        playerNum = characterSetup.playerNum;
+        healthbar = characterSetup.healthbar;
+        P1Name = characterSetup.P1Name;
+        winner = characterSetup.winner;
+        playAgainButton = characterSetup.playAgainButton;
+        mainMenuButton = characterSetup.mainMenuButton;
+        cooldownSlider = characterSetup.cooldownSlider;
+        audioManager = characterSetup.audioManager;
+        quickAttackIndicator = characterSetup.quickAttackIndicator;
+
+
+        P1Name.text = characterChoiceHandler.GetCharacterName(1);
+        P2Name = characterChoiceHandler.GetCharacterName(2);
+        enemy = characterChoiceHandler.CharacterChoice(2);
+
+        animator = GetComponent<Animator>();
+    }
+
     public virtual void Update()
     {
         //self knockback mechanic
@@ -201,8 +244,8 @@ public abstract class Character : MonoBehaviour
                 KBCounter -= Time.deltaTime;
                 return;
             }
-            animator.SetBool("knocked", false);
         }
+        animator.SetBool("knocked", false);
 
         if (ignoreUpdate)
         {
@@ -216,6 +259,11 @@ public abstract class Character : MonoBehaviour
 
             animator.SetBool("cWalk", false);
             animator.SetTrigger("tookDmg");
+            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Hurt"))
+            {
+                // If not, reset the trigger so it doesn't stay set
+                animator.ResetTrigger("tookDmg");
+            }
             return;
         }
 
@@ -346,6 +394,17 @@ public abstract class Character : MonoBehaviour
         }
     }
 
+    /*private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(bellPoint.position, attackRange * 2);
+        Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
+        //Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
+
+    }*/
+
+    #endregion
+
+    #region Colliders
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Ground"))
@@ -411,40 +470,6 @@ public abstract class Character : MonoBehaviour
             }
         }
     }
-
-    /*private void OnDrawGizmosSelected()
-    {
-        Gizmos.DrawWireSphere(bellPoint.position, attackRange * 2);
-        Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
-        //Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
-
-    }*/
-
-    public void StopPunching()
-    {
-        animator.SetBool("isHeavyAttacking", false);
-    }
-
-    public void stayStatic()
-    {
-        isStatic = true;
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
-        {
-            rb.bodyType = RigidbodyType2D.Static;
-        }
-    }
-
-    public void stayDynamic()
-    {
-        isStatic = false;
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
-        {
-            rb.bodyType = RigidbodyType2D.Dynamic;
-        }
-    }
-
     public void ActivateColliders()
     {
         Collider2D[] colliders = GetComponents<Collider2D>();
@@ -469,47 +494,146 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    public void InitializeCharacter()
+    public void stayStatic()
     {
-        up=characterSetup.up;
-        down=characterSetup.down;
-        left=characterSetup.left;
-        right=characterSetup.right;
-        lightAttack = characterSetup.lightAttack;
-        heavyAttack = characterSetup.heavyAttack;
-        block=characterSetup.block;
-        ability=characterSetup.ability;
-        charge=characterSetup.charge;   
-        stages=characterSetup.stages;
-        attackPoint=characterSetup.attackPoint;
-        blockDisabledIndicator=characterSetup.blockDisabledIndicator;
-        poison=characterSetup.poison;
-        Stack1Poison = characterSetup.Stack1Poison;
-        Stack2Poison= characterSetup.Stack2Poison;
-        Stack3Poison= characterSetup.Stack3Poison;
-        stun=characterSetup.stun;
-        enemyLayer=characterSetup.enemyLayer;
-        shield=characterSetup.shield;
-        gameManager = characterSetup.gameManager;
-        cdbarimage =characterSetup.cdbarimage;
-        activeSprite=characterSetup.activeSprite;
-        ogSprite=characterSetup.ogSprite;
-        playerNum=characterSetup.playerNum;
-        healthbar = characterSetup.healthbar;
-        P1Name = characterSetup.P1Name;
-        winner = characterSetup.winner;
-        playAgainButton = characterSetup.playAgainButton;
-        mainMenuButton = characterSetup.mainMenuButton;
-        cooldownSlider = characterSetup.cooldownSlider;
-        audioManager = characterSetup.audioManager;
-        quickAttackIndicator = characterSetup.quickAttackIndicator;
+        isStatic = true;
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.bodyType = RigidbodyType2D.Static;
+        }
+    }
 
+    public void stayDynamic()
+    {
+        isStatic = false;
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+    }
 
-        P1Name.text = characterChoiceHandler.GetCharacterName(1);
-        P2Name = characterChoiceHandler.GetCharacterName(2);
-        enemy = characterChoiceHandler.CharacterChoice(2);
+    public Collider2D[] GetColliders()
+    {
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        return colliders;
+    }
+    #endregion
 
-        animator = GetComponent<Animator>();
+    #region Abilities and Cooldowns
+    public void OnCooldown(float cd)
+    {
+        ignoreDamage = false;
+        ignoreMovement = false;
+
+        EnemyAbilityEnable();
+        knockable = true;
+        cdbarimage.sprite = ogSprite;
+        animator.SetBool("isUsingAbility", false);
+        animator.SetBool("Casting", false);
+        casting = false;
+
+        // Start the cooldown timer
+        cdTimer = cd;
+        onCooldown = true;
+        StartCoroutine(AbilityCooldown(cd));
+    }
+
+    public IEnumerator AbilityCooldown(float duration)
+    {
+
+        while (cdTimer > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            cdTimer -= 1f;
+            UpdateCooldownSlider(duration); // Update the cooldown slider every second
+        }
+
+        // Reset the cooldown flag
+        onCooldown = false;
+        cdTimer = 0f;
+    }
+
+    void UpdateCooldownSlider(float duration)
+    {
+        float progress = Mathf.Clamp01(1f - cdTimer / duration);
+        cooldownSlider.value = progress;
+    }
+
+    public void EnemyAbilityBlock()
+    {
+        enemy.AbilityDisabled();
+    }
+
+    public void EnemyAbilityEnable()
+    {
+        enemy.AbilityEnabled();
+    }
+
+    public void AbilityDisabled()
+    {
+        canCast = false;
+    }
+
+    public void AbilityEnabled()
+    {
+        canCast = true;
+    }
+
+    public void UsingAbility(float cd)
+    {
+        casting = true;
+        knockable = false;
+        animator.SetBool("Casting", true);
+        EnemyAbilityBlock();
+        animator.SetBool("isUsingAbility", true);
+        cdbarimage.sprite = activeSprite;
+        UpdateCooldownSlider(cd);
+    }
+
+    public void Casting(bool castin)
+    {
+        casting = castin;
+    }
+    #endregion
+
+    #region Knockback
+    public void Knockback(float force, float time, bool axis)
+    {
+        if (knockable)
+        {
+            knockbackXaxis = axis;
+            audioManager.PlaySFX(audioManager.knockback, audioManager.deathVolume);
+            bool enemyOnRight = enemy.transform.position.x > this.transform.position.x;
+            //This if must be removed when knockback tranfers to playerscript, its used for a Stellger Passive Function
+            if (time == 0.3333f)
+            {
+                enemyOnRight = !enemyOnRight;
+            }
+            else
+            {
+                animator.SetBool("knocked", true);
+            }
+            KBForce = force;
+            KBCounter = time;
+            knockfromright = enemyOnRight;
+
+        }
+    }
+
+    private IEnumerator ResetKnockedAfterDelay(float delay)
+    {
+        // Wait for the specified delay
+        yield return new WaitForSeconds(delay);
+
+        // Reset the knocked variable
+        knocked = false;
+    }
+
+    public void Knockable(bool update)
+    {
+        knockable = update;
     }
     #endregion
 
@@ -592,7 +716,7 @@ public abstract class Character : MonoBehaviour
     {
         if (charging)
         {
-             stayStatic();
+            stayStatic();
             ignoreMovement = true;
             if (charged)
             {
@@ -602,7 +726,7 @@ public abstract class Character : MonoBehaviour
                     animator.SetTrigger("ChargedHit");
                     charged = false;
                     animator.SetBool("Casting", true);
-
+                    animator.ResetTrigger("tookDmg");
                 }
                 return true;
             }
@@ -615,6 +739,7 @@ public abstract class Character : MonoBehaviour
                     animator.SetBool("Charging", false);
                     charging = false;
                     knockable = true;
+                    animator.ResetTrigger("tookDmg");
                 }
                 return true;
             } 
@@ -657,265 +782,16 @@ public abstract class Character : MonoBehaviour
         ResetQuickPunch();
     }
 
-    public void Die()
-    {
-        animator.SetBool("isDead", true);
-        Collider2D[] colliders = GetComponents<Collider2D>();
-        foreach (Collider2D collider in colliders)
-        {
-            collider.enabled = false;
-        }
-
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
-        {
-            rb.bodyType = RigidbodyType2D.Static;
-        }
-
-        ignoreDamage = true;
-
-        enemy.Win();
-        enemy.stayStatic();
-
-        audioManager.StopMusic();
-        audioManager.PlaySFX(audioManager.dearth, audioManager.doubleVol);
-        if (enemy.currHealth == maxHealth)
-        {
-            gameManager.RoundEndFlawless(playerNum, P2Name);
-            enemy.Win();
-        }
-        else if (enemy.currHealth <= 0)
-        {
-            gameManager.RoundEndTie(playerNum);
-        }
-        else
-        {
-            gameManager.RoundEnd(playerNum,P2Name);
-            
-        }
-       
-    }
-
-    public void PermaDeath()
-    {
-        animator.SetBool("permanentDeath", true);
-        this.enabled = false;
-    }
-
-    public void Win()
-    {
-        animator.SetTrigger("Win");
-    }
-
-    private void Awake()
-    {
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
-    }
-
-    public void OnCooldown(float cd)
-    {
-        ignoreDamage = false;
-        ignoreMovement = false;
-
-        EnemyAbilityEnable();
-        knockable = true;
-        cdbarimage.sprite = ogSprite;
-        animator.SetBool("isUsingAbility", false);
-        animator.SetBool("Casting", false);
-        casting = false;
-
-        // Start the cooldown timer
-        cdTimer = cd;
-        onCooldown = true;
-        StartCoroutine(AbilityCooldown(cd));
-    }
-
-    public IEnumerator AbilityCooldown(float duration)
-    {
-
-        while (cdTimer > 0)
-        {
-            yield return new WaitForSeconds(1f);
-            cdTimer -= 1f;
-            UpdateCooldownSlider(duration); // Update the cooldown slider every second
-        }
-
-        // Reset the cooldown flag
-        onCooldown = false;
-        cdTimer = 0f;
-    }
-
-    void UpdateCooldownSlider(float duration)
-    {
-        float progress = Mathf.Clamp01(1f - cdTimer / duration);
-        cooldownSlider.value = progress;
-    }
-
-
-    public void Knockback(float force, float time, bool axis)
-    {
-        if (knockable)
-        {
-            knockbackXaxis = axis;
-            audioManager.PlaySFX(audioManager.knockback, audioManager.deathVolume);
-            bool enemyOnRight = enemy.transform.position.x > this.transform.position.x;
-            //This if must be removed when knockback tranfers to playerscript, its used for a Stellger Passive Function
-            if (time == 0.3333f)
-            {
-                enemyOnRight = !enemyOnRight;
-            }
-            else
-            {
-                animator.SetBool("knocked", true);
-            }
-            KBForce = force;
-            KBCounter = time;
-            knockfromright = enemyOnRight;
-
-        }
-    }
-
-    private IEnumerator ResetKnockedAfterDelay(float delay)
-    {
-        // Wait for the specified delay
-        yield return new WaitForSeconds(delay);
-
-        // Reset the knocked variable
-        knocked = false;
-    }
-
-    public void EnemyAbilityBlock()
-    {
-        enemy.AbilityDisabled();
-    }
-
-    public void EnemyAbilityEnable()
-    {
-        enemy.AbilityEnabled();
-    }
-
-    public void AbilityDisabled()
-    {
-        canCast = false;
-    }
-
-    public void AbilityEnabled()
-    {
-        canCast = true;
-    }
-
-    public bool IsEnemyClose()
-    {
-        return Vector3.Distance(this.transform.position, enemy.transform.position) <= 3f;
-    }
-
     public void blockBreaker()
     {
         isBlocking = false;
-    }
+    } 
 
-    public void Knockable(bool update)
-    {
-        knockable = update;
-    }
-
-    public void UsingAbility(float cd)
-    {
-        casting = true;
-        knockable = false;
-        animator.SetBool("Casting", true);
-        EnemyAbilityBlock();      
-        animator.SetBool("isUsingAbility", true);
-        cdbarimage.sprite = activeSprite;
-        UpdateCooldownSlider(cd);
-    }
-
-    public Collider2D[] GetColliders()
-    {
-        Collider2D[] colliders = GetComponents<Collider2D>();
-        return colliders;
-    }
-
-    public void IgnoreMovement(bool boolean)
-    {
-        ignoreMovement = boolean;
-    }
-
-    public void IgnoreSlow(bool boolean)
-    {
-        ignoreSlow = boolean;
-    }
-
-    public void IgnoreUpdate(bool boolean)
-    {
-        ignoreUpdate = boolean;
-    }
-
-    public void ChangeSpeed(float speed)
-    {
-        moveSpeed = speed;
-    }
-
-    public void ChangeOGSpeed(float speed)
-    {
-        OGMoveSpeed = speed;
-    }
     public void PlayerBlock(bool blck)
     {
         isBlocking = blck;
     }
-
-    public void Casting(bool castin)
-    {
-        casting = castin;
-    }
-
-    public void BreakCharge()
-    {
-        StopCHarge();
-    }
-
-    public IEnumerator InterruptMovement(float time)
-    {
-        rb.velocity = Vector2.zero; // Stop the enemy's movement
-        ignoreMovement = true;
-
-        yield return new WaitForSeconds(time);
-
-        ignoreMovement = false;
-    }
-
-    public IEnumerator Stun(float time)
-    {
-        stun.gameObject.SetActive(true);
-        rb.velocity = Vector2.zero; // Stop the enemy's movement
-        stunned = true;
-
-        yield return new WaitForSeconds(time);
-
-        stunned = false;
-        stun.gameObject.SetActive(false);
-    }
-
-
-    public void DisableBlock(bool whileKnocked)
-    {
-         blockDisabled = true;
-         blockDisabledIndicator.gameObject.SetActive(true);
-    }
-
-    public void EnableBlock()
-    {
-        blockDisabled = false;
-        blockDisabledIndicator.gameObject.SetActive(false);
-    }
-
-    public Character GetEnemy()
-    {
-        return enemy;
-    }
-
-    
+ 
     #endregion
 
     #region General
@@ -963,7 +839,27 @@ public abstract class Character : MonoBehaviour
 
     }
 
-    virtual public void TakeDamage(int dmg,bool blockable)
+    
+
+    protected void QuickAttackIndicatorEnable()
+    {
+         quickAttackIndicator.SetActive(true);
+    }
+
+    protected void QuickAttackIndicatorDisable()
+    {
+         quickAttackIndicator?.SetActive(false);
+    }
+
+    public Character GetEnemy()
+    {
+        return enemy;
+    }
+    #endregion
+
+    #region Passive and Damage
+
+    virtual public void TakeDamage(int dmg, bool blockable)
     {
         if (ignoreDamage)
         {
@@ -987,16 +883,16 @@ public abstract class Character : MonoBehaviour
             {
                 currHealth -= 5;
                 print("Took 5 damage");
-                healthbar.SetHealth( currHealth);
+                healthbar.SetHealth(currHealth);
             }
             //if its light attack take no dmg
 
             if (dmg == chargeDmg)
             {
-                 currHealth -= dmg;
+                currHealth -= dmg;
 
-                 healthbar.SetHealth( currHealth);
-                 moveSpeed =  OGMoveSpeed;
+                healthbar.SetHealth(currHealth);
+                moveSpeed = OGMoveSpeed;
             }
         }
         else
@@ -1011,23 +907,143 @@ public abstract class Character : MonoBehaviour
 
             animator.SetTrigger("tookDmg");
 
-            healthbar.SetHealth( currHealth);
+            healthbar.SetHealth(currHealth);
         }
 
-        if ( currHealth <= 0)
+        if (currHealth <= 0)
         {
-             Die();
+            Die();
         }
     }
 
-    protected void QuickAttackIndicatorEnable()
+    public void Die()
     {
-         quickAttackIndicator.SetActive(true);
+        animator.SetBool("isDead", true);
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        foreach (Collider2D collider in colliders)
+        {
+            collider.enabled = false;
+        }
+
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.bodyType = RigidbodyType2D.Static;
+        }
+
+        ignoreDamage = true;
+
+        enemy.Win();
+        enemy.stayStatic();
+
+        audioManager.StopMusic();
+        audioManager.PlaySFX(audioManager.dearth, audioManager.doubleVol);
+        if (enemy.currHealth == maxHealth)
+        {
+            gameManager.RoundEndFlawless(playerNum, P2Name);
+            enemy.Win();
+        }
+        else if (enemy.currHealth <= 0)
+        {
+            gameManager.RoundEndTie(playerNum);
+        }
+        else
+        {
+            gameManager.RoundEnd(playerNum, P2Name);
+
+        }
+
     }
 
-    protected void QuickAttackIndicatorDisable()
+    public void PermaDeath()
     {
-         quickAttackIndicator?.SetActive(false);
+        animator.SetBool("permanentDeath", true);
+        this.enabled = false;
+    }
+
+    public void Win()
+    {
+        animator.SetTrigger("Win");
+    }
+
+    public void BreakCharge()
+    {
+        StopCHarge();
+    }
+
+    public IEnumerator InterruptMovement(float time)
+    {
+        rb.velocity = Vector2.zero; // Stop the enemy's movement
+        ignoreMovement = true;
+
+        yield return new WaitForSeconds(time);
+
+        ignoreMovement = false;
+    }
+
+    public IEnumerator Stun(float time)
+    {
+        stun.gameObject.SetActive(true);
+        rb.velocity = Vector2.zero; // Stop the enemy's movement
+        stunned = true;
+
+        yield return new WaitForSeconds(time);
+
+        stunned = false;
+        stun.gameObject.SetActive(false);
+    }
+
+
+    public void DisableBlock(bool whileKnocked)
+    {
+        blockDisabled = true;
+        blockDisabledIndicator.gameObject.SetActive(true);
+    }
+
+    public void EnableBlock()
+    {
+        blockDisabled = false;
+        blockDisabledIndicator.gameObject.SetActive(false);
+    }
+
+    public void IgnoreMovement(bool boolean)
+    {
+        ignoreMovement = boolean;
+    }
+
+    public void IgnoreSlow(bool boolean)
+    {
+        ignoreSlow = boolean;
+    }
+
+    public void IgnoreUpdate(bool boolean)
+    {
+        ignoreUpdate = boolean;
+    }
+
+    public void ChangeSpeed(float speed)
+    {
+        moveSpeed = speed;
+    }
+
+    public void ChangeOGSpeed(float speed)
+    {
+        OGMoveSpeed = speed;
+    }
+
+    public void StopPunching()
+    {
+        animator.SetBool("isHeavyAttacking", false);
+    }
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
+    public bool IsEnemyClose()
+    {
+        return Vector3.Distance(this.transform.position, enemy.transform.position) <= 3f;
     }
     #endregion
 
