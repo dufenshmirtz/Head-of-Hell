@@ -71,7 +71,11 @@ public class AudioManager : MonoBehaviour
     public AudioClip trailerSound;
     public AudioClip dearth;
     public AudioClip dramaticDrums;
-
+    public AudioClip idleGlitch;
+    public AudioClip jumpGlitch;
+    public AudioClip dashGlitch;
+    public AudioClip quickGlitch;
+    public AudioClip chargeGlitch;
     //volumes
     public float deathVolume = 1.0f;
     public float heavyAttackVolume = 1.0f;
@@ -98,6 +102,9 @@ public class AudioManager : MonoBehaviour
     public float musicVolume = 1.0f;
     public float sfxVolume = 1.0f;
 
+    private Dictionary<AudioClip, AudioSource> activeSoundEffects = new Dictionary<AudioClip, AudioSource>();
+
+
     private void Start()
     {
               
@@ -122,6 +129,11 @@ public class AudioManager : MonoBehaviour
     public void PlaySFX(AudioClip sfx,float volume)
     {
         SFX.PlayOneShot(sfx,volume);
+    }
+
+    public void StopSFX()
+    {
+            SFX.Stop();
     }
 
     private void Awake()
@@ -169,4 +181,47 @@ public class AudioManager : MonoBehaviour
             Debug.LogError("Playlist is empty. Add AudioClips to the playlist in the Inspector.");
         }
     }
+
+    public void PlayAndStoreSFX(AudioClip sfx, float volume)
+    {
+        // Create a new AudioSource to play the sound effect
+        AudioSource tempSource = gameObject.AddComponent<AudioSource>();
+        tempSource.volume = volume;
+        tempSource.clip = sfx;
+        tempSource.Play();
+
+        // Remove the AudioSource after the clip is done playing
+        StartCoroutine(RemoveAfterFinish(tempSource));
+
+        // Store this AudioSource in the dictionary
+        activeSoundEffects[sfx] = tempSource;
+    }
+
+    public void StopAndStoreSFX(AudioClip sfx)
+    {
+        // Check if the sound effect is currently playing
+        if (activeSoundEffects.ContainsKey(sfx))
+        {
+            AudioSource source = activeSoundEffects[sfx];
+
+            // Stop the AudioSource and remove it
+            if (source != null)
+            {
+                source.Stop();
+                Destroy(source); // Clean up the AudioSource after stopping
+            }
+
+            activeSoundEffects.Remove(sfx);
+        }
+    }
+
+    private IEnumerator RemoveAfterFinish(AudioSource source)
+    {
+        // Wait until the sound effect finishes playing
+        yield return new WaitForSeconds(source.clip.length);
+
+        // Remove the AudioSource from the dictionary and destroy it
+        Destroy(source);
+    }
 }
+
