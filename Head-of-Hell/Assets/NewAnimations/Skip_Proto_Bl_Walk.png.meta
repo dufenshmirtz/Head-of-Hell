@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: dff626ef24a15e34597e4ecf603e33aa
+guid: 633c07cb5afe8c54eadc82d49813f54b
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,12 +97,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: skiplaanimattack_0
+      name: Skip_Bl_Walk_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 80
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -111,19 +111,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 70ea266b532f2ce4080642a171dd7c3b
-      internalID: 789166729
+      spriteID: 33a3b3f052b3b3a49a794334ee0cadfa
+      internalID: 1238646441
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skiplaanimattack_1
+      name: Skip_Bl_Walk_1
       rect:
         serializedVersion: 2
-        x: 80
+        x: 100
         y: 0
-        width: 80
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -132,19 +132,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 800f89934cfacc444abde144d44a5725
-      internalID: -435907723
+      spriteID: f96662aa8880c4144bf588a8bd155f0d
+      internalID: 1894434356
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skiplaanimattack_2
+      name: Skip_Bl_Walk_2
       rect:
         serializedVersion: 2
-        x: 160
+        x: 200
         y: 0
-        width: 80
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -153,19 +153,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5cf1b54c6e24a0c4598fefcb912cfc8a
-      internalID: 1812863567
+      spriteID: 4cd25f4c2a5b09849b35e3b761a630a0
+      internalID: -1660873427
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skiplaanimattack_3
+      name: Skip_Bl_Walk_3
       rect:
         serializedVersion: 2
-        x: 240
+        x: 300
         y: 0
-        width: 80
+        width: 100
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -174,134 +174,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e7a11c8567c7bdc46801af7a311f84fd
-      internalID: 1554853709
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: skiplaanimattack_4
-      rect:
-        serializedVersion: 2
-        x: 320
-        y: 0
-        width: 80
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 48f0dcb9670914441ae65bfca950e9d6
-      internalID: -717169115
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: skiplaanimattack_5
-      rect:
-        serializedVersion: 2
-        x: 400
-        y: 0
-        width: 80
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0414c1487bd671147aaef403bc311049
-      internalID: -1408161929
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: skiplaanimattack_6
-      rect:
-        serializedVersion: 2
-        x: 480
-        y: 0
-        width: 80
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0a7bd1d8261ae474283fddf3e733afa0
-      internalID: 364738182
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: skiplaanimattack_7
-      rect:
-        serializedVersion: 2
-        x: 560
-        y: 0
-        width: 80
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fd5bf902028645a43b402654719226ee
-      internalID: 1434562563
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: skiplaanimattack_8
-      rect:
-        serializedVersion: 2
-        x: 640
-        y: 0
-        width: 80
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 16f8d264ab08939489a44c8f79120ec2
-      internalID: 587469120
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: skiplaanimattack_9
-      rect:
-        serializedVersion: 2
-        x: 720
-        y: 0
-        width: 80
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 206e741ee984cae43b1f2590718ed3a0
-      internalID: -514661684
+      spriteID: 6091020da5dab3c45a2a4f97a69ba879
+      internalID: 652186823
       vertices: []
       indices: 
       edges: []
@@ -317,16 +191,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      skiplaanimattack_0: 789166729
-      skiplaanimattack_1: -435907723
-      skiplaanimattack_2: 1812863567
-      skiplaanimattack_3: 1554853709
-      skiplaanimattack_4: -717169115
-      skiplaanimattack_5: -1408161929
-      skiplaanimattack_6: 364738182
-      skiplaanimattack_7: 1434562563
-      skiplaanimattack_8: 587469120
-      skiplaanimattack_9: -514661684
+      Skip_Bl_Walk_0: 1238646441
+      Skip_Bl_Walk_1: 1894434356
+      Skip_Bl_Walk_2: -1660873427
+      Skip_Bl_Walk_3: 652186823
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
