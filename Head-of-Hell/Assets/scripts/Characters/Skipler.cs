@@ -15,10 +15,34 @@ public class Skipler : Character
     protected float swordDashPower = 10f;
     protected float swordDashTime = 0.14f;
     protected int swordDashDmg = 5;
+    bool isIdlePlaying = false;
 
     public Transform skiplerPoint;
     public GameObject skiplerDouble;
 
+    public override void Start()
+    {
+        base.Start();
+
+        characterJump = audioManager.jumpGlitch;
+        chargeHitSound= audioManager.chargeGlitch;
+    }
+
+    override public void Update()
+    {
+        AnimatorStateInfo currentState = animator.GetCurrentAnimatorStateInfo(0);
+
+        // Check if the current state is not idle
+        if (!currentState.IsName("Idle"))
+        {
+            if (isIdlePlaying)
+            {
+                StopIdleGlitch();
+            }
+        }
+
+        base.Update();
+    }
     #region HeavyAttack
     override public void HeavyAttack()
     {
@@ -96,6 +120,7 @@ public class Skipler : Character
 
 
         audioManager.PlaySFX(audioManager.dash, 1);
+        audioManager.PlaySFX(audioManager.dashGlitch, 1f);
         // Calculate the dash velocity
         Vector2 dashVelocity = new Vector2(moveDirection * dashingPower, currentVelocity.y);
 
@@ -142,7 +167,7 @@ public class Skipler : Character
         enemy.StopPunching();
         enemy.BreakCharge();
         enemy.TakeDamage(DashDamage, true);
-        audioManager.PlaySFX(audioManager.dashHit, audioManager.heavyAttackVolume);
+        audioManager.PlaySFX(audioManager.dashHit, 3f);
     }
 
     override protected void OnTriggerEnter2D(Collider2D other)
@@ -252,4 +277,16 @@ public class Skipler : Character
         cdTimer -= 1f;
     }
     #endregion
+
+    public void IdleGlitch()
+    {
+        audioManager.PlayAndStoreSFX(audioManager.idleGlitch, audioManager.normalVol);
+        isIdlePlaying = true;
+    }
+
+    public void StopIdleGlitch()
+    {
+        audioManager.StopAndStoreSFX(audioManager.idleGlitch);  
+        isIdlePlaying = false;
+    }
 }

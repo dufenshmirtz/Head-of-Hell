@@ -1205,7 +1205,7 @@ PrefabInstance:
     - target: {fileID: 2553929291879454509, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 930962c0636204849bd44dff8f6ed763, type: 2}
+      objectReference: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
     - target: {fileID: 2584085071129299450, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: P1Name
       value: 
@@ -15295,7 +15295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f8fe9d4d2ba3247b0222a51ce37025, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 0}
+  manager: {fileID: 2144866982}
 --- !u!114 &677239676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17939,7 +17939,7 @@ MonoBehaviour:
   heavyswoosh: {fileID: 8300000, guid: 36a855f23c62d174daa56b78c61ffb44, type: 3}
   run: {fileID: 8300000, guid: 88bc754e0c2b6464e87c4f37dd9e2491, type: 3}
   dash: {fileID: 8300000, guid: 14948b00fe9485c4683ef762312afa6a, type: 3}
-  dashHit: {fileID: 8300000, guid: 3535653b319ca0149bc8013cab0c3d16, type: 3}
+  dashHit: {fileID: 8300000, guid: 47542d15b7f33264b960f4aaaea3a648, type: 3}
   counterScream: {fileID: 8300000, guid: b2feaa245b8e20e4f913157fe93371db, type: 3}
   counterClong: {fileID: 8300000, guid: 09efd9d06a4056242ad125c29d3a3160, type: 3}
   counterSucces: {fileID: 8300000, guid: 36258e181ede36e4180a7f07bfd4cb51, type: 3}
@@ -17987,7 +17987,12 @@ MonoBehaviour:
   powerupSpawned: {fileID: 8300000, guid: c3cfd3e6825805b4c9309a86df9c4b28, type: 3}
   trailerSound: {fileID: 8300000, guid: cf5a2cad4b2ac534a9f8ae6d99a2029b, type: 3}
   dearth: {fileID: 8300000, guid: dba8536210e58df48b3a725d9fca5f4f, type: 3}
-  dramaticDrums: {fileID: 8300000, guid: 8c251824ce7d4b2449b83ec0adc1642f, type: 3}
+  dramaticDrums: {fileID: 8300000, guid: b0844b189ccdfee4b8854bc16ef2b6cf, type: 3}
+  idleGlitch: {fileID: 8300000, guid: d76ca7ec51010f3489deed14512d71c1, type: 3}
+  jumpGlitch: {fileID: 8300000, guid: 4d695d839ecafad40a8cd019f180b81a, type: 3}
+  dashGlitch: {fileID: 8300000, guid: b36218a6abf238b4aa13102e1c68e623, type: 3}
+  quickGlitch: {fileID: 0}
+  chargeGlitch: {fileID: 8300000, guid: 08db8ba6a07420f4f8b1f5e52de26b17, type: 3}
   deathVolume: 3
   heavyAttackVolume: 1
   lightAttackVolume: 1
@@ -33464,7 +33469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 694730c9209201648aba0a2180f45ffe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
+  gameManager: {fileID: 2144866982}
 --- !u!1 &1603303755
 GameObject:
   m_ObjectHideFlags: 0
@@ -35629,7 +35634,7 @@ PrefabInstance:
     - target: {fileID: 3775815256451319138, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 930962c0636204849bd44dff8f6ed763, type: 2}
+      objectReference: {fileID: 9100000, guid: 11d5595fa0b947043b07da91212a5678, type: 2}
     - target: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_LocalScale.x
       value: -1
