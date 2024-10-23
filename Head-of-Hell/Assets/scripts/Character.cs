@@ -658,7 +658,7 @@ public abstract class Character : MonoBehaviour
         if (knockable)
         {
             knockbackXaxis = axis;
-            audioManager.PlaySFX(audioManager.knockback, audioManager.deathVolume);
+            audioManager.PlaySFX(audioManager.knockback, audioManager.lessVol);
             bool enemyOnRight = enemy.transform.position.x > this.transform.position.x;
             //This if must be removed when knockback tranfers to playerscript, its used for a Stellger Passive Function
             if (time == 0.3333f)

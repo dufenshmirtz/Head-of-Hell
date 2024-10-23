@@ -76,6 +76,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip dashGlitch;
     public AudioClip quickGlitch;
     public AudioClip chargeGlitch;
+    public AudioClip heavyGlitch;
+    public AudioClip heavyGlitchHit;
+    public AudioClip nothitGlitch;
     //volumes
     public float deathVolume = 1.0f;
     public float heavyAttackVolume = 1.0f;
