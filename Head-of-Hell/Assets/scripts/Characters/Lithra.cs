@@ -97,38 +97,42 @@ public class Lithra : Character
     #region LightAttack
     public override void LightAttack()
     {
-        if (airSpinready && (Input.GetKey( left) || Input.GetKey( right)))
+        // Check if air spin is ready and the player is moving either left or right (controller or keyboard)
+        if (airSpinready && (Input.GetKey(left) || Input.GetKey(right) || (controller && Input.GetAxis("Horizontal" + playerString) != 0)))
         {
             QuickAttackIndicatorDisable();
             StartCoroutine(PerformLightAttack());
         }
     }
 
+
     private IEnumerator PerformLightAttack()
     {
-        airSpinready=false;
-         IgnoreUpdate(true);
+        airSpinready = false;
+        IgnoreUpdate(true);
 
         audioManager.PlaySFX(audioManager.bellDash, 1f);
-        // Calculate the movement direction
-        float moveDirection = Input.GetKey( left) ? -1f : (Input.GetKey( right) ? 1f : 0f);
 
-        // Only proceed if a direction is given
+        // Calculate the movement direction (keyboard or controller)
+        float moveDirection = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : Input.GetAxis("Horizontal" + playerString));
+
+        // Only proceed if a direction is given (controller or keyboard)
         if (moveDirection == 0f)
         {
-             IgnoreUpdate(false);
-            airSpinready=true;
+            IgnoreUpdate(false);
+            airSpinready = true;
             yield break;
         }
 
-        if (!Input.GetKey(KeyCode.W) &&  isGrounded)
+        // Grounded vs. air logic for keyboard/controller
+        if (!Input.GetKey(up) && isGrounded && (controller && Input.GetAxis("Vertical" + playerString) <= 0.5f))
         {
-             rb.AddForce(new Vector2(moveDirection * airSpinSpeed , jumpHeight), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(moveDirection * airSpinSpeed, jumpHeight), ForceMode2D.Impulse);
         }
         else
-        {   
-             rb.velocity = new Vector2( rb.velocity.x, 0);
-             rb.AddForce(new Vector2(moveDirection * airSpinSpeed , jumpHeight), ForceMode2D.Impulse);
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 0);
+            rb.AddForce(new Vector2(moveDirection * airSpinSpeed, jumpHeight), ForceMode2D.Impulse);
         }
 
         animator.SetTrigger("QuickAttack");
@@ -142,24 +146,27 @@ public class Lithra : Character
             // transform.Translate(Vector2.right * moveDirection * airSpinSpeed * Time.deltaTime);
 
             // Check for enemy collision
-            Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+            Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
             if (hitEnemy != null)
             {
                 audioManager.PlaySFX(audioManager.bellDashHit, 1f);
-                enemy.TakeDamage(3,true);
+                enemy.TakeDamage(3, true);
                 StartCoroutine(enemy.Stun(0.5f));
-                float moveDirection2 = Input.GetKey( left) ? -1f : (Input.GetKey( right) ? 1f : 0f);
+
+                // Calculate move direction again after hitting (keyboard or controller)
+                float moveDirection2 = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : Input.GetAxis("Horizontal" + playerString));
 
                 // Jump back after hitting the enemy
-                 rb.velocity = Vector2.zero; // Reset current velocity
-                if(moveDirection2 == moveDirection) {
-                     rb.AddForce(new Vector2(-moveDirection2 * airSpinSpeed/2, jumpHeight), ForceMode2D.Impulse);
+                rb.velocity = Vector2.zero; // Reset current velocity
+                if (moveDirection2 == moveDirection)
+                {
+                    rb.AddForce(new Vector2(-moveDirection2 * airSpinSpeed / 2, jumpHeight), ForceMode2D.Impulse);
                 }
                 else
                 {
-                     rb.AddForce(new Vector2(moveDirection2 * airSpinSpeed/2, jumpHeight), ForceMode2D.Impulse);
+                    rb.AddForce(new Vector2(moveDirection2 * airSpinSpeed / 2, jumpHeight), ForceMode2D.Impulse);
                 }
-                
+
                 animator.SetTrigger("Reverse");
                 break; // Exit the loop after hitting an enemy
             }
@@ -167,14 +174,17 @@ public class Lithra : Character
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+
         // Wait until the player is grounded
-        while (! isGrounded)
+        while (!isGrounded)
         {
             yield return null;
         }
-         IgnoreUpdate(false);
+
+        IgnoreUpdate(false);
         StartCoroutine(ResetAirSpin());
     }
+
 
     IEnumerator ResetAirSpin()
     {

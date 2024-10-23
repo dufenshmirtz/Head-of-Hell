@@ -17965,7 +17965,7 @@ MonoBehaviour:
   sworDashin: {fileID: 8300000, guid: 74dc3797d2db85640b33cada7e2af4cb, type: 3}
   sworDashHit: {fileID: 8300000, guid: 415f11b477c2fce48bbb8fc69c3948da, type: 3}
   sworDashMiss: {fileID: 8300000, guid: e727902d6f3778f4ea8661194a593833, type: 3}
-  sworDashTada: {fileID: 8300000, guid: b33ac644e9c9ee14bba7c0f81678e9bf, type: 3}
+  sworDashTada: {fileID: 8300000, guid: a184552f59a49f64ea40be729e2eed4f, type: 3}
   roll: {fileID: 8300000, guid: ca1d32217aa5be84ca31c7685a0bfa55, type: 3}
   rollReady: {fileID: 8300000, guid: fbdc0f67f881ddf448b9375d23450b84, type: 3}
   skiplaHeavyHit: {fileID: 8300000, guid: 61c278f38ea9d484c9968edf886a0702, type: 3}
@@ -17991,7 +17991,7 @@ MonoBehaviour:
   idleGlitch: {fileID: 8300000, guid: d76ca7ec51010f3489deed14512d71c1, type: 3}
   jumpGlitch: {fileID: 8300000, guid: 4d695d839ecafad40a8cd019f180b81a, type: 3}
   dashGlitch: {fileID: 8300000, guid: b36218a6abf238b4aa13102e1c68e623, type: 3}
-  quickGlitch: {fileID: 0}
+  quickGlitch: {fileID: 8300000, guid: d01add9cf52bda54bbb40d8a81d33b50, type: 3}
   chargeGlitch: {fileID: 8300000, guid: 08db8ba6a07420f4f8b1f5e52de26b17, type: 3}
   deathVolume: 3
   heavyAttackVolume: 1
