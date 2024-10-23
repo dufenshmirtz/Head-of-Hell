@@ -7,6 +7,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.Playables;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 using static Unity.Collections.AllocatorManager;
@@ -124,15 +125,32 @@ public abstract class Character : MonoBehaviour
     protected AudioClip characterJump;
     protected AudioClip chargeHitSound;
 
+    protected string playerString;
+
     //handling variables
     int grounds = 0;
     int isonpad = 0;
+
+    int controllerCount = 0;
+
+    protected bool controller = false;
 
     #region Base
     public virtual void Start()
     {
         characterSetup = GetComponent<CharacterSetup>();
         characterChoiceHandler = GetComponent<CharacterManager>();
+
+        string[] connectedControllers = Input.GetJoystickNames();
+
+        // Count how many controllers are connected (non-empty entries in the array)
+        foreach (string controller in connectedControllers)
+        {
+            if (!string.IsNullOrEmpty(controller))
+            {
+                controllerCount++;
+            }
+        }
 
         InitializeCharacter();
 
@@ -208,6 +226,26 @@ public abstract class Character : MonoBehaviour
         P2Name = characterChoiceHandler.GetCharacterName(2);
         enemy = characterChoiceHandler.CharacterChoice(2);
 
+        if(playerNum==1)
+        {
+            playerString = "_P1";
+            if (controllerCount >= 2)
+            {
+                controller = true;
+            }
+        }
+        else if (playerNum == 2)
+        {
+            playerString = "_P2";
+            if (controllerCount >= 1)
+            {
+                controller = true;
+            }
+        }
+
+        
+        
+
         animator = GetComponent<Animator>();
     }
 
@@ -272,7 +310,7 @@ public abstract class Character : MonoBehaviour
             return;
         }
         //charge attack specifics
-        if ( ChargeCheck(charge))
+        if (ChargeCheck(charge))
         {
             return;
         }
@@ -282,18 +320,23 @@ public abstract class Character : MonoBehaviour
             return;
         }
 
-        // Running animations...
-        if (Input.GetKey(left) || Input.GetKey(right))
+        for (int i = 1; i <= 4; i++)
         {
-            if (ignoreMovement)
+            // Check if any button on joystick i was pressed
+            for (int button = 0; button <= 19; button++) // Joystick buttons range from 0 to 19
             {
-                return;
+                if (Input.GetKeyDown("joystick " + i + " button " + button))
+                {
+                    Debug.Log("Joystick " + i + " Button " + button + " is pressed");
+                }
             }
+        }
 
-            if (knocked)
-            {
-                return;
-            }
+        float moveDirection = Input.GetAxis("Horizontal"+playerString);
+        // Running animations...
+        if (Mathf.Abs(moveDirection) > 0.1f)
+        {
+            if (ignoreMovement || knocked) return;
 
             if (isGrounded)
             {
@@ -306,7 +349,7 @@ public abstract class Character : MonoBehaviour
                 animator.SetTrigger("Jump");
             }
 
-            float moveDirection = Input.GetKey(left) ? -1f : 1f; // -1 for A, 1 for D
+            //float moveDirection = Input.GetKey(left) ? -1f : 1f; // -1 for A, 1 for D
 
             if (isBlocking)
             {
@@ -330,35 +373,42 @@ public abstract class Character : MonoBehaviour
         }
 
         // Jumping
-        if (Input.GetKeyDown(up) && isGrounded)
+        if (Input.GetKeyDown(up) || Input.GetAxis("Vertical"+playerString) > 0.5f)
         {
-             Jump();
+            if (isGrounded)
+            {
+                Jump();
+            }
         }
 
         // Heavy Punching
-        if (Input.GetKeyDown(heavyAttack))
+        if (Input.GetKeyDown(heavyAttack) || (controller && Input.GetButtonDown("HeavyAttack" + playerString)))
         {
-             HeavyAttack();
+            HeavyAttack();
         }
+
         //Blocking
-        if (Input.GetKeyDown(block) && !casting)
+        if (Input.GetKeyDown(block) && !casting || (controller && Input.GetButtonDown("Block" + playerString)))
         {
              Block();
         }
-        else if (Input.GetKeyUp(block))
+        else if (Input.GetKeyUp(block) || (controller && Input.GetButtonUp("Block" + playerString)))
         {
              Unblock();
         }
 
         //ChargeAttack
-        if (Input.GetKeyDown(charge) && isGrounded)
+        if (Input.GetKeyDown(charge)|| (controller && Input.GetButtonDown("ChargeAttack" + playerString)))
         {
-             ChargeAttack();
-
+            if(isGrounded)
+            {
+                ChargeAttack();
+            }
+             
         }
 
-        //Get gown from pad
-        if (Input.GetKeyDown(down))
+        //Get down from pad
+        if (Input.GetKeyDown(down) || (controller && Input.GetAxis("Vertical" + playerString) < -0.5f))
         {
             Collider2D[] colliders = GetComponents<Collider2D>();
 
@@ -366,17 +416,19 @@ public abstract class Character : MonoBehaviour
         }
 
         //LightAttack
-        if (Input.GetKeyDown(lightAttack))
+        if (Input.GetKeyDown(lightAttack) || (controller && Input.GetButtonDown("QuickAttack" + playerString)))
         {
             moveSpeed = OGMoveSpeed;
-             LightAttack();
+            LightAttack();
         }
 
         //Spells
-        if (Input.GetKeyDown(ability) && !onCooldown && canCast && !casting)
+        if (Input.GetKeyDown(ability) || (controller && controller && Input.GetButtonDown("Spell" + playerString)))
         {
-
-             Spell();
+            if (!onCooldown && canCast && !casting)
+            {
+                Spell();
+            }           
         }
 
         // Animation control for jumping, falling, and landing
@@ -392,7 +444,9 @@ public abstract class Character : MonoBehaviour
         {
             preserveJump = false;
         }
+
     }
+
 
     /*private void OnDrawGizmosSelected()
     {
@@ -720,7 +774,7 @@ public abstract class Character : MonoBehaviour
             ignoreMovement = true;
             if (charged)
             {
-                if (Input.GetKeyUp(charge))
+                if (Input.GetKeyUp(charge) || (controller && Input.GetButtonUp("ChargeAttack" + playerString)))
                 {
                     //stayDynamic();
                     animator.SetTrigger("ChargedHit");
@@ -732,7 +786,7 @@ public abstract class Character : MonoBehaviour
             }
             else
             {
-                if (Input.GetKeyUp(charge))
+                if (Input.GetKeyUp(charge) || (controller && Input.GetButtonUp("ChargeAttack" + playerString)))
                 {
                     stayDynamic();
                     ignoreMovement = false;
@@ -882,7 +936,7 @@ public abstract class Character : MonoBehaviour
             if (dmg == heavyDamage) //if its heavy attack take half the damage
             {
                 currHealth -= 5;
-                print("Took 5 damage");
+                Debug.Log("Took 5 damage");
                 healthbar.SetHealth(currHealth);
             }
             //if its light attack take no dmg

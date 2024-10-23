@@ -146,14 +146,14 @@ public class Fin : Character
 
     IEnumerator Roll()
     {
-         IgnoreMovement(true);
-        ignoreDamage=true;
-         knockable = false;
+        IgnoreMovement(true);
+        ignoreDamage = true;
+        knockable = false;
 
         // Store the original gravity scale
         float ogGravityScale = rb.gravityScale;
 
-        // Disable gravity while dashing
+        // Disable gravity while rolling
         rb.gravityScale = 0f;
 
         // Store the current velocity
@@ -167,28 +167,33 @@ public class Fin : Character
         colliders[3].enabled = true;
         colliders[4].enabled = true;
 
-        // Determine the dash direction based on the input
-        float moveDirection = Input.GetKey( left) ? -1f : 1f; ;
+        // Determine the roll direction based on the input (keyboard always, controller only if controller == true)
+        float moveDirection = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : (controller ? Input.GetAxis("Horizontal" + playerString) : 0f));
 
+        // If no direction input was given, default to right
+        if (moveDirection == 0f)
+        {
+            moveDirection = 1f; // Default direction in case no input
+        }
 
         audioManager.PlaySFX(audioManager.roll, 1);
-        // Calculate the dash velocity
+
+        // Calculate the roll velocity
         Vector2 rollVelocity = new Vector2(moveDirection * rollPower, currentVelocity.y);
 
-        // Apply the dash velocity
+        // Apply the roll velocity
         rb.velocity = rollVelocity;
 
-        // Trigger the dash animation
+        // Trigger the roll animation
         animator.SetTrigger("QuickAttack");
 
-
-
-        // Wait for the dash duration
+        // Wait for the roll duration
         yield return new WaitForSeconds(rollTime);
 
-        // Reset the velocity after the dash
+        // Reset the velocity after the roll
         rb.velocity = currentVelocity;
 
+        // Re-enable colliders after rolling
         foreach (Collider2D collider in colliders)
         {
             if (collider != colliders[3])
@@ -199,21 +204,16 @@ public class Fin : Character
         colliders[3].enabled = false;
         colliders[4].enabled = false;
 
-
-
         // Reset the gravity scale
         rb.gravityScale = ogGravityScale;
 
-
-         IgnoreMovement(false);
-        ignoreDamage=false;
-
-         knockable = true;
+        IgnoreMovement(false);
+        ignoreDamage = false;
+        knockable = true;
 
         StartCoroutine(ResetRoll());
-
-
     }
+
 
     IEnumerator ResetRoll()
     {
