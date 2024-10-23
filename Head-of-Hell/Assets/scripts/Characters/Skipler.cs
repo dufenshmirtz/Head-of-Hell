@@ -47,7 +47,7 @@ public class Skipler : Character
     override public void HeavyAttack()
     {
         animator.SetTrigger("HeavyAttack");
-        audioManager.PlaySFX(audioManager.skiplaHeavyCharge, audioManager.heavySwooshVolume);
+        audioManager.PlaySFX(audioManager.heavyGlitch, 0.8f);
     }
 
     override public void DealHeavyDamage()
@@ -57,7 +57,7 @@ public class Skipler : Character
         if (hitEnemy != null)
         {
 
-            audioManager.PlaySFX(audioManager.skiplaHeavyHit, 1f);
+            audioManager.PlaySFX(audioManager.heavyGlitchHit, 1.3f);
             enemy.TakeDamage(heavyDamage, true);
 
             if (!enemy.isBlocking)
@@ -68,7 +68,7 @@ public class Skipler : Character
         }
         else
         {
-            audioManager.PlaySFX(audioManager.sworDashMiss, 1f);
+            audioManager.PlaySFX(audioManager.nothitGlitch, 1.8f);
         }
 
     }

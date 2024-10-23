@@ -17993,6 +17993,9 @@ MonoBehaviour:
   dashGlitch: {fileID: 8300000, guid: b36218a6abf238b4aa13102e1c68e623, type: 3}
   quickGlitch: {fileID: 8300000, guid: d01add9cf52bda54bbb40d8a81d33b50, type: 3}
   chargeGlitch: {fileID: 8300000, guid: 08db8ba6a07420f4f8b1f5e52de26b17, type: 3}
+  heavyGlitch: {fileID: 8300000, guid: 1e828e366fb715b41a674e2d35696daa, type: 3}
+  heavyGlitchHit: {fileID: 8300000, guid: 0a05035f7138bb74a8875b0ab0611cb1, type: 3}
+  nothitGlitch: {fileID: 8300000, guid: c203a2e0b2d1e7440a8a6719ccc46875, type: 3}
   deathVolume: 3
   heavyAttackVolume: 1
   lightAttackVolume: 1
