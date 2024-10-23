@@ -219,11 +219,11 @@ public class Lithra : Character
         {
             audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
         }
-         knockable = true;
+        chargeReset = true;
+        knockable = true;
         charging = false;
         animator.SetBool("Casting", false);
         animator.SetBool("Charging", false);
-         stayDynamic();
     }
     #endregion
 
