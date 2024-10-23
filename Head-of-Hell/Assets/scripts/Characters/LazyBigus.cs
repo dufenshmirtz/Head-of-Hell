@@ -151,6 +151,30 @@ public class LazyBigus : Character
         base.ChargeAttack();
         animator.SetTrigger("Charge");
     }
+
+    override public void DealChargeDmg()
+    {
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
+
+        if (hitEnemy != null)
+        {
+            enemy.StopPunching();
+            enemy.BreakCharge();
+            enemy.TakeDamage(chargeDmg, false);
+            enemy.Knockback(13f, 0.4f, false);
+            audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
+            ToxicTouch();
+        }
+        else
+        {
+            audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
+        }
+        chargeReset = true;
+        knockable = true;
+        charging = false;
+        animator.SetBool("Casting", false);
+        animator.SetBool("Charging", false);
+    }
     #endregion
 
     #region Passive
@@ -192,29 +216,7 @@ public class LazyBigus : Character
         }
     }
 
-    override public void DealChargeDmg()
-    {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
-
-        if (hitEnemy != null)
-        {
-            enemy.StopPunching();
-            enemy.BreakCharge();
-            enemy.TakeDamage(chargeDmg, false);
-            enemy.Knockback(13f, 0.4f, false);
-            audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
-            ToxicTouch();
-        }
-        else
-        {
-            audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
-        }
-         knockable = true;
-        charging = false;
-        animator.SetBool("Casting", false);
-        animator.SetBool("Charging", false);
-         stayDynamic();
-    }
+    
 
     private void ResetPoisonStacks()
     {

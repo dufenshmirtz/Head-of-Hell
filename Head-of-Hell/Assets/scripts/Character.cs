@@ -134,6 +134,7 @@ public abstract class Character : MonoBehaviour
     int controllerCount = 0;
 
     protected bool controller = false;
+    protected bool chargeReset = false;
 
     #region Base
     public virtual void Start()
@@ -566,6 +567,8 @@ public abstract class Character : MonoBehaviour
         {
             rb.bodyType = RigidbodyType2D.Dynamic;
         }
+        chargeReset = false;
+        print("--staydynamico");
     }
 
     public Collider2D[] GetColliders()
@@ -759,11 +762,12 @@ public abstract class Character : MonoBehaviour
             }
             
         }
-         knockable = true;
+        chargeReset = true;
+        print("--tru");
+        knockable = true;
         charging = false;
         animator.SetBool("Casting", false);
         animator.SetBool("Charging", false);
-         stayDynamic();
     }
 
     public bool ChargeCheck(KeyCode charge)
@@ -803,13 +807,18 @@ public abstract class Character : MonoBehaviour
 
     public void StopCHarge()
     {
-         stayDynamic();
+        stayDynamic();
+        ignoreMovement = false;
         animator.SetBool("Charging", false);
         charging = false;
-         knockable = true;
+        knockable = true;
         charged = false;
         animator.SetBool("Casting", false);
         animator.ResetTrigger("ChargedHit");
+    }
+    public void BreakCharge()
+    {
+        StopCHarge();
     }
     #endregion
 
@@ -915,6 +924,15 @@ public abstract class Character : MonoBehaviour
 
     virtual public void TakeDamage(int dmg, bool blockable)
     {
+        print(chargeReset);
+        if(chargeReset)
+        {
+            stayDynamic();
+            ignoreMovement = false;
+            chargeReset = false;
+            print("--takedmg");
+        }
+
         if (ignoreDamage)
         {
             return;
@@ -1020,10 +1038,7 @@ public abstract class Character : MonoBehaviour
         animator.SetTrigger("Win");
     }
 
-    public void BreakCharge()
-    {
-        StopCHarge();
-    }
+
 
     public IEnumerator InterruptMovement(float time)
     {
