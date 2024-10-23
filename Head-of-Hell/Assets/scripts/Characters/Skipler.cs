@@ -84,18 +84,17 @@ public class Skipler : Character
 
     IEnumerator Dash()
     {
+        skiplerDouble = resources.skiplerDouble;
+        skiplerPoint = resources.skiplerPoint;
 
-        skiplerDouble=resources.skiplerDouble;
-        skiplerPoint=resources.skiplerPoint;
-
-        GameObject skipDouble = Instantiate(skiplerDouble, skiplerPoint.position,skiplerPoint.rotation);
+        // Instantiate the skipler double
+        GameObject skipDouble = Instantiate(skiplerDouble, skiplerPoint.position, skiplerPoint.rotation);
         Vector3 newScale = skipDouble.transform.localScale;  // Get the current scale
         newScale.x = this.transform.localScale.x;            // Set the x scale to match the player's x scale
         skipDouble.transform.localScale = newScale;
 
         ignoreMovement = true;
         ignoreDamage = true;
-
         dashing = true;
 
         // Store the original gravity scale
@@ -107,20 +106,28 @@ public class Skipler : Character
         // Store the current velocity
         Vector2 currentVelocity = rb.velocity;
 
-        // Determine the dash direction based on the input
-        float moveDirection = Input.GetKey(left) ? -1f : 1f;
+        // Determine the dash direction based on input (keyboard always, controller only if controller == true)
+        float moveDirection = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : (controller ? Input.GetAxis("Horizontal" + playerString) : 0f));
 
+        // If no direction input was given, default to right
+        if (moveDirection == 0f)
+        {
+            moveDirection = 1f; // Default direction in case no input
+        }
+
+        // Disable colliders temporarily during the dash
         Collider2D[] colliders = GetColliders();
         foreach (Collider2D collider in colliders)
         {
             collider.enabled = false;
         }
-        colliders[3].enabled = true;
+        colliders[3].enabled = true;  // Keep specific colliders enabled
         colliders[4].enabled = true;
 
-
+        // Play dash sound effects
         audioManager.PlaySFX(audioManager.dash, 1);
         audioManager.PlaySFX(audioManager.dashGlitch, 1f);
+
         // Calculate the dash velocity
         Vector2 dashVelocity = new Vector2(moveDirection * dashingPower, currentVelocity.y);
 
@@ -129,8 +136,6 @@ public class Skipler : Character
 
         // Trigger the dash animation
         animator.SetTrigger("Spell");
-
-
 
         // Wait for the dash duration
         yield return new WaitForSeconds(dashingTime);
@@ -141,9 +146,8 @@ public class Skipler : Character
         // Reset the gravity scale
         rb.gravityScale = ogGravityScale;
 
+        // Re-enable damage and colliders
         ignoreDamage = false;
-
-
         foreach (Collider2D collider in colliders)
         {
             if (collider != colliders[3])
@@ -154,13 +158,15 @@ public class Skipler : Character
         colliders[3].enabled = false;
         colliders[4].enabled = false;
 
+        // Reset dash state
         dashHit = false;
         dashing = false;
 
+        // Trigger cooldown
         OnCooldown(cooldown);
         ignoreDamage = false;
-
     }
+
 
     public void DealDashDmg()
     {
@@ -205,11 +211,17 @@ public class Skipler : Character
         // Store the current velocity
         Vector2 currentVelocity = rb.velocity;
 
-        // Determine the dash direction based on the input
-        float moveDirection = Input.GetKey(left) ? -1f : 1f; ;
+        // Determine the dash direction based on input (keyboard always, controller only if controller == true)
+        float moveDirection = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : (controller ? Input.GetAxis("Horizontal" + playerString) : 0f));
 
+        // If no direction input was given, default to right
+        if (moveDirection == 0f)
+        {
+            moveDirection = 1f; // Default direction in case no input
+        }
 
-        audioManager.PlaySFX(audioManager.sworDashin, 1);
+        audioManager.PlaySFX(audioManager.quickGlitch, 0.7f);
+
         // Calculate the dash velocity
         Vector2 sworddashVelocity = new Vector2(moveDirection * swordDashPower, currentVelocity.y);
 
@@ -218,7 +230,6 @@ public class Skipler : Character
 
         // Trigger the dash animation
         animator.SetTrigger("QuickAttack");
-
 
         // Wait for the dash duration
         yield return new WaitForSeconds(swordDashTime);
@@ -234,8 +245,8 @@ public class Skipler : Character
         IgnoreMovement(false);
 
         StartCoroutine(ResetSwordDash());
-
     }
+
 
     IEnumerator ResetSwordDash()
     {
@@ -253,12 +264,8 @@ public class Skipler : Character
         {
             enemy.TakeDamage(swordDashDmg, true);
             enemy.Knockback(10f, .15f, true);
-            audioManager.PlaySFX(audioManager.sworDashHit, 0.8f);
+            audioManager.PlaySFX(audioManager.dashHit, 0.8f);
             ReduceCD();
-        }
-        else
-        {
-            audioManager.PlaySFX(audioManager.sworDashMiss, audioManager.swooshVolume);
         }
     }
     #endregion

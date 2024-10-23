@@ -66,27 +66,28 @@ public class Chiback : Character
 
     private IEnumerator ScytheJump()
     {
-         IgnoreUpdate(true);
+        IgnoreUpdate(true);
 
-        // Calculate the movement direction
-        float moveDirection = Input.GetKey( left) ? -1f : (Input.GetKey( right) ? 1f : 0f);
+        // Calculate the movement direction (keyboard always, controller only if controller == true)
+        float moveDirection = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : (controller ? Input.GetAxis("Horizontal" + playerString) : 0f));
 
         // Only proceed if a direction is given
         if (moveDirection == 0f)
         {
-             IgnoreUpdate(false);
-             OnCooldown(cooldown);
+            IgnoreUpdate(false);
+            OnCooldown(cooldown);
             yield break;
         }
 
-        if (!Input.GetKey(KeyCode.W) &&  isGrounded)
+        // Grounded vs air logic for keyboard/controller (keyboard always works, controller only when controller == true)
+        if (!Input.GetKey(KeyCode.W) && isGrounded || (controller && Input.GetAxis("Vertical" + playerString) <= 0.5f && isGrounded))
         {
-             rb.AddForce(new Vector2(moveDirection * jumpSpeed, jumpHeight), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(moveDirection * jumpSpeed, jumpHeight), ForceMode2D.Impulse);
         }
         else
         {
-             rb.velocity = new Vector2( rb.velocity.x, 0);
-             rb.AddForce(new Vector2(moveDirection * jumpSpeed, jumpHeight), ForceMode2D.Impulse);
+            rb.velocity = new Vector2(rb.velocity.x, 0);
+            rb.AddForce(new Vector2(moveDirection * jumpSpeed, jumpHeight), ForceMode2D.Impulse);
         }
 
         // Duration of the attack
@@ -94,53 +95,55 @@ public class Chiback : Character
 
         while (elapsedTime < jumpDuration)
         {
-            // Perform the air spin movement
-            // transform.Translate(Vector2.right * moveDirection * airSpinSpeed * Time.deltaTime);
-
             // Check for enemy collision
-            Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+            Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
             if (hitEnemy != null)
             {
                 enemy.BreakCharge();
                 animator.SetTrigger("SpellHit");
                 audioManager.PlaySFX(audioManager.sytheHit, 1f);
                 audioManager.PlaySFX(audioManager.sytheSlash, 1f);
-                if(elapsedTime < 0.33f) {
-                    enemy.TakeDamage(shortJumpDamage,true);
+
+                // Apply damage based on elapsed time during the jump
+                if (elapsedTime < 0.33f)
+                {
+                    enemy.TakeDamage(shortJumpDamage, true);
                     Enraged(shortJumpDamage);
                 }
-                if (0.33 <= elapsedTime && elapsedTime < 0.66)
+                else if (elapsedTime < 0.66f)
                 {
-                    enemy.TakeDamage(MedJumpDamage,true);
+                    enemy.TakeDamage(MedJumpDamage, true);
                     Enraged(MedJumpDamage);
                 }
-                if (0.66 <= elapsedTime)
+                else
                 {
                     enemy.TakeDamage(wideJumpDamage, true);
                     Enraged(wideJumpDamage);
                 }
 
-                if(timesHit>=enragingNum)
+                // Reset enraging hits if the threshold is reached
+                if (timesHit >= enragingNum)
                 {
                     timesHit = 0;
                 }
 
-                enemy.Knockback(11f,0.25f,false);
-               
+                // Apply knockback to the enemy
+                enemy.Knockback(11f, 0.25f, false);
 
-                // Jump back after hitting the enemy
-                 rb.velocity = Vector2.zero; // Reset current velocity
-                
+                // Reset velocity after hitting the enemy
+                rb.velocity = Vector2.zero;
                 break; // Exit the loop after hitting an enemy
             }
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-         IgnoreUpdate(false);
-         OnCooldown(cooldown);
+
+        IgnoreUpdate(false);
+        OnCooldown(cooldown);
         ignoreDamage = false;
     }
+
     #endregion
 
     #region LightAttack
