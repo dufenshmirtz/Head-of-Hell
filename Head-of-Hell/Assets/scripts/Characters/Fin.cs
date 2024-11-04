@@ -164,8 +164,8 @@ public class Fin : Character
         {
             collider.enabled = false;
         }
-        colliders[3].enabled = true;
-        colliders[4].enabled = true;
+        colliders[5].enabled = true;
+
 
         // Determine the roll direction based on the input (keyboard always, controller only if controller == true)
         float moveDirection = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : (controller ? Input.GetAxis("Horizontal" + playerString) : 0f));
@@ -201,7 +201,7 @@ public class Fin : Character
                 collider.enabled = true;
             }
         }
-        colliders[3].enabled = false;
+        colliders[5].enabled = false;
         colliders[4].enabled = false;
 
         // Reset the gravity scale

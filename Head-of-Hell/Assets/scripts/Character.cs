@@ -5,7 +5,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
 using TMPro;
 using Unity.VisualScripting;
-using UnityEditor.Playables;
+using UnityEngine.Playables;
+//using UnityEditor.Playables;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.TextCore.Text;
@@ -127,6 +128,12 @@ public abstract class Character : MonoBehaviour
 
     protected string playerString;
 
+    bool quickDisable = false;
+    bool heavyDisable = false;
+    bool blockDisable = false;
+    bool specialDisable = false;
+    bool chargeDisable = false;
+
     //handling variables
     int grounds = 0;
     int isonpad = 0;
@@ -163,6 +170,19 @@ public abstract class Character : MonoBehaviour
             CustomRuleset loadedRuleset = JsonUtility.FromJson<CustomRuleset>(json);
 
             maxHealth =loadedRuleset.health;
+
+            moveSpeed = loadedRuleset.playerSpeed;
+
+            quickDisable = loadedRuleset.quickDisabled;
+            heavyDisable = loadedRuleset.heavyDisabled;
+            blockDisable = loadedRuleset.blockDisabled;
+            specialDisable = loadedRuleset.specialDisabled;
+            chargeDisable = loadedRuleset.chargeDisabled;
+
+            if (loadedRuleset.hideHealth)
+            {
+                healthbar.gameObject.SetActive(false);
+            }
         }
         else
         {
@@ -243,9 +263,6 @@ public abstract class Character : MonoBehaviour
                 controller = true;
             }
         }
-
-        
-        
 
         animator = GetComponent<Animator>();
     }
@@ -385,23 +402,32 @@ public abstract class Character : MonoBehaviour
         // Heavy Punching
         if (Input.GetKeyDown(heavyAttack) || (controller && Input.GetButtonDown("HeavyAttack" + playerString)))
         {
-            HeavyAttack();
+            if(!heavyDisable)
+            {
+                HeavyAttack();
+            }           
         }
 
         //Blocking
         if (Input.GetKeyDown(block) && !casting || (controller && Input.GetButtonDown("Block" + playerString)))
         {
-             Block();
+            if (!blockDisable)
+            {
+                Block();
+            }            
         }
         else if (Input.GetKeyUp(block) || (controller && Input.GetButtonUp("Block" + playerString)))
         {
-             Unblock();
+            if (!blockDisable)
+            {
+                Unblock();
+            }
         }
 
         //ChargeAttack
         if (Input.GetKeyDown(charge)|| (controller && Input.GetButtonDown("ChargeAttack" + playerString)))
         {
-            if(isGrounded)
+            if(isGrounded && !chargeDisable)
             {
                 ChargeAttack();
             }
@@ -419,14 +445,17 @@ public abstract class Character : MonoBehaviour
         //LightAttack
         if (Input.GetKeyDown(lightAttack) || (controller && Input.GetButtonDown("QuickAttack" + playerString)))
         {
-            moveSpeed = OGMoveSpeed;
-            LightAttack();
+            if (!quickDisable)
+            {
+                moveSpeed = OGMoveSpeed;
+                LightAttack();
+            }          
         }
 
         //Spells
         if (Input.GetKeyDown(ability) || (controller && controller && Input.GetButtonDown("Spell" + playerString)))
         {
-            if (!onCooldown && canCast && !casting)
+            if (!onCooldown && canCast && !casting &&!specialDisable)
             {
                 Spell();
             }           
@@ -436,7 +465,7 @@ public abstract class Character : MonoBehaviour
         animator.SetBool("IsGrounded", isGrounded);
         animator.SetFloat("VerticalSpeed", rb.velocity.y);
 
-        if(rb.velocity.y != 0)
+        /*if(rb.velocity.y != 0)
         {
             preserveJump = true;
             animator.SetBool("IsGrounded", !preserveJump);
@@ -444,7 +473,7 @@ public abstract class Character : MonoBehaviour
         else
         {
             preserveJump = false;
-        }
+        }*/
 
     }
 
@@ -484,6 +513,7 @@ public abstract class Character : MonoBehaviour
         {
             isGrounded = true;
             animator.SetBool("Jump", false);
+            animator.SetBool("PlayerGrounded",true);
             grounds++;
         }
     }
@@ -518,6 +548,7 @@ public abstract class Character : MonoBehaviour
         if (other.CompareTag("Player"))  //--here
         {
             grounds--;
+            animator.SetBool("PlayerGrounded", false);
 
             if (grounds == 0)
             {
@@ -568,7 +599,6 @@ public abstract class Character : MonoBehaviour
             rb.bodyType = RigidbodyType2D.Dynamic;
         }
         chargeReset = false;
-        print("--staydynamico");
     }
 
     public Collider2D[] GetColliders()
@@ -763,7 +793,6 @@ public abstract class Character : MonoBehaviour
             
         }
         chargeReset = true;
-        print("--tru");
         knockable = true;
         charging = false;
         animator.SetBool("Casting", false);
@@ -924,13 +953,11 @@ public abstract class Character : MonoBehaviour
 
     virtual public void TakeDamage(int dmg, bool blockable)
     {
-        print(chargeReset);
         if(chargeReset)
         {
             stayDynamic();
             ignoreMovement = false;
             chargeReset = false;
-            print("--takedmg");
         }
 
         if (ignoreDamage)
@@ -954,7 +981,7 @@ public abstract class Character : MonoBehaviour
             if (dmg == heavyDamage) //if its heavy attack take half the damage
             {
                 currHealth -= 5;
-                Debug.Log("Took 5 damage");
+                Debug.Log("Took 5 damage.");
                 healthbar.SetHealth(currHealth);
             }
             //if its light attack take no dmg
@@ -962,7 +989,7 @@ public abstract class Character : MonoBehaviour
             if (dmg == chargeDmg)
             {
                 currHealth -= dmg;
-
+                Debug.Log("Took " + dmg + " damage.");
                 healthbar.SetHealth(currHealth);
                 moveSpeed = OGMoveSpeed;
             }
@@ -980,6 +1007,8 @@ public abstract class Character : MonoBehaviour
             animator.SetTrigger("tookDmg");
 
             healthbar.SetHealth(currHealth);
+
+            Debug.Log("Took " + dmg + " damage.");
         }
 
         if (currHealth <= 0)
@@ -1013,7 +1042,7 @@ public abstract class Character : MonoBehaviour
         if (enemy.currHealth == maxHealth)
         {
             gameManager.RoundEndFlawless(playerNum, P2Name);
-            enemy.Win();
+            KeepStats(P2Name,P1Name.text);
         }
         else if (enemy.currHealth <= 0)
         {
@@ -1022,7 +1051,7 @@ public abstract class Character : MonoBehaviour
         else
         {
             gameManager.RoundEnd(playerNum, P2Name);
-
+            KeepStats(P2Name,P1Name.text);
         }
 
     }
@@ -1052,6 +1081,8 @@ public abstract class Character : MonoBehaviour
 
     public IEnumerator Stun(float time)
     {
+        StopCHarge();
+
         stun.gameObject.SetActive(true);
         rb.velocity = Vector2.zero; // Stop the enemy's movement
         stunned = true;
@@ -1215,6 +1246,18 @@ public abstract class Character : MonoBehaviour
             Heal(amount);
         }
         
+    }
+
+    public void KeepStats(string winner,string loser)
+    {
+        if (CharacterStatsManager.Instance!=null)
+        {
+            CharacterStatsManager.Instance.KeepStats(winner, loser);
+        }
+        else
+        {
+            Debug.Log("Error.StatsManager not loaded properly.");
+        } 
     }
     #endregion
 }

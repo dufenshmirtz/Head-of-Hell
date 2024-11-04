@@ -16,6 +16,13 @@ public class StartButtonScript : MonoBehaviour
             ruleset.health = 100;
             ruleset.powerupsEnabled = true;
             ruleset.rounds = 1;
+            ruleset.playerSpeed = 4;
+            ruleset.quickDisabled = false;
+            ruleset.heavyDisabled = false;
+            ruleset.blockDisabled = false;
+            ruleset.chargeDisabled = false;
+            ruleset.specialDisabled = false;
+            ruleset.hideHealth = false;
 
             // Save the ruleset data to PlayerPrefs as JSON
             string json = JsonUtility.ToJson(ruleset);
