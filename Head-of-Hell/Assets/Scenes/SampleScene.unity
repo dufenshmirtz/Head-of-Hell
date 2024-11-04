@@ -1154,6 +1154,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1588322336008336028, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -1205,7 +1209,7 @@ PrefabInstance:
     - target: {fileID: 2553929291879454509, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: fcf1fa8fd86258848a0b77f1de784bd0, type: 2}
+      objectReference: {fileID: 9100000, guid: 4472bf1853d25b646b8a7a447194f823, type: 2}
     - target: {fileID: 2584085071129299450, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: P1Name
       value: 
@@ -1254,6 +1258,10 @@ PrefabInstance:
       propertyPath: quickAttackIndicator
       value: 
       objectReference: {fileID: 854344816}
+    - target: {fileID: 2705414560046700573, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5341404983514887946, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: P1Name
       value: 
@@ -1401,6 +1409,9 @@ PrefabInstance:
       insertIndex: 2
       addedObject: {fileID: 1346476726}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      insertIndex: 9
+      addedObject: {fileID: 221568203}
     - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: -1
       addedObject: {fileID: 221568179}
@@ -2292,7 +2303,7 @@ GameObject:
   - component: {fileID: 119301199}
   - component: {fileID: 119301198}
   - component: {fileID: 119301200}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Square
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -4753,6 +4764,41 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
   m_PrefabInstance: {fileID: 55097439}
   m_PrefabAsset: {fileID: 0}
+--- !u!70 &221568203
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221568178}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 4023
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.03, y: -0.13}
+  m_Size: {x: 0.89, y: 1.6}
+  m_Direction: 0
 --- !u!1 &224284506
 GameObject:
   m_ObjectHideFlags: 0
@@ -6112,7 +6158,7 @@ GameObject:
   m_Component:
   - component: {fileID: 279847380}
   - component: {fileID: 279847378}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LeftBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29331,6 +29377,41 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
   m_PrefabInstance: {fileID: 1656577412}
   m_PrefabAsset: {fileID: 0}
+--- !u!70 &1367423849
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367423824}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 4023
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.03, y: -0.13}
+  m_Size: {x: 0.89, y: 1.6}
+  m_Direction: 0
 --- !u!1 &1369490559
 GameObject:
   m_ObjectHideFlags: 0
@@ -35637,7 +35718,7 @@ PrefabInstance:
     - target: {fileID: 3775815256451319138, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: f1876437b15d78f4dbf917bee5810972, type: 2}
+      objectReference: {fileID: 9100000, guid: 11d5595fa0b947043b07da91212a5678, type: 2}
     - target: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_LocalScale.x
       value: -1
@@ -35825,6 +35906,9 @@ PrefabInstance:
       insertIndex: 2
       addedObject: {fileID: 246258982}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: 9
+      addedObject: {fileID: 1367423849}
     - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1367423825}
@@ -37198,7 +37282,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1727173186}
   - component: {fileID: 1727173184}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RightBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}

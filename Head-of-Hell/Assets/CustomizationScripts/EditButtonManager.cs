@@ -9,7 +9,6 @@ public class EditButtonManager : MonoBehaviour
 
     public void SlotInit()
     {
-        print(editNumber+"___editb");
         customRulesetUI.Initialize(editNumber);
     }
 }
