@@ -54,15 +54,15 @@
         },
         "lore": "Skipler was an unconventional scientist funding his extravagant work by using a complex computer he manufactured that made stock predictions (it could also override any gaming anti-cheat system, except for ours of course), until some government agents found him out and tried to force him to work for the state, using a list of federal crimes he commited in the name of science as leverage. When Skipler secretly disposed of them (they were found forging in a medow two years later),he put a target on his back and armies of policemen and federal agents went after him. Little did they know that Skipler had just found the way to traverse to alternate dimensions using a rear and powerful \"Interdimentional Crystal\" that he may or may not have stolen from an alien species. He build a mechanical arm that would contain and control the enormous power of the crystal, that was connected with his nervous system so he can bend it to his will.Thus, he disappeared along with all evidence of his work, and went on roaming across universes collecting data and experiences that intensifi."
       },
-      {
-        "name": "Rager",
-        "abilities": {
-          "passive": "Rager's ability is unblockable.",
-          "quick_attack": "Rager has an infinite, almost instantly hitting attack that can be spammed and deals 5 damage.",
-          "spell": "Rager grabs his opponent and performs a combo that ultimately deals 25 damage."
+        {
+            "name": "Rager",
+            "abilities": {
+                "passive": "Rager's ability is unblockable.",
+                "quick_attack": "Rager has an infinite, almost instantly hitting attack that can be spammed and deals 5 damage.",
+                "spell": "Rager grabs his opponent and performs a combo that ultimately deals 25 damage."
+            },
+            "lore": "Few days after his town was wrecked by a nuclear plant explosion, Aye's mother gave birth to him and died at labour. He was severely deformed so the doctors thought he wouldn't survive long. They decided to keep and study him, and surprisingly after some time his health was completely stablized. When Aye started growing up and the doctors started finding out that one of the radiation's alternations to his DNA gave him enormous strength. They contacted the military which immediately contained him and turned him into a supersoldier. Impervious to bullets and with his hands strenth and swiftness he was unstoppable, the weapon that could not be countered. At last, an enemy military intelligence service decided that the best way to relieve themselves from Aye's threat was not to fight him. After some backround check they sent him an envelope that contained proof that the nuclear plant explosion that killed his family was an inside job by the current government to alleviate the past establishment. He fled the military and was not seen by anyone since. Every government member was strangled gruesomely under mysterious circumstances the folowing months. For years nobody knew his whereabouts until he became the worlds top noch bowler after Jesus Quintana."
         },
-        "lore": "This character doesn't currently have a lore."
-      },
       {
         "name": "Lithra",
         "abilities": {
