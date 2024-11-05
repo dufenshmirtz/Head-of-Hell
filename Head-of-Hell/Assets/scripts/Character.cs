@@ -761,6 +761,7 @@ public abstract class Character : MonoBehaviour
         {
             charged = true;
             audioManager.PlaySFX(audioManager.charged, 0.7f);
+            animator.SetTrigger("Charged");
         }
     }
 
