@@ -1206,6 +1206,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2074438844188389760, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2553929291879454509, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Controller
       value: 
@@ -1350,6 +1354,18 @@ PrefabInstance:
       propertyPath: CharacterChoiceHandler
       value: 
       objectReference: {fileID: 221568179}
+    - target: {fileID: 5757193273073521226, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5757193273073521226, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5757193273073521226, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: m_Color.r
+      value: 0.5862026
+      objectReference: {fileID: 0}
     - target: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Name
       value: P1
@@ -35891,9 +35907,25 @@ PrefabInstance:
       propertyPath: CharacterChoiceHandler
       value: 
       objectReference: {fileID: 1367423825}
+    - target: {fileID: 7305932021564572236, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7305932021564572236, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7305932021564572236, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: m_Color.r
+      value: 0.60969925
+      objectReference: {fileID: 0}
     - target: {fileID: 7614724473534664062, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
       value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458631637096272621, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -2415709111268102098, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
