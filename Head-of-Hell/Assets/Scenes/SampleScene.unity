@@ -18058,10 +18058,6 @@ MonoBehaviour:
   heavyGlitch: {fileID: 8300000, guid: 1e828e366fb715b41a674e2d35696daa, type: 3}
   heavyGlitchHit: {fileID: 8300000, guid: 0a05035f7138bb74a8875b0ab0611cb1, type: 3}
   nothitGlitch: {fileID: 8300000, guid: c203a2e0b2d1e7440a8a6719ccc46875, type: 3}
-  volchBite: {fileID: 8300000, guid: b490a2fda316ad14ea29cb8923421e54, type: 3}
-  volchSpit: {fileID: 8300000, guid: 21a3ceb954e2afd47981f0fadec98e02, type: 3}
-  volchBiteSuccess: {fileID: 8300000, guid: 2d85ec46f54633f449fb9d0522bc2443, type: 3}
-  volchBiteExtra: {fileID: 8300000, guid: 61e0b31583ddc2f4e8b6c40a17d70e64, type: 3}
   deathVolume: 3
   heavyAttackVolume: 1
   lightAttackVolume: 1
