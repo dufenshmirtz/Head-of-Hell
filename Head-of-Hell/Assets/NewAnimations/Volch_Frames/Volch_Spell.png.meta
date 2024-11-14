@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1e5faa8edb18a9442956d660dd4777e1
+guid: a523783dbb1eb144fbdee91931ce2af3
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gabaneiro_Run_0
+      name: Volch_Spell_0
       rect:
         serializedVersion: 2
         x: 0
@@ -111,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 098c135cdfb280a409af0f76e56c2623
-      internalID: -895443749
+      spriteID: 4cdfb1e39618f2341be6c120c3a622b0
+      internalID: -299864556
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Run_1
+      name: Volch_Spell_1
       rect:
         serializedVersion: 2
         x: 100
@@ -132,14 +132,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9e20839b882097f44913cd3511fa93ca
-      internalID: 776257752
+      spriteID: a5ec668b4ee95624ba929c65e483468e
+      internalID: -1157866593
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Run_2
+      name: Volch_Spell_2
       rect:
         serializedVersion: 2
         x: 200
@@ -153,14 +153,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bcc5190a66f40fc438db1fcd27dd6992
-      internalID: 1988791276
+      spriteID: a52025c184072d346a95570b69aaf66a
+      internalID: 909927346
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Run_3
+      name: Volch_Spell_3
       rect:
         serializedVersion: 2
         x: 300
@@ -174,14 +174,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4019575acd2fa9043adc171bcd99286c
-      internalID: 854524723
+      spriteID: 2440bbd5f9580734ea51efa459bcedb3
+      internalID: -1309200778
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Run_4
+      name: Volch_Spell_4
       rect:
         serializedVersion: 2
         x: 400
@@ -195,14 +195,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0e0314b1affa1a84db855445721f4e30
-      internalID: -798699772
+      spriteID: df2cf08ab295cdb49b960c141296c565
+      internalID: -648926858
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Run_5
+      name: Volch_Spell_5
       rect:
         serializedVersion: 2
         x: 500
@@ -216,14 +216,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d5e18fb506bc9aa40bdadd9990b33a52
-      internalID: -918481480
+      spriteID: 1d9e4da7a2a73d7428f1a2f2bb2a9a1f
+      internalID: -1362510834
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gabaneiro_Run_6
+      name: Volch_Spell_6
       rect:
         serializedVersion: 2
         x: 600
@@ -237,29 +237,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c407452dee0cfdb4dad37348eaddb465
-      internalID: -1374409003
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gabaneiro_Run_7
-      rect:
-        serializedVersion: 2
-        x: 700
-        y: 0
-        width: 100
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 45d9de9dbb1816241b75e626b4c9f87c
-      internalID: -461466991
+      spriteID: 9779e063445d2334297c68e926c7055c
+      internalID: -1871473519
       vertices: []
       indices: 
       edges: []
@@ -275,14 +254,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Gabaneiro_Run_0: -895443749
-      Gabaneiro_Run_1: 776257752
-      Gabaneiro_Run_2: 1988791276
-      Gabaneiro_Run_3: 854524723
-      Gabaneiro_Run_4: -798699772
-      Gabaneiro_Run_5: -918481480
-      Gabaneiro_Run_6: -1374409003
-      Gabaneiro_Run_7: -461466991
+      Volch_Spell_0: -299864556
+      Volch_Spell_1: -1157866593
+      Volch_Spell_2: 909927346
+      Volch_Spell_3: -1309200778
+      Volch_Spell_4: -648926858
+      Volch_Spell_5: -1362510834
+      Volch_Spell_6: -1871473519
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
