@@ -79,10 +79,6 @@ public class AudioManager : MonoBehaviour
     public AudioClip heavyGlitch;
     public AudioClip heavyGlitchHit;
     public AudioClip nothitGlitch;
-    public AudioClip volchBite;
-    public AudioClip volchSpit;
-    public AudioClip volchBiteSuccess;
-    public AudioClip volchBiteExtra;
     //volumes
     public float deathVolume = 1.0f;
     public float heavyAttackVolume = 1.0f;

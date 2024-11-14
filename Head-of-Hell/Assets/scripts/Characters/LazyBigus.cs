@@ -26,8 +26,7 @@ public class LazyBigus : Character
     override public void HeavyAttack()
     {
         animator.SetTrigger("HeavyAttack");
-        audioManager.PlaySFX(audioManager.volchBite, 1.5f);
-        audioManager.PlaySFX(audioManager.volchBiteExtra, 2f);
+        audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
     }
 
     override public void DealHeavyDamage()
@@ -37,7 +36,7 @@ public class LazyBigus : Character
         if (hitEnemy != null)
         {
 
-            audioManager.PlaySFX(audioManager.volchBiteSuccess, 1.5f);
+            audioManager.PlaySFX(audioManager.BigusHeavy, 1f);
             enemy.TakeDamage(heavyDamage, true);
             ToxicTouch();
 
@@ -49,7 +48,7 @@ public class LazyBigus : Character
         }
         else
         {
-            //audioManager.PlaySFX(audioManager.swoosh, 1f);
+            audioManager.PlaySFX(audioManager.swoosh, 1f);
         }
 
     }
@@ -122,7 +121,7 @@ public class LazyBigus : Character
         firePoint = resources.shootinPoint;
         bulletParent = resources.bulletParent;
 
-        audioManager.PlaySFX(audioManager.volchSpit, audioManager.doubleVol);
+        audioManager.PlaySFX(audioManager.shoot, audioManager.normalVol);
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.velocity = new Vector2(transform.localScale.x * bulletSpeed, 0); // Shoots in the direction the character is facing
