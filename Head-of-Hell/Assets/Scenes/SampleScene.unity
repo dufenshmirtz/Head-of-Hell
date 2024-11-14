@@ -4762,7 +4762,7 @@ MonoBehaviour:
   RagerColor: {r: 0, g: 1, b: 0.9294118, a: 1}
   SkiplerColor: {r: 1, g: 1, b: 1, a: 1}
   VanderColor: {r: 0.08627451, g: 1, b: 0, a: 1}
-  LazyBigusColor: {r: 0.9294118, g: 0, b: 0.9725491, a: 1}
+  LazyBigusColor: {r: 1, g: 1, b: 1, a: 1}
   LithraColor: {r: 1, g: 1, b: 1, a: 1}
   ChibackColor: {r: 1, g: 1, b: 1, a: 1}
   SteelagerAnimatorController: {fileID: 9100000, guid: bd34ee43096dbcc438b20dbac8fff3b0, type: 2}
@@ -29375,7 +29375,7 @@ MonoBehaviour:
   RagerColor: {r: 0, g: 1, b: 0.9294118, a: 1}
   SkiplerColor: {r: 1, g: 1, b: 1, a: 1}
   VanderColor: {r: 0.08627451, g: 1, b: 0, a: 1}
-  LazyBigusColor: {r: 0.9294118, g: 0, b: 0.9725491, a: 1}
+  LazyBigusColor: {r: 1, g: 1, b: 1, a: 1}
   LithraColor: {r: 1, g: 1, b: 1, a: 1}
   ChibackColor: {r: 1, g: 1, b: 1, a: 1}
   SteelagerAnimatorController: {fileID: 9100000, guid: bd34ee43096dbcc438b20dbac8fff3b0, type: 2}
