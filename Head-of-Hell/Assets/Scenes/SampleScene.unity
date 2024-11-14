@@ -35723,10 +35723,6 @@ PrefabInstance:
       propertyPath: quickAttackIndicator
       value: 
       objectReference: {fileID: 825038717}
-    - target: {fileID: 856255475667701122, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.4
-      objectReference: {fileID: 0}
     - target: {fileID: 1169672021793951036, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_FlipX
       value: 0
@@ -35917,7 +35913,7 @@ PrefabInstance:
       objectReference: {fileID: 1367423825}
     - target: {fileID: 7305932021564572236, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Color.b
-      value: 0.745283
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7305932021564572236, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Color.g
@@ -35925,7 +35921,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7305932021564572236, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Color.r
-      value: 0.45301536
+      value: 0.60969925
       objectReference: {fileID: 0}
     - target: {fileID: 7614724473534664062, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
