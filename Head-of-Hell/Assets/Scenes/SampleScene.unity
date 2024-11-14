@@ -1356,7 +1356,7 @@ PrefabInstance:
       objectReference: {fileID: 221568179}
     - target: {fileID: 5757193273073521226, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.6886792
       objectReference: {fileID: 0}
     - target: {fileID: 5757193273073521226, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Color.g
@@ -1364,7 +1364,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5757193273073521226, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Color.r
-      value: 0.5862026
+      value: 0.40240481
       objectReference: {fileID: 0}
     - target: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Name
@@ -1414,6 +1414,10 @@ PrefabInstance:
       propertyPath: mirrorFireAttackPoint
       value: 
       objectReference: {fileID: 1739945226}
+    - target: {fileID: 9159698240938344579, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.4
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2584085071129299450, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
     m_RemovedGameObjects: []
@@ -35723,6 +35727,10 @@ PrefabInstance:
       propertyPath: quickAttackIndicator
       value: 
       objectReference: {fileID: 825038717}
+    - target: {fileID: 856255475667701122, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 1169672021793951036, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_FlipX
       value: 0
@@ -35913,7 +35921,7 @@ PrefabInstance:
       objectReference: {fileID: 1367423825}
     - target: {fileID: 7305932021564572236, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.6886792
       objectReference: {fileID: 0}
     - target: {fileID: 7305932021564572236, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Color.g
@@ -35921,7 +35929,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7305932021564572236, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Color.r
-      value: 0.60969925
+      value: 0.4186091
       objectReference: {fileID: 0}
     - target: {fileID: 7614724473534664062, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
