@@ -13,6 +13,7 @@ public class LazyBigus : Character
     int poisonCounter = 0;
     public GameObject beam;
     public BeamScript bScript;
+    private Coroutine poisonResetCoroutine;
 
     public override void Start()
     {
@@ -75,7 +76,7 @@ public class LazyBigus : Character
         enemy.TakeDamage(10,true);
         enemy.Knockback(13f, 0.5f, true);
         audioManager.PlaySFX(audioManager.beamHit, 1.8f);
-        StartCoroutine(Poison(2,2f,5));
+        StartCoroutine(Poison(1,2f,5));
     }
 
     private IEnumerator Poison(int damageAmount, float interval, int times)
@@ -89,7 +90,7 @@ public class LazyBigus : Character
             yield return new WaitForSeconds(interval);
 
             // Deal damage to the enemy
-            enemy.TakeDamage(damageAmount,false);
+            enemy.TakeDamageNoAnimation(damageAmount,false);
         }
         enemy.ActivatePoison(false);
     }
@@ -184,7 +185,7 @@ public class LazyBigus : Character
     {
         if(poisonCounter == 3)
         {
-            StartCoroutine(Poison(2,2f,2));
+            StartCoroutine(Poison(1,1f,4));
             poisonCounter = 0;
             return;
         }
@@ -215,9 +216,20 @@ public class LazyBigus : Character
                 poisonCounter++;
             }
         }
+        // Restart the poison reset coroutine
+        if (poisonResetCoroutine != null)
+        {
+            StopCoroutine(poisonResetCoroutine);
+        }
+        poisonResetCoroutine = StartCoroutine(ResetPoisonAfterDelay());
     }
 
-    
+    private IEnumerator ResetPoisonAfterDelay()
+    {
+        yield return new WaitForSeconds(5f); // Wait for 5 seconds
+        ResetPoisonStacks();
+        poisonCounter = 0; // Reset the poison counter
+    }
 
     private void ResetPoisonStacks()
     {

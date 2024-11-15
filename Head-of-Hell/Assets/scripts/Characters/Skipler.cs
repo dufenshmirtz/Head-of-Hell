@@ -157,6 +157,7 @@ public class Skipler : Character
         }
         colliders[3].enabled = false;
         colliders[4].enabled = false;
+        colliders[5].enabled = false;
 
         // Reset dash state
         dashHit = false;
