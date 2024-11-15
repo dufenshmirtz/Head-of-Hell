@@ -954,7 +954,7 @@ public abstract class Character : MonoBehaviour
 
     virtual public void TakeDamage(int dmg, bool blockable)
     {
-        if(chargeReset)
+        if (chargeReset)
         {
             stayDynamic();
             ignoreMovement = false;
@@ -1066,6 +1066,42 @@ public abstract class Character : MonoBehaviour
     public void Win()
     {
         animator.SetTrigger("Win");
+    }
+
+    virtual public void TakeDamageNoAnimation(int dmg, bool blockable)
+    {
+
+        if (ignoreDamage)
+        {
+            return;
+        }
+
+        if (isBlocking && blockable)
+        {
+            if (blockSound != null)
+            {
+                audioManager.PlaySFX(blockSound, audioManager.normalVol);
+            }           
+        }
+        else
+        {
+            if (damageShield)
+            {
+                damageShield = false;
+                shield.gameObject.SetActive(false);
+                return;
+            }
+            currHealth -= dmg;
+
+            healthbar.SetHealth(currHealth);
+
+            Debug.Log("Took " + dmg + " damage.");
+        }
+
+        if (currHealth <= 0)
+        {
+            Die();
+        }
     }
 
 

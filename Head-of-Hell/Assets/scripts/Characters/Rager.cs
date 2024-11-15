@@ -143,7 +143,7 @@ public class Rager : Character
 
         if (hitEnemy != null)
         {
-            enemy.TakeDamage(lightDamage, true);
+            enemy.TakeDamageNoAnimation(lightDamage, true);
             audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
         }
         else
