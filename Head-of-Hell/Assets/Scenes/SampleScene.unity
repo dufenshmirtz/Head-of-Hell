@@ -18040,6 +18040,7 @@ MonoBehaviour:
   bellPunch: {fileID: 8300000, guid: e79780db77cf1be4b9a85e63b7ed0692, type: 3}
   bellDash: {fileID: 8300000, guid: bcad5fac8e942784fbd369d3e400541d, type: 3}
   bellDashHit: {fileID: 8300000, guid: 09efd9d06a4056242ad125c29d3a3160, type: 3}
+  bellSpell: {fileID: 8300000, guid: a159b4e734aed7e4b860712c8fc90d94, type: 3}
   sytheDash: {fileID: 8300000, guid: 60cb94893b8ae0649aa26a01deee0881, type: 3}
   sytheSlash: {fileID: 8300000, guid: 550fde3fd77a551408a9fec2f673aefa, type: 3}
   sytheHit: {fileID: 8300000, guid: 88517911ae1b34c4185eb4b718c325f4, type: 3}
@@ -18066,6 +18067,10 @@ MonoBehaviour:
   volchSpit: {fileID: 8300000, guid: 21a3ceb954e2afd47981f0fadec98e02, type: 3}
   volchBiteSuccess: {fileID: 8300000, guid: 2d85ec46f54633f449fb9d0522bc2443, type: 3}
   volchBiteExtra: {fileID: 8300000, guid: 61e0b31583ddc2f4e8b6c40a17d70e64, type: 3}
+  skipWin: {fileID: 8300000, guid: eee410a3874a9dc43b842ba89fef0b63, type: 3}
+  skipPick: {fileID: 0}
+  gabaWin: {fileID: 0}
+  gabaPick: {fileID: 0}
   deathVolume: 3
   heavyAttackVolume: 1
   lightAttackVolume: 1

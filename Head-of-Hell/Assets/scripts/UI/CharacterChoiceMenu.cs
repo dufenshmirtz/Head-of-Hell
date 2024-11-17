@@ -155,6 +155,7 @@ public class CharacterChoiceMenu : MonoBehaviour
         if (name == "Skipler")
         {
             audiomanager.PlaySFX(audiomanager.dash, 1f);
+            //audiomanager.PlaySFX(audiomanager.skiplerPick, 2f);
         }
         if (name == "Vander")
         {

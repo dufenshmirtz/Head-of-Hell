@@ -50,8 +50,7 @@ public class Rager : Character
     override public void Spell()
     {
         animator.SetTrigger("Spell");
-         UsingAbility(cooldown);
-        ignoreDamage = true;
+        UsingAbility(cooldown);
     }
 
     public void DealComboDmg()
@@ -83,8 +82,7 @@ public class Rager : Character
             audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
             animator.SetBool("isUsingAbility", false);
             ResetQuickPunch();
-             OnCooldown(cooldown);
-            ignoreDamage = false;
+            OnCooldown(cooldown);
         }
 
     }
@@ -92,7 +90,6 @@ public class Rager : Character
     public void Startcombo()
     {
         animator.SetTrigger("Combo");
-        print("asskol");
     }
     public void FirstHit()
     {
@@ -126,8 +123,7 @@ public class Rager : Character
         ResetQuickPunch();
         animator.SetBool("ComboReady", false);
 
-         OnCooldown(cooldown);
-        ignoreDamage = false;
+        OnCooldown(cooldown);
 
     }
     #endregion

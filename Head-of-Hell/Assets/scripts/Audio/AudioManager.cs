@@ -54,9 +54,12 @@ public class AudioManager : MonoBehaviour
     public AudioClip skiplaHeavyHit;
     public AudioClip skiplaHeavyCharge;
     public AudioClip BigusHeavy;
+
     public AudioClip bellPunch;
     public AudioClip bellDash;
     public AudioClip bellDashHit;
+    public AudioClip bellSpell;
+
     public AudioClip sytheDash;
     public AudioClip sytheSlash;
     public AudioClip sytheHit;
@@ -71,6 +74,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip trailerSound;
     public AudioClip dearth;
     public AudioClip dramaticDrums;
+
     public AudioClip idleGlitch;
     public AudioClip jumpGlitch;
     public AudioClip dashGlitch;
@@ -79,10 +83,17 @@ public class AudioManager : MonoBehaviour
     public AudioClip heavyGlitch;
     public AudioClip heavyGlitchHit;
     public AudioClip nothitGlitch;
+
     public AudioClip volchBite;
     public AudioClip volchSpit;
     public AudioClip volchBiteSuccess;
     public AudioClip volchBiteExtra;
+
+    public AudioClip skipWin;
+    public AudioClip skipPick;
+    public AudioClip gabaWin;
+    public AudioClip gabaPick;
+
     //volumes
     public float deathVolume = 1.0f;
     public float heavyAttackVolume = 1.0f;
