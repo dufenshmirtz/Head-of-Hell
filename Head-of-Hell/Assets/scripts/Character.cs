@@ -125,6 +125,8 @@ public abstract class Character : MonoBehaviour
     protected AudioClip blockSound;
     protected AudioClip characterJump;
     protected AudioClip chargeHitSound;
+    protected AudioClip winQuip;
+
 
     protected string playerString;
 
@@ -671,6 +673,7 @@ public abstract class Character : MonoBehaviour
     public void UsingAbility(float cd)
     {
         casting = true;
+        ignoreDamage = true;
         knockable = false;
         animator.SetBool("Casting", true);
         EnemyAbilityBlock();
@@ -1065,6 +1068,10 @@ public abstract class Character : MonoBehaviour
 
     public void Win()
     {
+        if (winQuip != null)
+        {
+            audioManager.PlaySFX(winQuip, 2);
+        }
         animator.SetTrigger("Win");
     }
 

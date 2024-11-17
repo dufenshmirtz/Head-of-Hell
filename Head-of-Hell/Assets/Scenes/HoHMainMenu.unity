@@ -6574,6 +6574,7 @@ MonoBehaviour:
   bell: {fileID: 8300000, guid: e79780db77cf1be4b9a85e63b7ed0692, type: 3}
   fire: {fileID: 8300000, guid: f2d758e6c9d69d74f86a7ca36df2d3b7, type: 3}
   stageSound: {fileID: 8300000, guid: 29594e05b29e3b34d906c028c353e4a6, type: 3}
+  skiplerPick: {fileID: 8300000, guid: f3ede91ea6ac1cc46afb1ae5d062df03, type: 3}
   buttonClick: {fileID: 8300000, guid: 693754683b95e5b41b548ddad75347be, type: 3}
   startClick: {fileID: 8300000, guid: 6558d8fa5650c7941a67abf8ccc41da5, type: 3}
 --- !u!4 &344690515

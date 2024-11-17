@@ -79,7 +79,7 @@ public class Lithra : Character
                 StartCoroutine(enemy.Stun(0.8f));
             }
             audioManager.PlaySFX(audioManager.heavyattack, audioManager.heavyAttackVolume);
-            audioManager.PlaySFX(audioManager.bellPunch, audioManager.doubleVol);
+            audioManager.PlaySFX(audioManager.bellSpell, 1.5f);
         }
         else
         {
