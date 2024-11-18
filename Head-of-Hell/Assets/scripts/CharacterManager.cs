@@ -15,6 +15,7 @@ public class CharacterManager : MonoBehaviour
     public Color LazyBigusColor;
     public Color LithraColor;
     public Color ChibackColor;
+    public Color LupenColor;
 
     // Animator Controllers
     public RuntimeAnimatorController SteelagerAnimatorController;
@@ -25,6 +26,7 @@ public class CharacterManager : MonoBehaviour
     public RuntimeAnimatorController LazyBigusAnimatorController;
     public RuntimeAnimatorController LithraAnimatorController;
     public RuntimeAnimatorController ChibackAnimatorController;
+    public RuntimeAnimatorController LupenAnimatorController;
 
     Character character;
     Skipler skipler;
@@ -35,6 +37,7 @@ public class CharacterManager : MonoBehaviour
     Vander vander;
     Lithra lithra;
     Chiback chiback;
+    Lupen lupen;
     Animator animator;
 
     public CharacterManager enemyHandler;
@@ -119,6 +122,13 @@ public class CharacterManager : MonoBehaviour
                 animator = GetComponent<Animator>();
                 animator.runtimeAnimatorController = ChibackAnimatorController;
                 break;
+            case "Lupen":
+                lupen = this.gameObject.AddComponent<Lupen>();
+                character = lupen;
+                spriteRenderer.color = LupenColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = LupenAnimatorController;
+                break;
         }
     }
 
@@ -190,5 +200,76 @@ public class CharacterManager : MonoBehaviour
     {
         character.stayDynamic();
         character.ignoreUpdate = false;
+    }
+
+    public void ChangeCharacter(string characterName)
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // Assign character, color, and animator controller based on selection
+        switch (characterName)
+        {
+            case "Steelager":
+                steelager = this.gameObject.AddComponent<Steelager>();
+                character = steelager;
+                spriteRenderer.color = SteelagerColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = SteelagerAnimatorController;
+                break;
+            case "Vander":
+                vander = this.gameObject.AddComponent<Vander>();
+                character = vander;
+                spriteRenderer.color = VanderColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = VanderAnimatorController;
+                break;
+            case "Rager":
+                rager = this.gameObject.AddComponent<Rager>();
+                character = rager;
+                spriteRenderer.color = RagerColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = RagerAnimatorController;
+                break;
+            case "Skipler":
+                skipler = this.gameObject.AddComponent<Skipler>();
+                character = skipler;
+                spriteRenderer.color = SkiplerColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = SkiplerAnimatorController;
+                break;
+            case "Fin":
+                fin = this.gameObject.AddComponent<Fin>();
+                character = fin;
+                spriteRenderer.color = FinColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = FinAnimatorController;
+                break;
+            case "Lazy Bigus":
+                bigus = this.gameObject.AddComponent<LazyBigus>();
+                character = bigus;
+                spriteRenderer.color = LazyBigusColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = LazyBigusAnimatorController;
+                break;
+            case "Lithra":
+                lithra = this.gameObject.AddComponent<Lithra>();
+                character = lithra;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = LithraAnimatorController;
+                break;
+            case "Chiback":
+                chiback = this.gameObject.AddComponent<Chiback>();
+                character = chiback;
+                spriteRenderer.color = ChibackColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = ChibackAnimatorController;
+                break;
+            case "Lupen":
+                character = lupen;
+                spriteRenderer.color = LupenColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = LupenAnimatorController;
+                break;
+        }
     }
 }

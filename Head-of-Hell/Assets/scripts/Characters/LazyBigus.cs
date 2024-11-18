@@ -14,6 +14,7 @@ public class LazyBigus : Character
     public GameObject beam;
     public BeamScript bScript;
     private Coroutine poisonResetCoroutine;
+    public BulletScript bulletScript;
 
     public override void Start()
     {
@@ -127,6 +128,9 @@ public class LazyBigus : Character
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.velocity = new Vector2(transform.localScale.x * bulletSpeed, 0); // Shoots in the direction the character is facing
+
+        bulletScript=bullet.GetComponent<BulletScript>();
+        bulletScript.initiator = this;
 
         Destroy(bullet, 2f);
     }

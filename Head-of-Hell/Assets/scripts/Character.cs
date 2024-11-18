@@ -56,10 +56,10 @@ public abstract class Character : MonoBehaviour
     protected GameObject[] stages;
 
     //additional
-    bool isStatic = false;
-    bool casting = false;
-    bool canCast = true;
-    bool knocked = false;
+    protected bool isStatic = false;
+    protected bool casting = false;
+    protected bool canCast = true;
+    protected bool knocked = false;
     protected bool canRotate = true;
 
     //knockback
@@ -68,7 +68,7 @@ public abstract class Character : MonoBehaviour
     protected float KBCounter;
     protected float KBTotalTime;
     protected bool knockfromright;
-    bool knockbackXaxis;
+    protected bool knockbackXaxis;
     protected bool knockable = true;
 
     protected Transform attackPoint;
@@ -101,7 +101,7 @@ public abstract class Character : MonoBehaviour
     protected GameObject quickAttackIndicator;
     protected GameObject stun;
     protected GameObject shield;
-    private bool stunned = false;
+    protected bool stunned = false;
 
     //movement keys
     protected KeyCode up;
@@ -130,11 +130,11 @@ public abstract class Character : MonoBehaviour
 
     protected string playerString;
 
-    bool quickDisable = false;
-    bool heavyDisable = false;
-    bool blockDisable = false;
-    bool specialDisable = false;
-    bool chargeDisable = false;
+    protected bool quickDisable = false;
+    protected bool heavyDisable = false;
+    protected bool blockDisable = false;
+    protected bool specialDisable = false;
+    protected bool chargeDisable = false;
 
     //handling variables
     int grounds = 0;
@@ -144,6 +144,9 @@ public abstract class Character : MonoBehaviour
 
     protected bool controller = false;
     protected bool chargeReset = false;
+
+    protected bool jumpDisabled = false;
+
 
     #region Base
     public virtual void Start()
@@ -395,7 +398,7 @@ public abstract class Character : MonoBehaviour
         // Jumping
         if (Input.GetKeyDown(up) || Input.GetAxis("Vertical"+playerString) > 0.5f)
         {
-            if (isGrounded)
+            if (isGrounded && !jumpDisabled)
             {
                 Jump();
             }
@@ -951,6 +954,16 @@ public abstract class Character : MonoBehaviour
     {
         return enemy;
     }
+
+    public void SetEnemy(Character changeEnemy)
+    {
+        enemy=changeEnemy;
+    }
+
+    public bool AmICasting()
+    {
+        return casting;
+    }
     #endregion
 
     #region Passive and Damage
@@ -1150,6 +1163,11 @@ public abstract class Character : MonoBehaviour
     {
         blockDisabled = true;
         blockDisabledIndicator.gameObject.SetActive(true);
+    }
+
+    public void DisableJump(bool choice)
+    {
+        jumpDisabled = choice;
     }
 
     public void EnableBlock()
