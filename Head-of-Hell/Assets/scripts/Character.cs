@@ -1038,6 +1038,8 @@ public abstract class Character : MonoBehaviour
 
         ignoreDamage = true;
 
+        ActivateHealthBars(); //In case they are hidden
+
         enemy.Win();
         enemy.stayStatic();
 
@@ -1073,6 +1075,12 @@ public abstract class Character : MonoBehaviour
             audioManager.PlaySFX(winQuip, 2);
         }
         animator.SetTrigger("Win");
+    }
+
+    public void ActivateHealthBars()
+    {
+        healthbar.gameObject.SetActive(true);
+        enemy.healthbar.gameObject.SetActive(true);
     }
 
     virtual public void TakeDamageNoAnimation(int dmg, bool blockable)

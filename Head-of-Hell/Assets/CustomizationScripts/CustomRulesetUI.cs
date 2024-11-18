@@ -13,6 +13,7 @@ public class CustomRulesetUI : MonoBehaviour
     public Button speedButtonSlow, speedButtonNormal, speedButtonFast, speedButtonDoped;
     public Button quick, heavy, block, special, charge;
     public Button hideHealthButton;
+    public Button devToolsButton;
 
     //values
     private int rounds = 1;
@@ -22,6 +23,7 @@ public class CustomRulesetUI : MonoBehaviour
     private int playerSpeed = 4; // Default to "Slow"
     private bool quickDisabled = false, heavyDisabled = false, blockDisabled = false, specialDisabled = false, chargeDisabled = false;
     private bool hideHealth = false;
+    private bool devTools = false;
 
     void Start()
     {
@@ -35,10 +37,10 @@ public class CustomRulesetUI : MonoBehaviour
         powerupsNoButton.onClick.AddListener(() => SetPowerups(false));
 
         // Set up the button listeners for speed buttons
-        speedButtonSlow.onClick.AddListener(() => SetSpeed(2));
+        speedButtonSlow.onClick.AddListener(() => SetSpeed(3));
         speedButtonNormal.onClick.AddListener(() => SetSpeed(4));
-        speedButtonFast.onClick.AddListener(() => SetSpeed(6));
-        speedButtonDoped.onClick.AddListener(() => SetSpeed(8));
+        speedButtonFast.onClick.AddListener(() => SetSpeed(5));
+        speedButtonDoped.onClick.AddListener(() => SetSpeed(6));
 
         // Set up the button listeners for ability buttons
         quick.onClick.AddListener(() => ToggleAbility(ref quickDisabled, quick));
@@ -49,10 +51,13 @@ public class CustomRulesetUI : MonoBehaviour
 
         // Restrict health input to only integers
         healthInput.contentType = TMP_InputField.ContentType.IntegerNumber;
-        hideHealthButton.onClick.AddListener(() => ToggleHealth(ref hideHealth,hideHealthButton));
+        hideHealthButton.onClick.AddListener(() => ToggleButton(ref hideHealth,hideHealthButton));
+
+        devToolsButton.onClick.AddListener(() => ToggleButton(ref devTools, devToolsButton));
 
         // Set up the listener for save button
         saveButton.onClick.AddListener(SaveCustomRuleset);
+
     }
 
     public void Initialize(int slotNumber)
@@ -71,6 +76,7 @@ public class CustomRulesetUI : MonoBehaviour
             // Load speed and ability states (if they are part of your CustomRuleset)
             SetSpeed(ruleset.playerSpeed);
             SetAbilityStates(ruleset.quickDisabled, ruleset.heavyDisabled, ruleset.blockDisabled, ruleset.specialDisabled, ruleset.chargeDisabled);
+            SetDevTools(ruleset.devTools);
         }
         else
         {
@@ -82,6 +88,7 @@ public class CustomRulesetUI : MonoBehaviour
             SetHideHealth(false);
             SetSpeed(4);
             SetAbilityStates(false, false, false, false, false);
+            SetDevTools(false);
         }
     }
 
@@ -108,14 +115,20 @@ public class CustomRulesetUI : MonoBehaviour
         UpdateButtonVisual(hideHealthButton,hideHealth);
     }
 
+    private void SetDevTools(bool dev)
+    {
+        devTools = dev;
+        UpdateButtonVisual(devToolsButton, devTools);
+    }
+
     // Method to set player speed and update UI
     private void SetSpeed(int speedValue)
     {
         playerSpeed = speedValue;
-        speedButtonSlow.interactable = playerSpeed != 2;
+        speedButtonSlow.interactable = playerSpeed != 3;
         speedButtonNormal.interactable = playerSpeed != 4;
-        speedButtonFast.interactable = playerSpeed != 6;
-        speedButtonDoped.interactable = playerSpeed != 8;
+        speedButtonFast.interactable = playerSpeed != 5;
+        speedButtonDoped.interactable = playerSpeed != 6;
     }
 
     // Method to toggle abilities on and off and update UI
@@ -125,7 +138,7 @@ public class CustomRulesetUI : MonoBehaviour
         UpdateButtonVisual(button, abilityDisabled); // Update the button's visual state
     }
 
-    private void ToggleHealth(ref bool hide, Button button)
+    private void ToggleButton(ref bool hide, Button button)
     {
         hide = !hide; // Toggle the state
         UpdateButtonVisual(button, hide); // Update the button's visual state
@@ -180,7 +193,8 @@ public class CustomRulesetUI : MonoBehaviour
             heavyDisabled = heavyDisabled,
             blockDisabled = blockDisabled,
             specialDisabled = specialDisabled,
-            chargeDisabled = chargeDisabled
+            chargeDisabled = chargeDisabled,
+            devTools=devTools
         };
 
         RulesetManager.Instance.SaveCustomRuleset(selectedSlot, newRuleset);
