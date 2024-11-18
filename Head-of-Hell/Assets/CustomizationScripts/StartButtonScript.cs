@@ -23,6 +23,7 @@ public class StartButtonScript : MonoBehaviour
             ruleset.chargeDisabled = false;
             ruleset.specialDisabled = false;
             ruleset.hideHealth = false;
+            ruleset.devTools = false;
 
             // Save the ruleset data to PlayerPrefs as JSON
             string json = JsonUtility.ToJson(ruleset);
