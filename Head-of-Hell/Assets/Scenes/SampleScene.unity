@@ -1213,7 +1213,7 @@ PrefabInstance:
     - target: {fileID: 2553929291879454509, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 4472bf1853d25b646b8a7a447194f823, type: 2}
+      objectReference: {fileID: 9100000, guid: cf96a39428a2f394ab233d360aaa22d9, type: 2}
     - target: {fileID: 2584085071129299450, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: P1Name
       value: 
@@ -4769,6 +4769,7 @@ MonoBehaviour:
   LazyBigusColor: {r: 1, g: 1, b: 1, a: 1}
   LithraColor: {r: 1, g: 1, b: 1, a: 1}
   ChibackColor: {r: 1, g: 1, b: 1, a: 1}
+  LupenColor: {r: 0.8679245, g: 0.55268776, b: 0.55268776, a: 1}
   SteelagerAnimatorController: {fileID: 9100000, guid: bd34ee43096dbcc438b20dbac8fff3b0, type: 2}
   FinAnimatorController: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
   RagerAnimatorController: {fileID: 9100000, guid: f71edc3b937f70a43934b1b47dee5d0a, type: 2}
@@ -4777,6 +4778,7 @@ MonoBehaviour:
   LazyBigusAnimatorController: {fileID: 9100000, guid: fcf1fa8fd86258848a0b77f1de784bd0, type: 2}
   LithraAnimatorController: {fileID: 9100000, guid: 11d5595fa0b947043b07da91212a5678, type: 2}
   ChibackAnimatorController: {fileID: 9100000, guid: f1876437b15d78f4dbf917bee5810972, type: 2}
+  LupenAnimatorController: {fileID: 9100000, guid: cf96a39428a2f394ab233d360aaa22d9, type: 2}
   enemyHandler: {fileID: 1367423825}
   playerNum: 1
 --- !u!4 &221568191 stripped
@@ -16423,6 +16425,7 @@ MonoBehaviour:
   bulletSpeed: 35
   beam: {fileID: 1746473117}
   bScript: {fileID: 0}
+  bulletScript: {fileID: 0}
 --- !u!114 &770792714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29391,6 +29394,7 @@ MonoBehaviour:
   LazyBigusColor: {r: 1, g: 1, b: 1, a: 1}
   LithraColor: {r: 1, g: 1, b: 1, a: 1}
   ChibackColor: {r: 1, g: 1, b: 1, a: 1}
+  LupenColor: {r: 0.7169812, g: 0.47686014, b: 0.47686014, a: 1}
   SteelagerAnimatorController: {fileID: 9100000, guid: bd34ee43096dbcc438b20dbac8fff3b0, type: 2}
   FinAnimatorController: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
   RagerAnimatorController: {fileID: 9100000, guid: f71edc3b937f70a43934b1b47dee5d0a, type: 2}
@@ -29399,6 +29403,7 @@ MonoBehaviour:
   LazyBigusAnimatorController: {fileID: 9100000, guid: fcf1fa8fd86258848a0b77f1de784bd0, type: 2}
   LithraAnimatorController: {fileID: 9100000, guid: 11d5595fa0b947043b07da91212a5678, type: 2}
   ChibackAnimatorController: {fileID: 9100000, guid: f1876437b15d78f4dbf917bee5810972, type: 2}
+  LupenAnimatorController: {fileID: 9100000, guid: cf96a39428a2f394ab233d360aaa22d9, type: 2}
   enemyHandler: {fileID: 221568179}
   playerNum: 2
 --- !u!4 &1367423837 stripped
@@ -34040,6 +34045,7 @@ MonoBehaviour:
   bulletSpeed: 35
   beam: {fileID: 2099202209}
   bScript: {fileID: 0}
+  bulletScript: {fileID: 0}
 --- !u!1 &1608458667
 GameObject:
   m_ObjectHideFlags: 0
@@ -34497,6 +34503,7 @@ MonoBehaviour:
   bulletSpeed: 35
   beam: {fileID: 1608458667}
   bScript: {fileID: 0}
+  bulletScript: {fileID: 0}
 --- !u!114 &1609535760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35751,7 +35758,7 @@ PrefabInstance:
     - target: {fileID: 3775815256451319138, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 11d5595fa0b947043b07da91212a5678, type: 2}
+      objectReference: {fileID: 9100000, guid: f71edc3b937f70a43934b1b47dee5d0a, type: 2}
     - target: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_LocalScale.x
       value: -1
@@ -36563,6 +36570,7 @@ MonoBehaviour:
   bulletSpeed: 35
   beam: {fileID: 1288735581}
   bScript: {fileID: 0}
+  bulletScript: {fileID: 0}
 --- !u!1 &1676760847
 GameObject:
   m_ObjectHideFlags: 0
