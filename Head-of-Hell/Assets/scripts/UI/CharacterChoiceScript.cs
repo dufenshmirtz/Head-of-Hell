@@ -9,8 +9,8 @@ public class CharacterChoiceScript : MonoBehaviour
     public MainMenuMusic sfx;
     bool notSelected;
 
-    private int rows = 2;  // Number of rows in your button grid
-    private int cols = 3;  // Number of columns in your button grid
+    private int rows = 3;  // Number of rows in your button grid
+    private int cols = 4;  // Number of columns in your button grid
 
     private bool clickProcessed = false;
 
@@ -76,11 +76,11 @@ public class CharacterChoiceScript : MonoBehaviour
             // When both players picked, only navigate between "Back" (index 6) and "Start" (index 7)
             if (direction > 0)
             {
-                selectedIndex = selectedIndex == 6 ? 7 : 6;
+                selectedIndex = selectedIndex == 9 ? 10 : 9;
             }
             else
             {
-                selectedIndex = selectedIndex == 7 ? 6 : 7;
+                selectedIndex = selectedIndex == 10 ? 9 : 10;
             }
         }
         else
@@ -91,7 +91,7 @@ public class CharacterChoiceScript : MonoBehaviour
 
             selectedIndex = newIndex;
 
-            if (selectedIndex > 6)
+            if (selectedIndex > 9)
             {
                 selectedIndex = 0;
             }
@@ -102,7 +102,7 @@ public class CharacterChoiceScript : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(buttons[selectedIndex].gameObject);
         buttons[selectedIndex].Select();
 
-        if (!bothpicked && selectedIndex != 6 && selectedIndex != 7)
+        if (!bothpicked && selectedIndex != 9 && selectedIndex != 10)
         {
             characterChoiceMenu.HoveringIn(buttons[selectedIndex].name);
         }
@@ -119,11 +119,11 @@ public class CharacterChoiceScript : MonoBehaviour
             // When both players picked, only navigate between "Back" (index 6) and "Start" (index 7)
             if (direction > 0)
             {
-                selectedIndex = selectedIndex == 6 ? 7 : 6;
+                selectedIndex = selectedIndex == 9 ? 10 : 9;
             }
             else
             {
-                selectedIndex = selectedIndex == 7 ? 6 : 7;
+                selectedIndex = selectedIndex == 10 ? 9 : 10;
             }
         }
         else
@@ -136,7 +136,7 @@ public class CharacterChoiceScript : MonoBehaviour
             if (newIndex < currentRow * cols) newIndex = (currentRow + 1) * cols - 1;
 
             selectedIndex = newIndex;
-            if (selectedIndex > 6)
+            if (selectedIndex > 9)
             {
                 selectedIndex = 0;
             }
@@ -145,7 +145,7 @@ public class CharacterChoiceScript : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(buttons[selectedIndex].gameObject);
         buttons[selectedIndex].Select();
 
-        if (!bothpicked && selectedIndex != 6 && selectedIndex != 7)
+        if (!bothpicked && selectedIndex != 9 && selectedIndex != 10)
         {
             characterChoiceMenu.HoveringIn(buttons[selectedIndex].name);
         }
