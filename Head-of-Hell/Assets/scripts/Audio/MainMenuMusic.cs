@@ -28,6 +28,8 @@ public class MainMenuMusic : MonoBehaviour
     public AudioClip fire;
     public AudioClip stageSound;
 
+    public AudioClip skiplerPick;
+
     public AudioClip buttonClick;
     public AudioClip startClick;
 

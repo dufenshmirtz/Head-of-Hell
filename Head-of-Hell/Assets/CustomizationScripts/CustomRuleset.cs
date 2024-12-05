@@ -7,6 +7,7 @@ public class CustomRuleset
     public int health;              // Player's health
     public bool hideHealth;
     public int playerSpeed;         //Player'speed
+    public bool devTools;
 
     //Disable abilitiess
     public bool quickDisabled;       

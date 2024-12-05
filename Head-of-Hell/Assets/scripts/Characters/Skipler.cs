@@ -26,6 +26,7 @@ public class Skipler : Character
 
         characterJump = audioManager.jumpGlitch;
         chargeHitSound= audioManager.chargeGlitch;
+        //winQuip = audioManager.skipWin;
     }
 
     override public void Update()
@@ -147,7 +148,6 @@ public class Skipler : Character
         rb.gravityScale = ogGravityScale;
 
         // Re-enable damage and colliders
-        ignoreDamage = false;
         foreach (Collider2D collider in colliders)
         {
             if (collider != colliders[3])
@@ -157,6 +157,7 @@ public class Skipler : Character
         }
         colliders[3].enabled = false;
         colliders[4].enabled = false;
+        colliders[5].enabled = false;
 
         // Reset dash state
         dashHit = false;
@@ -164,7 +165,6 @@ public class Skipler : Character
 
         // Trigger cooldown
         OnCooldown(cooldown);
-        ignoreDamage = false;
     }
 
 

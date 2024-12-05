@@ -173,6 +173,7 @@ public class Chiback : Character
             {
                 enemy.Knockback(15f, 0.8f, true);
                 enemy.DisableBlock(true);
+                enemy.DisableJump(true);
                 StartCoroutine(ResetBlockability());
             }
         }
@@ -197,6 +198,7 @@ public class Chiback : Character
         yield return new WaitForSeconds(jumpDuration+0.1f);
 
         enemy.EnableBlock();
+        enemy.DisableJump(false);
     }
 
     #endregion

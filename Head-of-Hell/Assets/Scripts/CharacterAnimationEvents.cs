@@ -11,6 +11,7 @@ public class CharacterAnimationEvents : MonoBehaviour
     Vander vander;
     Lithra lithra;
     Chiback chiback;
+    Lupen lupen;
 
     //General
     void Start()
@@ -187,6 +188,40 @@ public class CharacterAnimationEvents : MonoBehaviour
         chiback.DealFireDamage();
     }
 
-    
-    //sth
+    //Lupen
+    public void TransformationEvent()
+    {
+        lupen = (Lupen)character;
+        lupen.Transformation();
+    }
+
+    public void DealWipDamageEvent()
+    {
+        lupen = (Lupen)character;
+        lupen.DealWipDamage();
+    }
+
+    public void ChangeCharacterEvents(int mode)
+    {
+        // Get all Character components attached to this GameObject
+        Character[] characters = GetComponents<Character>();
+
+        if (characters.Length > 0)
+        {
+            if (mode == 1)
+            {
+                // Always pick the last Character component
+                character = characters[characters.Length - 1];
+            }
+            else
+            {
+                character = characters[0];
+            }
+            print(character+" kolos");
+        }
+        else
+        {
+            Debug.LogWarning("No Character components found on this GameObject.");
+        }
+    }
 }
