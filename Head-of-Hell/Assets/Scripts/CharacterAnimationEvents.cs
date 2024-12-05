@@ -195,6 +195,12 @@ public class CharacterAnimationEvents : MonoBehaviour
         lupen.Transformation();
     }
 
+    public void DealWipDamageEvent()
+    {
+        lupen = (Lupen)character;
+        lupen.DealWipDamage();
+    }
+
     public void ChangeCharacterEvents(int mode)
     {
         // Get all Character components attached to this GameObject

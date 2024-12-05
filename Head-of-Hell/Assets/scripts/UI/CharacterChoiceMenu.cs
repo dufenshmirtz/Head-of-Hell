@@ -35,7 +35,6 @@ public class CharacterChoiceMenu : MonoBehaviour
 
     public void OnCharacterButtonClicked(Button button)
     {
-        Debug.Log("-1-");
 
         if (picked)
         {
