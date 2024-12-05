@@ -5,6 +5,7 @@ using UnityEngine;
 public class BulletScript : MonoBehaviour
 {
     private bool hasHit = false;
+    public LazyBigus initiator;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,12 +26,10 @@ public class BulletScript : MonoBehaviour
             Destroy(gameObject);
             Debug.Log("BDestroyed");
             Character character = other.GetComponent<Character>();
-            LazyBigus enemy;
             if (character != null)
             {
                 character.TakeDamage(3, true);
-                enemy = (LazyBigus)character.GetEnemy();
-                enemy.StackPoison();
+                initiator.StackPoison();
             }
         }
     }

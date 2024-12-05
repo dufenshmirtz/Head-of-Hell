@@ -12,18 +12,32 @@ public class CharacterResources : MonoBehaviour
     public Transform shootinPoint;
     public Transform bulletParent;
 
+    //Lithra
     public Transform bellPoint;
     public Transform bellStunPoint;
 
+    //Chiback
     public Transform mirrorFireAttackPoint;
     public Transform fireAttackPoint;
 
+    //Steelager
     public Transform explosionPoint;
 
+    //Volch
     public Transform firePoint;
     public GameObject beam;
 
+    //skipler
     public GameObject skiplerDouble;
     public Transform skiplerPoint;
+
+    //Lupen
+    public Transform wipPoint;
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(wipPoint.position, 1f);
+
+    }
 
 }

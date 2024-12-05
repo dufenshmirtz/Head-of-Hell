@@ -13,8 +13,23 @@ public class CountdownManager : MonoBehaviour
 
     void Start()
     {
-        // Start the countdown as soon as the scene loads
-        StartCoroutine(StartCountdown());
+        string json = PlayerPrefs.GetString("SelectedRuleset", null);
+
+        if (!string.IsNullOrEmpty(json))
+        {
+            // Convert the JSON string back to a CustomRuleset object
+            CustomRuleset loadedRuleset = JsonUtility.FromJson<CustomRuleset>(json);
+
+            if (!loadedRuleset.devTools)
+            {
+                // Start the countdown as soon as the scene loads,and if its not disabled by dev tools
+                StartCoroutine(StartCountdown());
+            }
+            else
+            {
+                audioManager.PlayMusic();
+            }
+        }         
     }
 
     // Coroutine to handle the countdown

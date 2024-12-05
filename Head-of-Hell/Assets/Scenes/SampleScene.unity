@@ -1213,7 +1213,7 @@ PrefabInstance:
     - target: {fileID: 2553929291879454509, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 4472bf1853d25b646b8a7a447194f823, type: 2}
+      objectReference: {fileID: 9100000, guid: cf96a39428a2f394ab233d360aaa22d9, type: 2}
     - target: {fileID: 2584085071129299450, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: P1Name
       value: 
@@ -1375,6 +1375,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1308555820}
     - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: wipPoint
+      value: 
+      objectReference: {fileID: 1250506315}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: bellPoint
       value: 
       objectReference: {fileID: 1746435904}
@@ -1424,6 +1428,9 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: 8
+      addedObject: {fileID: 1250506315}
+    - targetCorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      insertIndex: 9
       addedObject: {fileID: 100841901}
     - targetCorrespondingSourceObject: {fileID: 8850850641682188571, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: 2
@@ -2951,6 +2958,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 371476597}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &168730420
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 168730421}
+  m_Layer: 8
+  m_Name: wipPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &168730421
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 168730420}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.78, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1367423837}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &169729477
 GameObject:
   m_ObjectHideFlags: 0
@@ -3882,6 +3920,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &184793121
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -4769,6 +4808,8 @@ MonoBehaviour:
   LazyBigusColor: {r: 1, g: 1, b: 1, a: 1}
   LithraColor: {r: 1, g: 1, b: 1, a: 1}
   ChibackColor: {r: 1, g: 1, b: 1, a: 1}
+  LupenColor: {r: 0.06951761, g: 0, b: 1, a: 1}
+  LupenSpiritColor: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
   SteelagerAnimatorController: {fileID: 9100000, guid: bd34ee43096dbcc438b20dbac8fff3b0, type: 2}
   FinAnimatorController: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
   RagerAnimatorController: {fileID: 9100000, guid: f71edc3b937f70a43934b1b47dee5d0a, type: 2}
@@ -4777,6 +4818,7 @@ MonoBehaviour:
   LazyBigusAnimatorController: {fileID: 9100000, guid: fcf1fa8fd86258848a0b77f1de784bd0, type: 2}
   LithraAnimatorController: {fileID: 9100000, guid: 11d5595fa0b947043b07da91212a5678, type: 2}
   ChibackAnimatorController: {fileID: 9100000, guid: f1876437b15d78f4dbf917bee5810972, type: 2}
+  LupenAnimatorController: {fileID: 9100000, guid: cf96a39428a2f394ab233d360aaa22d9, type: 2}
   enemyHandler: {fileID: 1367423825}
   playerNum: 1
 --- !u!4 &221568191 stripped
@@ -7731,6 +7773,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &355700675
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -8617,6 +8660,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &371476604
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -10057,6 +10101,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &448782100
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -11268,6 +11313,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &541449330
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -12192,6 +12238,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &559944329
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -13962,6 +14009,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &627431773
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -15389,6 +15437,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &677239677
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -16423,6 +16472,7 @@ MonoBehaviour:
   bulletSpeed: 35
   beam: {fileID: 1746473117}
   bScript: {fileID: 0}
+  bulletScript: {fileID: 0}
 --- !u!114 &770792714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16498,6 +16548,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &770792717
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -18040,6 +18091,7 @@ MonoBehaviour:
   bellPunch: {fileID: 8300000, guid: e79780db77cf1be4b9a85e63b7ed0692, type: 3}
   bellDash: {fileID: 8300000, guid: bcad5fac8e942784fbd369d3e400541d, type: 3}
   bellDashHit: {fileID: 8300000, guid: 09efd9d06a4056242ad125c29d3a3160, type: 3}
+  bellSpell: {fileID: 8300000, guid: a159b4e734aed7e4b860712c8fc90d94, type: 3}
   sytheDash: {fileID: 8300000, guid: 60cb94893b8ae0649aa26a01deee0881, type: 3}
   sytheSlash: {fileID: 8300000, guid: 550fde3fd77a551408a9fec2f673aefa, type: 3}
   sytheHit: {fileID: 8300000, guid: 88517911ae1b34c4185eb4b718c325f4, type: 3}
@@ -18066,6 +18118,10 @@ MonoBehaviour:
   volchSpit: {fileID: 8300000, guid: 21a3ceb954e2afd47981f0fadec98e02, type: 3}
   volchBiteSuccess: {fileID: 8300000, guid: 2d85ec46f54633f449fb9d0522bc2443, type: 3}
   volchBiteExtra: {fileID: 8300000, guid: 61e0b31583ddc2f4e8b6c40a17d70e64, type: 3}
+  skipWin: {fileID: 8300000, guid: eee410a3874a9dc43b842ba89fef0b63, type: 3}
+  skipPick: {fileID: 0}
+  gabaWin: {fileID: 0}
+  gabaPick: {fileID: 0}
   deathVolume: 3
   heavyAttackVolume: 1
   lightAttackVolume: 1
@@ -19642,6 +19698,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &892172698
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -26520,6 +26577,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &1228552614
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -26963,6 +27021,37 @@ Transform:
   - {fileID: 154136936}
   - {fileID: 2052386261}
   m_Father: {fileID: 541449325}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1250506314
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1250506315}
+  m_Layer: 8
+  m_Name: wipPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1250506315
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1250506314}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.78, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 221568191}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1250537791
 PrefabInstance:
@@ -27947,6 +28036,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &1300380416
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -29386,6 +29476,8 @@ MonoBehaviour:
   LazyBigusColor: {r: 1, g: 1, b: 1, a: 1}
   LithraColor: {r: 1, g: 1, b: 1, a: 1}
   ChibackColor: {r: 1, g: 1, b: 1, a: 1}
+  LupenColor: {r: 0.07058824, g: 0, b: 1, a: 1}
+  LupenSpiritColor: {r: 0.67058825, g: 0.67058825, b: 0.67058825, a: 1}
   SteelagerAnimatorController: {fileID: 9100000, guid: bd34ee43096dbcc438b20dbac8fff3b0, type: 2}
   FinAnimatorController: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
   RagerAnimatorController: {fileID: 9100000, guid: f71edc3b937f70a43934b1b47dee5d0a, type: 2}
@@ -29394,6 +29486,7 @@ MonoBehaviour:
   LazyBigusAnimatorController: {fileID: 9100000, guid: fcf1fa8fd86258848a0b77f1de784bd0, type: 2}
   LithraAnimatorController: {fileID: 9100000, guid: 11d5595fa0b947043b07da91212a5678, type: 2}
   ChibackAnimatorController: {fileID: 9100000, guid: f1876437b15d78f4dbf917bee5810972, type: 2}
+  LupenAnimatorController: {fileID: 9100000, guid: cf96a39428a2f394ab233d360aaa22d9, type: 2}
   enemyHandler: {fileID: 221568179}
   playerNum: 2
 --- !u!4 &1367423837 stripped
@@ -31168,6 +31261,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!114 &1478511392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32421,6 +32515,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &1531342475
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -34035,6 +34130,7 @@ MonoBehaviour:
   bulletSpeed: 35
   beam: {fileID: 2099202209}
   bScript: {fileID: 0}
+  bulletScript: {fileID: 0}
 --- !u!1 &1608458667
 GameObject:
   m_ObjectHideFlags: 0
@@ -34492,6 +34588,7 @@ MonoBehaviour:
   bulletSpeed: 35
   beam: {fileID: 1608458667}
   bScript: {fileID: 0}
+  bulletScript: {fileID: 0}
 --- !u!114 &1609535760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34567,6 +34664,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &1609535762
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -35746,7 +35844,7 @@ PrefabInstance:
     - target: {fileID: 3775815256451319138, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 11d5595fa0b947043b07da91212a5678, type: 2}
+      objectReference: {fileID: 9100000, guid: cf96a39428a2f394ab233d360aaa22d9, type: 2}
     - target: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_LocalScale.x
       value: -1
@@ -35799,6 +35897,10 @@ PrefabInstance:
       propertyPath: beam
       value: 
       objectReference: {fileID: 1961905756}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: wipPoint
+      value: 
+      objectReference: {fileID: 168730421}
     - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: bellPoint
       value: 
@@ -35945,6 +36047,9 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: 8
+      addedObject: {fileID: 168730421}
+    - targetCorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: 9
       addedObject: {fileID: 989350883}
     - targetCorrespondingSourceObject: {fileID: 4307065134795609038, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: 2
@@ -36558,6 +36663,7 @@ MonoBehaviour:
   bulletSpeed: 35
   beam: {fileID: 1288735581}
   bScript: {fileID: 0}
+  bulletScript: {fileID: 0}
 --- !u!1 &1676760847
 GameObject:
   m_ObjectHideFlags: 0
@@ -37898,6 +38004,7 @@ MonoBehaviour:
   beam: {fileID: 0}
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
 --- !u!70 &1753174037
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

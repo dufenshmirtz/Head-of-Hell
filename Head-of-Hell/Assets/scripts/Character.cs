@@ -56,10 +56,10 @@ public abstract class Character : MonoBehaviour
     protected GameObject[] stages;
 
     //additional
-    bool isStatic = false;
-    bool casting = false;
-    bool canCast = true;
-    bool knocked = false;
+    protected bool isStatic = false;
+    protected bool casting = false;
+    protected bool canCast = true;
+    protected bool knocked = false;
     protected bool canRotate = true;
 
     //knockback
@@ -68,7 +68,7 @@ public abstract class Character : MonoBehaviour
     protected float KBCounter;
     protected float KBTotalTime;
     protected bool knockfromright;
-    bool knockbackXaxis;
+    protected bool knockbackXaxis;
     protected bool knockable = true;
 
     protected Transform attackPoint;
@@ -101,7 +101,7 @@ public abstract class Character : MonoBehaviour
     protected GameObject quickAttackIndicator;
     protected GameObject stun;
     protected GameObject shield;
-    private bool stunned = false;
+    protected bool stunned = false;
 
     //movement keys
     protected KeyCode up;
@@ -125,14 +125,16 @@ public abstract class Character : MonoBehaviour
     protected AudioClip blockSound;
     protected AudioClip characterJump;
     protected AudioClip chargeHitSound;
+    protected AudioClip winQuip;
+
 
     protected string playerString;
 
-    bool quickDisable = false;
-    bool heavyDisable = false;
-    bool blockDisable = false;
-    bool specialDisable = false;
-    bool chargeDisable = false;
+    protected bool quickDisable = false;
+    protected bool heavyDisable = false;
+    protected bool blockDisable = false;
+    protected bool specialDisable = false;
+    protected bool chargeDisable = false;
 
     //handling variables
     int grounds = 0;
@@ -142,6 +144,9 @@ public abstract class Character : MonoBehaviour
 
     protected bool controller = false;
     protected bool chargeReset = false;
+
+    protected bool jumpDisabled = false;
+
 
     #region Base
     public virtual void Start()
@@ -272,8 +277,13 @@ public abstract class Character : MonoBehaviour
         //self knockback mechanic
         if (knockable)
         {
+            if(playerNum == 1)
+            {
+                print(KBCounter);
+            }
             if (KBCounter > 0)
             {
+                print("***Update");
                 if (knockfromright == true)
                 {
                     if (!knockbackXaxis)
@@ -393,7 +403,7 @@ public abstract class Character : MonoBehaviour
         // Jumping
         if (Input.GetKeyDown(up) || Input.GetAxis("Vertical"+playerString) > 0.5f)
         {
-            if (isGrounded)
+            if (isGrounded && !jumpDisabled)
             {
                 Jump();
             }
@@ -476,15 +486,6 @@ public abstract class Character : MonoBehaviour
         }*/
 
     }
-
-
-    /*private void OnDrawGizmosSelected()
-    {
-        Gizmos.DrawWireSphere(bellPoint.position, attackRange * 2);
-        Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
-        //Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
-
-    }*/
 
     #endregion
 
@@ -671,6 +672,7 @@ public abstract class Character : MonoBehaviour
     public void UsingAbility(float cd)
     {
         casting = true;
+        ignoreDamage = true;
         knockable = false;
         animator.SetBool("Casting", true);
         EnemyAbilityBlock();
@@ -688,6 +690,7 @@ public abstract class Character : MonoBehaviour
     #region Knockback
     public void Knockback(float force, float time, bool axis)
     {
+        print("***function");
         if (knockable)
         {
             knockbackXaxis = axis;
@@ -705,7 +708,6 @@ public abstract class Character : MonoBehaviour
             KBForce = force;
             KBCounter = time;
             knockfromright = enemyOnRight;
-
         }
     }
 
@@ -948,13 +950,23 @@ public abstract class Character : MonoBehaviour
     {
         return enemy;
     }
+
+    public void SetEnemy(Character changeEnemy)
+    {
+        enemy=changeEnemy;
+    }
+
+    public bool AmICasting()
+    {
+        return casting;
+    }
     #endregion
 
     #region Passive and Damage
 
     virtual public void TakeDamage(int dmg, bool blockable)
     {
-        if(chargeReset)
+        if (chargeReset)
         {
             stayDynamic();
             ignoreMovement = false;
@@ -1035,6 +1047,8 @@ public abstract class Character : MonoBehaviour
 
         ignoreDamage = true;
 
+        ActivateHealthBars(); //In case they are hidden
+
         enemy.Win();
         enemy.stayStatic();
 
@@ -1065,7 +1079,53 @@ public abstract class Character : MonoBehaviour
 
     public void Win()
     {
+        if (winQuip != null)
+        {
+            audioManager.PlaySFX(winQuip, 2);
+        }
         animator.SetTrigger("Win");
+    }
+
+    public void ActivateHealthBars()
+    {
+        healthbar.gameObject.SetActive(true);
+        enemy.healthbar.gameObject.SetActive(true);
+    }
+
+    virtual public void TakeDamageNoAnimation(int dmg, bool blockable)
+    {
+
+        if (ignoreDamage)
+        {
+            return;
+        }
+
+        if (isBlocking && blockable)
+        {
+            if (blockSound != null)
+            {
+                audioManager.PlaySFX(blockSound, audioManager.normalVol);
+            }           
+        }
+        else
+        {
+            if (damageShield)
+            {
+                damageShield = false;
+                shield.gameObject.SetActive(false);
+                return;
+            }
+            currHealth -= dmg;
+
+            healthbar.SetHealth(currHealth);
+
+            Debug.Log("Took " + dmg + " damage.");
+        }
+
+        if (currHealth <= 0)
+        {
+            Die();
+        }
     }
 
 
@@ -1080,7 +1140,12 @@ public abstract class Character : MonoBehaviour
         ignoreMovement = false;
     }
 
-    public IEnumerator Stun(float time)
+    public void Stun(float time)
+    {
+        StartCoroutine(StunCoroutine(time));
+    }
+
+    public IEnumerator StunCoroutine(float time)
     {
         StopCHarge();
 
@@ -1094,11 +1159,34 @@ public abstract class Character : MonoBehaviour
         stun.gameObject.SetActive(false);
     }
 
+    public void Slow(float time)
+    {
+        StartCoroutine(SlowCoroutine(time));
+    }
+
+    public IEnumerator SlowCoroutine(float time)
+    {
+        StopCHarge();
+
+        stun.gameObject.SetActive(true);
+        moveSpeed = heavySpeed;
+
+        yield return new WaitForSeconds(time);
+
+        moveSpeed = OGMoveSpeed;
+        stun.gameObject.SetActive(false);
+    }
+
 
     public void DisableBlock(bool whileKnocked)
     {
         blockDisabled = true;
         blockDisabledIndicator.gameObject.SetActive(true);
+    }
+
+    public void DisableJump(bool choice)
+    {
+        jumpDisabled = choice;
     }
 
     public void EnableBlock()
@@ -1145,6 +1233,11 @@ public abstract class Character : MonoBehaviour
     public bool IsEnemyClose()
     {
         return Vector3.Distance(this.transform.position, enemy.transform.position) <= 3f;
+    }
+
+    public int GetCurrentHealth()
+    {
+        return currHealth;
     }
     #endregion
 
