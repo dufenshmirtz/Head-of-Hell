@@ -76,7 +76,7 @@ public class Lithra : Character
             
             if (bellStunPoint != null)
             {
-                StartCoroutine(enemy.Stun(0.8f));
+                enemy.Stun(0.8f);
             }
             audioManager.PlaySFX(audioManager.heavyattack, audioManager.heavyAttackVolume);
             audioManager.PlaySFX(audioManager.bellSpell, 1.5f);
@@ -151,7 +151,7 @@ public class Lithra : Character
             {
                 audioManager.PlaySFX(audioManager.bellDashHit, 1f);
                 enemy.TakeDamage(3, true);
-                StartCoroutine(enemy.Stun(0.5f));
+                enemy.Stun(0.5f);
 
                 // Calculate move direction again after hitting (keyboard or controller)
                 float moveDirection2 = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : Input.GetAxis("Horizontal" + playerString));
@@ -233,7 +233,7 @@ public class Lithra : Character
     {
         if (StunChance())
         {
-            StartCoroutine(enemy.Stun(0.8f));
+            enemy.Stun(0.8f);
         }
     }
     bool StunChance()

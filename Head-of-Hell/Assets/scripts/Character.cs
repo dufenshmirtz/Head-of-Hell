@@ -277,8 +277,13 @@ public abstract class Character : MonoBehaviour
         //self knockback mechanic
         if (knockable)
         {
+            if(playerNum == 1)
+            {
+                print(KBCounter);
+            }
             if (KBCounter > 0)
             {
+                print("***Update");
                 if (knockfromright == true)
                 {
                     if (!knockbackXaxis)
@@ -481,15 +486,6 @@ public abstract class Character : MonoBehaviour
         }*/
 
     }
-
-
-    /*private void OnDrawGizmosSelected()
-    {
-        Gizmos.DrawWireSphere(bellPoint.position, attackRange * 2);
-        Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
-        //Gizmos.DrawWireSphere(bellStunPoint.position, attackRange / 3);
-
-    }*/
 
     #endregion
 
@@ -694,6 +690,7 @@ public abstract class Character : MonoBehaviour
     #region Knockback
     public void Knockback(float force, float time, bool axis)
     {
+        print("***function");
         if (knockable)
         {
             knockbackXaxis = axis;
@@ -711,7 +708,6 @@ public abstract class Character : MonoBehaviour
             KBForce = force;
             KBCounter = time;
             knockfromright = enemyOnRight;
-
         }
     }
 
@@ -1144,7 +1140,12 @@ public abstract class Character : MonoBehaviour
         ignoreMovement = false;
     }
 
-    public IEnumerator Stun(float time)
+    public void Stun(float time)
+    {
+        StartCoroutine(StunCoroutine(time));
+    }
+
+    public IEnumerator StunCoroutine(float time)
     {
         StopCHarge();
 
@@ -1155,6 +1156,24 @@ public abstract class Character : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         stunned = false;
+        stun.gameObject.SetActive(false);
+    }
+
+    public void Slow(float time)
+    {
+        StartCoroutine(SlowCoroutine(time));
+    }
+
+    public IEnumerator SlowCoroutine(float time)
+    {
+        StopCHarge();
+
+        stun.gameObject.SetActive(true);
+        moveSpeed = heavySpeed;
+
+        yield return new WaitForSeconds(time);
+
+        moveSpeed = OGMoveSpeed;
         stun.gameObject.SetActive(false);
     }
 
@@ -1214,6 +1233,11 @@ public abstract class Character : MonoBehaviour
     public bool IsEnemyClose()
     {
         return Vector3.Distance(this.transform.position, enemy.transform.position) <= 3f;
+    }
+
+    public int GetCurrentHealth()
+    {
+        return currHealth;
     }
     #endregion
 

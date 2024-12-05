@@ -31,4 +31,13 @@ public class CharacterResources : MonoBehaviour
     public GameObject skiplerDouble;
     public Transform skiplerPoint;
 
+    //Lupen
+    public Transform wipPoint;
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(wipPoint.position, 1f);
+
+    }
+
 }

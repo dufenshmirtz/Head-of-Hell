@@ -1,7 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
-using UnityEditor.PackageManager;
-using UnityEditor.Playables;
+//using UnityEditor.PackageManager;
+//using UnityEditor.Playables;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.UIElements.Experimental;
@@ -16,6 +16,8 @@ public class LupenSpirit : MonoBehaviour
     public CharacterManager characterChoiceHandler;
     public Animator animator;
     public CharacterAnimationEvents cEvents;
+    public int whipDamage,robberyCounter;
+    public Character enemy;
 
     public void Start()
     {
@@ -31,7 +33,7 @@ public class LupenSpirit : MonoBehaviour
         {
             lupen.enabled=true;
             lupenInFormSpell = false;
-            lupen.ReturnToLupen();
+            lupen.ReturnToLupen(whipDamage,robberyCounter);
         }
 
         if ((Input.GetKeyDown(ability) || (controller && controller && Input.GetButtonDown("Spell" + playerString)))&& lupen.isActiveAndEnabled==false)
