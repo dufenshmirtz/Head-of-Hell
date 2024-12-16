@@ -21,14 +21,13 @@ public class LupenSpirit : MonoBehaviour
 
     public void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
 
     void Update()
     {
-        animator = GetComponent<Animator>();
-
+        
         if (lupenInFormSpell && !animator.GetBool("Casting"))
         {
             lupen.enabled=true;
@@ -36,7 +35,7 @@ public class LupenSpirit : MonoBehaviour
             lupen.ReturnToLupen(whipDamage,robberyCounter);
         }
 
-        if ((Input.GetKeyDown(ability) || (controller && controller && Input.GetButtonDown("Spell" + playerString)))&& lupen.isActiveAndEnabled==false)
+        if ((Input.GetKeyDown(ability) || (controller && Input.GetButtonDown("Spell" + playerString)))&& lupen.isActiveAndEnabled==false)
         {
             StartCoroutine(SetLupenInFormSpellAfterDelay(1f));
         }
