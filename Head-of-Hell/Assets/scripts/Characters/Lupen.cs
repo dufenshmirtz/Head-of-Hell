@@ -94,6 +94,7 @@ public class Lupen : Character
         characterChoiceHandler.ChangeCharacter(randomCharacter);
         cEvents.ChangeCharacterEvents(1);
         stayDynamic();
+        enemy.ChangeEnemy(characterChoiceHandler.CharacterChoice(1));
         //SaveValues and change form
         spirit.whipDamage = wipDamage;
         spirit.robberyCounter=robberyCountter;
@@ -107,6 +108,7 @@ public class Lupen : Character
         RemoveLastAttachedScript();
         characterChoiceHandler.ChangeCharacter("Lupen");
         cEvents.ChangeCharacterEvents(2);
+        enemy.ChangeEnemy(characterChoiceHandler.CharacterChoice(1));
         OnCooldown(cooldown);
     }
 
@@ -154,7 +156,8 @@ public class Lupen : Character
         {
             enemy.TakeDamage(wipDamage, true);
             Robbed();
-            enemy.Slow(1.5f);
+            enemy.Slow(1.5f,1f);
+            StartCoroutine(SpeedUpCoroutine(1.5f,1f));
             audioManager.PlaySFX(audioManager.counterSucces, audioManager.doubleVol);
         }
         else
@@ -162,6 +165,16 @@ public class Lupen : Character
             audioManager.PlaySFX(audioManager.stab, audioManager.swooshVolume);
         }
 
+    }
+
+    public IEnumerator SpeedUpCoroutine(float time, float amount)
+    {
+
+        moveSpeed = moveSpeed + amount;
+
+        yield return new WaitForSeconds(time);
+
+        moveSpeed = OGMoveSpeed;
     }
 
     IEnumerator ResetWip()

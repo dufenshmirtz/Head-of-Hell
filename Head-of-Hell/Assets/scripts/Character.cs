@@ -1159,17 +1159,16 @@ public abstract class Character : MonoBehaviour
         stun.gameObject.SetActive(false);
     }
 
-    public void Slow(float time)
+    public void Slow(float time,float amount)
     {
-        StartCoroutine(SlowCoroutine(time));
+        StartCoroutine(SlowCoroutine(time,amount));
     }
 
-    public IEnumerator SlowCoroutine(float time)
+    public IEnumerator SlowCoroutine(float time, float amount)
     {
-        StopCHarge();
 
         stun.gameObject.SetActive(true);
-        moveSpeed = heavySpeed;
+        moveSpeed = moveSpeed-amount;
 
         yield return new WaitForSeconds(time);
 
@@ -1295,6 +1294,11 @@ public abstract class Character : MonoBehaviour
             currHealth = maxHealth;
         }
         healthbar.SetHealth(currHealth);
+    }
+
+    public void ChangeEnemy(Character newEnemy)
+    {
+        enemy = newEnemy;
     }
 
     #endregion
