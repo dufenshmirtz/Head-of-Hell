@@ -65,10 +65,6 @@ public class CharacterManager : MonoBehaviour
 
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
-        if (playerNum == 1) //TESTING
-        {
-            characterName = "Lupen";
-        }
         
 
         // Assign character, color, and animator controller based on selection
