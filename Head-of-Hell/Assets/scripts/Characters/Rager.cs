@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Rager : Character
@@ -90,14 +91,30 @@ public class Rager : Character
     public void Startcombo()
     {
         animator.SetTrigger("Combo");
+
+        StartCoroutine(DealComboDamageOverTime(2f, 15));
     }
-    public void FirstHit()
+
+    private IEnumerator DealComboDamageOverTime(float totalDuration, int totalHits)
+    {
+        float delayBetweenHits = totalDuration / totalHits; // Calculate delay between hits
+
+        for (int i = 0; i < totalHits; i++)
+        {
+            if (enemy != null) // Ensure enemy is not null
+            {
+                enemy.TakeDamage(1, false);
+            }
+            yield return new WaitForSeconds(delayBetweenHits); // Wait before the next hit
+        }
+    }
+    public void FirstHit() //old and useless remove
     {
         enemy.GetComponent<Character>().TakeDamage(hit1Damage, true); //--here
         audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
     }
 
-    public void SecondHit()
+    public void SecondHit() //old and useless remove
     {
         enemy.GetComponent<Character>().TakeDamage(hit2Damage, true); //--here
         audioManager.PlaySFX(audioManager.heavyattack, audioManager.lightAttackVolume);
