@@ -14,6 +14,7 @@ public class Lupen : Character
     bool wipReady = true;
     Transform wipPoint;
     int robberyCountter=0;
+    Character stolenCharacter;
 
     public float hitBoxWidth = 2f; // Length in the X-axis
     public float hitBoxHeight = 0.5f; // Thinness in the Y-axi
@@ -34,6 +35,8 @@ public class Lupen : Character
         spirit.characterChoiceHandler= characterChoiceHandler;
         spirit.cEvents = cEvents;
         spirit.enemy = enemy;
+        spirit.healthbar = healthbar;
+        spirit.maxHealth=maxHealth;
 
         size = new Vector2(hitBoxWidth, hitBoxHeight);
     }
@@ -82,6 +85,7 @@ public class Lupen : Character
     {
         stayStatic();
         animator.SetTrigger("Spell");
+        UsingAbility(cooldown);
     }
 
     public void Transformation()
@@ -93,18 +97,22 @@ public class Lupen : Character
         
         characterChoiceHandler.ChangeCharacter(randomCharacter);
         cEvents.ChangeCharacterEvents(1);
+        stolenCharacter = characterChoiceHandler.CharacterChoice(1);
         stayDynamic();
-        enemy.ChangeEnemy(characterChoiceHandler.CharacterChoice(1));
+        enemy.ChangeEnemy(stolenCharacter);
         //SaveValues and change form
+        spirit.stolenCharacter = stolenCharacter;
+        spirit.currentHealth = currHealth;
         spirit.whipDamage = wipDamage;
         spirit.robberyCounter=robberyCountter;
         spirit.Action();
     }
 
-    public void ReturnToLupen(int wdmg,int rc)
+    public void ReturnToLupen(int wdmg,int rc,int currentHealth)
     {
         wipDamage=wdmg;
         robberyCountter=rc;
+        currHealth = currentHealth;
         RemoveLastAttachedScript();
         characterChoiceHandler.ChangeCharacter("Lupen");
         cEvents.ChangeCharacterEvents(2);

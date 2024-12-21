@@ -8,6 +8,7 @@ public class Rager : Character
     int hit1Damage = 2, hit2Damage = 7, hit3Damage = 10;
     //Lightattack
     int lightDamage = 5;
+    bool spellHit = false;
 
     #region HeavyAttack
     override public void HeavyAttack()
@@ -63,20 +64,21 @@ public class Rager : Character
         {
             enemy.StopPunching();
             enemy.BreakCharge();
-             cdbarimage.sprite =  activeSprite;
+            cdbarimage.sprite =  activeSprite;
             //dmg and sound
             hitEnemy.GetComponent<Character>().TakeDamage(0, true); 
             audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
 
             //playerState
-             stayStatic();
-             canRotate = false;
+            stayStatic();
+            canRotate = false;
             //enemystate
             enemy.stayStatic();
             enemy.blockBreaker();
             enemy.AbilityDisabled();
             enemy.Grabbed();
             animator.SetBool("ComboReady", true);
+            spellHit = true;
         }
         else
         {
@@ -90,9 +92,12 @@ public class Rager : Character
 
     public void Startcombo()
     {
-        animator.SetTrigger("Combo");
+        if(spellHit)
+        {
+            animator.SetTrigger("Combo");
 
-        StartCoroutine(DealComboDamageOverTime(2f, 15));
+            StartCoroutine(DealComboDamageOverTime(2f, 15));
+        }
     }
 
     private IEnumerator DealComboDamageOverTime(float totalDuration, int totalHits)
@@ -137,6 +142,7 @@ public class Rager : Character
         enemy.Knockback(8f, .25f, false);
 
         //cd
+        spellHit = false;
         ResetQuickPunch();
         animator.SetBool("ComboReady", false);
 

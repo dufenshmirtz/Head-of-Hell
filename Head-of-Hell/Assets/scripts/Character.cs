@@ -1128,7 +1128,10 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-
+    public void DealDamageToEnemy(int amount)
+    {
+        enemy.TakeDamageNoAnimation(amount,false);
+    }
 
     public IEnumerator InterruptMovement(float time)
     {
@@ -1237,6 +1240,12 @@ public abstract class Character : MonoBehaviour
     public int GetCurrentHealth()
     {
         return currHealth;
+    }
+
+    public void SetCurrentHealth(int value)
+    {
+        currHealth = value;
+        healthbar.SetHealth(value);
     }
     #endregion
 
