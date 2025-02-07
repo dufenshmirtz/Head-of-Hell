@@ -205,14 +205,15 @@ public class CharacterManager : MonoBehaviour
         character.ignoreUpdate = false;
     }
 
-    public void ChangeCharacter(string characterName)
+    public void ChangeCharacter(string givenName)
     {
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
+        characterName=givenName;
         spriteRenderer.color = LupenSpiritColor;
 
         // Assign character, color, and animator controller based on selection
-        switch (characterName)
+        switch (givenName)
         {
             case "Steelager":
                 steelager = this.gameObject.AddComponent<Steelager>();

@@ -17,26 +17,35 @@ public class LupenSpirit : MonoBehaviour
     public Animator animator;
     public CharacterAnimationEvents cEvents;
     public int whipDamage,robberyCounter;
-    public Character enemy;
+    public Character enemy,stolenCharacter;
+    public int currentHealth;
+    public helthbarscript healthbar;
+    public int maxHealth;
+    bool swapped;
 
     public void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
 
     void Update()
     {
-        animator = GetComponent<Animator>();
-
+        if (swapped)
+        {
+            stolenCharacter.SetCurrentHealth(currentHealth);
+            swapped = false;
+        }
+        
         if (lupenInFormSpell && !animator.GetBool("Casting"))
         {
             lupen.enabled=true;
             lupenInFormSpell = false;
-            lupen.ReturnToLupen(whipDamage,robberyCounter);
+            currentHealth=stolenCharacter.GetCurrentHealth();
+            lupen.ReturnToLupen(whipDamage,robberyCounter,currentHealth);
         }
 
-        if ((Input.GetKeyDown(ability) || (controller && controller && Input.GetButtonDown("Spell" + playerString)))&& lupen.isActiveAndEnabled==false)
+        if ((Input.GetKeyDown(ability) || (controller && Input.GetButtonDown("Spell" + playerString)))&& lupen.isActiveAndEnabled==false)
         {
             StartCoroutine(SetLupenInFormSpellAfterDelay(1f));
         }
@@ -53,5 +62,11 @@ public class LupenSpirit : MonoBehaviour
     public void Action()
     {
         lupen.enabled=false;
+
+        print(stolenCharacter);
+
+        swapped = true;
+
+        //stolenCharacter.TakeDamageNoAnimation(maxHealth - currentHealth, false);
     }
 }

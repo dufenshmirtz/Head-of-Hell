@@ -83,11 +83,21 @@ public class bombScript : MonoBehaviour
         if (other.gameObject.layer != enemy && exploded && !dmgEnd && !jumpDone)
         {
 
-            Character character = other.GetComponent<Character>();
-            if (character != null)
-            {
+            Character[] characters = other.GetComponents<Character>();
+            Character activeCharacter = null;
 
-                character.Knockback(13f, 0.3333f, true);
+            foreach (Character charComponent in characters)
+            {
+                if (charComponent.isActiveAndEnabled)
+                {
+                    activeCharacter = charComponent;
+                    break; // Stop after finding the first active component
+                }
+            }
+
+            if (activeCharacter != null)
+            {
+                activeCharacter.Knockback(13f, 0.3333f, true);
                 jumpDone = true;
             }
         }
