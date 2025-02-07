@@ -1,26 +1,35 @@
 # Head-of-Hell
 •Coding Manifest•
 
-{ below function
+-'{' below function
 
-Functions first letter capital
+-Functions first letter capital
 
-Variables first letter lowercase
+-Variables first letter lowercase
 
-Second word in a name girst letter capital (camelcase)
+-Second word in a name girst letter capital (camelcase)
 
-Comments on code on the right
+-Comments on code on the right
 
-Comments explaining functions above
+-Comments explaining functions above
 
-No counter or i,j etc variable names decklared
+-No counter or i,j etc variable names decklared
 
-Tabs below functions
+-Tabs below functions
 
-Responsibility of deleting one's unnecessary prints
+-Responsibility of deleting one's unnecessary prints
 
-Print() for testing Debug.Log for actual error messages
+-Print() for testing Debug.Log for actual error messages
 
-For github commits: if title discriptive enough ok, if need add discription comments for changes.
+-For github commits: if title discriptive enough ok, if need add discription comments for changes.
 
-For github merging: always first merge main branch into your branch and for main merging consult XLR8© CEO
+-For github merging: always first merge main branch into your branch and for main merging consult XLR8© CEO
+
+
+# XLR8 Structure
+
+-Graphics and lore designer: Giannis Chrysomallis
+
+-UI Moderator: Stathis Iliadis
+
+-Gameplay Moderator: Fotis Chrysomallis
