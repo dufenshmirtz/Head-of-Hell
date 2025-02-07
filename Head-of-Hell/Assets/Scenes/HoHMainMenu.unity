@@ -29206,12 +29206,12 @@ MonoBehaviour:
       m_Calls: []
   m_text: Chan Chan is one of the most powerful beings in the universe. He is an
     eccentric mad wizard with enormous power. For him,the whole cosmos is a game,
-    and life is just a fragile temporary force. He created Z.I.M.E.R. (Zealous Infinite
-    Energy Reactor) for generating unlimited energy for his every day needs (like
-    his coffe maker, toaster etc.). But how does it work? It kidnaps the best warriors
-    of any kind from all around the universe and puts them on a never ending fighting
-    tournament, where each battle's intensity is transformed into energy. In the
-    end, the tournament has only one winner. Its maker, Chan Chan...
+    and life is just a fragile temporary force. He created D.I.E.N.A.M.O. for generating
+    unlimited energy for his every day needs (like his coffe maker, toaster etc.).
+    But how does it work? It kidnaps the best warriors of any kind from all around
+    the universe and puts them on a never ending fighting tournament, where each
+    battle's intensity is transformed into energy. In the end, the tournament has
+    only one winner. Its maker, Chan Chan...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ca68c96531b663f409f99cc0f3298091, type: 2}
   m_sharedMaterial: {fileID: -1117074530133824481, guid: ca68c96531b663f409f99cc0f3298091, type: 2}
