@@ -30,4 +30,9 @@ public class helthbarscript : MonoBehaviour
     {
         slider.value = health;
     }
+
+    public int GetHealth()
+    {
+        return (int)slider.value;
+    }
 }

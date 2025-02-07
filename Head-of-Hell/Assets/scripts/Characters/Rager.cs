@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Rager : Character
@@ -7,6 +8,7 @@ public class Rager : Character
     int hit1Damage = 2, hit2Damage = 7, hit3Damage = 10;
     //Lightattack
     int lightDamage = 5;
+    bool spellHit = false;
 
     #region HeavyAttack
     override public void HeavyAttack()
@@ -62,20 +64,21 @@ public class Rager : Character
         {
             enemy.StopPunching();
             enemy.BreakCharge();
-             cdbarimage.sprite =  activeSprite;
+            cdbarimage.sprite =  activeSprite;
             //dmg and sound
             hitEnemy.GetComponent<Character>().TakeDamage(0, true); 
             audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
 
             //playerState
-             stayStatic();
-             canRotate = false;
+            stayStatic();
+            canRotate = false;
             //enemystate
             enemy.stayStatic();
             enemy.blockBreaker();
             enemy.AbilityDisabled();
             enemy.Grabbed();
             animator.SetBool("ComboReady", true);
+            spellHit = true;
         }
         else
         {
@@ -89,15 +92,34 @@ public class Rager : Character
 
     public void Startcombo()
     {
-        animator.SetTrigger("Combo");
+        if(spellHit)
+        {
+            animator.SetTrigger("Combo");
+
+            StartCoroutine(DealComboDamageOverTime(2f, 15));
+        }
     }
-    public void FirstHit()
+
+    private IEnumerator DealComboDamageOverTime(float totalDuration, int totalHits)
+    {
+        float delayBetweenHits = totalDuration / totalHits; // Calculate delay between hits
+
+        for (int i = 0; i < totalHits; i++)
+        {
+            if (enemy != null) // Ensure enemy is not null
+            {
+                enemy.TakeDamage(1, false);
+            }
+            yield return new WaitForSeconds(delayBetweenHits); // Wait before the next hit
+        }
+    }
+    public void FirstHit() //old and useless remove
     {
         enemy.GetComponent<Character>().TakeDamage(hit1Damage, true); //--here
         audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
     }
 
-    public void SecondHit()
+    public void SecondHit() //old and useless remove
     {
         enemy.GetComponent<Character>().TakeDamage(hit2Damage, true); //--here
         audioManager.PlaySFX(audioManager.heavyattack, audioManager.lightAttackVolume);
@@ -120,6 +142,7 @@ public class Rager : Character
         enemy.Knockback(8f, .25f, false);
 
         //cd
+        spellHit = false;
         ResetQuickPunch();
         animator.SetBool("ComboReady", false);
 
