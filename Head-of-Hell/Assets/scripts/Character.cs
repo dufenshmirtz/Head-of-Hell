@@ -311,7 +311,7 @@ public abstract class Character : MonoBehaviour
                 return;
             }
         }
-        animator.SetBool("knocked", false);
+        //animator.SetBool("knocked", false);  oldKnocked*
 
         if (ignoreUpdate)
         {
@@ -703,7 +703,8 @@ public abstract class Character : MonoBehaviour
             }
             else
             {
-                animator.SetBool("knocked", true);
+                //animator.SetBool("knocked", true); oldKnocked*
+                animator.SetTrigger("tookDmg");
             }
             KBForce = force;
             KBCounter = time;

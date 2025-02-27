@@ -117,6 +117,7 @@ public class Lupen : Character
         characterChoiceHandler.ChangeCharacter("Lupen");
         cEvents.ChangeCharacterEvents(2);
         enemy.ChangeEnemy(characterChoiceHandler.CharacterChoice(1));
+        P1Name.text = "Lupen";
         OnCooldown(cooldown);
     }
 
@@ -164,8 +165,8 @@ public class Lupen : Character
         {
             enemy.TakeDamage(wipDamage, true);
             Robbed();
-            enemy.Slow(1.5f,1f);
-            StartCoroutine(SpeedUpCoroutine(1.5f,1f));
+            enemy.Slow(1.5f,2f);
+            StartCoroutine(SpeedUpCoroutine(1.5f,2f));
             audioManager.PlaySFX(audioManager.counterSucces, audioManager.doubleVol);
         }
         else
@@ -222,4 +223,11 @@ public class Lupen : Character
         }
     }
     #endregion
+
+    public override void TakeDamage(int dmg, bool blockable)
+    {
+        base.TakeDamage(dmg, blockable);       
+
+        animator.SetTrigger(characterChoiceHandler.PickRandomCharacter());
+    }
 }

@@ -4808,7 +4808,7 @@ MonoBehaviour:
   LazyBigusColor: {r: 1, g: 1, b: 1, a: 1}
   LithraColor: {r: 1, g: 1, b: 1, a: 1}
   ChibackColor: {r: 1, g: 1, b: 1, a: 1}
-  LupenColor: {r: 0.06951761, g: 0, b: 1, a: 1}
+  LupenColor: {r: 1, g: 1, b: 1, a: 1}
   LupenSpiritColor: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
   SteelagerAnimatorController: {fileID: 9100000, guid: bd34ee43096dbcc438b20dbac8fff3b0, type: 2}
   FinAnimatorController: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
@@ -29476,7 +29476,7 @@ MonoBehaviour:
   LazyBigusColor: {r: 1, g: 1, b: 1, a: 1}
   LithraColor: {r: 1, g: 1, b: 1, a: 1}
   ChibackColor: {r: 1, g: 1, b: 1, a: 1}
-  LupenColor: {r: 0.07058824, g: 0, b: 1, a: 1}
+  LupenColor: {r: 1, g: 1, b: 1, a: 1}
   LupenSpiritColor: {r: 0.67058825, g: 0.67058825, b: 0.67058825, a: 1}
   SteelagerAnimatorController: {fileID: 9100000, guid: bd34ee43096dbcc438b20dbac8fff3b0, type: 2}
   FinAnimatorController: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
