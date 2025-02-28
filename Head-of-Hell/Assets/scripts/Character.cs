@@ -223,7 +223,7 @@ public abstract class Character : MonoBehaviour
         block = characterSetup.block;
         ability = characterSetup.ability;
         charge = characterSetup.charge;
-        stages = characterSetup.stages;
+        //stages = characterSetup.stages;
         attackPoint = characterSetup.attackPoint;
         blockDisabledIndicator = characterSetup.blockDisabledIndicator;
         poison = characterSetup.poison;

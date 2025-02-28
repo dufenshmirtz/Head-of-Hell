@@ -61,7 +61,6 @@ public class CharacterManager : MonoBehaviour
         if (characterName == "Random")
         {
             characterName = PickRandomCharacter();
-            characterName = "Lupen"; //testing
         }
 
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
