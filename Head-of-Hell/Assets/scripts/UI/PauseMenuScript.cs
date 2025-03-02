@@ -46,4 +46,10 @@ public class PauseMenuScript : MonoBehaviour
     {
         ToggleMenu();
     }
+
+    public void Resume()
+    {
+        cChoice.CharacterChoice(1).stayDynamic();
+        cChoice.CharacterChoice(2).stayDynamic();
+    }
 }

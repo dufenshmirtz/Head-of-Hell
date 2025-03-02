@@ -144,6 +144,7 @@ public abstract class Character : MonoBehaviour
 
     protected bool controller = false;
     protected bool chargeReset = false;
+    bool chargeAttackActive = false;
 
     protected bool jumpDisabled = false;
 
@@ -277,10 +278,6 @@ public abstract class Character : MonoBehaviour
         //self knockback mechanic
         if (knockable)
         {
-            if(playerNum == 1)
-            {
-                print(KBCounter);
-            }
             if (KBCounter > 0)
             {
                 print("***Update");
@@ -807,6 +804,7 @@ public abstract class Character : MonoBehaviour
     {
         if (charging)
         {
+            chargeAttackActive = true;
             stayStatic();
             ignoreMovement = true;
             if (charged)
@@ -841,6 +839,7 @@ public abstract class Character : MonoBehaviour
     public void StopCHarge()
     {
         stayDynamic();
+        chargeAttackActive = false;
         ignoreMovement = false;
         animator.SetBool("Charging", false);
         charging = false;
@@ -967,11 +966,24 @@ public abstract class Character : MonoBehaviour
 
     virtual public void TakeDamage(int dmg, bool blockable)
     {
-        if (chargeReset)
+        
+
+        if (chargeAttackActive)
         {
-            stayDynamic();
-            ignoreMovement = false;
-            chargeReset = false;
+            if (chargeReset)
+            {
+                print("kolok1");
+                stayDynamic();
+                ignoreMovement = false;
+                chargeReset = false;
+            }
+            else
+            {
+                print("kolok2");
+                TakeDamageNoAnimation(dmg, blockable);
+                return;
+            }
+            
         }
 
         if (ignoreDamage)

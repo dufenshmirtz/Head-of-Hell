@@ -1213,7 +1213,7 @@ PrefabInstance:
     - target: {fileID: 2553929291879454509, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: f71edc3b937f70a43934b1b47dee5d0a, type: 2}
+      objectReference: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
     - target: {fileID: 2584085071129299450, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: P1Name
       value: 
@@ -7408,7 +7408,7 @@ Transform:
   m_GameObject: {fileID: 343070151}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.4621537, y: -0.13890666, z: 0.0006431788}
+  m_LocalPosition: {x: 1.5396056, y: -0.57011306, z: -0.04754727}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7418,7 +7418,7 @@ Transform:
   - {fileID: 1629606823}
   - {fileID: 2037558368}
   - {fileID: 1355541907}
-  m_Father: {fileID: 2144866981}
+  m_Father: {fileID: 1358952049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &343137452
 GameObject:
@@ -24752,7 +24752,7 @@ Transform:
   m_GameObject: {fileID: 1165083479}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.4621537, y: -0.13890666, z: 0.0006431788}
+  m_LocalPosition: {x: 1.5396056, y: -0.57011306, z: -0.04754727}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -24760,7 +24760,7 @@ Transform:
   - {fileID: 1263962658}
   - {fileID: 92049291}
   - {fileID: 1557120625}
-  m_Father: {fileID: 2144866981}
+  m_Father: {fileID: 1358952049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1168592207
 PrefabInstance:
@@ -28496,7 +28496,7 @@ Transform:
   m_GameObject: {fileID: 1331674805}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.34, y: 3.13, z: 0}
+  m_LocalPosition: {x: 0.34, y: 2.68, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -29352,6 +29352,40 @@ Transform:
   - {fileID: 1605975883}
   - {fileID: 368428921}
   m_Father: {fileID: 448782095}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1358952048
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1358952049}
+  m_Layer: 0
+  m_Name: Stages
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1358952049
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1358952048}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.2760086, y: -0.42461902, z: -0.0048006885}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1165083480}
+  - {fileID: 1544195028}
+  - {fileID: 343070152}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1362458775
 GameObject:
@@ -32778,13 +32812,13 @@ Transform:
   m_GameObject: {fileID: 1544195027}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.4621537, y: -0.13890666, z: 0.0006431788}
+  m_LocalPosition: {x: 1.5396056, y: -1.27, z: -0.04754727}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1014283786}
   - {fileID: 1331674806}
-  m_Father: {fileID: 2144866981}
+  m_Father: {fileID: 1358952049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1557120621 stripped
 GameObject:
@@ -33307,21 +33341,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerScript, Assembly-CSharp
-        m_MethodName: stayDynamic
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerScript, Assembly-CSharp
-        m_MethodName: stayDynamic
+      - m_Target: {fileID: 1996188184}
+        m_TargetAssemblyTypeName: PauseMenuScript, Assembly-CSharp
+        m_MethodName: Resume
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -43463,7 +43485,7 @@ GameObject:
   - component: {fileID: 2144866981}
   - component: {fileID: 2144866982}
   m_Layer: 0
-  m_Name: Stages
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43481,10 +43503,7 @@ Transform:
   m_LocalPosition: {x: -2.1985567, y: -0.8558254, z: -0.052991137}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1165083480}
-  - {fileID: 1544195028}
-  - {fileID: 343070152}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2144866982
@@ -43915,6 +43934,7 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 1100116391}
   - {fileID: 2144866981}
+  - {fileID: 1358952049}
   - {fileID: 1904178138}
   - {fileID: 55097439}
   - {fileID: 1656577412}
