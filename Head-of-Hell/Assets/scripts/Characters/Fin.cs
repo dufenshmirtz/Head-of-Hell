@@ -31,7 +31,7 @@ public class Fin : Character
 
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
             enemy.TakeDamage(heavyDamage, true);
-            enemy.TakeDamageNoAnimation(passiveDamage, false);
+            enemy.TakeDamageNoAnimation(passiveDamage, true);
 
             if (! enemy.isBlocking)
             {
