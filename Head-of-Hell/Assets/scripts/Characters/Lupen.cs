@@ -85,7 +85,7 @@ public class Lupen : Character
     {
         stayStatic();
         animator.SetTrigger("Spell");
-        UsingAbility(cooldown);
+        //UsingAbility(cooldown);
     }
 
     public void Transformation()
