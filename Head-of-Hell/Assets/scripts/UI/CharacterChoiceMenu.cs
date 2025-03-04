@@ -214,4 +214,41 @@ public class CharacterChoiceMenu : MonoBehaviour
         return availableButtons[randomIndex];
     }
 
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(1)) // Detect right-click
+        {
+            DeselectCharacter();
+        }
+    }
+
+    void DeselectCharacter()
+    {
+        if (currentPlayer == 2) // If Player 2 has picked, remove Player 2's selection
+        {
+            foreach (Button button in characterButtons)
+            {
+                Transform childP2 = button.transform.Find("P2");
+                if (childP2 != null) childP2.gameObject.SetActive(false);
+                button.interactable = true;
+            }
+            PlayerPrefs.DeleteKey("Player2Choice");
+            p2characterNameText.text = "";
+            currentPlayer = 1; // Switch back to Player 1
+        }
+        else if (currentPlayer == 1 && p1b != null) // If Player 1 has picked, remove Player 1's selection
+        {
+            Transform childP1 = p1b.transform.Find("P1");
+            if (childP1 != null) childP1.gameObject.SetActive(false);
+            PlayerPrefs.DeleteKey("Player1Choice");
+            p1characterNameText.text = "";
+            p1b = null; // Remove reference to the selected button
+        }
+
+        picked = false; // Allow reselection
+        cscript.BothPicked(false);
+        startButton.gameObject.SetActive(false);
+    }
+
+
 }
