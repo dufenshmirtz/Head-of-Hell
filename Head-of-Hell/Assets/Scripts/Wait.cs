@@ -14,6 +14,6 @@ public class Wait : MonoBehaviour
     IEnumerator Wait_for_Seconds()
     {
         yield return new WaitForSeconds(wait_time);
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 }
