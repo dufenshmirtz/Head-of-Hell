@@ -28,6 +28,7 @@ public class CharacterManager : MonoBehaviour
     public RuntimeAnimatorController LithraAnimatorController;
     public RuntimeAnimatorController ChibackAnimatorController;
     public RuntimeAnimatorController LupenAnimatorController;
+    public RuntimeAnimatorController VisviaAnimatorController;
 
     Character character;
     Skipler skipler;
@@ -40,6 +41,7 @@ public class CharacterManager : MonoBehaviour
     Chiback chiback;
     Lupen lupen;
     Animator animator;
+    Visvia visvia;
 
     public CharacterManager enemyHandler;
 
@@ -132,6 +134,13 @@ public class CharacterManager : MonoBehaviour
                 animator = GetComponent<Animator>();
                 animator.runtimeAnimatorController = LupenAnimatorController;
                 break;
+            case "Visvia":
+                visvia = this.gameObject.AddComponent<Visvia>();
+                character = visvia;
+                spriteRenderer.color = LupenColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = VisviaAnimatorController;
+                break;
         }
     }
 
@@ -151,7 +160,7 @@ public class CharacterManager : MonoBehaviour
         string[] characterTypeNames = {
             "Steelager", "Vander", "Rager",
             "Skipler", "Fin", "Lazy Bigus",
-            "Lithra", "Chiback", "Lupen"
+            "Lithra", "Chiback", "Lupen","Visvia"
         };
 
         // Randomly select an index
