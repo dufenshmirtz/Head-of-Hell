@@ -81,6 +81,7 @@ public abstract class Character : MonoBehaviour
     protected bool ignoreMovement = false;
     protected bool ignoreSlow = false;
     public bool blockDisabled;
+    public bool canAlterSpeed = true;
 
     //bar images
     protected Image cdbarimage;
@@ -147,6 +148,7 @@ public abstract class Character : MonoBehaviour
     bool chargeAttackActive = false;
 
     protected bool jumpDisabled = false;
+    
 
 
     #region Base
@@ -915,14 +917,20 @@ public abstract class Character : MonoBehaviour
 
     virtual public void HeavyAttackStart()
     {
-        moveSpeed =  heavySpeed;
-        StartCoroutine(WaitAndSetSpeed());
+        if (canAlterSpeed)
+        {
+            moveSpeed = heavySpeed;
+            StartCoroutine(WaitAndSetSpeed());
+        }
         animator.SetBool("isHeavyAttacking", true);
     }
 
     public void HeavyAttackEnd()
     {
-         moveSpeed =  OGMoveSpeed;
+        if (canAlterSpeed)
+        {
+            moveSpeed = OGMoveSpeed;
+        }       
         animator.SetBool("isHeavyAttacking", false);
     }
 
@@ -1177,7 +1185,10 @@ public abstract class Character : MonoBehaviour
 
     public void Slow(float time,float amount)
     {
-        StartCoroutine(SlowCoroutine(time,amount));
+        if (canAlterSpeed)
+        {
+            StartCoroutine(SlowCoroutine(time, amount));
+        }
     }
 
     public IEnumerator SlowCoroutine(float time, float amount)
