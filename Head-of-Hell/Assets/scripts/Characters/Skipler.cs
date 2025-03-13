@@ -281,7 +281,7 @@ public class Skipler : Character
     #region Passive
     void ReduceCD()
     {
-        cdTimer -= 1f;
+        cdTimer -= 2f;
     }
     #endregion
 

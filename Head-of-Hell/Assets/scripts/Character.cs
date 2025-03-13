@@ -974,7 +974,16 @@ public abstract class Character : MonoBehaviour
 
     virtual public void TakeDamage(int dmg, bool blockable)
     {
-        
+
+        if (ignoreDamage)
+        {
+            return;
+        }
+
+        if (dmg == chargeDmg)
+        {
+            StopCHarge();
+        }
 
         if (chargeAttackActive)
         {
@@ -994,17 +1003,7 @@ public abstract class Character : MonoBehaviour
             
         }
 
-        if (ignoreDamage)
-        {
-            return;
-        }
-
         ResetQuickPunch();
-
-        if (dmg == chargeDmg)
-        {
-            StopCHarge();
-        }
 
         if (isBlocking && blockable)
         {
