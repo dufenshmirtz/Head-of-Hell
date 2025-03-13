@@ -78,7 +78,6 @@ public class Visvia : Character
         if (hitEnemy != null)
         {
             enemy.StopPunching();
-            enemy.BreakCharge();
             enemy.TakeDamage(3, true);
             enemy.Knockback(8f, 0.3333f, true);
 
