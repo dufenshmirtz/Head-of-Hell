@@ -41,12 +41,12 @@ public class characterInfoChoice : MonoBehaviour
 
     void LoadCharacterData()
     {
-        string path = Path.Combine(Application.dataPath, "Stathis/characterData.json");
-
-        if (File.Exists(path))
+        // Load the JSON file from the Resources folder
+        TextAsset jsonFile = Resources.Load<TextAsset>("characterData");
+        if (jsonFile != null)
         {
-            string json = File.ReadAllText(path);
-            characterList = JsonUtility.FromJson<CharacterList>(json);
+            // Deserialize the JSON data into the CharacterList object
+            characterList = JsonUtility.FromJson<CharacterList>(jsonFile.text);
 
             // Check if characterList is null
             if (characterList == null || characterList.characters == null)
@@ -64,7 +64,7 @@ public class characterInfoChoice : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Error: characterData.json file not found in Stathis folder!");
+            Debug.LogError("Error: characterData.json not found in Resources!");
         }
     }
 
@@ -141,10 +141,9 @@ public class characterInfoChoice : MonoBehaviour
         }
     }
 
-
     // Update is called once per frame
     void Update()
     {
-
+        // You can add update logic here if needed
     }
 }
