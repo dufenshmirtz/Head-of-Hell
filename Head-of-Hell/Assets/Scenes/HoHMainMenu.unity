@@ -5060,7 +5060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df36c3a185aa4634490af79338828c67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
+  animator: {fileID: 239138883}
   p1b: {fileID: 258459144}
   menu: {fileID: 1305964959}
 --- !u!114 &258459144
@@ -10847,7 +10847,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df36c3a185aa4634490af79338828c67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
+  animator: {fileID: 1657667372}
   p1b: {fileID: 601038619}
   menu: {fileID: 1305964959}
 --- !u!114 &601038619
@@ -21390,7 +21390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df36c3a185aa4634490af79338828c67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
+  animator: {fileID: 1655459559}
   p1b: {fileID: 1285657032}
   menu: {fileID: 1305964959}
 --- !u!114 &1285657037
