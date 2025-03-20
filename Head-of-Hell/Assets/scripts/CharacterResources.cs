@@ -6,7 +6,7 @@ public class CharacterResources : MonoBehaviour
 {
     public GameObject bomb;
     public Transform bombSpawner;
-    public Transform bombParent;
+    public Transform trash;
 
     public GameObject bullet;
     public Transform shootinPoint;
@@ -33,6 +33,10 @@ public class CharacterResources : MonoBehaviour
 
     //Lupen
     public Transform wipPoint;
+
+    //Visvia
+    public Transform fartPoint;
+    public GameObject fart;
 
     private void OnDrawGizmosSelected()
     {

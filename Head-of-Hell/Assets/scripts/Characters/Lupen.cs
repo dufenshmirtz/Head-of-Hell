@@ -85,7 +85,7 @@ public class Lupen : Character
     {
         stayStatic();
         animator.SetTrigger("Spell");
-        UsingAbility(cooldown);
+        //UsingAbility(cooldown);
     }
 
     public void Transformation()
@@ -208,17 +208,11 @@ public class Lupen : Character
     public void Robbed()
     {
         robberyCountter++;
-        if (robberyCountter == 3)
+        if (robberyCountter == 2)
         {
-            if (currHealth > enemy.GetCurrentHealth())
-            {
-                wipDamage++;
-                print("wipDamage: " + wipDamage);
-            }
-            else
-            {
-                Heal(5);
-            }
+            
+            wipDamage++;
+            print("wipDamage: " + wipDamage);            
             robberyCountter = 0;
         }
     }

@@ -81,6 +81,7 @@ public abstract class Character : MonoBehaviour
     protected bool ignoreMovement = false;
     protected bool ignoreSlow = false;
     public bool blockDisabled;
+    public bool canAlterSpeed = true;
 
     //bar images
     protected Image cdbarimage;
@@ -144,8 +145,10 @@ public abstract class Character : MonoBehaviour
 
     protected bool controller = false;
     protected bool chargeReset = false;
+    bool chargeAttackActive = false;
 
     protected bool jumpDisabled = false;
+    
 
 
     #region Base
@@ -277,10 +280,6 @@ public abstract class Character : MonoBehaviour
         //self knockback mechanic
         if (knockable)
         {
-            if(playerNum == 1)
-            {
-                print(KBCounter);
-            }
             if (KBCounter > 0)
             {
                 print("***Update");
@@ -807,6 +806,7 @@ public abstract class Character : MonoBehaviour
     {
         if (charging)
         {
+            chargeAttackActive = true;
             stayStatic();
             ignoreMovement = true;
             if (charged)
@@ -841,6 +841,7 @@ public abstract class Character : MonoBehaviour
     public void StopCHarge()
     {
         stayDynamic();
+        chargeAttackActive = false;
         ignoreMovement = false;
         animator.SetBool("Charging", false);
         charging = false;
@@ -916,14 +917,20 @@ public abstract class Character : MonoBehaviour
 
     virtual public void HeavyAttackStart()
     {
-        moveSpeed =  heavySpeed;
-        StartCoroutine(WaitAndSetSpeed());
+        if (canAlterSpeed)
+        {
+            moveSpeed = heavySpeed;
+            StartCoroutine(WaitAndSetSpeed());
+        }
         animator.SetBool("isHeavyAttacking", true);
     }
 
     public void HeavyAttackEnd()
     {
-         moveSpeed =  OGMoveSpeed;
+        if (canAlterSpeed)
+        {
+            moveSpeed = OGMoveSpeed;
+        }       
         animator.SetBool("isHeavyAttacking", false);
     }
 
@@ -967,24 +974,36 @@ public abstract class Character : MonoBehaviour
 
     virtual public void TakeDamage(int dmg, bool blockable)
     {
-        if (chargeReset)
-        {
-            stayDynamic();
-            ignoreMovement = false;
-            chargeReset = false;
-        }
 
         if (ignoreDamage)
         {
             return;
         }
 
-        ResetQuickPunch();
-
         if (dmg == chargeDmg)
         {
             StopCHarge();
         }
+
+        if (chargeAttackActive)
+        {
+            if (chargeReset)
+            {
+                print("kolok1");
+                stayDynamic();
+                ignoreMovement = false;
+                chargeReset = false;
+            }
+            else
+            {
+                print("kolok2");
+                TakeDamageNoAnimation(dmg, blockable);
+                return;
+            }
+            
+        }
+
+        ResetQuickPunch();
 
         if (isBlocking && blockable)
         {
@@ -1165,7 +1184,10 @@ public abstract class Character : MonoBehaviour
 
     public void Slow(float time,float amount)
     {
-        StartCoroutine(SlowCoroutine(time,amount));
+        if (canAlterSpeed)
+        {
+            StartCoroutine(SlowCoroutine(time, amount));
+        }
     }
 
     public IEnumerator SlowCoroutine(float time, float amount)
