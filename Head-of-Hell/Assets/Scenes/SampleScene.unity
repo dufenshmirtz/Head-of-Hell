@@ -330,6 +330,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
 --- !u!1 &27000638
 GameObject:
   m_ObjectHideFlags: 0
@@ -1213,7 +1216,7 @@ PrefabInstance:
     - target: {fileID: 2553929291879454509, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: f71edc3b937f70a43934b1b47dee5d0a, type: 2}
+      objectReference: {fileID: 9100000, guid: 8349b7f4e453b9e4b966cd6122db6b70, type: 2}
     - target: {fileID: 2584085071129299450, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: P1Name
       value: 
@@ -1375,6 +1378,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1308555820}
     - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: fart
+      value: 
+      objectReference: {fileID: 7115441870068545560, guid: 49549700bfe6f2844bbf2d3853e17378, type: 3}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: trash
+      value: 
+      objectReference: {fileID: 2100796710}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: wipPoint
       value: 
       objectReference: {fileID: 1250506315}
@@ -1382,6 +1393,10 @@ PrefabInstance:
       propertyPath: bellPoint
       value: 
       objectReference: {fileID: 1746435904}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: fartPoint
+      value: 
+      objectReference: {fileID: 2136813100}
     - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: firePoint
       value: 
@@ -1428,9 +1443,12 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: 8
-      addedObject: {fileID: 1250506315}
+      addedObject: {fileID: 2136813100}
     - targetCorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: 9
+      addedObject: {fileID: 1250506315}
+    - targetCorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      insertIndex: 10
       addedObject: {fileID: 100841901}
     - targetCorrespondingSourceObject: {fileID: 8850850641682188571, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: 2
@@ -3414,6 +3432,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   mirrorFireAttackPoint: {fileID: 689308824}
   fireAttackPoint: {fileID: 2133402719}
 --- !u!1 &174624792
@@ -3843,6 +3864,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &184793119
@@ -3907,7 +3931,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 277780955}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 2033122796}
   bulletParent: {fileID: 2100796710}
@@ -3921,6 +3945,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &184793121
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -4819,6 +4845,7 @@ MonoBehaviour:
   LithraAnimatorController: {fileID: 9100000, guid: 11d5595fa0b947043b07da91212a5678, type: 2}
   ChibackAnimatorController: {fileID: 9100000, guid: f1876437b15d78f4dbf917bee5810972, type: 2}
   LupenAnimatorController: {fileID: 9100000, guid: cf96a39428a2f394ab233d360aaa22d9, type: 2}
+  VisviaAnimatorController: {fileID: 9100000, guid: 8349b7f4e453b9e4b966cd6122db6b70, type: 2}
   enemyHandler: {fileID: 1367423825}
   playerNum: 1
 --- !u!4 &221568191 stripped
@@ -5126,6 +5153,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &239065757
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 239065758}
+  m_Layer: 8
+  m_Name: Fart
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &239065758
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 239065757}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1367423837}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &239896308
 GameObject:
   m_ObjectHideFlags: 0
@@ -5814,6 +5872,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1522488523}
   bombsParent: {fileID: 2100796710}
@@ -7408,7 +7469,7 @@ Transform:
   m_GameObject: {fileID: 343070151}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.4621537, y: -0.13890666, z: 0.0006431788}
+  m_LocalPosition: {x: 1.5396056, y: -0.57011306, z: -0.04754727}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7418,7 +7479,7 @@ Transform:
   - {fileID: 1629606823}
   - {fileID: 2037558368}
   - {fileID: 1355541907}
-  m_Father: {fileID: 2144866981}
+  m_Father: {fileID: 1358952049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &343137452
 GameObject:
@@ -7698,6 +7759,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
 --- !u!114 &355700673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7760,7 +7824,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 112308069}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 1683079366}
   bulletParent: {fileID: 2100796710}
@@ -7774,6 +7838,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &355700675
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -8579,6 +8645,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -8647,7 +8716,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 778165903}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 2063969440}
   bulletParent: {fileID: 2100796710}
@@ -8661,6 +8730,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &371476604
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -10021,6 +10092,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1670223497}
   bombsParent: {fileID: 2100796710}
@@ -10088,7 +10162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1670223497}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 209170803}
   bulletParent: {fileID: 2100796710}
@@ -10102,6 +10176,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &448782100
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -11236,6 +11312,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &541449327
@@ -11300,7 +11379,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1776539105}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 214577207}
   bulletParent: {fileID: 2100796710}
@@ -11314,6 +11393,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &541449330
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -12158,6 +12239,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 343137453}
   bombsParent: {fileID: 2100796710}
@@ -12225,7 +12309,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 343137453}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 1787095675}
   bulletParent: {fileID: 2100796710}
@@ -12239,6 +12323,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &559944329
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -13928,6 +14014,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -13996,7 +14085,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1086519415}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 1867783813}
   bulletParent: {fileID: 2100796710}
@@ -14010,6 +14099,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &627431773
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -15424,7 +15515,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1604138820}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 2109567927}
   bulletParent: {fileID: 2100796710}
@@ -15438,6 +15529,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &677239677
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -16467,6 +16560,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 569739573}
   bulletSpeed: 35
@@ -16535,7 +16631,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 2124878124}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 178960802}
   bulletParent: {fileID: 2100796710}
@@ -16549,6 +16645,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &770792717
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -19287,6 +19385,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
 --- !u!1001 &882995806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19623,6 +19724,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
 --- !u!114 &892172695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19685,7 +19789,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 302230613}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 2088760328}
   bulletParent: {fileID: 2100796710}
@@ -19699,6 +19803,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &892172698
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -22788,6 +22894,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
 --- !u!1 &1025716889
 GameObject:
   m_ObjectHideFlags: 0
@@ -24752,7 +24861,7 @@ Transform:
   m_GameObject: {fileID: 1165083479}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.4621537, y: -0.13890666, z: 0.0006431788}
+  m_LocalPosition: {x: 1.5396056, y: -0.57011306, z: -0.04754727}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -24760,7 +24869,7 @@ Transform:
   - {fileID: 1263962658}
   - {fileID: 92049291}
   - {fileID: 1557120625}
-  m_Father: {fileID: 2144866981}
+  m_Father: {fileID: 1358952049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1168592207
 PrefabInstance:
@@ -24900,6 +25009,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
 --- !u!1 &1169185177
 GameObject:
   m_ObjectHideFlags: 0
@@ -25107,6 +25219,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
 --- !u!1 &1185634414
 GameObject:
   m_ObjectHideFlags: 0
@@ -25864,6 +25979,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
 --- !u!1 &1220970790
 GameObject:
   m_ObjectHideFlags: 0
@@ -26502,6 +26620,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
 --- !u!114 &1228552612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26564,7 +26685,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 530979623}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 1015529912}
   bulletParent: {fileID: 2100796710}
@@ -26578,6 +26699,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &1228552614
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -26749,6 +26872,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -27191,6 +27317,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -27959,6 +28088,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   mirrorFireAttackPoint: {fileID: 1079567584}
   fireAttackPoint: {fileID: 1505197450}
 --- !u!114 &1300380414
@@ -28023,7 +28155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1961157082}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 1867498298}
   bulletParent: {fileID: 2100796710}
@@ -28037,6 +28169,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &1300380416
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -28466,6 +28600,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1100786215}
   bombsParent: {fileID: 2100796710}
@@ -28496,7 +28633,7 @@ Transform:
   m_GameObject: {fileID: 1331674805}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.34, y: 3.13, z: 0}
+  m_LocalPosition: {x: 0.34, y: 2.68, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -29353,6 +29490,40 @@ Transform:
   - {fileID: 368428921}
   m_Father: {fileID: 448782095}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1358952048
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1358952049}
+  m_Layer: 0
+  m_Name: Stages
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1358952049
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1358952048}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.2760086, y: -0.42461902, z: -0.0048006885}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1165083480}
+  - {fileID: 1544195028}
+  - {fileID: 343070152}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1362458775
 GameObject:
   m_ObjectHideFlags: 0
@@ -29487,6 +29658,7 @@ MonoBehaviour:
   LithraAnimatorController: {fileID: 9100000, guid: 11d5595fa0b947043b07da91212a5678, type: 2}
   ChibackAnimatorController: {fileID: 9100000, guid: f1876437b15d78f4dbf917bee5810972, type: 2}
   LupenAnimatorController: {fileID: 9100000, guid: cf96a39428a2f394ab233d360aaa22d9, type: 2}
+  VisviaAnimatorController: {fileID: 9100000, guid: 8349b7f4e453b9e4b966cd6122db6b70, type: 2}
   enemyHandler: {fileID: 221568179}
   playerNum: 2
 --- !u!4 &1367423837 stripped
@@ -31186,6 +31358,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
 --- !u!114 &1478511390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31248,7 +31423,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1936941808}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 377940056}
   bulletParent: {fileID: 2100796710}
@@ -31262,6 +31437,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!114 &1478511392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32438,6 +32615,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   mirrorFireAttackPoint: {fileID: 79255834}
   fireAttackPoint: {fileID: 1247528379}
 --- !u!114 &1531342472
@@ -32502,7 +32682,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1848321332}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 1807776857}
   bulletParent: {fileID: 2100796710}
@@ -32516,6 +32696,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &1531342475
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -32778,13 +32960,13 @@ Transform:
   m_GameObject: {fileID: 1544195027}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.4621537, y: -0.13890666, z: 0.0006431788}
+  m_LocalPosition: {x: 1.5396056, y: -1.27, z: -0.04754727}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1014283786}
   - {fileID: 1331674806}
-  m_Father: {fileID: 2144866981}
+  m_Father: {fileID: 1358952049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1557120621 stripped
 GameObject:
@@ -33307,21 +33489,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerScript, Assembly-CSharp
-        m_MethodName: stayDynamic
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerScript, Assembly-CSharp
-        m_MethodName: stayDynamic
+      - m_Target: {fileID: 1996188184}
+        m_TargetAssemblyTypeName: PauseMenuScript, Assembly-CSharp
+        m_MethodName: Resume
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -34125,6 +34295,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1881472743}
   bulletSpeed: 35
@@ -34583,6 +34756,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1943892085}
   bulletSpeed: 35
@@ -34651,7 +34827,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1666705483}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 1111632356}
   bulletParent: {fileID: 2100796710}
@@ -34665,6 +34841,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &1609535762
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -35844,7 +36022,7 @@ PrefabInstance:
     - target: {fileID: 3775815256451319138, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: cf96a39428a2f394ab233d360aaa22d9, type: 2}
+      objectReference: {fileID: 9100000, guid: f1876437b15d78f4dbf917bee5810972, type: 2}
     - target: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_LocalScale.x
       value: -1
@@ -35898,6 +36076,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1961905756}
     - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: fart
+      value: 
+      objectReference: {fileID: 7115441870068545560, guid: 49549700bfe6f2844bbf2d3853e17378, type: 3}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: trash
+      value: 
+      objectReference: {fileID: 2100796710}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: wipPoint
       value: 
       objectReference: {fileID: 168730421}
@@ -35906,9 +36092,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1694445414}
     - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: fartPoint
+      value: 
+      objectReference: {fileID: 239065758}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: firePoint
       value: 
       objectReference: {fileID: 1607409125}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: bombParent
+      value: 
+      objectReference: {fileID: 2100796710}
     - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: bulletParent
       value: 
@@ -36047,9 +36241,12 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: 8
-      addedObject: {fileID: 168730421}
+      addedObject: {fileID: 239065758}
     - targetCorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: 9
+      addedObject: {fileID: 168730421}
+    - targetCorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: 10
       addedObject: {fileID: 989350883}
     - targetCorrespondingSourceObject: {fileID: 4307065134795609038, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: 2
@@ -36658,6 +36855,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 461525617}
   bulletSpeed: 35
@@ -37929,6 +38129,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
 --- !u!114 &1753174034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37991,7 +38194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 2070115600}
-  bombParent: {fileID: 2100796710}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 621216153}
   bulletParent: {fileID: 2100796710}
@@ -38005,6 +38208,8 @@ MonoBehaviour:
   skiplerDouble: {fileID: 0}
   skiplerPoint: {fileID: 0}
   wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
 --- !u!70 &1753174037
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -40654,6 +40859,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &1988288838 stripped
@@ -41374,6 +41582,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   mirrorFireAttackPoint: {fileID: 1584761535}
   fireAttackPoint: {fileID: 1839956112}
 --- !u!1 &2018083340
@@ -41944,6 +42155,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1001 &2041432792
@@ -42521,7 +42735,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2100796710}
   m_Layer: 0
-  m_Name: bombs
+  m_Name: DynamicTraash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43078,6 +43292,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &2136813099
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2136813100}
+  m_Layer: 8
+  m_Name: Fart
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2136813100
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2136813099}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 221568191}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2136894068
 GameObject:
   m_ObjectHideFlags: 0
@@ -43463,7 +43708,7 @@ GameObject:
   - component: {fileID: 2144866981}
   - component: {fileID: 2144866982}
   m_Layer: 0
-  m_Name: Stages
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43481,10 +43726,7 @@ Transform:
   m_LocalPosition: {x: -2.1985567, y: -0.8558254, z: -0.052991137}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1165083480}
-  - {fileID: 1544195028}
-  - {fileID: 343070152}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2144866982
@@ -43908,6 +44150,9 @@ MonoBehaviour:
   moveSpeed: 4
   blockDisabled: 0
   ignoreUpdate: 0
+  farted: 0
+  fartcd: 0
+  fartDamage: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -43915,6 +44160,7 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 1100116391}
   - {fileID: 2144866981}
+  - {fileID: 1358952049}
   - {fileID: 1904178138}
   - {fileID: 55097439}
   - {fileID: 1656577412}

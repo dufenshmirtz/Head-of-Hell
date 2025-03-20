@@ -30,7 +30,7 @@ AnimationClip:
       value: {fileID: -1592472163, guid: b5e73178fe40fd6418fbb4f65b9d9669, type: 3}
     - time: 0.45
       value: {fileID: 548442381, guid: b5e73178fe40fd6418fbb4f65b9d9669, type: 3}
-    - time: 0.55
+    - time: 0.56666666
       value: {fileID: 1923060518, guid: b5e73178fe40fd6418fbb4f65b9d9669, type: 3}
     - time: 0.6666667
       value: {fileID: 1624168629, guid: b5e73178fe40fd6418fbb4f65b9d9669, type: 3}
@@ -101,7 +101,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.55
+  - time: 0.56666666
     functionName: DealDamageEvent
     data: 
     objectReferenceParameter: {fileID: 0}

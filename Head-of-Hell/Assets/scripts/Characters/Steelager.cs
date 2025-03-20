@@ -102,7 +102,7 @@ public class Steelager : Character
     {
         bombPrefab = resources.bomb;
         bombPoint=resources.bombSpawner;
-        bombsParent = resources.bombParent;
+        bombsParent = resources.trash;
 
         bombCharging = true;
         audioManager.PlaySFX(audioManager.fuse, audioManager.normalVol);

@@ -11,7 +11,7 @@ public class Chiback : Character
     float jumpDuration = 1f;
     bool fireReady = true;
     int timesHit = 0;
-    int enragingNum = 4;
+    int enragingNum = 3;
     int shortJumpDamage = 5, MedJumpDamage = 10, wideJumpDamage = 15;
     bool roarPlayed = false;
 
@@ -169,13 +169,12 @@ public class Chiback : Character
             audioManager.PlaySFX(audioManager.lightattack, 0.5f);
             enemy.TakeDamage(5, true);
 
-            if (! enemy.isBlocking)
-            {
-                enemy.Knockback(15f, 0.8f, true);
-                enemy.DisableBlock(true);
-                enemy.DisableJump(true);
-                StartCoroutine(ResetBlockability());
-            }
+            
+            enemy.Knockback(15f, 0.8f, true);
+            enemy.DisableBlock(true);
+            enemy.DisableJump(true);
+            StartCoroutine(ResetBlockability());
+            
         }
         else
         {

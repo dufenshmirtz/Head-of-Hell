@@ -13,6 +13,7 @@ public class Fin : Character
     float rollTime = 0.39f;
     bool rollReady = true;
     int passiveDamage = 4;
+    bool safety = true;
 
     #region HeavyAttack
     override public void HeavyAttack()
@@ -29,7 +30,8 @@ public class Fin : Character
         {
 
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
-            enemy.TakeDamage(heavyDamage+passiveDamage, true);
+            enemy.TakeDamage(heavyDamage, true);
+            enemy.TakeDamageNoAnimation(passiveDamage, true);
 
             if (! enemy.isBlocking)
             {
@@ -51,7 +53,9 @@ public class Fin : Character
         audioManager.PlaySFX(audioManager.counterScream, audioManager.counterVol);
         animator.SetTrigger("Spell");
         counterIsOn = true;
+        safety = true;
         UsingAbility(cooldown);
+        StartCoroutine(CounterOffSafety());
     }
 
     public bool DetectCounter()
@@ -76,12 +80,23 @@ public class Fin : Character
             // Start the cooldown timer
             OnCooldown(missCooldown);
             CounterVariablesOff();
+            safety = false;
         }
         else
         {
             ignoreCounterOff = false;
         }
         
+    }
+
+    private IEnumerator CounterOffSafety()
+    {
+        yield return new WaitForSeconds(0.41f);
+        if (!counterDone && safety)
+        {
+            OnCooldown(missCooldown);
+            CounterVariablesOff();
+        }
     }
 
     public void CounterSuccessOff()

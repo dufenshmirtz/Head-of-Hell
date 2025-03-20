@@ -12,6 +12,7 @@ public class CharacterAnimationEvents : MonoBehaviour
     Lithra lithra;
     Chiback chiback;
     Lupen lupen;
+    Visvia visvia;
 
     //General
     void Start()
@@ -223,5 +224,19 @@ public class CharacterAnimationEvents : MonoBehaviour
         {
             Debug.LogWarning("No Character components found on this GameObject.");
         }
+    }
+
+    //Visvia
+
+    public void DealGrabDamageEvent()
+    {
+        visvia = (Visvia)character;
+        visvia.GrabDmg();
+    }
+
+    public void DealQuickDamageEvent()
+    {
+        visvia = (Visvia)character;
+        visvia.DealQuickDamage();
     }
 }
