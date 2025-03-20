@@ -266,4 +266,6 @@ public class CharacterChoiceMenu : MonoBehaviour
         int randomIndex = Random.Range(0, availableButtons.Count);
         return availableButtons[randomIndex];
     }
+
+
 }
