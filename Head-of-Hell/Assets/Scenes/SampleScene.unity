@@ -4827,7 +4827,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: 
   SteelagerColor: {r: 0.9725491, g: 0.69411767, b: 0, a: 1}
-  FinColor: {r: 1, g: 0, b: 0.1137255, a: 1}
+  FinColor: {r: 1, g: 1, b: 1, a: 1}
   RagerColor: {r: 1, g: 1, b: 1, a: 1}
   SkiplerColor: {r: 1, g: 1, b: 1, a: 1}
   VanderColor: {r: 0.08627451, g: 1, b: 0, a: 1}
@@ -29640,7 +29640,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: 
   SteelagerColor: {r: 0.9725491, g: 0.69411767, b: 0, a: 1}
-  FinColor: {r: 1, g: 0, b: 0.1137255, a: 1}
+  FinColor: {r: 1, g: 1, b: 1, a: 1}
   RagerColor: {r: 1, g: 1, b: 1, a: 1}
   SkiplerColor: {r: 1, g: 1, b: 1, a: 1}
   VanderColor: {r: 0.08627451, g: 1, b: 0, a: 1}
