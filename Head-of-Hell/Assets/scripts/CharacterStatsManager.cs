@@ -83,6 +83,25 @@ public class CharacterStatsManager : MonoBehaviour
             }
         }
     }
+    public void ResetAllStats()
+    {
+        print("kolosssrs");
+        foreach (var characterName in characterNames)
+        {
+            if (characterStatsDict.ContainsKey(characterName))
+            {
+                characterStatsDict[characterName].wins = 0;
+                characterStatsDict[characterName].totalGames = 0;
+                print("kolos2");
+            }
+            else
+            {
+                print("kolossss");
+            }
+        }
+
+        SaveCharacterStats(); // Save the reset stats to PlayerPrefs
+    }
 }
 
 [System.Serializable]

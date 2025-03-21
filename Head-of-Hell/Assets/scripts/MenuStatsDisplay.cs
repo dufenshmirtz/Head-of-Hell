@@ -28,4 +28,10 @@ public class MenuStatsDisplay : MonoBehaviour
 
         statsDisplayText.text = statsText;
     }
+
+    public void ResetStats()
+    {
+        CharacterStatsManager.Instance.ResetAllStats();
+        UpdateStatsDisplay() ;
+    }
 }

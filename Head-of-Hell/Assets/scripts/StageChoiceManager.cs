@@ -104,7 +104,7 @@ public class StageChoiceManager : MonoBehaviour
 
         if (!picked && selectedIndex != 4 && selectedIndex != 5)
         {
-            stageChoiceButtons.HoveringIn(buttons[selectedIndex].name);
+            
         }
 
     }
@@ -147,8 +147,10 @@ public class StageChoiceManager : MonoBehaviour
 
         if (!picked && selectedIndex != 6 && selectedIndex != 7)
         {
-            stageChoiceButtons.HoveringIn(buttons[selectedIndex].name);
+            
         }
+
+
 
     }
 
@@ -164,7 +166,7 @@ public class StageChoiceManager : MonoBehaviour
             notSelected = false;
 
             // Update character name display
-            stageChoiceButtons.HoveringIn(buttons[0].name);
+            
         }
     }
 
