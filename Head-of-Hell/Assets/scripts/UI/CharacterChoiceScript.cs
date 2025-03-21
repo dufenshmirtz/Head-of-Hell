@@ -5,154 +5,41 @@ using UnityEngine.UI;
 public class CharacterChoiceScript : MonoBehaviour
 {
     public Button[] buttons;  // Assign your buttons in the Inspector
-    private int selectedIndex = 0;
     public MainMenuMusic sfx;
-    bool notSelected;
-
-    private int rows = 2;  // Number of rows in your button grid
-    private int cols = 3;  // Number of columns in your button grid
-
-    private bool clickProcessed = false;
-
     public CharacterChoiceMenu characterChoiceMenu;  // Reference to the CharacterChoiceMenu script
-
+    private bool notSelected = true;
     public bool bothpicked = false;
 
     void Start()
     {
         notSelected = true;
+
+        // Automatically assign OnSelect event for each button
+        foreach (Button btn in buttons)
+        {
+            EventTrigger trigger = btn.gameObject.GetComponent<EventTrigger>();
+            if (trigger == null)
+            {
+                trigger = btn.gameObject.AddComponent<EventTrigger>();
+            }
+
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.Select;
+            entry.callback.AddListener((eventData) => { OnButtonHighlighted(btn); });
+
+            trigger.triggers.Add(entry);
+        }
     }
 
     void Update()
     {
-        // Navigate through the buttons with the arrow keys
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow) ||
+            Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow)) && notSelected)
         {
-            if (notSelected)
-            {
-                AutoSelectButton();
-                return;
-            }
-            NavigateVertical(1);
+            AutoSelectButton();
         }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            if (notSelected)
-            {
-                AutoSelectButton();
-                return;
-            }
-            NavigateVertical(-1);
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            if (notSelected)
-            {
-                AutoSelectButton();
-                return;
-            }
-            NavigateHorizontal(1);
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            if (notSelected)
-            {
-                AutoSelectButton();
-                return;
-            }
-            NavigateHorizontal(-1);
-        }
-
-        
     }
 
-    void NavigateVertical(int direction)
-    {
-        sfx.ButtonSound();
-        buttons[selectedIndex].OnDeselect(null);
-
-        if (bothpicked)
-        {
-            // When both players picked, only navigate between "Back" (index 6) and "Start" (index 7)
-            if (direction > 0)
-            {
-                selectedIndex = selectedIndex == 6 ? 7 : 6;
-            }
-            else
-            {
-                selectedIndex = selectedIndex == 7 ? 6 : 7;
-            }
-        }
-        else
-        {
-            int newIndex = selectedIndex + direction * cols;
-            if (newIndex >= buttons.Length) newIndex %= buttons.Length;
-            if (newIndex < 0) newIndex += buttons.Length;
-
-            selectedIndex = newIndex;
-
-            if (selectedIndex > 6)
-            {
-                selectedIndex = 0;
-            }
-        }
-
-        
-
-        EventSystem.current.SetSelectedGameObject(buttons[selectedIndex].gameObject);
-        buttons[selectedIndex].Select();
-
-        if (!bothpicked && selectedIndex != 6 && selectedIndex != 7)
-        {
-            characterChoiceMenu.HoveringIn(buttons[selectedIndex].name);
-        }
-
-    }
-
-    void NavigateHorizontal(int direction)
-    {
-        sfx.ButtonSound();
-        buttons[selectedIndex].OnDeselect(null);
-
-        if (bothpicked)
-        {
-            // When both players picked, only navigate between "Back" (index 6) and "Start" (index 7)
-            if (direction > 0)
-            {
-                selectedIndex = selectedIndex == 6 ? 7 : 6;
-            }
-            else
-            {
-                selectedIndex = selectedIndex == 7 ? 6 : 7;
-            }
-        }
-        else
-        {
-            int newIndex = selectedIndex + direction;
-            int currentRow = selectedIndex / cols;
-
-            // Ensure new index is within the same row
-            if (newIndex >= (currentRow + 1) * cols) newIndex = currentRow * cols;
-            if (newIndex < currentRow * cols) newIndex = (currentRow + 1) * cols - 1;
-
-            selectedIndex = newIndex;
-            if (selectedIndex > 6)
-            {
-                selectedIndex = 0;
-            }
-        }
-        
-        EventSystem.current.SetSelectedGameObject(buttons[selectedIndex].gameObject);
-        buttons[selectedIndex].Select();
-
-        if (!bothpicked && selectedIndex != 6 && selectedIndex != 7)
-        {
-            characterChoiceMenu.HoveringIn(buttons[selectedIndex].name);
-        }
-
-    }
-
-    
     void AutoSelectButton()
     {
         // Ensure the first button is selected by default
@@ -168,8 +55,17 @@ public class CharacterChoiceScript : MonoBehaviour
         }
     }
 
-    public void BothPicked(bool didthey)
+    public void OnButtonHighlighted(Button button)
     {
-        bothpicked = didthey;
+        if (!bothpicked)
+        {
+            sfx.ButtonSound();
+            characterChoiceMenu.HoveringIn(button.name);
+        }
+    }
+
+    public void BothPicked(bool didThey)
+    {
+        bothpicked = didThey;
     }
 }

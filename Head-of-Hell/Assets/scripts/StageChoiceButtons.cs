@@ -5,13 +5,9 @@ using TMPro;
 public class StageChoiceButtons : MonoBehaviour
 {
     public Button[] stageButtons;  // Buttons representing stages
-
     public TextMeshProUGUI stageNameText;  // Text to display the selected stage name
-
     public Button startButton;  // Button to confirm the stage selection
-
     private bool stagePicked = false;
-
     public MainMenuMusic audiomanager;
 
     void Start()
@@ -24,12 +20,18 @@ public class StageChoiceButtons : MonoBehaviour
         startButton.gameObject.SetActive(false);  // Hide the start button initially
     }
 
+    void Update()
+    {
+        // Detect right mouse button click
+        if (Input.GetMouseButtonDown(1)) // 1 means right mouse button
+        {
+            ResetStageSelection();
+        }
+    }
+
     public void OnStageButtonClicked(Button button)
     {
-        if (stagePicked)
-        {
-            return;
-        }
+        if (stagePicked) return;
 
         // Get the stage index or identifier from the button
         int stageIndex = System.Array.IndexOf(stageButtons, button);
@@ -60,6 +62,8 @@ public class StageChoiceButtons : MonoBehaviour
 
     public void ResetStageSelection()
     {
+        if (!stagePicked) return; // If no stage was picked, don't do anything
+
         // Reactivate all stage buttons
         foreach (Button button in stageButtons)
         {
@@ -72,25 +76,19 @@ public class StageChoiceButtons : MonoBehaviour
 
         // Hide the start button
         startButton.gameObject.SetActive(false);
+
+        Debug.Log("Stage selection reset!");
     }
 
     public void HoveringIn(string name)
     {
-        if (stagePicked)
-        {
-            return;
-        }
-
+        if (stagePicked) return;
         stageNameText.text = name;
     }
 
     public void HoveringOut()
     {
-        if (stagePicked)
-        {
-            return;
-        }
-
+        if (stagePicked) return;
         stageNameText.text = "";
     }
 
