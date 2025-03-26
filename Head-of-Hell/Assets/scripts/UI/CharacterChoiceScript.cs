@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; // Import SceneManager
 
 public class CharacterChoiceScript : MonoBehaviour
 {
     public Button[] buttons;  // Assign your buttons in the Inspector
+    public Button startButton; // Assign your Start button in the Inspector
     public MainMenuMusic sfx;
     public CharacterChoiceMenu characterChoiceMenu;  // Reference to the CharacterChoiceMenu script
     private bool notSelected = true;
@@ -38,6 +40,18 @@ public class CharacterChoiceScript : MonoBehaviour
         {
             AutoSelectButton();
         }
+
+        if (bothpicked)
+        {
+            Debug.Log("Both players have picked");
+        }
+
+        // Check if both players have picked and Enter is pressed
+        if (bothpicked && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
+        {
+            Debug.Log("Enter Key pressed, trying to start game");
+            TriggerStartButton();
+        }
     }
 
     void AutoSelectButton()
@@ -67,5 +81,13 @@ public class CharacterChoiceScript : MonoBehaviour
     public void BothPicked(bool didThey)
     {
         bothpicked = didThey;
+    }
+
+    void TriggerStartButton()
+    {
+        if (startButton != null)
+        {
+            startButton.onClick.Invoke(); // Simulates a button click
+        }
     }
 }

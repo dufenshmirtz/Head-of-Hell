@@ -11571,7 +11571,7 @@ MonoBehaviour:
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 258459144}
     m_SelectOnDown: {fileID: 1285657032}
-    m_SelectOnLeft: {fileID: 1251873981}
+    m_SelectOnLeft: {fileID: 2104072078}
     m_SelectOnRight: {fileID: 156924021}
   m_Transition: 1
   m_Colors:
@@ -16106,7 +16106,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &893962520
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16160,6 +16160,7 @@ MonoBehaviour:
   - {fileID: 1251873981}
   - {fileID: 156924021}
   - {fileID: 1269562321}
+  startButton: {fileID: 0}
   sfx: {fileID: 344690514}
   characterChoiceMenu: {fileID: 1305964959}
   bothpicked: 0
@@ -22825,7 +22826,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 715.95, y: -456}
+  m_AnchoredPosition: {x: 715.9501, y: -455.9999}
   m_SizeDelta: {x: 444.1369, y: 160.38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1269562321
@@ -22841,7 +22842,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -24083,7 +24084,7 @@ GameObject:
   - component: {fileID: 1305964956}
   - component: {fileID: 1305964959}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: CharacterButtons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
