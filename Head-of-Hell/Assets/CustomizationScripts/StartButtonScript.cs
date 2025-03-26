@@ -1,18 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class StartButtonScript : MonoBehaviour
 {
-    public TMP_Text setting;
-    
-    public void CheckForDefault()
-    {
-        if(setting.text == "Default")
-        {
-            CustomRuleset ruleset= new CustomRuleset();
+    public TMP_Text setting; // Assign in Inspector (for Default ruleset check)
 
+    void Update()
+    {
+        // Check for Enter key press (both Return and Keypad Enter)
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            StartGame();
+        }
+    }
+
+    // Called when the UI Button is clicked (assign in Inspector)
+    public void OnStartButtonClicked()
+    {
+        StartGame();
+    }
+
+    private void StartGame()
+    {
+        // Check if the ruleset is "Default" and apply settings
+        if (setting.text == "Default")
+        {
+            CustomRuleset ruleset = new CustomRuleset();
             ruleset.health = 100;
             ruleset.powerupsEnabled = true;
             ruleset.rounds = 1;
@@ -25,10 +39,13 @@ public class StartButtonScript : MonoBehaviour
             ruleset.hideHealth = false;
             ruleset.devTools = false;
 
-            // Save the ruleset data to PlayerPrefs as JSON
+            // Save to PlayerPrefs
             string json = JsonUtility.ToJson(ruleset);
             PlayerPrefs.SetString("SelectedRuleset", json);
-            PlayerPrefs.Save(); // Make sure data is saved
+            PlayerPrefs.Save();
         }
+
+        // Load the game scene (replace "GameScene" with your actual scene name)
+        SceneManager.LoadScene(1);
     }
 }
