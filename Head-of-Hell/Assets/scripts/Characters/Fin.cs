@@ -146,6 +146,15 @@ public class Fin : Character
         base.TakeDamage(dmg, blockable);
     }
 
+    override public void TakeDamageNoAnimation(int dmg, bool blockable)
+    {
+        if(DetectCounter()){
+            return;
+        }
+
+        base.TakeDamageNoAnimation(dmg, blockable);
+    }
+
     #endregion
 
     #region LightAttack
