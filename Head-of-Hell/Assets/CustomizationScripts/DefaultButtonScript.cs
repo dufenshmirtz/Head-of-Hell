@@ -10,5 +10,6 @@ public class DefaultButtonScript : MonoBehaviour
     public void Defaultify()
     {
         choice.text="Default";
+        RulesetManager.Instance.SetRulesetNum(-1);
     }
 }

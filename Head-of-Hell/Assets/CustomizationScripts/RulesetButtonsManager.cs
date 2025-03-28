@@ -20,6 +20,7 @@ public class RulesetButtonsManager : MonoBehaviour
             string json = JsonUtility.ToJson(ruleset);
             PlayerPrefs.SetString("SelectedRuleset", json);
             PlayerPrefs.Save(); // Make sure data is saved
+            RulesetManager.Instance.SetRulesetNum(ruleNumber);
 
             Debug.Log($"Ruleset for Slot {ruleNumber} saved to PlayerPrefs");
         }
