@@ -9,7 +9,7 @@ public class CharacterStatsManager : MonoBehaviour
 
     private List<string> characterNames = new List<string>
     {
-        "Fin", "Skipler", "Lithra", "Lazy Bigus", "Rager", "Vander", "Chiback", "Steelager"
+        "Fin", "Skipler", "Lithra", "Lazy Bigus", "Rager", "Vander", "Chiback", "Steelager","Lupen","Visvia"
     };
 
     void Awake()

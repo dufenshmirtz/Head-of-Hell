@@ -206,7 +206,7 @@ public class Visvia : Character
             // Change color based on the current form
             if (currentForm == 0)
             {
-                StartCoroutine(ChangeColor(Color.blue));
+                StartCoroutine(ChangeColor(Color.white));
             }
             if (currentForm == 1)
             {
@@ -214,7 +214,7 @@ public class Visvia : Character
             }
             if (currentForm == 2)
             {
-                StartCoroutine(ChangeColor(Color.green));
+                StartCoroutine(ChangeColor(Color.blue));
             }
         }
     }
@@ -228,7 +228,6 @@ public class Visvia : Character
         sr.color = newColor; // Change to the new color
 
         yield return new WaitForSeconds(0.5f); // Wait for 1 second
-        sr.color = originalColor; // Revert back to the original color
         trasformin = false;
     }
 
