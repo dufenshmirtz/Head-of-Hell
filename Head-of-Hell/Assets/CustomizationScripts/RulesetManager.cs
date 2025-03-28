@@ -3,6 +3,7 @@ using UnityEngine;
 public class RulesetManager : MonoBehaviour
 {
     public static RulesetManager Instance;
+    int rulesetNum=-1;
 
     private void Awake()
     {
@@ -32,5 +33,13 @@ public class RulesetManager : MonoBehaviour
             return JsonUtility.FromJson<CustomRuleset>(json);
         }
         return null;
+    }
+
+    public void SetRulesetNum(int num){
+        rulesetNum=num;
+    }
+
+    public int GetRulesetNum(){
+        return rulesetNum;
     }
 }
