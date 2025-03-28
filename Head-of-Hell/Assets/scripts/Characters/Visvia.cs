@@ -10,7 +10,7 @@ public class Visvia : Character
     GameObject fartPrefab;
     bool fartin = true;
     bool trasformin = false;
-    int cd1=5, cd2=5, cd3 = 5;
+    int cd1=10, cd2=6, cd3 = 8;
     Transform grabPoint;
     List<FartManager> activeFarts = new List<FartManager>(); // Track all farts
     bool explosionDamaged = false;
@@ -130,16 +130,17 @@ public class Visvia : Character
 
     IEnumerator FartBoost()
     {
-        fartDamage = fartDamage * 3;
+        fartDamage = fartDamage * 2;
         moveSpeed= moveSpeed + 2;
         canAlterSpeed = false;
+        OnCooldown(cd1);
 
         yield return new WaitForSeconds(5f); // Wait for 1 second
 
         fartDamage = fartDamage / 2;
         moveSpeed= OGMoveSpeed;
         canAlterSpeed = true;
-        OnCooldown(cd2);
+        
     }
 
     void ExplodeAllFarts()
@@ -152,15 +153,16 @@ public class Visvia : Character
             }
         }
         activeFarts.Clear(); // Clear the list after explosion
+        OnCooldown(cd3);
     }
 
     public void FartExploded()
     {
         if (!explosionDamaged)
         {
+            enemy.Knockback(8f, 0.3f, false);
             enemy.TakeDamage(10,true);
             explosionDamaged = true;
-            OnCooldown(cd3);
             StartCoroutine(ResetExplosionCouroutine());
         }
     }
@@ -177,10 +179,12 @@ public class Visvia : Character
     {
         fartDuration=fartDuration*10;
 
-        yield return new WaitForSeconds(3f); // Wait for 1 second
+        OnCooldown(cd2);
+
+        yield return new WaitForSeconds(3f); 
 
         fartDuration = fartDuration / 10;
-        OnCooldown(cd2);
+        
     }
 
     #endregion

@@ -208,7 +208,7 @@ public class Lupen : Character
     public void Robbed()
     {
         robberyCountter++;
-        if (robberyCountter == 2)
+        if (robberyCountter == 1)
         {
             
             wipDamage++;
