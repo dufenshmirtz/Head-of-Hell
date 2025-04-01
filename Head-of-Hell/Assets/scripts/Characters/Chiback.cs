@@ -170,7 +170,9 @@ public class Chiback : Character
             enemy.TakeDamage(5, true);
 
             
-            enemy.Knockback(15f, 0.8f, true);
+            if(!onCooldown){
+                enemy.Knockback(15f, 0.8f, true);
+            }
             enemy.DisableBlock(true);
             enemy.DisableJump(true);
             StartCoroutine(ResetBlockability());

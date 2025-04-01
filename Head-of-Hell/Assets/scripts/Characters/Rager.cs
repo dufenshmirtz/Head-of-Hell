@@ -7,7 +7,7 @@ public class Rager : Character
     float cooldown = 20f;
     int hit1Damage = 2, hit2Damage = 7, hit3Damage = 10;
     //Lightattack
-    int lightDamage = 5;
+    int lightDamage = 3;
     bool spellHit = false;
 
     #region HeavyAttack
