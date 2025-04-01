@@ -15,6 +15,7 @@ public class LazyBigus : Character
     public BeamScript bScript;
     private Coroutine poisonResetCoroutine;
     public BulletScript bulletScript;
+    bool beamHit=false;
 
     public override void Start()
     {
@@ -74,10 +75,22 @@ public class LazyBigus : Character
 
     public void BeamHitEnemy()
     {
-        enemy.TakeDamage(10,true);
-        enemy.Knockback(13f, 0.5f, true);
-        audioManager.PlaySFX(audioManager.beamHit, 1.8f);
-        StartCoroutine(Poison(1,2f,5));
+        if(!beamHit){
+            enemy.TakeDamage(10,true);
+            enemy.Knockback(13f, 0.5f, true);
+            audioManager.PlaySFX(audioManager.beamHit, 1.8f);
+            StartCoroutine(Poison(2,1f,5));
+            StartCoroutine(BeamDetectorReset());
+        }
+    }
+
+    private IEnumerator BeamDetectorReset(){
+
+        beamHit=true;
+
+        yield return new WaitForSeconds(1f);
+
+        beamHit=false;
     }
 
     private IEnumerator Poison(int damageAmount, float interval, int times)
