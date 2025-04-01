@@ -40,6 +40,10 @@ public class Steelager : Character
             audioManager.PlaySFX(audioManager.explosion, audioManager.lessVol);
             enemy.TakeDamage(heavyDamage, true);
 
+            if(moveSpeed > OGMoveSpeed){
+                enemy.TakeDamageNoAnimation(3,false);
+            }
+
             if (!enemy.isBlocking)
             {
                 enemy.Knockback(11f, 0.15f, true);
@@ -134,4 +138,6 @@ public class Steelager : Character
         animator.SetTrigger("Charge");
     }
     #endregion
+
+    //Passive
 }
