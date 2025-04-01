@@ -212,6 +212,15 @@ public abstract class Character : MonoBehaviour
         heavySpeed = moveSpeed / 2;
 
         cooldownSlider.maxValue = 1f;
+
+        //Disable Indicators
+        shield.gameObject.SetActive(false);
+        poison.gameObject.SetActive(false);
+        Stack1Poison.gameObject.SetActive(false);
+        Stack2Poison.gameObject.SetActive(false);
+        Stack3Poison.gameObject.SetActive(false);
+        stun.gameObject.SetActive(false);
+        blockDisabledIndicator.gameObject.SetActive(false);
         
     }
 
@@ -979,6 +988,7 @@ public abstract class Character : MonoBehaviour
         {
             return;
         }
+
 
         if (dmg == chargeDmg)
         {

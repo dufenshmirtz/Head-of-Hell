@@ -230,7 +230,7 @@ public class LazyBigus : Character
 
     private IEnumerator ResetPoisonAfterDelay()
     {
-        yield return new WaitForSeconds(5f); // Wait for 5 seconds
+        yield return new WaitForSeconds(8f); // Wait for 5 seconds
         ResetPoisonStacks();
         poisonCounter = 0; // Reset the poison counter
     }
