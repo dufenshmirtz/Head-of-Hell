@@ -40,8 +40,10 @@ public class Steelager : Character
             audioManager.PlaySFX(audioManager.explosion, audioManager.lessVol);
             enemy.TakeDamage(heavyDamage, true);
 
-            if(moveSpeed > OGMoveSpeed){
+            if(knocked){
                 enemy.TakeDamageNoAnimation(3,false);
+            }else{
+                print(moveSpeed);
             }
 
             if (!enemy.isBlocking)

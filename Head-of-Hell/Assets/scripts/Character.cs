@@ -291,7 +291,6 @@ public abstract class Character : MonoBehaviour
         {
             if (KBCounter > 0)
             {
-                print("***Update");
                 if (knockfromright == true)
                 {
                     if (!knockbackXaxis)
@@ -698,7 +697,6 @@ public abstract class Character : MonoBehaviour
     #region Knockback
     public void Knockback(float force, float time, bool axis)
     {
-        print("***function");
         if (knockable)
         {
             knockbackXaxis = axis;
@@ -708,6 +706,8 @@ public abstract class Character : MonoBehaviour
             if (time == 0.3333f)
             {
                 enemyOnRight = !enemyOnRight;
+                knocked=true;
+                StartCoroutine(ResetKnockedAfterDelay(0.3333f));
             }
             else
             {
@@ -726,6 +726,7 @@ public abstract class Character : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         // Reset the knocked variable
+        print("l");
         knocked = false;
     }
 
