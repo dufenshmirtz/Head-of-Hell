@@ -84,12 +84,17 @@ public class Lupen : Character
     override public void Spell()
     {
         stayStatic();
+        ignoreUpdate = true;
+        ignoreDamage = true;
+        knockable = false;
         animator.SetTrigger("Spell");
-        //UsingAbility(cooldown);
     }
 
     public void Transformation()
     {
+        ignoreUpdate = false;
+        ignoreDamage=false;
+        knockable = true;
         do
         {
             randomCharacter = characterChoiceHandler.PickRandomCharacter();
@@ -114,10 +119,6 @@ public class Lupen : Character
         robberyCountter=rc;
         currHealth = currentHealth;
         RemoveLastAttachedScript();
-        characterChoiceHandler.ChangeCharacter("Lupen");
-        cEvents.ChangeCharacterEvents(2);
-        enemy.ChangeEnemy(characterChoiceHandler.CharacterChoice(1));
-        P1Name.text = "Lupen";
         OnCooldown(cooldown);
     }
 
@@ -135,12 +136,19 @@ public class Lupen : Character
             // Destroy the last component
             Destroy(lastComponent);
 
+            characterChoiceHandler.ChangeCharacter("Lupen");
+            cEvents.ChangeCharacterEvents(2);
+            enemy.ChangeEnemy(characterChoiceHandler.CharacterChoice(1));
+            P1Name.text = "Lupen";
+
             Debug.Log($"Removed component: {lastComponent.GetType().Name}");
         }
         else
         {
             Debug.LogWarning("No scripts to remove on this GameObject.");
         }
+
+
     }
 
     #endregion

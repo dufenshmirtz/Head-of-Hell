@@ -44,7 +44,7 @@ public class Visvia : Character
                 animator.SetTrigger("Spell");
                 break;
             case 2:
-                animator.SetTrigger("QuickAttack");
+                animator.SetTrigger("HeavyAttack");
                 break;
         }
     }
@@ -60,7 +60,13 @@ public class Visvia : Character
             enemy.TakeDamage(heavyDamage, true);
             if (!enemy.isBlocking)
             {
-                enemy.Knockback(11f, 0.15f, true);
+                if(currentForm == 1){
+                    enemy.Knockback(17f, 0.3f, true);
+                }if(currentForm == 2){
+                    enemy.Knockback(5f, 0.3333f, true);
+                }else{
+                    enemy.Knockback(11f, 0.15f, true);
+                }
             }
 
         }
