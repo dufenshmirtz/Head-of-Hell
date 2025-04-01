@@ -41,7 +41,7 @@ public class Visvia : Character
                 audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
                 break;
             case 1:
-                animator.SetTrigger("Spell");
+                animator.SetTrigger("HeavyAttack");
                 break;
             case 2:
                 animator.SetTrigger("HeavyAttack");
@@ -61,11 +61,14 @@ public class Visvia : Character
             if (!enemy.isBlocking)
             {
                 if(currentForm == 1){
-                    enemy.Knockback(17f, 0.3f, true);
-                }if(currentForm == 2){
+                    enemy.Knockback(25f, 0.2f, true);
+                    print("ass2%%1");
+                }else if(currentForm == 2){
                     enemy.Knockback(5f, 0.3333f, true);
+                    print("ass2%%2");
                 }else{
                     enemy.Knockback(11f, 0.15f, true);
+                    print("ass2%%3");
                 }
             }
 

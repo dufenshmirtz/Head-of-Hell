@@ -87,6 +87,7 @@ public class Lupen : Character
         ignoreUpdate = true;
         ignoreDamage = true;
         knockable = false;
+        damageShield = false;
         animator.SetTrigger("Spell");
     }
 
