@@ -99,7 +99,7 @@ public class Lupen : Character
         do
         {
             randomCharacter = characterChoiceHandler.PickRandomCharacter();
-        } while (randomCharacter=="Lupen");
+        } while (randomCharacter=="Lupen" || randomCharacter=="Visvia");
         
         characterChoiceHandler.ChangeCharacter(randomCharacter);
         cEvents.ChangeCharacterEvents(1);
