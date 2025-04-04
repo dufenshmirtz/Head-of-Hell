@@ -137,7 +137,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2.3
+  - time: 0.98333335
     functionName: ResetExplosionEvent
     data: 
     objectReferenceParameter: {fileID: 0}

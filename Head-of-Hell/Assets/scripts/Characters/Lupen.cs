@@ -177,6 +177,7 @@ public class Lupen : Character
             enemy.Slow(1.5f,2f);
             StartCoroutine(SpeedUpCoroutine(1.5f,2f));
             audioManager.PlaySFX(audioManager.counterSucces, audioManager.doubleVol);
+            StartCoroutine(TriggerRobberyIndicator());
         }
         else
         {
@@ -201,6 +202,14 @@ public class Lupen : Character
         audioManager.PlaySFX(audioManager.katanaSeath, audioManager.doubleVol);
         wipReady = true;
         QuickAttackIndicatorEnable();
+    }
+
+    IEnumerator TriggerRobberyIndicator()
+    {
+        robberyCountIndicator.text = (wipDamage-1).ToString();
+        robberyCountIndicator.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        robberyCountIndicator.gameObject.SetActive(false);
     }
 
     #endregion
