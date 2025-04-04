@@ -139,6 +139,8 @@ public abstract class Character : MonoBehaviour
     protected bool specialDisable = false;
     protected bool chargeDisable = false;
 
+    public bool overrideDeath=false;
+
     //handling variables
     int grounds = 0;
     int isonpad = 0;
@@ -1067,6 +1069,9 @@ public abstract class Character : MonoBehaviour
 
     public void Die()
     {
+        if(overrideDeath){
+            return;
+        }
         animator.SetBool("isDead", true);
         Collider2D[] colliders = GetComponents<Collider2D>();
         foreach (Collider2D collider in colliders)
@@ -1399,6 +1404,10 @@ public abstract class Character : MonoBehaviour
 
     public void KeepStats(string winner,string loser)
     {
+        if(winner==loser){
+            return;
+        }
+        
         if (CharacterStatsManager.Instance!=null)
         {
             CharacterStatsManager.Instance.KeepStats(winner, loser);

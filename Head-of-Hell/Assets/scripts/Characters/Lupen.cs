@@ -104,6 +104,7 @@ public class Lupen : Character
         characterChoiceHandler.ChangeCharacter(randomCharacter);
         cEvents.ChangeCharacterEvents(1);
         stolenCharacter = characterChoiceHandler.CharacterChoice(1);
+        stolenCharacter.overrideDeath = true; //in case he dies in form
         stayDynamic();
         enemy.ChangeEnemy(stolenCharacter);
         //SaveValues and change form
