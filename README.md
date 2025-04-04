@@ -28,8 +28,13 @@
 
 # XLR8 Structure
 
--Graphics and lore designer: Giannis Chrysomallis
+-Graphics and lore Moderator: Giannis Chrysomallis
 
--UI Moderator: Stathis Iliadis
+-Graphics designer: Giorgos Benas
 
--Gameplay Moderator: Fotis Chrysomallis
+-UI Moderator: Aris Hartopoulos
+
+-Gameplay Moderator/General Manager: Fotis Chrysomallis
+
+-SFX Moderator: Stathis Iliadis
+
