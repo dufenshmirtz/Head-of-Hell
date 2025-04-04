@@ -278,6 +278,11 @@ public class CharacterManager : MonoBehaviour
                 spriteRenderer.color = LupenColor;
                 animator.runtimeAnimatorController = LupenAnimatorController;
                 break;
+            case "Visvia":
+                character = visvia;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = VisviaAnimatorController;
+                break;
         }
     }
 }

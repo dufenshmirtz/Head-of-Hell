@@ -102,6 +102,8 @@ public abstract class Character : MonoBehaviour
     protected GameObject quickAttackIndicator;
     protected GameObject stun;
     protected GameObject shield;
+
+    protected TextMeshPro robberyCountIndicator;
     protected bool stunned = false;
 
     //movement keys
@@ -221,6 +223,7 @@ public abstract class Character : MonoBehaviour
         Stack3Poison.gameObject.SetActive(false);
         stun.gameObject.SetActive(false);
         blockDisabledIndicator.gameObject.SetActive(false);
+        robberyCountIndicator.gameObject.SetActive(false);
         
     }
 
@@ -242,6 +245,7 @@ public abstract class Character : MonoBehaviour
         Stack1Poison = characterSetup.Stack1Poison;
         Stack2Poison = characterSetup.Stack2Poison;
         Stack3Poison = characterSetup.Stack3Poison;
+        robberyCountIndicator = characterSetup.robberyCountIndicator;
         stun = characterSetup.stun;
         enemyLayer = characterSetup.enemyLayer;
         shield = characterSetup.shield;
@@ -1326,17 +1330,21 @@ public abstract class Character : MonoBehaviour
     }
     public void ActivateblockBreaker(bool on)
     {
-        blockDisabledIndicator.gameObject.SetActive(on);
+        blockDisabledIndicator.gameObject.SetActive(on); 
     }
 
     public void Heal(int amount)
     {
-        currHealth += amount;
-        if (currHealth > maxHealth)
-        {
-            currHealth = maxHealth;
+        if(!animator.GetBool("isDead")){
+            
+            currHealth += amount;
+            if (currHealth > maxHealth)
+            {
+                currHealth = maxHealth;
+            }
+            healthbar.SetHealth(currHealth);
         }
-        healthbar.SetHealth(currHealth);
+        
     }
 
     public void ChangeEnemy(Character newEnemy)
