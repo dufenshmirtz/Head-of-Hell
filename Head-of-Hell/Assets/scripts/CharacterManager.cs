@@ -279,7 +279,7 @@ public class CharacterManager : MonoBehaviour
                 animator.runtimeAnimatorController = LupenAnimatorController;
                 break;
             case "Visvia":
-                character = visvia;
+                character = this.gameObject.AddComponent<Visvia>();
                 animator = GetComponent<Animator>();
                 animator.runtimeAnimatorController = VisviaAnimatorController;
                 break;
