@@ -138,6 +138,7 @@ public abstract class Character : MonoBehaviour
     protected bool blockDisable = false;
     protected bool specialDisable = false;
     protected bool chargeDisable = false;
+    bool ignoreStats=false;
 
     public bool overrideDeath=false;
 
@@ -691,6 +692,7 @@ public abstract class Character : MonoBehaviour
         EnemyAbilityBlock();
         animator.SetBool("isUsingAbility", true);
         cdbarimage.sprite = activeSprite;
+        isBlocking = false;
         UpdateCooldownSlider(cd);
     }
 
@@ -889,7 +891,7 @@ public abstract class Character : MonoBehaviour
     {
         animator.SetBool("cWalk", false);
         animator.SetBool("Crouch", false);
-         PlayerBlock(false);
+        PlayerBlock(false);
         isBlocking=false;
 
         ResetQuickPunch();
@@ -1404,10 +1406,10 @@ public abstract class Character : MonoBehaviour
 
     public void KeepStats(string winner,string loser)
     {
-        if(winner==loser){
+        if(winner==loser || ignoreStats){
             return;
         }
-        
+
         if (CharacterStatsManager.Instance!=null)
         {
             CharacterStatsManager.Instance.KeepStats(winner, loser);

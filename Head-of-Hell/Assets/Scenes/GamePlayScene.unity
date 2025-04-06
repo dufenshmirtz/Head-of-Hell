@@ -331,6 +331,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
 --- !u!1 &27000638
 GameObject:
   m_ObjectHideFlags: 0
@@ -1573,7 +1574,7 @@ GameObject:
   m_Component:
   - component: {fileID: 75958759}
   m_Layer: 0
-  m_Name: TrashMaybe
+  m_Name: Trash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3437,6 +3438,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   mirrorFireAttackPoint: {fileID: 689308824}
   fireAttackPoint: {fileID: 2133402719}
 --- !u!1 &174624792
@@ -4047,6 +4049,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &184793119
@@ -6054,6 +6057,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1522488523}
   bombsParent: {fileID: 2100796710}
@@ -7939,6 +7943,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
 --- !u!114 &355700673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8824,6 +8829,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -10270,6 +10276,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1670223497}
   bombsParent: {fileID: 2100796710}
@@ -11489,6 +11496,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &541449327
@@ -12415,6 +12423,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 343137453}
   bombsParent: {fileID: 2100796710}
@@ -14189,6 +14198,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -16735,6 +16745,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 569739573}
   bulletSpeed: 35
@@ -19559,6 +19570,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
 --- !u!1001 &882995806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19896,6 +19908,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
 --- !u!114 &892172695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23065,6 +23078,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
 --- !u!1 &1025716889
 GameObject:
   m_ObjectHideFlags: 0
@@ -23532,6 +23546,7 @@ GameObject:
   - component: {fileID: 1052106698}
   - component: {fileID: 1052106697}
   - component: {fileID: 1052106696}
+  - component: {fileID: 1052106699}
   m_Layer: 8
   m_Name: RobberyCounter
   m_TagString: Untagged
@@ -23700,6 +23715,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1052106694}
   m_CullTransparentMesh: 1
+--- !u!114 &1052106699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052106694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79dbf44acec63b949b3c117f7181dc94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1057621995
 GameObject:
   m_ObjectHideFlags: 0
@@ -25358,6 +25385,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
 --- !u!1 &1169185177
 GameObject:
   m_ObjectHideFlags: 0
@@ -25566,6 +25594,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
 --- !u!1 &1185634414
 GameObject:
   m_ObjectHideFlags: 0
@@ -26324,6 +26353,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
 --- !u!1 &1220970790
 GameObject:
   m_ObjectHideFlags: 0
@@ -26963,6 +26993,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
 --- !u!114 &1228552612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27214,6 +27245,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -27657,6 +27689,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -28426,6 +28459,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   mirrorFireAttackPoint: {fileID: 1079567584}
   fireAttackPoint: {fileID: 1505197450}
 --- !u!114 &1300380414
@@ -28937,6 +28971,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1100786215}
   bombsParent: {fileID: 2100796710}
@@ -31693,6 +31728,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
 --- !u!114 &1478511390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32949,6 +32985,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   mirrorFireAttackPoint: {fileID: 79255834}
   fireAttackPoint: {fileID: 1247528379}
 --- !u!114 &1531342472
@@ -34680,6 +34717,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1881472743}
   bulletSpeed: 35
@@ -35139,6 +35177,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1943892085}
   bulletSpeed: 35
@@ -37244,6 +37283,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 461525617}
   bulletSpeed: 35
@@ -38516,6 +38556,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
 --- !u!114 &1753174034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41245,6 +41286,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &1988288838 stripped
@@ -41966,6 +42008,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   mirrorFireAttackPoint: {fileID: 1584761535}
   fireAttackPoint: {fileID: 1839956112}
 --- !u!1 &2018083340
@@ -42537,6 +42580,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1001 &2041432792
@@ -43114,7 +43158,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2100796710}
   m_Layer: 0
-  m_Name: DynamicTraash
+  m_Name: DynamicTrash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44530,6 +44574,7 @@ MonoBehaviour:
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
+  overrideDeath: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
