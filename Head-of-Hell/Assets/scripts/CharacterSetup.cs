@@ -49,6 +49,7 @@ public class CharacterSetup : MonoBehaviour
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
     public GameObject quickAttackIndicator;
+    public TextMeshProUGUI damageCounter;
 
 
     public int playerNum;
