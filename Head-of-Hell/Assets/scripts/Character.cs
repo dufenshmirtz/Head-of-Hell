@@ -39,6 +39,10 @@ public abstract class Character : MonoBehaviour
     protected GameObject mainMenuButton;
     protected Slider cooldownSlider;
 
+    protected TextMeshProUGUI damageCounter;
+
+    bool damageCounterReseted = true;
+
     //basic stats
     public float moveSpeed = 4f; // Initialize moveSpeed
     protected float heavySpeed;
@@ -263,6 +267,7 @@ public abstract class Character : MonoBehaviour
         playAgainButton = characterSetup.playAgainButton;
         mainMenuButton = characterSetup.mainMenuButton;
         cooldownSlider = characterSetup.cooldownSlider;
+        damageCounter = characterSetup.damageCounter;
         audioManager = characterSetup.audioManager;
         quickAttackIndicator = characterSetup.quickAttackIndicator;
 
@@ -614,6 +619,7 @@ public abstract class Character : MonoBehaviour
             rb.bodyType = RigidbodyType2D.Dynamic;
         }
         chargeReset = false;
+        chargeAttackActive = false;
     }
 
     public Collider2D[] GetColliders()
@@ -849,6 +855,7 @@ public abstract class Character : MonoBehaviour
                     charging = false;
                     knockable = true;
                     animator.ResetTrigger("tookDmg");
+                    chargeAttackActive=false;
                 }
                 return true;
             } 
@@ -1035,6 +1042,8 @@ public abstract class Character : MonoBehaviour
                 currHealth -= 5;
                 Debug.Log("Took 5 damage.");
                 healthbar.SetHealth(currHealth);
+
+                StartCoroutine(TriggerDamageCounter(5));
             }
             //if its light attack take no dmg
 
@@ -1044,6 +1053,8 @@ public abstract class Character : MonoBehaviour
                 Debug.Log("Took " + dmg + " damage.");
                 healthbar.SetHealth(currHealth);
                 moveSpeed = OGMoveSpeed;
+
+                StartCoroutine(TriggerDamageCounter(dmg));
             }
         }
         else
@@ -1059,6 +1070,8 @@ public abstract class Character : MonoBehaviour
             animator.SetTrigger("tookDmg");
 
             healthbar.SetHealth(currHealth);
+
+            StartCoroutine(TriggerDamageCounter(dmg));
 
             Debug.Log("Took " + dmg + " damage.");
         }
@@ -1161,6 +1174,8 @@ public abstract class Character : MonoBehaviour
 
             healthbar.SetHealth(currHealth);
 
+            StartCoroutine(TriggerDamageCounter(dmg));
+
             Debug.Log("Took " + dmg + " damage.");
         }
 
@@ -1168,6 +1183,20 @@ public abstract class Character : MonoBehaviour
         {
             Die();
         }
+    }
+
+    IEnumerator TriggerDamageCounter(int damage){
+
+        if(damageCounter.gameObject.activeSelf){
+            damage += int.Parse(damageCounter.text);
+        }
+        damageCounter.text = damage.ToString();
+        damageCounter.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(2f);
+
+        damageCounter.gameObject.SetActive(false);
+
     }
 
     public void DealDamageToEnemy(int amount)

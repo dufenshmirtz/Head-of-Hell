@@ -4632,9 +4632,9 @@ RectTransform:
   m_Children:
   - {fileID: 1937351131}
   - {fileID: 310275625}
-  - {fileID: 832322832}
   - {fileID: 2043734450}
   - {fileID: 893962520}
+  - {fileID: 832322832}
   - {fileID: 1586750639}
   - {fileID: 89366904}
   - {fileID: 1340899663}
