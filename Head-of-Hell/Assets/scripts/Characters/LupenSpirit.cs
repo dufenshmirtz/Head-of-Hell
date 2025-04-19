@@ -22,6 +22,7 @@ public class LupenSpirit : MonoBehaviour
     public helthbarscript healthbar;
     public int maxHealth;
     bool swapped;
+    bool healthswap=true;
 
     public void Start()
     {
@@ -31,16 +32,28 @@ public class LupenSpirit : MonoBehaviour
 
     void Update()
     {
-        if (swapped)
+        if (!healthswap) //set his health right
         {
             stolenCharacter.SetCurrentHealth(currentHealth);
-            swapped = false;
+            healthswap=true;
+        }
+
+        if(swapped){  //case he dies in form
+            if(stolenCharacter.GetCurrentHealth() <= 0){
+                lupen.enabled=true;
+                lupenInFormSpell = false;
+                swapped = false;
+                currentHealth=stolenCharacter.GetCurrentHealth();
+                lupen.ReturnToLupen(whipDamage,robberyCounter,currentHealth);
+                lupen.Die();
+            }
         }
         
-        if (lupenInFormSpell && !animator.GetBool("Casting"))
+        if (lupenInFormSpell && !animator.GetBool("Casting"))  //return after casting
         {
             lupen.enabled=true;
             lupenInFormSpell = false;
+            swapped = false;
             currentHealth=stolenCharacter.GetCurrentHealth();
             lupen.ReturnToLupen(whipDamage,robberyCounter,currentHealth);
         }
@@ -66,6 +79,8 @@ public class LupenSpirit : MonoBehaviour
         print(stolenCharacter);
 
         swapped = true;
+
+        healthswap=false;
 
         //stolenCharacter.TakeDamageNoAnimation(maxHealth - currentHealth, false);
     }

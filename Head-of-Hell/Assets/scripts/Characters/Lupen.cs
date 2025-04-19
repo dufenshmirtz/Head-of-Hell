@@ -99,11 +99,12 @@ public class Lupen : Character
         do
         {
             randomCharacter = characterChoiceHandler.PickRandomCharacter();
-        } while (randomCharacter=="Lupen");
+        } while (randomCharacter=="Lupen" || randomCharacter=="Visvia");
         
         characterChoiceHandler.ChangeCharacter(randomCharacter);
         cEvents.ChangeCharacterEvents(1);
         stolenCharacter = characterChoiceHandler.CharacterChoice(1);
+        stolenCharacter.overrideDeath = true; //in case he dies in form
         stayDynamic();
         enemy.ChangeEnemy(stolenCharacter);
         //SaveValues and change form
@@ -177,6 +178,7 @@ public class Lupen : Character
             enemy.Slow(1.5f,2f);
             StartCoroutine(SpeedUpCoroutine(1.5f,2f));
             audioManager.PlaySFX(audioManager.counterSucces, audioManager.doubleVol);
+            StartCoroutine(TriggerRobberyIndicator());
         }
         else
         {
@@ -201,6 +203,14 @@ public class Lupen : Character
         audioManager.PlaySFX(audioManager.katanaSeath, audioManager.doubleVol);
         wipReady = true;
         QuickAttackIndicatorEnable();
+    }
+
+    IEnumerator TriggerRobberyIndicator()
+    {
+        robberyCountIndicator.text = (wipDamage-1).ToString();
+        robberyCountIndicator.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        robberyCountIndicator.gameObject.SetActive(false);
     }
 
     #endregion

@@ -29,6 +29,8 @@ public class CharacterSetup : MonoBehaviour
     public GameObject Stack3Poison;
     public GameObject stun;
     public GameObject shield;
+
+    public TextMeshPro robberyCountIndicator;
     public GameManager gameManager;
 
     public Rigidbody2D rb;
@@ -47,6 +49,7 @@ public class CharacterSetup : MonoBehaviour
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
     public GameObject quickAttackIndicator;
+    public TextMeshProUGUI damageCounter;
 
 
     public int playerNum;

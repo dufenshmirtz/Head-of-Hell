@@ -66,8 +66,8 @@ public class Steelager : Character
         ignoreDamage=true;
         animator.SetTrigger("Spell");
         audioManager.PlaySFX(audioManager.bigExplosion, audioManager.doubleVol);
-         UsingAbility(cooldown);
-         stayStatic();
+        UsingAbility(cooldown);
+        stayStatic();
     }
 
     public void DealExplosionDamage()
@@ -84,8 +84,8 @@ public class Steelager : Character
 
     public void ExplosionReset()
     {
-         OnCooldown(cooldown);
-         stayDynamic();
+        OnCooldown(cooldown);
+        stayDynamic();
         ignoreDamage = false;
     }
 

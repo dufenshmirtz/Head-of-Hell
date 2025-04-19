@@ -39,6 +39,10 @@ public abstract class Character : MonoBehaviour
     protected GameObject mainMenuButton;
     protected Slider cooldownSlider;
 
+    protected TextMeshProUGUI damageCounter;
+
+    bool damageCounterReseted = true;
+
     //basic stats
     public float moveSpeed = 4f; // Initialize moveSpeed
     protected float heavySpeed;
@@ -102,6 +106,8 @@ public abstract class Character : MonoBehaviour
     protected GameObject quickAttackIndicator;
     protected GameObject stun;
     protected GameObject shield;
+
+    protected TextMeshPro robberyCountIndicator;
     protected bool stunned = false;
 
     //movement keys
@@ -136,6 +142,9 @@ public abstract class Character : MonoBehaviour
     protected bool blockDisable = false;
     protected bool specialDisable = false;
     protected bool chargeDisable = false;
+    bool ignoreStats=false;
+
+    public bool overrideDeath=false;
 
     //handling variables
     int grounds = 0;
@@ -221,6 +230,7 @@ public abstract class Character : MonoBehaviour
         Stack3Poison.gameObject.SetActive(false);
         stun.gameObject.SetActive(false);
         blockDisabledIndicator.gameObject.SetActive(false);
+        robberyCountIndicator.gameObject.SetActive(false);
         
     }
 
@@ -242,6 +252,7 @@ public abstract class Character : MonoBehaviour
         Stack1Poison = characterSetup.Stack1Poison;
         Stack2Poison = characterSetup.Stack2Poison;
         Stack3Poison = characterSetup.Stack3Poison;
+        robberyCountIndicator = characterSetup.robberyCountIndicator;
         stun = characterSetup.stun;
         enemyLayer = characterSetup.enemyLayer;
         shield = characterSetup.shield;
@@ -256,6 +267,7 @@ public abstract class Character : MonoBehaviour
         playAgainButton = characterSetup.playAgainButton;
         mainMenuButton = characterSetup.mainMenuButton;
         cooldownSlider = characterSetup.cooldownSlider;
+        damageCounter = characterSetup.damageCounter;
         audioManager = characterSetup.audioManager;
         quickAttackIndicator = characterSetup.quickAttackIndicator;
 
@@ -607,6 +619,7 @@ public abstract class Character : MonoBehaviour
             rb.bodyType = RigidbodyType2D.Dynamic;
         }
         chargeReset = false;
+        chargeAttackActive = false;
     }
 
     public Collider2D[] GetColliders()
@@ -685,6 +698,7 @@ public abstract class Character : MonoBehaviour
         EnemyAbilityBlock();
         animator.SetBool("isUsingAbility", true);
         cdbarimage.sprite = activeSprite;
+        isBlocking = false;
         UpdateCooldownSlider(cd);
     }
 
@@ -841,6 +855,7 @@ public abstract class Character : MonoBehaviour
                     charging = false;
                     knockable = true;
                     animator.ResetTrigger("tookDmg");
+                    chargeAttackActive=false;
                 }
                 return true;
             } 
@@ -883,7 +898,7 @@ public abstract class Character : MonoBehaviour
     {
         animator.SetBool("cWalk", false);
         animator.SetBool("Crouch", false);
-         PlayerBlock(false);
+        PlayerBlock(false);
         isBlocking=false;
 
         ResetQuickPunch();
@@ -1027,6 +1042,8 @@ public abstract class Character : MonoBehaviour
                 currHealth -= 5;
                 Debug.Log("Took 5 damage.");
                 healthbar.SetHealth(currHealth);
+
+                StartCoroutine(TriggerDamageCounter(5));
             }
             //if its light attack take no dmg
 
@@ -1036,6 +1053,8 @@ public abstract class Character : MonoBehaviour
                 Debug.Log("Took " + dmg + " damage.");
                 healthbar.SetHealth(currHealth);
                 moveSpeed = OGMoveSpeed;
+
+                StartCoroutine(TriggerDamageCounter(dmg));
             }
         }
         else
@@ -1052,6 +1071,8 @@ public abstract class Character : MonoBehaviour
 
             healthbar.SetHealth(currHealth);
 
+            StartCoroutine(TriggerDamageCounter(dmg));
+
             Debug.Log("Took " + dmg + " damage.");
         }
 
@@ -1063,6 +1084,9 @@ public abstract class Character : MonoBehaviour
 
     public void Die()
     {
+        if(overrideDeath){
+            return;
+        }
         animator.SetBool("isDead", true);
         Collider2D[] colliders = GetComponents<Collider2D>();
         foreach (Collider2D collider in colliders)
@@ -1150,6 +1174,8 @@ public abstract class Character : MonoBehaviour
 
             healthbar.SetHealth(currHealth);
 
+            StartCoroutine(TriggerDamageCounter(dmg));
+
             Debug.Log("Took " + dmg + " damage.");
         }
 
@@ -1157,6 +1183,20 @@ public abstract class Character : MonoBehaviour
         {
             Die();
         }
+    }
+
+    IEnumerator TriggerDamageCounter(int damage){
+
+        if(damageCounter.gameObject.activeSelf){
+            damage += int.Parse(damageCounter.text);
+        }
+        damageCounter.text = damage.ToString();
+        damageCounter.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(2f);
+
+        damageCounter.gameObject.SetActive(false);
+
     }
 
     public void DealDamageToEnemy(int amount)
@@ -1326,17 +1366,21 @@ public abstract class Character : MonoBehaviour
     }
     public void ActivateblockBreaker(bool on)
     {
-        blockDisabledIndicator.gameObject.SetActive(on);
+        blockDisabledIndicator.gameObject.SetActive(on); 
     }
 
     public void Heal(int amount)
     {
-        currHealth += amount;
-        if (currHealth > maxHealth)
-        {
-            currHealth = maxHealth;
+        if(!animator.GetBool("isDead")){
+            
+            currHealth += amount;
+            if (currHealth > maxHealth)
+            {
+                currHealth = maxHealth;
+            }
+            healthbar.SetHealth(currHealth);
         }
-        healthbar.SetHealth(currHealth);
+        
     }
 
     public void ChangeEnemy(Character newEnemy)
@@ -1391,6 +1435,10 @@ public abstract class Character : MonoBehaviour
 
     public void KeepStats(string winner,string loser)
     {
+        if(winner==loser || ignoreStats){
+            return;
+        }
+
         if (CharacterStatsManager.Instance!=null)
         {
             CharacterStatsManager.Instance.KeepStats(winner, loser);
