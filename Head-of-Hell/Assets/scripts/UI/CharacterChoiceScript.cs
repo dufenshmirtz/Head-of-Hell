@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement; // Import SceneManager
 
 public class CharacterChoiceScript : MonoBehaviour
 {
+    private Button lastHighlightedButton = null;
+
     public Button[] buttons;  // Assign your buttons in the Inspector
     public Button startButton; // Assign your Start button in the Inspector
     public MainMenuMusic sfx;
@@ -40,11 +42,11 @@ public class CharacterChoiceScript : MonoBehaviour
         {
             AutoSelectButton();
         }
-
-        if (bothpicked)
-        {
-            Debug.Log("Both players have picked");
-        }
+        
+        // debug for deselect if (bothpicked)
+        //{
+            //Debug.Log("Both players have picked");
+        //}
 
         // Check if both players have picked and Enter is pressed
         if (bothpicked && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
@@ -75,8 +77,29 @@ public class CharacterChoiceScript : MonoBehaviour
         {
             sfx.ButtonSound();
             characterChoiceMenu.HoveringIn(button.name);
+
+            // Hide border from the last highlighted button
+            if (lastHighlightedButton != null && lastHighlightedButton != button)
+            {
+                Transform lastBorder = lastHighlightedButton.transform.Find("Border");
+                if (lastBorder != null)
+                {
+                    lastBorder.gameObject.SetActive(false);
+                }
+            }
+
+            // Show border on the currently highlighted button
+            Transform border = button.transform.Find("Border");
+            if (border != null)
+            {
+                border.gameObject.SetActive(true);
+            }
+
+            // Save the current button as last highlighted
+            lastHighlightedButton = button;
         }
     }
+
 
     public void BothPicked(bool didThey)
     {

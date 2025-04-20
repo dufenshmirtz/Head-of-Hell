@@ -101,6 +101,9 @@ public class CharacterChoiceMenu : MonoBehaviour
             {
                 Transform childP2 = button.transform.Find("P2");
                 if (childP2 != null) childP2.gameObject.SetActive(false);
+                Transform border = button.transform.Find("Border");
+                if (border != null) border.gameObject.SetActive(false);
+
                 button.interactable = true;
             }
             p2characterNameText.text = "";
