@@ -45,9 +45,9 @@ public class Vander : Character
     #region Spell
     override public void Spell()
     {
-         attackRange += 0.5f;
+        attackRange += 0.5f;
         animator.SetTrigger("Spell");
-         UsingAbility(cooldown);
+        UsingAbility(cooldown);
         ignoreDamage = true;
     }
 
@@ -142,6 +142,44 @@ public class Vander : Character
     #endregion
 
     #region Passive
+
+    public override void DealChargeDmg()
+    {
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+
+        if (hitEnemy != null)
+        {
+            enemy.StopPunching();
+            enemy.BreakCharge();
+            enemy.TakeDamage(chargeDmg,false);
+            Lifesteal(8);
+            enemy.Knockback(13f, 0.4f, false);
+            audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
+            if (chargeHitSound != null)
+            {
+                audioManager.PlaySFX(chargeHitSound, 1.5f);
+            }
+        }
+        else
+        {
+            if (chargeHitSound != null)
+            {
+                audioManager.PlaySFX(chargeHitSound, 1.5f);
+            }
+            else
+            {
+                audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
+            }
+            
+        }
+        chargeReset = true;
+        knockable = true;
+        charging = false;
+        animator.SetBool("Casting", false);
+        animator.SetBool("Charging", false);
+    }
+
+
     void Lifesteal(int amount)
     {
          currHealth += amount;

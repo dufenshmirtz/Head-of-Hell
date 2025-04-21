@@ -58,7 +58,7 @@ public class Lithra : Character
     override public void Spell()
     {
         animator.SetTrigger("Spell");
-         UsingAbility(cooldown);
+        UsingAbility(cooldown);
         ignoreDamage = true;
         audioManager.PlaySFX(audioManager.swoosh, audioManager.doubleVol);
     }

@@ -141,7 +141,7 @@ public abstract class Character : MonoBehaviour
     protected bool heavyDisable = false;
     protected bool blockDisable = false;
     protected bool specialDisable = false;
-    protected bool chargeDisable = false;
+    public bool chargeDisable = false;
     bool ignoreStats=false;
 
     public bool overrideDeath=false;
