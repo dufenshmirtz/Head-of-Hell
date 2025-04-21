@@ -236,7 +236,6 @@ public class CharacterAnimationEvents : MonoBehaviour
 
     public void DealQuickDamageEvent()
     {
-        visvia = (Visvia)character;
-        visvia.DealQuickDamage();
+ 
     }
 }
