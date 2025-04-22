@@ -77,8 +77,6 @@ public class LupenSpirit : MonoBehaviour
     {
         lupen.enabled=false;
 
-        print(stolenCharacter);
-
         swapped = true;
 
         healthswap=false;

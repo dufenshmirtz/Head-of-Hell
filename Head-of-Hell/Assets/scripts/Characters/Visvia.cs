@@ -16,19 +16,25 @@ public class Visvia : Character
     public int blastCounter=0;
     float overheatDuration = 8f;
     float elapsed = 0f;
-    float overheatFrequency=0.5f;
-    int overheatDamage=3;
+    float overheatFrequency=0.2f;
+    int overheatDamage=2;
 
     int cooldown = 10;
-    int grabDamage = 12;
+    int grabDamage = 6;
+    bool overHeated = false;
 
     Transform grabPoint;
+
+    GameObject blast; // for testing
+    Transform blastPoint;
 
     public override void Start()
     {
         base.Start();
 
-        grabPoint = resources.bellPoint;
+        grabPoint = resources.grabPoint;
+        blast = resources.fart; //for testing
+        blastPoint = resources.fartPoint;
     }
 
     #region HeavyAttack
@@ -66,19 +72,38 @@ public class Visvia : Character
     {
         animator.SetTrigger("Spell");
         blastCounter++;
+        StartCoroutine(HeatCounter());
         UsingAbility(cooldown);
         StartCoroutine(GrabEnd());
     }
 
     public void GrabDmg()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(grabPoint.position, attackRange * 3, enemyLayer);
+        Vector2 capsuleSize = new Vector2(7f, 0.5f); // Long in X-axis, thin in Y-axis
+        Collider2D hitEnemy = Physics2D.OverlapCapsule(grabPoint.position, capsuleSize, CapsuleDirection2D.Horizontal, 0f, enemyLayer);
 
         if (hitEnemy != null)
         {
             enemy.StopPunching();
             enemy.TakeDamage(grabDamage, true);
-            enemy.Knockback(8f, 0.3333f, true);
+            enemy.Knockback(12f, 0.3333f, true);
+        }
+        else
+        {
+            audioManager.PlaySFX(audioManager.bellPunch, audioManager.swooshVolume);
+        }
+    }
+
+
+    public void GrabStartDmg()
+    {
+        Vector2 capsuleSize = new Vector2(7f, 0.5f); // Long in X-axis, thin in Y-axis
+        Collider2D hitEnemy = Physics2D.OverlapCapsule(grabPoint.position, capsuleSize, CapsuleDirection2D.Horizontal, 0f, enemyLayer);
+
+        if (hitEnemy != null)
+        {
+            enemy.StopPunching();
+            enemy.TakeDamage(grabDamage, true);
 
         }
         else
@@ -111,6 +136,10 @@ public class Visvia : Character
 
     private IEnumerator ShotgunBlast()
     {
+        StartCoroutine(HeatCounter());
+
+        ShowShotgunBlast(0.3f);
+
         // Lock orientation
         canRotate = false;
 
@@ -132,12 +161,14 @@ public class Visvia : Character
             }
             audioManager.PlaySFX(audioManager.counterSucces, 1f);
         }
+        //Unlock Rotation
+        yield return new WaitForSeconds(dashDuration-0.1f);
+        canRotate = true;
 
-        // Wait during dash
+        //End recoilDash
         yield return new WaitForSeconds(dashDuration);
 
         // Unlock orientation and reset velocity
-        canRotate = true;
         rb.velocity = Vector2.zero;
         OverheatCheck();
 
@@ -171,11 +202,15 @@ public class Visvia : Character
             quickDisable = true;
             moveSpeed= moveSpeed + 2;
             canAlterSpeed = false;
+            overHeated=true;
             StartCoroutine(Overheat());
         }
     }
 
     IEnumerator Overheat(){
+
+        robberyCountIndicator.text = "X";
+        robberyCountIndicator.gameObject.SetActive(true);
 
         while (elapsed < overheatDuration)
         {
@@ -186,8 +221,10 @@ public class Visvia : Character
                 if (target != null && target != this)
                 {
                     target.TakeDamage(overheatDamage, false);
+
                 }
             }
+            ShowShotgunBlast(0.1f);
 
             yield return new WaitForSeconds(overheatFrequency);
             elapsed += overheatFrequency;
@@ -202,7 +239,27 @@ public class Visvia : Character
         specialDisable = false;
         blockDisable = false;
         quickDisable = false;
+        overHeated=false;
+        robberyCountIndicator.gameObject.SetActive(false);
     }
+
+    IEnumerator HeatCounter(){
+        robberyCountIndicator.text = blastCounter.ToString();
+        robberyCountIndicator.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        if(!overHeated){
+            robberyCountIndicator.gameObject.SetActive(false);
+        }
+        
+    }
+
+    void ShowShotgunBlast(float time)   // for testing
+    {
+        GameObject blastVisual = Instantiate(blast, blastPoint.position, Quaternion.identity);
+        //blastVisual.transform.localScale = Vector3.one * shotgunRange * 2f;
+        Destroy(blastVisual, time); // Show it briefly
+    }
+
 
     #endregion
 
