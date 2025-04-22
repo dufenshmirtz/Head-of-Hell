@@ -18611,6 +18611,8 @@ MonoBehaviour:
   skipPick: {fileID: 0}
   gabaWin: {fileID: 0}
   gabaPick: {fileID: 0}
+  shotgunBlast: {fileID: 8300000, guid: fd71645531950a646b6a42f15d7a5568, type: 3}
+  alarm: {fileID: 8300000, guid: 4fdd5e9de285249428c5a62e5d1f9087, type: 3}
   deathVolume: 3
   heavyAttackVolume: 1
   lightAttackVolume: 1
@@ -36841,7 +36843,7 @@ PrefabInstance:
     - target: {fileID: 3775815256451319138, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: cf96a39428a2f394ab233d360aaa22d9, type: 2}
+      objectReference: {fileID: 9100000, guid: f71edc3b937f70a43934b1b47dee5d0a, type: 2}
     - target: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_LocalScale.x
       value: -1

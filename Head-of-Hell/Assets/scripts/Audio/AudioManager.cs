@@ -94,6 +94,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip gabaWin;
     public AudioClip gabaPick;
 
+    public AudioClip shotgunBlast,alarm;
+
     //volumes
     public float deathVolume = 1.0f;
     public float heavyAttackVolume = 1.0f;
