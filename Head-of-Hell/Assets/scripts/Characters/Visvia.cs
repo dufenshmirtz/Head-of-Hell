@@ -84,6 +84,7 @@ public class Visvia : Character
 
         if (hitEnemy != null)
         {
+            audioManager.PlaySFX(audioManager.stabHit, audioManager.heavySwooshVolume);
             enemy.StopPunching();
             enemy.TakeDamage(grabDamage, true);
             enemy.Knockback(12f, 0.3333f, true);
@@ -104,6 +105,7 @@ public class Visvia : Character
         {
             enemy.StopPunching();
             enemy.TakeDamage(grabDamage, true);
+            audioManager.PlaySFX(audioManager.katanaSwoosh, audioManager.heavySwooshVolume);
 
         }
         else
@@ -140,6 +142,8 @@ public class Visvia : Character
 
         ShowShotgunBlast(0.3f);
 
+        audioManager.PlaySFX(audioManager.shotgunBlast, audioManager.heavySwooshVolume);
+
         // Lock orientation
         canRotate = false;
 
@@ -152,6 +156,7 @@ public class Visvia : Character
         // Deal damage in front of the player
         Vector2 attackPosition = attackPoint.position;
         Collider2D hit = Physics2D.OverlapCircle(attackPoint.position, shotgunRange, enemyLayer);
+        
         if (hit != null)
         {
             enemy.TakeDamage(shotgunDamage, false);
@@ -159,7 +164,6 @@ public class Visvia : Character
             {
                 enemy.Knockback(10f, 0.2f, true);
             }
-            audioManager.PlaySFX(audioManager.counterSucces, 1f);
         }
         //Unlock Rotation
         yield return new WaitForSeconds(dashDuration-0.1f);
@@ -208,6 +212,8 @@ public class Visvia : Character
     }
 
     IEnumerator Overheat(){
+
+        audioManager.PlaySFX(audioManager.alarm, audioManager.heavySwooshVolume);
 
         robberyCountIndicator.text = "X";
         robberyCountIndicator.gameObject.SetActive(true);
