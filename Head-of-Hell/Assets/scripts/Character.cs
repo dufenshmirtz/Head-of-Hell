@@ -1448,5 +1448,6 @@ public abstract class Character : MonoBehaviour
             Debug.Log("Error.StatsManager not loaded properly.");
         } 
     }
+
     #endregion
 }

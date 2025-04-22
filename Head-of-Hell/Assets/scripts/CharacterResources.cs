@@ -38,10 +38,12 @@ public class CharacterResources : MonoBehaviour
     public Transform fartPoint;
     public GameObject fart;
 
+    public Transform grabPoint;
+
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawWireSphere(wipPoint.position, 1f);
-
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(grabPoint.position, new Vector3(7f, 0.5f, 0f)); // Match capsule size
     }
 
 }

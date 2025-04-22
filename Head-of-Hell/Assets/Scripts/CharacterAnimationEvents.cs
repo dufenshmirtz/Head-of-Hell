@@ -228,14 +228,15 @@ public class CharacterAnimationEvents : MonoBehaviour
 
     //Visvia
 
-    public void DealGrabDamageEvent()
+    public void DealGrabReturnDamageEvent()
     {
         visvia = (Visvia)character;
         visvia.GrabDmg();
     }
 
-    public void DealQuickDamageEvent()
+    public void DealGrabStartDamageEvent()
     {
- 
+        visvia = (Visvia)character;
+        visvia.GrabStartDmg();
     }
 }
