@@ -19,7 +19,7 @@ public class Fin : Character
     override public void HeavyAttack()
     {
         animator.SetTrigger("HeavyAttack");
-        audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
+        audioManager.PlaySFX(audioManager.incense, audioManager.doubleVol);
     }
 
     override public void DealHeavyDamage()
@@ -256,4 +256,18 @@ public class Fin : Character
         animator.SetTrigger("Charge");
     }
     #endregion
+
+    public void ThreePointThrow()
+    {
+        audioManager.PlaySFX(audioManager.swoosh, audioManager.normalVol);
+    }
+    public void ThreePointBaptism()
+    {
+        audioManager.PlaySFX(audioManager.waterSplash, audioManager.normalVol);
+    }
+
+    public void ThreePointBall()
+    {
+        audioManager.PlaySFX(audioManager.fireblast, audioManager.normalVol);
+    }
 }

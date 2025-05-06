@@ -96,6 +96,9 @@ public class AudioManager : MonoBehaviour
 
     public AudioClip portal;
 
+    public AudioClip incense;
+    public AudioClip waterSplash;
+
 
     public AudioClip shotgunBlast,alarm;
 
