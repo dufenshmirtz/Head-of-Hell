@@ -1216,7 +1216,7 @@ PrefabInstance:
     - target: {fileID: 2553929291879454509, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 8349b7f4e453b9e4b966cd6122db6b70, type: 2}
+      objectReference: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
     - target: {fileID: 2584085071129299450, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: P1Name
       value: 
@@ -18801,6 +18801,8 @@ MonoBehaviour:
   gabaWin: {fileID: 0}
   gabaPick: {fileID: 0}
   portal: {fileID: 8300000, guid: 3d93f537382f0524f96d0457207ad8b0, type: 3}
+  incense: {fileID: 8300000, guid: ceb3230fffc7bec49a29f08f696200cf, type: 3}
+  waterSplash: {fileID: 8300000, guid: c280083b5534f02448eca00e2bd6950a, type: 3}
   shotgunBlast: {fileID: 8300000, guid: fd71645531950a646b6a42f15d7a5568, type: 3}
   alarm: {fileID: 8300000, guid: 4fdd5e9de285249428c5a62e5d1f9087, type: 3}
   deathVolume: 3
