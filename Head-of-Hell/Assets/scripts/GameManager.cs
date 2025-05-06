@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
     static bool p1Random = false;
     static bool p2Random = false;
     bool gameEnd = false;
+    static int portalNumber;
+    public GameObject[] portalPairs;
 
     // Start is called before the first frame update
     void Start()
@@ -53,10 +55,31 @@ public class GameManager : MonoBehaviour
             CustomRuleset loadedRuleset = JsonUtility.FromJson<CustomRuleset>(json);
 
             roundNumber = loadedRuleset.rounds;
+            portalNumber = loadedRuleset.portals;
         }
         else
         {
             Debug.LogWarning("No ruleset found in PlayerPrefs.");
+        }
+
+        switch (portalNumber)
+        {
+            case 0: 
+                break;
+            case 1:
+                portalPairs[0].SetActive (true);
+                break;
+            case 2:
+                portalPairs[0].SetActive(true);
+                portalPairs[1].SetActive (true);
+                break;
+            case 3:
+                portalPairs[2].SetActive(true);
+                break;
+            case 4:
+                portalPairs[2].SetActive(true);
+                portalPairs[3].SetActive(true);
+                break;
         }
 
         ActivateIndicators();

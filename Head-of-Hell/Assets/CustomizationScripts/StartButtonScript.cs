@@ -38,6 +38,7 @@ public class StartButtonScript : MonoBehaviour
             ruleset.specialDisabled = false;
             ruleset.hideHealth = false;
             ruleset.devTools = false;
+            ruleset.portals = 0;
 
             // Save to PlayerPrefs
             string json = JsonUtility.ToJson(ruleset);
