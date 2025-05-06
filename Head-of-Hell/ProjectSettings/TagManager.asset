@@ -9,6 +9,7 @@ TagManager:
   - Audio
   - Bullet
   - PowerUp
+  - Portal
   layers:
   - Default
   - TransparentFX

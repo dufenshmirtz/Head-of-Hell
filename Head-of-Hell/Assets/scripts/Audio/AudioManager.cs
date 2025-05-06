@@ -94,6 +94,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip gabaWin;
     public AudioClip gabaPick;
 
+    public AudioClip portal;
+
+
     public AudioClip shotgunBlast,alarm;
 
     //volumes

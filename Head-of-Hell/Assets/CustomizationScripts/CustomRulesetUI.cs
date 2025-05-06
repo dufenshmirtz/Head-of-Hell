@@ -14,6 +14,7 @@ public class CustomRulesetUI : MonoBehaviour
     public Button quick, heavy, block, special, charge;
     public Button hideHealthButton;
     public Button devToolsButton;
+    public Button ppButton0,ppButton1, ppButton2, ppButton1non, ppButton2non;
 
     //values
     private int rounds = 1;
@@ -24,6 +25,7 @@ public class CustomRulesetUI : MonoBehaviour
     private bool quickDisabled = false, heavyDisabled = false, blockDisabled = false, specialDisabled = false, chargeDisabled = false;
     private bool hideHealth = false;
     private bool devTools = false;
+    private int portals = 0;
 
     void Start()
     {
@@ -48,6 +50,12 @@ public class CustomRulesetUI : MonoBehaviour
         block.onClick.AddListener(() => ToggleAbility(ref blockDisabled, block));
         special.onClick.AddListener(() => ToggleAbility(ref specialDisabled, special));
         charge.onClick.AddListener(() => ToggleAbility(ref chargeDisabled, charge));
+
+        ppButton0.onClick.AddListener(() => Setportals(0));
+        ppButton1.onClick.AddListener(() => Setportals(1));
+        ppButton2.onClick.AddListener(() => Setportals(2));
+        ppButton1non.onClick.AddListener(() => Setportals(3));
+        ppButton2non.onClick.AddListener(() => Setportals(4));
 
         // Restrict health input to only integers
         healthInput.contentType = TMP_InputField.ContentType.IntegerNumber;
@@ -77,6 +85,7 @@ public class CustomRulesetUI : MonoBehaviour
             SetSpeed(ruleset.playerSpeed);
             SetAbilityStates(ruleset.quickDisabled, ruleset.heavyDisabled, ruleset.blockDisabled, ruleset.specialDisabled, ruleset.chargeDisabled);
             SetDevTools(ruleset.devTools);
+            Setportals(ruleset.portals);
         }
         else
         {
@@ -89,6 +98,7 @@ public class CustomRulesetUI : MonoBehaviour
             SetSpeed(4);
             SetAbilityStates(false, false, false, false, false);
             SetDevTools(false);
+            Setportals(0);
         }
     }
 
@@ -107,6 +117,16 @@ public class CustomRulesetUI : MonoBehaviour
         powerupsEnabled = isEnabled;
         powerupsYesButton.interactable = !powerupsEnabled;
         powerupsNoButton.interactable = powerupsEnabled;
+    }
+
+    private void Setportals(int roundValue)
+    {
+        portals = roundValue;
+        ppButton0.interactable = portals != 0;
+        ppButton1.interactable = portals != 1;
+        ppButton2.interactable = portals != 2;
+        ppButton1non.interactable = portals != 3;
+        ppButton2non.interactable = portals != 4;
     }
 
     private void SetHideHealth(bool hide)
@@ -194,7 +214,8 @@ public class CustomRulesetUI : MonoBehaviour
             blockDisabled = blockDisabled,
             specialDisabled = specialDisabled,
             chargeDisabled = chargeDisabled,
-            devTools=devTools
+            devTools = devTools,
+            portals = portals
         };
 
         RulesetManager.Instance.SaveCustomRuleset(selectedSlot, newRuleset);
