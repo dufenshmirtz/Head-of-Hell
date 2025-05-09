@@ -38,6 +38,10 @@ public class CharacterResources : MonoBehaviour
     public Transform fartPoint;
     public GameObject fart;
 
+    //Fin
+    public GameObject freebaby;
+    public Transform escapeRoute;
+
     public Transform grabPoint;
 
     private void OnDrawGizmosSelected()

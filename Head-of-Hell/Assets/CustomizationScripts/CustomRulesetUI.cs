@@ -15,6 +15,7 @@ public class CustomRulesetUI : MonoBehaviour
     public Button hideHealthButton;
     public Button devToolsButton;
     public Button ppButton0,ppButton1, ppButton2, ppButton1non, ppButton2non;
+    public Button ccYesButton, ccNoButton;
 
     //values
     private int rounds = 1;
@@ -26,6 +27,7 @@ public class CustomRulesetUI : MonoBehaviour
     private bool hideHealth = false;
     private bool devTools = false;
     private int portals = 0;
+    private bool chanChanEnabled = true;
 
     void Start()
     {
@@ -65,6 +67,9 @@ public class CustomRulesetUI : MonoBehaviour
 
         // Set up the listener for save button
         saveButton.onClick.AddListener(SaveCustomRuleset);
+
+        ccYesButton.onClick.AddListener(() => SetChanChanMode(true));
+        ccNoButton.onClick.AddListener(() => SetChanChanMode(false));
 
     }
 
@@ -117,6 +122,13 @@ public class CustomRulesetUI : MonoBehaviour
         powerupsEnabled = isEnabled;
         powerupsYesButton.interactable = !powerupsEnabled;
         powerupsNoButton.interactable = powerupsEnabled;
+    }
+
+    private void SetChanChanMode(bool isEnabled)
+    {
+        chanChanEnabled = isEnabled;
+        ccYesButton.interactable = !chanChanEnabled;
+        ccNoButton.interactable = chanChanEnabled;
     }
 
     private void Setportals(int roundValue)
@@ -215,7 +227,8 @@ public class CustomRulesetUI : MonoBehaviour
             specialDisabled = specialDisabled,
             chargeDisabled = chargeDisabled,
             devTools = devTools,
-            portals = portals
+            portals = portals,
+            chanChan = chanChanEnabled
         };
 
         RulesetManager.Instance.SaveCustomRuleset(selectedSlot, newRuleset);

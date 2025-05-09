@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     bool gameEnd = false;
     static int portalNumber;
     public GameObject[] portalPairs;
+    bool chanChan;
+    public int maxHealth= -1;
 
     // Start is called before the first frame update
     void Start()
@@ -56,10 +58,18 @@ public class GameManager : MonoBehaviour
 
             roundNumber = loadedRuleset.rounds;
             portalNumber = loadedRuleset.portals;
+            chanChan = loadedRuleset.chanChan;
         }
         else
         {
             Debug.LogWarning("No ruleset found in PlayerPrefs.");
+        }
+
+        if(chanChan)
+        {
+            maxHealth = Random.Range(100, 201);
+            portalNumber = Random.Range(0, 5);
+            print("..; " + portalNumber);
         }
 
         switch (portalNumber)

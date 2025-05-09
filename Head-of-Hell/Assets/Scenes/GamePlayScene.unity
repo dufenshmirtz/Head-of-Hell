@@ -1394,6 +1394,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100796710}
     - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: freebaby
+      value: 
+      objectReference: {fileID: 8210700397617554645, guid: 7d869bc1ef8be9145b37f41b749e1214, type: 3}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: wipPoint
       value: 
       objectReference: {fileID: 1250506315}
@@ -1417,6 +1421,10 @@ PrefabInstance:
       propertyPath: bombParent
       value: 
       objectReference: {fileID: 2100796710}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: escapeRoute
+      value: 
+      objectReference: {fileID: 687642920}
     - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: bulletParent
       value: 
@@ -1465,6 +1473,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: 11
       addedObject: {fileID: 100841901}
+    - targetCorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      insertIndex: 12
+      addedObject: {fileID: 687642920}
     - targetCorrespondingSourceObject: {fileID: 8850850641682188571, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: 2
       addedObject: {fileID: 1346476726}
@@ -1613,6 +1624,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 57808467}
   m_CullTransparentMesh: 1
+--- !u!1 &60361243
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 60361244}
+  m_Layer: 8
+  m_Name: escapePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &60361244
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 60361243}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.66, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1367423837}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &74670325
 GameObject:
   m_ObjectHideFlags: 0
@@ -4282,6 +4324,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &184793121
 CapsuleCollider2D:
@@ -8178,6 +8222,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &355700675
 CapsuleCollider2D:
@@ -9073,6 +9119,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &371476604
 CapsuleCollider2D:
@@ -10553,6 +10601,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &448782100
 CapsuleCollider2D:
@@ -11773,6 +11823,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &541449330
 CapsuleCollider2D:
@@ -12706,6 +12758,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &559944329
 CapsuleCollider2D:
@@ -14560,6 +14614,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &627431773
 CapsuleCollider2D:
@@ -15991,6 +16047,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &677239677
 CapsuleCollider2D:
@@ -16394,6 +16452,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 682141727}
   m_CullTransparentMesh: 1
+--- !u!1 &687642919
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 687642920}
+  m_Layer: 8
+  m_Name: escapePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &687642920
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 687642919}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.66, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 221568191}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &689308824 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2136285491085914477, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
@@ -17112,6 +17201,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &770792717
 CapsuleCollider2D:
@@ -20392,6 +20483,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &892172698
 CapsuleCollider2D:
@@ -27690,6 +27783,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &1228552614
 CapsuleCollider2D:
@@ -29194,6 +29289,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &1300380416
 CapsuleCollider2D:
@@ -32465,6 +32562,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!114 &1478511392
 MonoBehaviour:
@@ -33727,6 +33826,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &1531342475
 CapsuleCollider2D:
@@ -35927,6 +36028,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &1609535762
 CapsuleCollider2D:
@@ -37169,6 +37272,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100796710}
     - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: freebaby
+      value: 
+      objectReference: {fileID: 8210700397617554645, guid: 7d869bc1ef8be9145b37f41b749e1214, type: 3}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: wipPoint
       value: 
       objectReference: {fileID: 168730421}
@@ -37192,6 +37299,10 @@ PrefabInstance:
       propertyPath: bombParent
       value: 
       objectReference: {fileID: 2100796710}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: escapeRoute
+      value: 
+      objectReference: {fileID: 60361244}
     - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: bulletParent
       value: 
@@ -37348,6 +37459,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: 11
       addedObject: {fileID: 989350883}
+    - targetCorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: 12
+      addedObject: {fileID: 60361244}
     - targetCorrespondingSourceObject: {fileID: 4307065134795609038, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: 2
       addedObject: {fileID: 246258982}
@@ -39315,6 +39429,8 @@ MonoBehaviour:
   wipPoint: {fileID: 0}
   fartPoint: {fileID: 0}
   fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
   grabPoint: {fileID: 0}
 --- !u!70 &1753174037
 CapsuleCollider2D:

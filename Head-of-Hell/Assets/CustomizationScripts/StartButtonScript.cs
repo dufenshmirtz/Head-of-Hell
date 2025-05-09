@@ -8,6 +8,7 @@ public class StartButtonScript : MonoBehaviour
 
     void Update()
     {
+        print(setting.text);
         // Check for Enter key press (both Return and Keypad Enter)
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
@@ -39,6 +40,7 @@ public class StartButtonScript : MonoBehaviour
             ruleset.hideHealth = false;
             ruleset.devTools = false;
             ruleset.portals = 0;
+            ruleset.chanChan = true;
 
             // Save to PlayerPrefs
             string json = JsonUtility.ToJson(ruleset);

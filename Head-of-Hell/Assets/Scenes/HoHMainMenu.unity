@@ -1972,6 +1972,8 @@ MonoBehaviour:
   ppButton2: {fileID: 1620985762}
   ppButton1non: {fileID: 651287602}
   ppButton2non: {fileID: 1492094143}
+  ccYesButton: {fileID: 1796343771}
+  ccNoButton: {fileID: 162125277}
 --- !u!1 &92267581
 GameObject:
   m_ObjectHideFlags: 0
@@ -3771,7 +3773,7 @@ GameObject:
   - component: {fileID: 162125278}
   - component: {fileID: 162125277}
   m_Layer: 5
-  m_Name: puNoButton
+  m_Name: ccNoButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24274,7 +24276,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1269562324}
         m_TargetAssemblyTypeName: StartButtonScript, Assembly-CSharp
-        m_MethodName: CheckForDefault
+        m_MethodName: OnStartButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -35293,7 +35295,7 @@ GameObject:
   - component: {fileID: 1796343772}
   - component: {fileID: 1796343771}
   m_Layer: 5
-  m_Name: puYesButton
+  m_Name: ccYesButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

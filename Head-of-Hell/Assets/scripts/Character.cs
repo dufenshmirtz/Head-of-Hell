@@ -157,6 +157,8 @@ public abstract class Character : MonoBehaviour
     bool chargeAttackActive = false;
 
     protected bool jumpDisabled = false;
+
+    bool chanChan;
     
 
 
@@ -186,7 +188,17 @@ public abstract class Character : MonoBehaviour
             // Convert the JSON string back to a CustomRuleset object
             CustomRuleset loadedRuleset = JsonUtility.FromJson<CustomRuleset>(json);
 
-            maxHealth =loadedRuleset.health;
+            chanChan = loadedRuleset.chanChan;
+
+            if (chanChan)
+            {
+                StartCoroutine(WaitForMaxHealth());
+            }
+            else
+            {
+                maxHealth = loadedRuleset.health;
+            }
+
 
             moveSpeed = loadedRuleset.playerSpeed;
 
@@ -505,6 +517,17 @@ public abstract class Character : MonoBehaviour
         }*/
 
     }
+
+    IEnumerator WaitForMaxHealth()
+    {
+        // Wait until gameManager.maxHealth is no longer -1
+        yield return new WaitUntil(() => gameManager.maxHealth != -1);
+
+        // Now it's safe to assign the value
+        maxHealth = gameManager.maxHealth;
+        print("..;"+maxHealth);
+    }
+
 
     #endregion
 
@@ -1308,7 +1331,7 @@ public abstract class Character : MonoBehaviour
 
     public bool IsEnemyClose()
     {
-        return Vector3.Distance(this.transform.position, enemy.transform.position) <= 3f;
+        return Vector3.Distance(this.transform.position, enemy.transform.position) <= 4f;
     }
 
     public int GetCurrentHealth()

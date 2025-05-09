@@ -174,6 +174,12 @@ public class CharacterAnimationEvents : MonoBehaviour
         fin.ThreePointBall();
     }
 
+    public void BabyEscaapeEvent()
+    {
+        fin = (Fin)character;
+        fin.FreeExit();
+    }
+
     //Skipler
     public void SwordDashDamageEvent()
     {
