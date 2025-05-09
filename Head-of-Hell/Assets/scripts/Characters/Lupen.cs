@@ -84,11 +84,20 @@ public class Lupen : Character
     override public void Spell()
     {
         stayStatic();
+        KnockNearbyEnemies();
         ignoreUpdate = true;
         ignoreDamage = true;
         knockable = false;
         damageShield = false;
         animator.SetTrigger("Spell");
+    }
+
+    void KnockNearbyEnemies()
+    {
+        if (IsEnemyClose())
+        {
+            enemy.Knockback(9f, 0.5f, false);
+        }
     }
 
     public void Transformation()
