@@ -84,6 +84,7 @@ public class Lupen : Character
     override public void Spell()
     {
         stayStatic();
+        audioManager.PlaySFX(audioManager.transformation, 1.8f);
         KnockNearbyEnemies();
         ignoreUpdate = true;
         ignoreDamage = true;
@@ -178,6 +179,7 @@ public class Lupen : Character
 
     public void DealWipDamage()
     {
+        audioManager.PlaySFX(audioManager.whip , audioManager.normalVol);
         Collider2D hitEnemy = Physics2D.OverlapCapsule(wipPoint.position,size, CapsuleDirection2D.Horizontal,0f,enemyLayer);
 
         if (hitEnemy != null)
@@ -186,13 +188,10 @@ public class Lupen : Character
             Robbed();
             enemy.Slow(1.5f,2f);
             StartCoroutine(SpeedUpCoroutine(1.5f,2f));
-            audioManager.PlaySFX(audioManager.counterSucces, audioManager.doubleVol);
+            audioManager.PlaySFX(audioManager.coinSound, audioManager.normalVol);
             StartCoroutine(TriggerRobberyIndicator());
         }
-        else
-        {
-            audioManager.PlaySFX(audioManager.stab, audioManager.swooshVolume);
-        }
+        
 
     }
 

@@ -18826,9 +18826,9 @@ MonoBehaviour:
   run: {fileID: 8300000, guid: 88bc754e0c2b6464e87c4f37dd9e2491, type: 3}
   dash: {fileID: 8300000, guid: 14948b00fe9485c4683ef762312afa6a, type: 3}
   dashHit: {fileID: 8300000, guid: 47542d15b7f33264b960f4aaaea3a648, type: 3}
-  counterScream: {fileID: 8300000, guid: b2feaa245b8e20e4f913157fe93371db, type: 3}
-  counterClong: {fileID: 8300000, guid: 09efd9d06a4056242ad125c29d3a3160, type: 3}
-  counterSucces: {fileID: 8300000, guid: 36258e181ede36e4180a7f07bfd4cb51, type: 3}
+  counterScream: {fileID: 8300000, guid: f9755d2450d4f1749b1489c4009e45a5, type: 3}
+  counterClong: {fileID: 8300000, guid: 40065e1def0061444bb766058176fe15, type: 3}
+  counterSucces: {fileID: 8300000, guid: d2f39123e9a962a428a0f44405544cda, type: 3}
   stabHit: {fileID: 8300000, guid: 4abe0fcf175276b4aabd4159bc788c03, type: 3}
   stab: {fileID: 8300000, guid: 516ca132e334e3044ac61616c5055a3f, type: 3}
   grab: {fileID: 8300000, guid: 76a6cbd0e9c205f488872f49d21ea5c6, type: 3}
@@ -18894,6 +18894,9 @@ MonoBehaviour:
   portal: {fileID: 8300000, guid: 3d93f537382f0524f96d0457207ad8b0, type: 3}
   incense: {fileID: 8300000, guid: ceb3230fffc7bec49a29f08f696200cf, type: 3}
   waterSplash: {fileID: 8300000, guid: c280083b5534f02448eca00e2bd6950a, type: 3}
+  transformation: {fileID: 8300000, guid: 768454c41d9bfe843b74d1cdea0dda44, type: 3}
+  whip: {fileID: 8300000, guid: 09efd9d06a4056242ad125c29d3a3160, type: 3}
+  coinSound: {fileID: 8300000, guid: 36258e181ede36e4180a7f07bfd4cb51, type: 3}
   shotgunBlast: {fileID: 8300000, guid: fd71645531950a646b6a42f15d7a5568, type: 3}
   alarm: {fileID: 8300000, guid: 4fdd5e9de285249428c5a62e5d1f9087, type: 3}
   deathVolume: 3
@@ -44985,6 +44988,7 @@ MonoBehaviour:
   - {fileID: 979127239}
   - {fileID: 616644771}
   - {fileID: 808757111}
+  maxHealth: -1
 --- !u!1 &2147385444
 GameObject:
   m_ObjectHideFlags: 0
