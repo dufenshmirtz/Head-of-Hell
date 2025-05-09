@@ -60,7 +60,7 @@ public class Fin : Character
     #region Spell
     public override void Spell()
     {
-        audioManager.PlaySFX(audioManager.counterScream, audioManager.counterVol);
+        audioManager.PlaySFX(audioManager.counterScream, 2.5f);
         animator.SetTrigger("Spell");
         counterIsOn = true;
         safety = true;
@@ -118,7 +118,7 @@ public class Fin : Character
     public void Countered()
     {
         animator.SetTrigger("counterHit");
-        audioManager.PlaySFX(audioManager.counterSucces, audioManager.doubleVol);
+        audioManager.PlaySFX(audioManager.counterSucces, 1.5f);
         enemy.stayStatic();
         stayStatic();
         ignoreCounterOff = true;
@@ -130,7 +130,7 @@ public class Fin : Character
         enemy.StopPunching();
         enemy.BreakCharge();
 
-        audioManager.PlaySFX(audioManager.counterClong, audioManager.doubleVol);
+        audioManager.PlaySFX(audioManager.counterClong, 0.5f);
 
         enemy.TakeDamage(damage,true);
 
@@ -270,6 +270,7 @@ public class Fin : Character
     public void ThreePointThrow()
     {
         audioManager.PlaySFX(audioManager.swoosh, audioManager.normalVol);
+        audioManager.PlaySFX(audioManager.counterScream, audioManager.normalVol);
     }
     public void ThreePointBaptism()
     {
