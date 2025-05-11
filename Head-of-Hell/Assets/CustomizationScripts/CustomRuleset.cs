@@ -8,6 +8,8 @@ public class CustomRuleset
     public bool hideHealth;
     public int playerSpeed;         //Player'speed
     public bool devTools;
+    public int portals;
+    public bool chanChan;
 
     //Disable abilitiess
     public bool quickDisabled;       

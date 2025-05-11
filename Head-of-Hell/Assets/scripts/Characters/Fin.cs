@@ -14,12 +14,22 @@ public class Fin : Character
     bool rollReady = true;
     int passiveDamage = 4;
     bool safety = true;
+    Transform escapePoint;
+    GameObject freeBaby;
+
+    public override void Start()
+    {
+        base.Start();
+
+        escapePoint = resources.escapeRoute;
+        freeBaby = resources.freebaby;
+    }
 
     #region HeavyAttack
     override public void HeavyAttack()
     {
         animator.SetTrigger("HeavyAttack");
-        audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
+        audioManager.PlaySFX(audioManager.incense, audioManager.doubleVol);
     }
 
     override public void DealHeavyDamage()
@@ -50,7 +60,7 @@ public class Fin : Character
     #region Spell
     public override void Spell()
     {
-        audioManager.PlaySFX(audioManager.counterScream, audioManager.counterVol);
+        audioManager.PlaySFX(audioManager.counterScream, 2.5f);
         animator.SetTrigger("Spell");
         counterIsOn = true;
         safety = true;
@@ -108,7 +118,7 @@ public class Fin : Character
     public void Countered()
     {
         animator.SetTrigger("counterHit");
-        audioManager.PlaySFX(audioManager.counterSucces, audioManager.doubleVol);
+        audioManager.PlaySFX(audioManager.counterSucces, 1.5f);
         enemy.stayStatic();
         stayStatic();
         ignoreCounterOff = true;
@@ -120,7 +130,7 @@ public class Fin : Character
         enemy.StopPunching();
         enemy.BreakCharge();
 
-        audioManager.PlaySFX(audioManager.counterClong, audioManager.doubleVol);
+        audioManager.PlaySFX(audioManager.counterClong, 0.5f);
 
         enemy.TakeDamage(damage,true);
 
@@ -256,4 +266,52 @@ public class Fin : Character
         animator.SetTrigger("Charge");
     }
     #endregion
+
+    public void ThreePointThrow()
+    {
+        audioManager.PlaySFX(audioManager.swoosh, audioManager.normalVol);
+        audioManager.PlaySFX(audioManager.counterScream, audioManager.normalVol);
+    }
+    public void ThreePointBaptism()
+    {
+        audioManager.PlaySFX(audioManager.waterSplash, audioManager.normalVol);
+    }
+
+    public void ThreePointBall()
+    {
+        audioManager.PlaySFX(audioManager.fireblast, audioManager.normalVol);
+    }
+
+    public void FreeExit()
+    {
+        StartCoroutine(SpawnBabiesWithDelay());
+    }
+
+    IEnumerator SpawnBabiesWithDelay()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            // Instantiate the freeBaby prefab at the escapePoint position
+            GameObject baby = Instantiate(freeBaby, escapePoint.position, Quaternion.identity);
+
+            // Determine direction: -1 if facing right, 1 if facing left (inverted for opposite direction)
+            int direction = transform.localScale.x > 0 ? -1 : 1;
+
+            // Set direction on the BabyRun script
+            BabyRun mover = baby.GetComponent<BabyRun>();
+            if (mover != null)
+            {
+                mover.SetDirection(direction);
+            }
+            else
+            {
+                Debug.LogWarning("BabyRun script is missing on the prefab.");
+            }
+
+            yield return new WaitForSeconds(1.5f);  // Wait 2 seconds before next spawn
+        }
+    }
+
+
+
 }
