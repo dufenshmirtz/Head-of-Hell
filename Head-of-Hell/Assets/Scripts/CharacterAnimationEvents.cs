@@ -156,6 +156,30 @@ public class CharacterAnimationEvents : MonoBehaviour
         fin.DealCounterDmg();
     }
 
+    public void WaterSplashEvent()
+    {
+        fin = (Fin)character;
+        fin.ThreePointBaptism();
+    }
+
+    public void ThrowBabyEvent()
+    {
+        fin = (Fin)character;
+        fin.ThreePointThrow();
+    }
+
+    public void BabyEmergeEvent()
+    {
+        fin = (Fin)character;
+        fin.ThreePointBall();
+    }
+
+    public void BabyEscaapeEvent()
+    {
+        fin = (Fin)character;
+        fin.FreeExit();
+    }
+
     //Skipler
     public void SwordDashDamageEvent()
     {

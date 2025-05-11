@@ -23,9 +23,11 @@ public class AudioManager : MonoBehaviour
     public AudioClip run;
     public AudioClip dash;
     public AudioClip dashHit;
+
     public AudioClip counterScream;
     public AudioClip counterClong;
     public AudioClip counterSucces;
+
     public AudioClip stabHit;
     public AudioClip stab;
     public AudioClip grab;
@@ -93,6 +95,17 @@ public class AudioManager : MonoBehaviour
     public AudioClip skipPick;
     public AudioClip gabaWin;
     public AudioClip gabaPick;
+
+    public AudioClip portal;
+
+    public AudioClip incense;
+    public AudioClip waterSplash;
+
+    public AudioClip transformation;
+    public AudioClip whip;
+    public AudioClip coinSound;
+
+
 
     public AudioClip shotgunBlast,alarm;
 
