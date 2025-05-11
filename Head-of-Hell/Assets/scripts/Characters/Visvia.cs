@@ -8,7 +8,7 @@ public class Visvia : Character
     bool shotgunReady = true;
     float shotgunForce = 15f;
     float upwardsForce = 6f;
-    float shotgunCooldown = 2f;
+    float shotgunCooldown = 4f;
     float dashDuration = 0.3f;
     float shotgunRange = 1f;
     int shotgunDamage = 5;
@@ -17,7 +17,7 @@ public class Visvia : Character
     float overheatDuration = 8f;
     float elapsed = 0f;
     float overheatFrequency=0.2f;
-    int overheatDamage=2;
+    int overheatDamage=1;
 
     int cooldown = 10;
     int grabDamage = 6;
@@ -84,7 +84,7 @@ public class Visvia : Character
 
         if (hitEnemy != null)
         {
-            audioManager.PlaySFX(audioManager.stabHit, audioManager.heavySwooshVolume);
+            audioManager.PlaySFX(audioManager.stabHit, 2f);
             enemy.StopPunching();
             enemy.TakeDamage(grabDamage, true);
             enemy.Knockback(12f, 0.3333f, true);
@@ -105,7 +105,7 @@ public class Visvia : Character
         {
             enemy.StopPunching();
             enemy.TakeDamage(grabDamage, true);
-            audioManager.PlaySFX(audioManager.katanaSwoosh, audioManager.heavySwooshVolume);
+            audioManager.PlaySFX(audioManager.katanaSwoosh, 2f);
 
         }
         else
@@ -142,7 +142,7 @@ public class Visvia : Character
 
         ShowShotgunBlast(0.3f);
 
-        audioManager.PlaySFX(audioManager.shotgunBlast, audioManager.heavySwooshVolume);
+        audioManager.PlaySFX(audioManager.shotgunBlast, 2f);
 
         // Lock orientation
         canRotate = false;
@@ -159,7 +159,7 @@ public class Visvia : Character
         
         if (hit != null)
         {
-            enemy.TakeDamage(shotgunDamage, false);
+            enemy.TakeDamage(shotgunDamage, true);
             if (!enemy.isBlocking)
             {
                 enemy.Knockback(10f, 0.2f, true);
@@ -198,7 +198,7 @@ public class Visvia : Character
     #region Passive
     
     public void OverheatCheck(){
-        if(blastCounter >= 5){
+        if(blastCounter >= 7){
             chargeDisable = true;
             heavyDisable = true;
             specialDisable = true;
@@ -213,12 +213,12 @@ public class Visvia : Character
 
     IEnumerator Overheat(){
 
-        audioManager.PlaySFX(audioManager.alarm, audioManager.heavySwooshVolume);
+        audioManager.PlaySFX(audioManager.alarm, 2f);
 
         robberyCountIndicator.text = "X";
         robberyCountIndicator.gameObject.SetActive(true);
 
-        while (elapsed < overheatDuration)
+        while (elapsed < overheatDuration && !animator.GetBool("isDead"))
         {
             Collider2D hit = Physics2D.OverlapCircle(attackPoint.position, shotgunRange, enemyLayer);
             if (hit != null)
