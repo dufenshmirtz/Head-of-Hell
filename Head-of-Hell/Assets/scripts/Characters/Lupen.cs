@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements.Experimental;
@@ -228,6 +229,44 @@ public class Lupen : Character
     {
         base.ChargeAttack();
         animator.SetTrigger("Charge");
+    }
+
+    public override bool ChargeCheck(KeyCode charge)
+    {
+        if (charging)
+        {
+            chargeAttackActive = true;
+            stayStatic();
+            ignoreMovement = true;
+            if (charged)
+            {
+                if (Input.GetKeyUp(charge) || (controller && Input.GetButtonUp("ChargeAttack" + playerString)))
+                {
+                    int randomIndex = Random.Range(0, 6); // if you have 6 hurt animations
+                    animator.SetFloat("Index", randomIndex);
+                    animator.SetTrigger("ChargedHit");
+                    charged = false;
+                    animator.SetBool("Casting", true);
+                    animator.ResetTrigger("tookDmg");
+                }
+                return true;
+            }
+            else
+            {
+                if (Input.GetKeyUp(charge) || (controller && Input.GetButtonUp("ChargeAttack" + playerString)))
+                {
+                    stayDynamic();
+                    ignoreMovement = false;
+                    animator.SetBool("Charging", false);
+                    charging = false;
+                    knockable = true;
+                    animator.ResetTrigger("tookDmg");
+                    chargeAttackActive = false;
+                }
+                return true;
+            }
+        }
+        return false;
     }
     #endregion
 
