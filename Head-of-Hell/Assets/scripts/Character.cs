@@ -22,7 +22,7 @@ public abstract class Character : MonoBehaviour
     protected CharacterResources resources;
     protected bool usingAbility;
     //Charge
-    bool charged = false;
+    protected bool charged = false;
     protected bool charging = false;
     private Coroutine chargeCoroutine;
     float chargeTime = 0.5f;
@@ -154,7 +154,7 @@ public abstract class Character : MonoBehaviour
 
     protected bool controller = false;
     protected bool chargeReset = false;
-    bool chargeAttackActive = false;
+    protected bool chargeAttackActive = false;
 
     protected bool jumpDisabled = false;
 
@@ -849,7 +849,7 @@ public abstract class Character : MonoBehaviour
         animator.SetBool("Charging", false);
     }
 
-    public bool ChargeCheck(KeyCode charge)
+    public virtual bool ChargeCheck(KeyCode charge)
     {
         if (charging)
         {
