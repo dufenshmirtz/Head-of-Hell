@@ -8,6 +8,7 @@ public class PowerUpSpawner : MonoBehaviour
     public float spawnInterval = 10f; // Time between spawns
     public LayerMask platformMask; // LayerMask for platforms to avoid overlap
     public float checkRadius = 1f; // Radius for overlap check
+    bool chanChan;
 
     private float timer;
 
@@ -24,10 +25,21 @@ public class PowerUpSpawner : MonoBehaviour
             // Convert the JSON string back to a CustomRuleset object
             CustomRuleset loadedRuleset = JsonUtility.FromJson<CustomRuleset>(json);
 
-            if (!loadedRuleset.powerupsEnabled)
+            chanChan = loadedRuleset.chanChan;
+
+            if (chanChan)
             {
-                this.gameObject.SetActive(false);
+                this.gameObject.SetActive(Random.value > 0.5f);  //50% chance
             }
+            else 
+            {
+                if (!loadedRuleset.powerupsEnabled && !chanChan)
+                {
+                    this.gameObject.SetActive(false);
+                }
+            }
+
+            
         }
         else
         {

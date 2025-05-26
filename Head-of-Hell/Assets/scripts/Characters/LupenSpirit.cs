@@ -58,8 +58,9 @@ public class LupenSpirit : MonoBehaviour
             lupen.ReturnToLupen(whipDamage,robberyCounter,currentHealth);
         }
 
-        if ((Input.GetKeyDown(ability) || (controller && Input.GetButtonDown("Spell" + playerString)))&& lupen.isActiveAndEnabled==false)
+        if ((Input.GetKeyDown(ability) || (controller && Input.GetButtonDown("Spell" + playerString)))&& lupen.isActiveAndEnabled==false && !enemy.AmICasting())
         {
+            stolenCharacter.chargeDisable=true;
             StartCoroutine(SetLupenInFormSpellAfterDelay(1f));
         }
         return;
@@ -75,8 +76,6 @@ public class LupenSpirit : MonoBehaviour
     public void Action()
     {
         lupen.enabled=false;
-
-        print(stolenCharacter);
 
         swapped = true;
 
