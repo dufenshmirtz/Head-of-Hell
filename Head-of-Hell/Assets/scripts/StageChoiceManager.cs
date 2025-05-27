@@ -4,28 +4,31 @@ using UnityEngine.UI;
 
 public class StageChoiceManager : MonoBehaviour
 {
-    public Button[] buttons;  // Assign your buttons in the Inspector
+    public Button[] buttons;
     private int selectedIndex = 0;
     public MainMenuMusic sfx;
     bool notSelected;
 
-    private int rows = 2;  // Number of rows in your button grid
-    private int cols = 3;  // Number of columns in your button grid
+    private int rows = 2;
+    private int cols = 3;
 
     private bool clickProcessed = false;
-
-    public StageChoiceButtons stageChoiceButtons;  // Reference to the stageChoiceButtons script
+    public StageChoiceButtons stageChoiceButtons;
 
     public bool picked = false;
+
+    public Button proceedButton;
+    private bool stageSelected = false;
+    private bool gameModeSelected = false;
 
     void Start()
     {
         notSelected = true;
+        proceedButton.interactable = false;
     }
 
     void Update()
     {
-        // Navigate through the buttons with the arrow keys
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             if (notSelected)
@@ -62,8 +65,6 @@ public class StageChoiceManager : MonoBehaviour
             }
             NavigateHorizontal(-1);
         }
-
-        
     }
 
     void NavigateVertical(int direction)
@@ -73,40 +74,26 @@ public class StageChoiceManager : MonoBehaviour
 
         if (picked)
         {
-            // When both players picked, only navigate between "Back" (index 6) and "Start" (index 7)
-            if (direction > 0)
-            {
-                selectedIndex = selectedIndex == 4 ? 5 : 4;
-            }
-            else
-            {
-                selectedIndex = selectedIndex == 5 ? 4 : 5;
-            }
+            // Navigate between Back (index 4), Random (5), and Proceed (6)
+            if (selectedIndex < 4) selectedIndex = 4;
+
+            selectedIndex += direction;
+
+            if (selectedIndex > 6) selectedIndex = 4;
+            if (selectedIndex < 4) selectedIndex = 6;
         }
         else
         {
             int newIndex = selectedIndex + direction * cols;
             if (newIndex >= buttons.Length) newIndex %= buttons.Length;
             if (newIndex < 0) newIndex += buttons.Length;
+            if (newIndex > 3) newIndex = 0; // keep only on stage buttons before selection
 
             selectedIndex = newIndex;
-
-            if (selectedIndex > 4)
-            {
-                selectedIndex = 0;
-            }
         }
-
-        
 
         EventSystem.current.SetSelectedGameObject(buttons[selectedIndex].gameObject);
         buttons[selectedIndex].Select();
-
-        if (!picked && selectedIndex != 4 && selectedIndex != 5)
-        {
-            
-        }
-
     }
 
     void NavigateHorizontal(int direction)
@@ -116,62 +103,57 @@ public class StageChoiceManager : MonoBehaviour
 
         if (picked)
         {
-            // When both players picked, only navigate between "Back" (index 6) and "Start" (index 7)
-            if (direction > 0)
-            {
-                selectedIndex = selectedIndex == 6 ? 7 : 6;
-            }
-            else
-            {
-                selectedIndex = selectedIndex == 7 ? 6 : 7;
-            }
+            if (selectedIndex < 4) selectedIndex = 4;
+
+            selectedIndex += direction;
+            if (selectedIndex > 6) selectedIndex = 4;
+            if (selectedIndex < 4) selectedIndex = 6;
         }
         else
         {
             int newIndex = selectedIndex + direction;
             int currentRow = selectedIndex / cols;
 
-            // Ensure new index is within the same row
             if (newIndex >= (currentRow + 1) * cols) newIndex = currentRow * cols;
             if (newIndex < currentRow * cols) newIndex = (currentRow + 1) * cols - 1;
+            if (newIndex > 3) newIndex = 0;
 
             selectedIndex = newIndex;
-            if (selectedIndex > 6)
-            {
-                selectedIndex = 0;
-            }
         }
-        
+
         EventSystem.current.SetSelectedGameObject(buttons[selectedIndex].gameObject);
         buttons[selectedIndex].Select();
-
-        if (!picked && selectedIndex != 6 && selectedIndex != 7)
-        {
-            
-        }
-
-
-
     }
 
-    
     void AutoSelectButton()
     {
-        // Ensure the first button is selected by default
         if (buttons.Length > 0)
         {
             sfx.ButtonSound();
             EventSystem.current.SetSelectedGameObject(buttons[0].gameObject);
             buttons[0].Select();
             notSelected = false;
-
-            // Update character name display
-            
         }
     }
 
-    public void Picked(bool didthey)
+    public void OnStageSelected()
     {
-        picked = didthey;
+        stageSelected = true;
+        CheckReadyToProceed();
+    }
+
+    public void OnGameModeSelected()
+    {
+        gameModeSelected = true;
+        CheckReadyToProceed();
+    }
+
+    void CheckReadyToProceed()
+    {
+        if (stageSelected && gameModeSelected)
+        {
+            picked = true;
+            proceedButton.interactable = true;
+        }
     }
 }
