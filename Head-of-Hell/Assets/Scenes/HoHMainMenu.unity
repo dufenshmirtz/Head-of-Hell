@@ -6846,7 +6846,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &310275625
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9447,8 +9447,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000030517578, y: -159.78253}
-  m_SizeDelta: {x: -0.0001, y: 319.569}
+  m_AnchoredPosition: {x: 7.47, y: -161.91626}
+  m_SizeDelta: {x: 14.9399, y: 323.8312}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &439883375
 MonoBehaviour:
@@ -10833,9 +10833,9 @@ CanvasGroup:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 520063455}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Alpha: 1
-  m_Interactable: 0
+  m_Interactable: 1
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!1 &520957544
@@ -16393,6 +16393,7 @@ MonoBehaviour:
   sfx: {fileID: 344690514}
   stageChoiceButtons: {fileID: 231687233}
   picked: 0
+  proceedButton: {fileID: 0}
 --- !u!224 &832322832
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23271,8 +23272,8 @@ MonoBehaviour:
     m_NormalColor: {r: 0.52156866, g: 0.13333334, b: 0.2784314, a: 0}
     m_HighlightedColor: {r: 0.18039216, g: 0, b: 0.14901961, a: 0.19215687}
     m_PressedColor: {r: 0.6392157, g: 0.19607845, b: 0.31764707, a: 0.20392157}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_SelectedColor: {r: 0.6392157, g: 0.19607843, b: 0.31764707, a: 0}
+    m_DisabledColor: {r: 0.6392157, g: 0.19607843, b: 0.31764707, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -23340,7 +23341,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.6392157, g: 0.19607843, b: 0.31764707, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -23372,7 +23373,7 @@ SortingGroup:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1244644691}
-  m_Enabled: 1
+  m_Enabled: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
@@ -27987,8 +27988,8 @@ MonoBehaviour:
     m_NormalColor: {r: 0.52156866, g: 0.13333334, b: 0.2784314, a: 0}
     m_HighlightedColor: {r: 0.18039216, g: 0, b: 0.14901961, a: 0.19215687}
     m_PressedColor: {r: 0.6392157, g: 0.19607845, b: 0.31764707, a: 0.20392157}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_SelectedColor: {r: 0.6392157, g: 0.19607843, b: 0.31764707, a: 0}
+    m_DisabledColor: {r: 0.6392157, g: 0.19607843, b: 0.31764707, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -29255,7 +29256,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1454062314
 RectTransform:
   m_ObjectHideFlags: 0
@@ -29292,6 +29293,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statsDisplayText: {fileID: 439883375}
+  resetButton: {fileID: 1244644693}
+  backButton: {fileID: 1381084648}
+  sfx: {fileID: 0}
 --- !u!114 &1454062316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38610,7 +38614,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1937351131
 RectTransform:
   m_ObjectHideFlags: 0
