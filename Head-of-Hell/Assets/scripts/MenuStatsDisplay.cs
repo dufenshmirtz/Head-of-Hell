@@ -8,7 +8,7 @@ public class MenuStatsDisplay : MonoBehaviour
     [SerializeField] private TMP_Text statsDisplayText;
     [SerializeField] private Button resetButton;
     [SerializeField] private Button backButton;
-    [SerializeField] private MainMenuMusic sfx;  // Reference to your sound effect script
+    [SerializeField] private MainMenuMusic sfx;
 
     private Button[] buttons;
     private int selectedIndex = 0;
@@ -40,7 +40,8 @@ public class MenuStatsDisplay : MonoBehaviour
             }
             Navigate(1);
         }
-        else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
             ClickSelectedButton();
         }
@@ -51,13 +52,14 @@ public class MenuStatsDisplay : MonoBehaviour
         if (sfx != null)
             sfx.ButtonSound();
 
-        // Deselect the current button (optional, can trigger OnDeselect callbacks)
+        // Deselect current (if needed)
         buttons[selectedIndex].OnDeselect(null);
 
         selectedIndex += direction;
         if (selectedIndex < 0) selectedIndex = buttons.Length - 1;
         else if (selectedIndex >= buttons.Length) selectedIndex = 0;
 
+        // Set as selected for EventSystem to trigger highlight
         EventSystem.current.SetSelectedGameObject(buttons[selectedIndex].gameObject);
         buttons[selectedIndex].Select();
     }
@@ -75,9 +77,9 @@ public class MenuStatsDisplay : MonoBehaviour
             if (sfx != null)
                 sfx.ButtonSound();
 
-            EventSystem.current.SetSelectedGameObject(buttons[0].gameObject);
-            buttons[0].Select();
-            selectedIndex = 0;
+            selectedIndex = 1;
+            EventSystem.current.SetSelectedGameObject(buttons[selectedIndex].gameObject);
+            buttons[selectedIndex].Select();
             notSelected = false;
         }
     }

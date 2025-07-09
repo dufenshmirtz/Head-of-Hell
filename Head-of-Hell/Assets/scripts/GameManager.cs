@@ -36,18 +36,19 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         stageName = PlayerPrefs.GetString("SelectedStage");
-        if (stageName == "Stage 1")
+        if (stageName == "Stage 1" && stages.Length > 0 && stages[0] != null)
         {
             stages[0].SetActive(true);
         }
-        else if (stageName == "Stage 2")
+        else if (stageName == "Stage 2" && stages.Length > 1 && stages[1] != null)
         {
             stages[1].SetActive(true);
         }
-        else if (stageName == "Stage 3")
+        else if (stageName == "Stage 3" && stages.Length > 2 && stages[2] != null)
         {
             stages[2].SetActive(true);
         }
+
 
         string json = PlayerPrefs.GetString("SelectedRuleset", null);
 

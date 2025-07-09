@@ -9085,12 +9085,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnLeft: {fileID: 1982517915}
+    m_SelectOnRight: {fileID: 1364556900}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -13559,12 +13559,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnLeft: {fileID: 1364556900}
+    m_SelectOnRight: {fileID: 1982517915}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -16389,11 +16389,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8b6214693db354482f0427e0e060bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttons: []
-  sfx: {fileID: 344690514}
-  stageChoiceButtons: {fileID: 231687233}
-  picked: 0
-  proceedButton: {fileID: 0}
+  defaultButton: {fileID: 2064264261}
+  customButton: {fileID: 1620422118}
+  stageButtons:
+  - {fileID: 425963998}
+  - {fileID: 1364556900}
+  - {fileID: 632628579}
+  - {fileID: 1982517915}
+  proceedButton: {fileID: 1457201263}
+  gameSetupMenu: {fileID: 832322830}
+  characterSelectionMenu: {fileID: 893962519}
+  stagePicked: 0
+  proceedActive: 0
+  selectionText: {fileID: 0}
 --- !u!224 &832322832
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27190,12 +27198,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnLeft: {fileID: 425963998}
+    m_SelectOnRight: {fileID: 632628579}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -32823,12 +32831,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnLeft: {fileID: 2064264261}
+    m_SelectOnRight: {fileID: 2064264261}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.52156866, g: 0.13333334, b: 0.2784314, a: 0}
@@ -40070,12 +40078,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnLeft: {fileID: 632628579}
+    m_SelectOnRight: {fileID: 425963998}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -41263,12 +41271,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnLeft: {fileID: 1620422118}
+    m_SelectOnRight: {fileID: 1620422118}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.52156866, g: 0.13333334, b: 0.2784314, a: 0}
