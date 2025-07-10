@@ -18,20 +18,32 @@ public class CharacterChoiceScript : MonoBehaviour
     {
         notSelected = true;
 
-        // Automatically assign OnSelect event for each button
         foreach (Button btn in buttons)
         {
+            // Hide all borders at start
+            Transform border = btn.transform.Find("Border");
+            if (border != null)
+            {
+                border.gameObject.SetActive(false);
+            }
+
             EventTrigger trigger = btn.gameObject.GetComponent<EventTrigger>();
             if (trigger == null)
             {
                 trigger = btn.gameObject.AddComponent<EventTrigger>();
             }
 
-            EventTrigger.Entry entry = new EventTrigger.Entry();
-            entry.eventID = EventTriggerType.Select;
-            entry.callback.AddListener((eventData) => { OnButtonHighlighted(btn); });
+            // SELECT event
+            EventTrigger.Entry selectEntry = new EventTrigger.Entry();
+            selectEntry.eventID = EventTriggerType.Select;
+            selectEntry.callback.AddListener((eventData) => { OnButtonHighlighted(btn); });
+            trigger.triggers.Add(selectEntry);
 
-            trigger.triggers.Add(entry);
+            // DESELECT event
+            EventTrigger.Entry deselectEntry = new EventTrigger.Entry();
+            deselectEntry.eventID = EventTriggerType.Deselect;
+            deselectEntry.callback.AddListener((eventData) => { OnButtonUnhighlighted(btn); });
+            trigger.triggers.Add(deselectEntry);
         }
     }
 
@@ -42,13 +54,7 @@ public class CharacterChoiceScript : MonoBehaviour
         {
             AutoSelectButton();
         }
-        
-        // debug for deselect if (bothpicked)
-        //{
-            //Debug.Log("Both players have picked");
-        //}
 
-        // Check if both players have picked and Enter is pressed
         if (bothpicked && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
         {
             Debug.Log("Enter Key pressed, trying to start game");
@@ -58,7 +64,6 @@ public class CharacterChoiceScript : MonoBehaviour
 
     void AutoSelectButton()
     {
-        // Ensure the first button is selected by default
         if (buttons.Length > 0)
         {
             sfx.ButtonSound();
@@ -66,7 +71,6 @@ public class CharacterChoiceScript : MonoBehaviour
             buttons[0].Select();
             notSelected = false;
 
-            // Update character name display
             characterChoiceMenu.HoveringIn(buttons[0].name);
         }
     }
@@ -78,16 +82,6 @@ public class CharacterChoiceScript : MonoBehaviour
             sfx.ButtonSound();
             characterChoiceMenu.HoveringIn(button.name);
 
-            // Hide border from the last highlighted button
-            if (lastHighlightedButton != null && lastHighlightedButton != button)
-            {
-                Transform lastBorder = lastHighlightedButton.transform.Find("Border");
-                if (lastBorder != null)
-                {
-                    lastBorder.gameObject.SetActive(false);
-                }
-            }
-
             // Show border on the currently highlighted button
             Transform border = button.transform.Find("Border");
             if (border != null)
@@ -95,11 +89,25 @@ public class CharacterChoiceScript : MonoBehaviour
                 border.gameObject.SetActive(true);
             }
 
-            // Save the current button as last highlighted
             lastHighlightedButton = button;
         }
     }
 
+    public void OnButtonUnhighlighted(Button button)
+    {
+        // Hide border when button is no longer selected
+        Transform border = button.transform.Find("Border");
+        if (border != null)
+        {
+            border.gameObject.SetActive(false);
+        }
+
+        // Clear last highlighted if needed
+        if (lastHighlightedButton == button)
+        {
+            lastHighlightedButton = null;
+        }
+    }
 
     public void BothPicked(bool didThey)
     {
