@@ -1,27 +1,26 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System;
+using UnityEngine.EventSystems;
 
 public class StageChoiceManager : MonoBehaviour
 {
     public Button defaultButton;
     public Button customButton;
-    public Button[] stageButtons; // 2x2 grid: 0 1
-                                  //            2 3
+    public Button[] stageButtons; // 0–3 (1 row or 2x2 logic is irrelevant here)
     public Button proceedButton;
 
-    public GameObject gameSetupMenu;           // Parent GameObject to disable (GameSetupMenu)
-    public GameObject characterSelectionMenu;  // Character Selection UI to enable
-
-    public bool stagePicked = false;
-    public bool proceedActive = false;
+    public GameObject gameSetupMenu;
+    public GameObject characterSelectionMenu;
 
     public TextMeshProUGUI selectionText;
 
     private int selectedModeIndex = 0; // 0 = default, 1 = custom
     private int selectedStageIndex = 0;
+
     private bool gameModePicked = false;
+    private bool stagePicked = false;
+    private bool readyToProceed = false;
 
     void Start()
     {
@@ -34,9 +33,13 @@ public class StageChoiceManager : MonoBehaviour
         {
             HandleModeSelection();
         }
-        else
+        else if (!stagePicked)
         {
             HandleStageSelection();
+        }
+        else if (readyToProceed)
+        {
+            HandleProceed();
         }
 
         if (Input.GetMouseButtonDown(1)) // Right click to reset
@@ -44,9 +47,9 @@ public class StageChoiceManager : MonoBehaviour
             ResetAll();
         }
 
-        // When Return is pressed while the proceedButton is selected, invoke its click event
-        if (Input.GetKeyDown(KeyCode.Return) && proceedButton != null &&
-            proceedButton.gameObject == UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject)
+        // Global fallback: if proceed is selected and Enter is pressed, invoke
+        if (Input.GetKeyDown(KeyCode.Return) &&
+            EventSystem.current.currentSelectedGameObject == proceedButton.gameObject)
         {
             proceedButton.onClick.Invoke();
         }
@@ -67,7 +70,7 @@ public class StageChoiceManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Return))
         {
             gameModePicked = true;
-            selectedStageIndex = 0;
+            
             HighlightStageSelection();
         }
     }
@@ -86,17 +89,21 @@ public class StageChoiceManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Return))
         {
+            // Stage selected
             stageButtons[selectedStageIndex].onClick.Invoke();
             stagePicked = true;
-            proceedActive = true;
-
-            // Select the Proceed button so Enter will work on it
-            if (proceedButton != null)
-                proceedButton.Select();
+            readyToProceed = true;
+            HighlightProceed();
+            return;
         }
 
-
         HighlightStageSelection();
+    }
+
+    void HandleProceed()
+    {
+        // Just allow Enter to invoke the button — selection is already handled globally
+        HighlightProceed();
     }
 
     void HighlightCurrentSelection()
@@ -105,6 +112,8 @@ public class StageChoiceManager : MonoBehaviour
             defaultButton.Select();
         else
             customButton.Select();
+
+        
     }
 
     void HighlightStageSelection()
@@ -115,23 +124,31 @@ public class StageChoiceManager : MonoBehaviour
         }
     }
 
+    void HighlightProceed()
+    {
+        proceedButton.Select();
+        
+    }
+
     void ResetAll()
     {
         gameModePicked = false;
+        stagePicked = false;
+        readyToProceed = false;
+
         selectedModeIndex = 0;
         selectedStageIndex = 0;
+
         HighlightCurrentSelection();
     }
 
-    // This method should be linked to proceedButton OnClick in the inspector
+    // Call this from the Proceed Button OnClick
     public void OnProceed()
     {
-        // Disable the GameObject this script is attached to
-        gameObject.SetActive(false);
+        if (gameSetupMenu != null)
+            gameSetupMenu.SetActive(false);
 
-        // Enable the character selection UI
         if (characterSelectionMenu != null)
             characterSelectionMenu.SetActive(true);
     }
-
 }

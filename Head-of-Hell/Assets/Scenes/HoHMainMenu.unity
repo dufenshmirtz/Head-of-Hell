@@ -16399,8 +16399,6 @@ MonoBehaviour:
   proceedButton: {fileID: 1457201263}
   gameSetupMenu: {fileID: 832322830}
   characterSelectionMenu: {fileID: 893962519}
-  stagePicked: 0
-  proceedActive: 0
   selectionText: {fileID: 0}
 --- !u!224 &832322832
 RectTransform:
@@ -29406,6 +29404,18 @@ MonoBehaviour:
       - m_Target: {fileID: 344690514}
         m_TargetAssemblyTypeName: MainMenuMusic, Assembly-CSharp
         m_MethodName: ButtonSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 832322831}
+        m_TargetAssemblyTypeName: StageChoiceManager, Assembly-CSharp
+        m_MethodName: OnProceed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
