@@ -888,15 +888,18 @@ public abstract class Character : MonoBehaviour
 
     public void StopCHarge()
     {
-        stayDynamic();
-        chargeAttackActive = false;
-        ignoreMovement = false;
-        animator.SetBool("Charging", false);
-        charging = false;
-        knockable = true;
-        charged = false;
-        animator.SetBool("Casting", false);
-        animator.ResetTrigger("ChargedHit");
+        if (!casting)
+        {
+            stayDynamic();
+            chargeAttackActive = false;
+            ignoreMovement = false;
+            animator.SetBool("Charging", false);
+            charging = false;
+            knockable = true;
+            charged = false;
+            animator.SetBool("Casting", false);
+            animator.ResetTrigger("ChargedHit");
+        }
     }
     public void BreakCharge()
     {
@@ -1279,6 +1282,8 @@ public abstract class Character : MonoBehaviour
 
     public void DisableBlock(bool whileKnocked)
     {
+        isBlocking = false;
+        moveSpeed = OGMoveSpeed;
         blockDisabled = true;
         blockDisabledIndicator.gameObject.SetActive(true);
     }

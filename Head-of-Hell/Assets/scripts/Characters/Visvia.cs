@@ -87,6 +87,7 @@ public class Visvia : Character
             audioManager.PlaySFX(audioManager.stabHit, 2f);
             enemy.StopPunching();
             enemy.TakeDamage(grabDamage, true);
+            enemy.BreakCharge();
             enemy.Knockback(12f, 0.3333f, true);
         }
         else
@@ -105,6 +106,7 @@ public class Visvia : Character
         {
             enemy.StopPunching();
             enemy.TakeDamage(grabDamage, true);
+            enemy.BreakCharge();
             audioManager.PlaySFX(audioManager.katanaSwoosh, 2f);
 
         }
@@ -187,7 +189,7 @@ public class Visvia : Character
 
         #endregion
 
-        #region ChargeAttack
+    #region ChargeAttack
         public override void ChargeAttack()
         {
             base.ChargeAttack();

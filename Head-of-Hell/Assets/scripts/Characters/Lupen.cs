@@ -216,7 +216,7 @@ public class Lupen : Character
 
     IEnumerator TriggerRobberyIndicator()
     {
-        robberyCountIndicator.text = (wipDamage-1).ToString();
+        robberyCountIndicator.text = (wipDamage).ToString();
         robberyCountIndicator.gameObject.SetActive(true);
         yield return new WaitForSeconds(1f);
         robberyCountIndicator.gameObject.SetActive(false);
@@ -276,12 +276,13 @@ public class Lupen : Character
         robberyCountter++;
         if (robberyCountter == 1)
         {
-            
-            wipDamage++;
-            print("wipDamage: " + wipDamage);            
+            int randomDamage = Random.Range(0, 4); // 0, 1, 2, or 3
+            wipDamage += randomDamage;
+            print("wipDamage increased by: " + randomDamage + ", total: " + wipDamage);
             robberyCountter = 0;
         }
     }
+
     #endregion
 
     public override void TakeDamage(int dmg, bool blockable)
