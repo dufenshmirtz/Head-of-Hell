@@ -1216,7 +1216,7 @@ PrefabInstance:
     - target: {fileID: 2553929291879454509, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: cf96a39428a2f394ab233d360aaa22d9, type: 2}
+      objectReference: {fileID: 9100000, guid: bd34ee43096dbcc438b20dbac8fff3b0, type: 2}
     - target: {fileID: 2584085071129299450, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: P1Name
       value: 
