@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class StageChoiceManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class StageChoiceManager : MonoBehaviour
     public Button customButton;
     public Button[] stageButtons; // 0–3 (1 row or 2x2 logic is irrelevant here)
     public Button proceedButton;
+    public Button randomButton;
 
     public GameObject gameSetupMenu;
     public GameObject characterSelectionMenu;
@@ -70,7 +72,6 @@ public class StageChoiceManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Return))
         {
             gameModePicked = true;
-            
             HighlightStageSelection();
         }
     }
@@ -89,8 +90,31 @@ public class StageChoiceManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Return))
         {
-            // Stage selected
-            stageButtons[selectedStageIndex].onClick.Invoke();
+            Button selectedButton = stageButtons[selectedStageIndex];
+
+            if (selectedButton == randomButton)
+            {
+                Button randomStage = GetRandomStageButton();
+                randomStage.onClick.Invoke();
+
+                // Update selectedStageIndex to match randomly selected button
+                for (int i = 0; i < stageButtons.Length; i++)
+                {
+                    if (stageButtons[i] == randomStage)
+                    {
+                        selectedStageIndex = i;
+                        break;
+                    }
+                }
+
+                Debug.Log("Randomly selected stage: " + randomStage.name);
+                HighlightStageSelection();
+            }
+            else
+            {
+                selectedButton.onClick.Invoke();
+            }
+
             stagePicked = true;
             readyToProceed = true;
             HighlightProceed();
@@ -102,8 +126,7 @@ public class StageChoiceManager : MonoBehaviour
 
     void HandleProceed()
     {
-        // Just allow Enter to invoke the button — selection is already handled globally
-        HighlightProceed();
+        HighlightProceed(); // Just highlight — Enter is handled globally in Update()
     }
 
     void HighlightCurrentSelection()
@@ -112,8 +135,6 @@ public class StageChoiceManager : MonoBehaviour
             defaultButton.Select();
         else
             customButton.Select();
-
-        
     }
 
     void HighlightStageSelection()
@@ -127,7 +148,6 @@ public class StageChoiceManager : MonoBehaviour
     void HighlightProceed()
     {
         proceedButton.Select();
-        
     }
 
     void ResetAll()
@@ -150,5 +170,13 @@ public class StageChoiceManager : MonoBehaviour
 
         if (characterSelectionMenu != null)
             characterSelectionMenu.SetActive(true);
+    }
+
+    private Button GetRandomStageButton()
+    {
+        List<Button> availableButtons = new List<Button>(stageButtons);
+        availableButtons.Remove(randomButton); // Exclude the random button itself
+        int randomIndex = Random.Range(0, availableButtons.Count);
+        return availableButtons[randomIndex];
     }
 }
