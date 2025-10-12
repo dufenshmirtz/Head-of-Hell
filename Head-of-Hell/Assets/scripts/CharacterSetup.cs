@@ -16,7 +16,8 @@ public class CharacterSetup : MonoBehaviour
     public KeyCode heavyAttack;
     public KeyCode block;
     public KeyCode ability;
-    public KeyCode charge;   
+    public KeyCode charge;  
+    public KeyCode parry;  
 
     public GameObject[] stages;
 
