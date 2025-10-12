@@ -285,7 +285,7 @@ public class Lupen : Character
 
     #endregion
 
-    public override void TakeDamage(int dmg, bool blockable)
+    public override void TakeDamage(int dmg, bool blockable, bool parryable=true)
     {
         base.TakeDamage(dmg, blockable);       
 

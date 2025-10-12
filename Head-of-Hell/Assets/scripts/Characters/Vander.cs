@@ -179,6 +179,13 @@ public class Vander : Character
         animator.SetBool("Charging", false);
     }
 
+    public override void DealCounterDmg()
+    {
+        base.DealCounterDmg();
+
+        Lifesteal(smallLifesteal);
+    }
+
 
     void Lifesteal(int amount)
     {
