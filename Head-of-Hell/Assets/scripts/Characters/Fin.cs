@@ -4,16 +4,16 @@ using UnityEngine;
 public class Fin : Character
 {
     float missCooldown = 10f, cooldown = 15f;
-    bool ignoreCounterOff = false;
-    int damage = 25;
-    bool counterIsOn = false;
-    bool counterDone = false;
+    // bool ignoreCounterOff = false;
+    // int damage = 25;
+    // bool counterIsOn = false;
+    // bool counterDone = false;
     //Roll
     float rollPower = 8f;
     float rollTime = 0.39f;
     bool rollReady = true;
     int passiveDamage = 4;
-    bool safety = true;
+    // bool safety = true;
     Transform escapePoint;
     GameObject freeBaby;
 
@@ -58,112 +58,94 @@ public class Fin : Character
     #endregion
 
     #region Spell
-    public override void Spell()
-    {
-        audioManager.PlaySFX(audioManager.counterScream, 2.5f);
-        animator.SetTrigger("Spell");
-        counterIsOn = true;
-        safety = true;
-        UsingAbility(cooldown);
-        StartCoroutine(CounterOffSafety());
-    }
+    // public override void Spell()
+    // {
+    //     audioManager.PlaySFX(audioManager.counterScream, 2.5f);
+    //     animator.SetTrigger("Spell");
+    //     counterIsOn = true;
+    //     safety = true;
+    //     UsingAbility(cooldown);
+    //     StartCoroutine(CounterOffSafety());
+    // }
 
-    public bool DetectCounter()
-    {
-        if (counterIsOn)
-        {
-            if (!counterDone)
-            {
-                Countered();
-                return true;
-            }
-            return true;
-        }
+    // public bool DetectCounter()
+    // {
+    //     if (counterIsOn)
+    //     {
+    //         if (!counterDone)
+    //         {
+    //             Countered();
+    //             return true;
+    //         }
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
-    public void CounterOff()
-    {
-        if (!ignoreCounterOff)
-        {
-            // Start the cooldown timer
-            OnCooldown(missCooldown);
-            CounterVariablesOff();
-            safety = false;
-        }
-        else
-        {
-            ignoreCounterOff = false;
-        }
+    // public void CounterOff()
+    // {
+    //     if (!ignoreCounterOff)
+    //     {
+    //         // Start the cooldown timer
+    //         OnCooldown(missCooldown);
+    //         CounterVariablesOff();
+    //         safety = false;
+    //     }
+    //     else
+    //     {
+    //         ignoreCounterOff = false;
+    //     }
         
-    }
+    // }
 
-    private IEnumerator CounterOffSafety()
-    {
-        yield return new WaitForSeconds(0.41f);
-        if (!counterDone && safety)
-        {
-            OnCooldown(missCooldown);
-            CounterVariablesOff();
-        }
-    }
+    // private IEnumerator CounterOffSafety()
+    // {
+    //     yield return new WaitForSeconds(0.41f);
+    //     if (!counterDone && safety)
+    //     {
+    //         OnCooldown(missCooldown);
+    //         CounterVariablesOff();
+    //     }
+    // }
 
-    public void CounterSuccessOff()
-    {
-        CounterVariablesOff();
-        OnCooldown(cooldown);
-    }
+    // public void CounterSuccessOff()
+    // {
+    //     CounterVariablesOff();
+    //     OnCooldown(cooldown);
+    // }
 
-    public void Countered()
-    {
-        animator.SetTrigger("counterHit");
-        audioManager.PlaySFX(audioManager.counterSucces, 1.5f);
-        enemy.stayStatic();
-        stayStatic();
-        ignoreCounterOff = true;
-        counterDone = true;
-    }
+    // public void Countered()
+    // {
+    //     animator.SetTrigger("counterHit");
+    //     audioManager.PlaySFX(audioManager.counterSucces, 1.5f);
+    //     enemy.stayStatic();
+    //     stayStatic();
+    //     ignoreCounterOff = true;
+    //     counterDone = true;
+    // }
 
-    public void DealCounterDmg()
-    {
-        enemy.StopPunching();
-        enemy.BreakCharge();
+    // public void DealCounterDmg()
+    // {
+    //     enemy.StopPunching();
+    //     enemy.BreakCharge();
 
-        audioManager.PlaySFX(audioManager.counterClong, 0.5f);
+    //     audioManager.PlaySFX(audioManager.counterClong, 0.5f);
 
-        enemy.TakeDamage(damage,true);
+    //     enemy.TakeDamage(damage,true);
 
-         stayDynamic();
-        enemy.stayDynamic();
+    //      stayDynamic();
+    //     enemy.stayDynamic();
 
-        enemy.Knockback(10f, .3f, false);
+    //     enemy.Knockback(10f, .3f, false);
 
-    }
+    // }
 
-    public void CounterVariablesOff()
-    {
-        counterDone = false;
-        counterIsOn = false;
-    }
-
-    override public void TakeDamage(int dmg, bool blockable)
-    {
-        if(DetectCounter()){
-            return;
-        }
-
-        base.TakeDamage(dmg, blockable);
-    }
-
-    override public void TakeDamageNoAnimation(int dmg, bool blockable)
-    {
-        if(DetectCounter()){
-            return;
-        }
-
-        base.TakeDamageNoAnimation(dmg, blockable);
-    }
+    // public void CounterVariablesOff()
+    // {
+    //     counterDone = false;
+    //     counterIsOn = false;
+    // }
 
     #endregion
 
