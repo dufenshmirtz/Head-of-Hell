@@ -120,6 +120,7 @@ public abstract class Character : MonoBehaviour
     protected KeyCode block;
     protected KeyCode ability;
     protected KeyCode charge;
+    protected KeyCode parry;
 
     protected CharacterSetup characterSetup;
     protected CharacterManager characterChoiceHandler;
@@ -144,6 +145,15 @@ public abstract class Character : MonoBehaviour
     public bool chargeDisable = false;
     bool ignoreStats=false;
 
+    //parry
+    protected bool canParry = true;
+    protected bool safety= true;
+    protected bool ignoreCounterOff = false;
+    protected int parryDamage = 16;
+    public bool counterIsOn = false;
+    protected bool counterDone = false;
+
+
     public bool overrideDeath=false;
 
     //handling variables
@@ -159,6 +169,9 @@ public abstract class Character : MonoBehaviour
     protected bool jumpDisabled = false;
 
     bool chanChan;
+
+    //teleport
+    public bool justTeleported = false;
     
 
 
@@ -257,6 +270,7 @@ public abstract class Character : MonoBehaviour
         block = characterSetup.block;
         ability = characterSetup.ability;
         charge = characterSetup.charge;
+        parry = characterSetup.parry;
         //stages = characterSetup.stages;
         attackPoint = characterSetup.attackPoint;
         blockDisabledIndicator = characterSetup.blockDisabledIndicator;
@@ -393,7 +407,7 @@ public abstract class Character : MonoBehaviour
 
         float moveDirection = Input.GetAxis("Horizontal"+playerString);
         // Running animations...
-        if (Mathf.Abs(moveDirection) > 0.1f)
+        if (Mathf.Abs(moveDirection) > 0.1f && !isStatic)
         {
             if (ignoreMovement || knocked) return;
 
@@ -500,6 +514,15 @@ public abstract class Character : MonoBehaviour
             {
                 Spell();
             }           
+        }
+
+        //Parry
+        if (Input.GetKeyDown(parry))
+        {
+            if (canParry && canCast)
+            {
+                Parry();
+            }          
         }
 
         // Animation control for jumping, falling, and landing
@@ -821,7 +844,9 @@ public abstract class Character : MonoBehaviour
         if (hitEnemy != null)
         {
             enemy.StopPunching();
-            enemy.BreakCharge();
+            if(!enemy.counterIsOn){
+                enemy.BreakCharge();
+            }
             enemy.TakeDamage(chargeDmg,false);
             enemy.Knockback(13f, 0.4f, false);
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
@@ -990,7 +1015,102 @@ public abstract class Character : MonoBehaviour
 
     }
 
-    
+    void Parry(){
+        audioManager.PlaySFX(audioManager.counterScream, 2.5f);
+        animator.SetTrigger("Parry");
+        counterIsOn = true;
+        safety = true;
+        canParry=false;
+        knockable = false;
+        stayStatic();
+        StartCoroutine(ResetParry());
+        StartCoroutine(CounterOffSafety());
+    }
+
+    IEnumerator ResetParry()
+    {
+
+        yield return new WaitForSeconds(5f);
+        audioManager.PlaySFX(audioManager.rollReady, audioManager.lessVol);
+        canParry = true;
+    }
+
+    public bool DetectCounter()
+    {
+        if (counterIsOn)
+        {
+            if (!counterDone)
+            {
+                Countered();
+                return true;
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    public void CounterOff()
+    {
+        if (!ignoreCounterOff)
+        {
+            CounterVariablesOff();
+            safety = false;
+        }
+        else
+        {
+            ignoreCounterOff = false;
+        }
+        
+    }
+
+    private IEnumerator CounterOffSafety()
+    {
+        yield return new WaitForSeconds(0.41f);
+        if (!counterDone && safety)
+        {
+            CounterVariablesOff();
+        }
+    }
+
+    public void CounterSuccessOff()
+    {
+        CounterVariablesOff();
+    }
+
+    public void Countered()
+    {
+        animator.SetTrigger("counterHit");
+        audioManager.PlaySFX(audioManager.counterSucces, 1.5f);
+        enemy.stayStatic();
+        stayStatic();
+        ignoreCounterOff = true;
+        counterDone = true;
+    }
+
+    virtual public void DealCounterDmg()
+    {
+        enemy.StopPunching();
+        enemy.BreakCharge();
+
+        audioManager.PlaySFX(audioManager.counterClong, 0.5f);
+
+        enemy.TakeDamage(parryDamage,true);
+
+         stayDynamic();
+        enemy.stayDynamic();
+
+        enemy.Knockback(10f, .3f, false);
+
+    }
+
+    public void CounterVariablesOff()
+    {
+        counterDone = false;
+        counterIsOn = false;
+        knockable = true;
+        stayDynamic();
+    }
 
     protected void QuickAttackIndicatorEnable()
     {
@@ -1016,12 +1136,27 @@ public abstract class Character : MonoBehaviour
     {
         return casting;
     }
+
+    public IEnumerator TeleportCooldown()
+    {
+        justTeleported = true;
+        yield return new WaitForSeconds(2f);
+        justTeleported = false;
+    }
     #endregion
 
     #region Passive and Damage
 
-    virtual public void TakeDamage(int dmg, bool blockable)
+    virtual public void TakeDamage(int dmg, bool blockable, bool parryable=true)
     {
+        if(parryable)
+        {
+            if(DetectCounter())
+            {
+                print("suvkkkk");
+                return;
+            }
+        }
 
         if (ignoreDamage)
         {
@@ -1170,8 +1305,16 @@ public abstract class Character : MonoBehaviour
         enemy.healthbar.gameObject.SetActive(true);
     }
 
-    virtual public void TakeDamageNoAnimation(int dmg, bool blockable)
+    virtual public void TakeDamageNoAnimation(int dmg, bool blockable, bool parryable=true)
     {
+        if(parryable)
+        {
+            if(DetectCounter())
+            {
+                return;
+            }
+        }
+        
 
         if (ignoreDamage)
         {

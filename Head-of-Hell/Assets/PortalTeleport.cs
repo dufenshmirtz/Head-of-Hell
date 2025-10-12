@@ -3,13 +3,12 @@ using UnityEngine;
 
 public class PortalTeleport : MonoBehaviour
 {
-    public Transform destinationPortal; // Assign the other portal's Transform in the inspector
-    public bool canTeleport = true; // Prevents immediate re-teleporting loop
+    public Transform destinationPortal; // Assign in inspector
     AudioManager audioManager;
 
     void Start()
     {
-        audioManager = FindObjectOfType<AudioManager>(); // Find and assign the AudioManager
+        audioManager = FindObjectOfType<AudioManager>();
 
         if (audioManager == null)
         {
@@ -19,26 +18,33 @@ public class PortalTeleport : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (canTeleport && other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            // Teleport player to destination
+            // Try to get the Character script on the collided object
+            Character character = other.GetComponent<Character>();
+            if (character == null)
+            {
+                Debug.LogWarning("No Character script found on the player!");
+                return;
+            }
+
+            // If recently teleported, don't teleport again
+            if (character.justTeleported)
+            {
+                return;
+            }
+
+            // Teleport to destination portal
             other.transform.position = destinationPortal.position;
 
-            audioManager.PlaySFX(audioManager.portal, audioManager.normalVol);
-
-            // Disable teleporting temporarily on the destination portal
-            PortalTeleport destPortal = destinationPortal.GetComponent<PortalTeleport>();
-            if (destPortal != null)
+            // Play sound
+            if (audioManager != null)
             {
-                destPortal.StartCoroutine(destPortal.DisableTeleportForMoment());
+                audioManager.PlaySFX(audioManager.portal, audioManager.normalVol);
             }
-        }
-    }
 
-    private IEnumerator DisableTeleportForMoment()
-    {
-        canTeleport = false;
-        yield return new WaitForSeconds(2f); // Prevent immediate re-entry loop
-        canTeleport = true;
+            // Start cooldown so they can't teleport again right away
+            character.StartCoroutine(character.TeleportCooldown());
+        }
     }
 }

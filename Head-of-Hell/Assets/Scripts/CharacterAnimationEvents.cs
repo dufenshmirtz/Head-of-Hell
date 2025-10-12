@@ -52,6 +52,21 @@ public class CharacterAnimationEvents : MonoBehaviour
     {
         character.stayStatic();
     }
+
+     public void CounterOffEvent()
+    {
+        character.CounterOff();
+    }
+
+    public void CounterSuccessEvent()
+    {
+        character.CounterSuccessOff();
+    }
+
+    public void CounterDamageEvent()
+    {
+        character.DealCounterDmg();
+    }
     //Vander
     public void StabDamageEvent()
     {
@@ -138,23 +153,23 @@ public class CharacterAnimationEvents : MonoBehaviour
     }
 
     //Fin
-    public void CounterOffEvent()
-    {
-        fin = (Fin)character;
-        fin.CounterOff();
-    }
+    // public void CounterOffEvent()
+    // {
+    //     fin = (Fin)character;
+    //     fin.CounterOff();
+    // }
 
-    public void CounterSuccessEvent()
-    {
-        fin = (Fin)character;
-        fin.CounterSuccessOff();
-    }
+    // public void CounterSuccessEvent()
+    // {
+    //     fin = (Fin)character;
+    //     fin.CounterSuccessOff();
+    // }
 
-    public void CounterDamageEvent()
-    {
-        fin = (Fin)character;
-        fin.DealCounterDmg();
-    }
+    // public void CounterDamageEvent()
+    // {
+    //     fin = (Fin)character;
+    //     fin.DealCounterDmg();
+    // }
 
     public void WaterSplashEvent()
     {
