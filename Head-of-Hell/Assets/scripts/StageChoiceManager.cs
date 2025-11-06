@@ -27,8 +27,12 @@ public class StageChoiceManager : MonoBehaviour
     void Start()
     {
         HighlightCurrentSelection();
-    }
 
+        if (selectionText != null)
+        {
+            selectionText.text = "Curren Setting : " + CurrentSettingsData.currentRulesetName;
+        }
+    }
     void Update()
     {
         if (!gameModePicked)

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;  // Import TextMeshPro for input fields
 
@@ -215,7 +215,7 @@ public class CustomRulesetUI : MonoBehaviour
 
         CustomRuleset newRuleset = new CustomRuleset()
         {
-            slotName = slotNameInput.text,
+            slotName = string.IsNullOrEmpty(slotNameInput.text) ? "Empty" : slotNameInput.text,
             rounds = rounds,
             powerupsEnabled = powerupsEnabled,
             health = health,
@@ -231,9 +231,26 @@ public class CustomRulesetUI : MonoBehaviour
             chanChan = chanChanEnabled
         };
 
+        // ✅ Save the ruleset to PlayerPrefs
         RulesetManager.Instance.SaveCustomRuleset(selectedSlot, newRuleset);
+
+        // ✅ Update the global "Current Setting" so StageChoiceManager shows it
+        CurrentSettingsData.currentRulesetName = newRuleset.slotName;
+
+        //Refresh Slot Name 
+        SlotNameInitializer slotNameInitializer = FindObjectOfType<SlotNameInitializer>();
+        if (slotNameInitializer != null)
+        {
+            slotNameInitializer.InitializeSlotNames();
+        }
+
+
+        // ✅ Debug info
         PrintCustomRuleset(newRuleset);
+
+        Debug.Log($"Custom ruleset '{newRuleset.slotName}' saved and set as current.");
     }
+
 
     // Method to print the ruleset details for debugging
     private void PrintCustomRuleset(CustomRuleset ruleset)

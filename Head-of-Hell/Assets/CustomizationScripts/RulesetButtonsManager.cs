@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,8 +10,6 @@ public class RulesetButtonsManager : MonoBehaviour
     public void SaveRuleToPlayerPrefs()
     {
         CustomRuleset ruleset = RulesetManager.Instance.LoadCustomRuleset(ruleNumber);
-        choice.text = ruleset.slotName; 
-        // Load the CustomRuleset for the specified ruleNumber
 
         // Check if the ruleset exists for the given ruleNumber
         if (ruleset != null)
@@ -22,7 +20,18 @@ public class RulesetButtonsManager : MonoBehaviour
             PlayerPrefs.Save(); // Make sure data is saved
             RulesetManager.Instance.SetRulesetNum(ruleNumber);
 
-            Debug.Log($"Ruleset for Slot {ruleNumber} saved to PlayerPrefs");
+            // ✅ Update the current setting name so StageChoiceManager shows it
+            CurrentSettingsData.currentRulesetName = ruleset.slotName;
+
+            // ✅ (Optional) persist it between sessions
+            PlayerPrefs.SetString("LastUsedRulesetName", ruleset.slotName);
+            PlayerPrefs.Save();
+
+            // ✅ Update the UI text in this menu
+            if (choice != null)
+                choice.text = ruleset.slotName;
+
+            Debug.Log($"Ruleset for Slot {ruleNumber} saved to PlayerPrefs and set as current.");
         }
         else
         {
