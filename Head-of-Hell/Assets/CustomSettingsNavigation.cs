@@ -1,20 +1,30 @@
-﻿﻿using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 public class CustomSettingsNavigation : MonoBehaviour
 {
     [Header("Assign in Inspector")]
-    public Button[] editButtons;  // Your 5 "Edit" buttons
-    public Button backButton;     // Your Back button
+    public Button[] slotButtons;
+    public Button[] editButtons;
+    public Button backButton;
 
     private int currentIndex = 0;
+    private bool onEditSide = false;
 
     void Start()
     {
-        // Select the first Edit button by default
-        if (editButtons.Length > 0)
-            EventSystem.current.SetSelectedGameObject(editButtons[0].gameObject);
+        // Force EventSystem to reset its last selection
+        EventSystem.current.SetSelectedGameObject(null);
+        StartCoroutine(SelectFirstSlot());
+    }
+
+    IEnumerator SelectFirstSlot()
+    {
+        yield return null; // Wait 1 frame so Unity clears the old selection
+        if (slotButtons.Length > 0)
+            EventSystem.current.SetSelectedGameObject(slotButtons[0].gameObject);
     }
 
     void Update()
@@ -25,37 +35,43 @@ public class CustomSettingsNavigation : MonoBehaviour
     void HandleNavigation()
     {
         if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-        {
-            MoveSelection(1);
-        }
+            MoveVertical(1);
         else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-        {
-            MoveSelection(-1);
-        }
-        else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
+            MoveVertical(-1);
+        else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            MoveHorizontal(true);
+        else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+            MoveHorizontal(false);
+        else if (Input.GetKeyDown(KeyCode.Return))
             ActivateCurrentButton();
-        }
     }
 
-    void MoveSelection(int direction)
+    void MoveVertical(int dir)
     {
-        // 5 edit buttons + 1 back button → total options
-        int totalOptions = editButtons.Length + 1;
+        int max = slotButtons.Length;
+        currentIndex = (currentIndex + dir + max) % max;
+        UpdateSelection();
+    }
 
-        currentIndex = (currentIndex + direction + totalOptions) % totalOptions;
+    void MoveHorizontal(bool toRight)
+    {
+        onEditSide = toRight;
+        UpdateSelection();
+    }
 
-        if (currentIndex < editButtons.Length)
+    void UpdateSelection()
+    {
+        if (onEditSide)
             editButtons[currentIndex].Select();
         else
-            backButton.Select();
+            slotButtons[currentIndex].Select();
     }
 
     void ActivateCurrentButton()
     {
-        if (currentIndex < editButtons.Length)
+        if (onEditSide)
             editButtons[currentIndex].onClick.Invoke();
         else
-            backButton.onClick.Invoke();
+            slotButtons[currentIndex].onClick.Invoke();
     }
 }

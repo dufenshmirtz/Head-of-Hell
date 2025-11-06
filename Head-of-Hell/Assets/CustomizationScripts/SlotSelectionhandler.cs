@@ -1,25 +1,32 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class SlotSelectionHandler : MonoBehaviour
 {
-    public RulesetManager rulesetManager; // Reference to RulesetManager
-    public Text currentSettingDisplay;    // Text to display the current setting
+    public RulesetManager rulesetManager;      // Reference to RulesetManager
+    public GameObject customSettingsMenu;      // The panel with your "Custom Settings" screen
+    public GameObject editSettingsPanel;       // The panel with your "Edit Settings" screen
+    public CustomRulesetUI customRulesetUI;    // Reference to the UI script that controls Edit Settings
 
-    private int selectedSlot = -1;        // Variable to track the selected slot
-
-    // Method to handle slot selection and open the customization screen
+    // Called when clicking or pressing Enter on Edit buttons
     public void EditSlot(int slotNumber)
     {
-        // Load the ruleset from the saved slot
+        // Load the ruleset from the selected slot
         CustomRuleset ruleset = rulesetManager.LoadCustomRuleset(slotNumber);
 
-        // Pass the selected slot and ruleset to the next scene
+        // Save the active slot info globally (optional, if needed later)
         CustomRulesetScreenManager.selectedSlot = slotNumber;
         CustomRulesetScreenManager.currentRuleset = ruleset;
 
-        // Load the custom ruleset UI scene
-        SceneManager.LoadScene("CustomRulesetScene"); // Adjust to your scene name
+        // Hide the Custom Settings panel
+        if (customSettingsMenu != null)
+            customSettingsMenu.SetActive(false);
+
+        // Show the Edit Settings panel
+        if (editSettingsPanel != null)
+            editSettingsPanel.SetActive(true);
+
+        // Initialize the edit panel with the loaded ruleset
+        if (customRulesetUI != null)
+            customRulesetUI.Initialize(slotNumber);
     }
 }
