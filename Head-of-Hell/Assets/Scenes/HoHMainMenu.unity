@@ -7061,7 +7061,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &310275625
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7203,7 +7203,7 @@ GameObject:
   - component: {fileID: 319373948}
   - component: {fileID: 319373947}
   m_Layer: 5
-  m_Name: Slot1Button (4)
+  m_Name: 'Slot5Button '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7256,12 +7256,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 1145295126}
+    m_SelectOnDown: {fileID: 1120789050}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 40599121}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -12157,7 +12157,7 @@ GameObject:
   - component: {fileID: 573786847}
   - component: {fileID: 573786850}
   m_Layer: 5
-  m_Name: Slot2Button
+  m_Name: Edit2Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13164,7 +13164,7 @@ GameObject:
   - component: {fileID: 606134512}
   - component: {fileID: 606134511}
   m_Layer: 5
-  m_Name: Slot1Button (2)
+  m_Name: 'Slot3Button '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13217,12 +13217,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 678736624}
+    m_SelectOnDown: {fileID: 1145295126}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 945646596}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -14462,7 +14462,7 @@ GameObject:
   - component: {fileID: 657171951}
   - component: {fileID: 657171954}
   m_Layer: 5
-  m_Name: Slot4Button
+  m_Name: Edit4Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14707,6 +14707,66 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 660159080}
   m_CullTransparentMesh: 1
+--- !u!1 &677310928
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 677310929}
+  - component: {fileID: 677310930}
+  m_Layer: 5
+  m_Name: CustomSettingsNavManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &677310929
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677310928}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1586750639}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &677310930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677310928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f8561fe340c8b44b594a5c64398eee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  editButtons:
+  - {fileID: 1120789050}
+  - {fileID: 678736624}
+  - {fileID: 606134512}
+  - {fileID: 1145295126}
+  - {fileID: 319373948}
+  - {fileID: 2134197179}
+  - {fileID: 573786847}
+  - {fileID: 945646596}
+  - {fileID: 657171951}
+  - {fileID: 40599121}
+  backButton: {fileID: 42755809}
 --- !u!1 &678736621
 GameObject:
   m_ObjectHideFlags: 0
@@ -14721,7 +14781,7 @@ GameObject:
   - component: {fileID: 678736624}
   - component: {fileID: 678736623}
   m_Layer: 5
-  m_Name: Slot1Button (1)
+  m_Name: 'Slot2Button '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14774,12 +14834,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 1120789050}
+    m_SelectOnDown: {fileID: 606134512}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 573786847}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -18986,7 +19046,7 @@ GameObject:
   - component: {fileID: 945646596}
   - component: {fileID: 945646599}
   m_Layer: 5
-  m_Name: Slot3Button
+  m_Name: Edit3Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22217,12 +22277,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 319373948}
+    m_SelectOnDown: {fileID: 678736624}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 2134197179}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -22829,7 +22889,7 @@ GameObject:
   - component: {fileID: 1145295126}
   - component: {fileID: 1145295125}
   m_Layer: 5
-  m_Name: Slot1Button (3)
+  m_Name: 'Slot4Button '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22882,12 +22942,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 606134512}
+    m_SelectOnDown: {fileID: 319373948}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 657171951}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -33891,7 +33951,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1586750639
 RectTransform:
   m_ObjectHideFlags: 0
@@ -33904,6 +33964,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 677310929}
   - {fileID: 1130594334}
   - {fileID: 442390440}
   - {fileID: 386559412}
@@ -40376,7 +40437,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1937351131
 RectTransform:
   m_ObjectHideFlags: 0
@@ -44105,7 +44166,7 @@ GameObject:
   - component: {fileID: 2134197179}
   - component: {fileID: 2134197182}
   m_Layer: 5
-  m_Name: Slot1Button
+  m_Name: Edit1Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44144,7 +44205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
