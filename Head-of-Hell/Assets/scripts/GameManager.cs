@@ -30,7 +30,13 @@ public class GameManager : MonoBehaviour
     static int portalNumber;
     public GameObject[] portalPairs;
     bool chanChan;
-    public int maxHealth= -1;
+    public int maxHealth = -1;
+    
+    //training
+    public bool trainingMode = false;           // tick this for training scene
+    public FighterAgent agentP1, agentP2;       // drag the two FighterAgent components
+    public Transform p1Spawn, p2Spawn;          // empty transforms as spawn points
+
 
     // Start is called before the first frame update
     void Start()
@@ -106,6 +112,13 @@ public class GameManager : MonoBehaviour
 
     public void RoundEnd(int playerNum, string winnerName)
     {
+        if (trainingMode)//training
+        {
+            ShortWins(playerNum, winnerName); // keep your stat logic if you want
+            SoftResetRound(playerNum);
+            return;
+        }
+        
         winner.gameObject.SetActive(true);
         DisableGamePlay();
         winner.text = winnerName + " prevails!";
@@ -117,7 +130,13 @@ public class GameManager : MonoBehaviour
 
     public void RoundEndTie(int playerNum)
     {
-
+        if (trainingMode) //training
+        {
+            // undo the “short win” penalty/bonus you do for ties and just reset
+            SoftResetRound(0);
+            return;
+        }
+    
         winner.gameObject.SetActive(true);
         DisableGamePlay();
         winner.text = "Tie?\nDEATH PREVAILS...";
@@ -139,6 +158,13 @@ public class GameManager : MonoBehaviour
 
     public void RoundEndFlawless(int playerNum, string winnerName)
     {
+        if (trainingMode)
+        {
+            ShortWins(playerNum, winnerName);
+            SoftResetRound(playerNum);
+            return;
+        }
+    
         winner.gameObject.SetActive(true);
         DisableGamePlay();
         winner.text = "FLAWLESS\n" + winnerName + " prevails!";
@@ -173,6 +199,13 @@ public class GameManager : MonoBehaviour
 
         if (player1Wins > roundNumber / 2 || player2Wins > roundNumber / 2)
         {
+            if (trainingMode)//training
+            {
+                // For training: don’t show end-of-match UI, just soft reset
+                SoftResetRound(playerNum);
+                return;
+            }
+
             finalWinner.text = "Victory belongs to " + winnerName + "!\n Chan Chan smiles...";
             winner.gameObject.SetActive(false);
             finalWinner.gameObject.SetActive(true);
@@ -191,6 +224,12 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            if (trainingMode) //training
+            {
+                SoftResetRound(playerNum);
+                return;
+            }
+
             roundCounter++;
             CheckForRandomCharacters();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -313,4 +352,38 @@ public class GameManager : MonoBehaviour
         player1Wins = 0;
         player2Wins = 0;
     }
+
+    // Training
+    public void SoftResetRound(int winnerPlayerNum = 0)
+    {
+        // End episodes (if training)
+        if (trainingMode)
+        {
+            if (agentP1) agentP1.EndEpisode();
+            if (agentP2) agentP2.EndEpisode();
+        }
+
+        // Hide victory UI
+        winner.gameObject.SetActive(false);
+        finalWinner.gameObject.SetActive(false);
+        playAgainButton.SetActive(false);
+        mainMenuButton.SetActive(false);
+
+        // Reset state/flags you track
+        tie = false;
+        gameEnd = false;
+        // Do NOT change roundCounter/player wins here for training;
+        // the trainer needs shorter, frequent episodes.
+        // (In human play your existing logic still runs.)
+
+        // Reset both characters
+        var c1 = p1Manager.CharacterChoice(1);
+        var c2 = p2Manager.CharacterChoice(2);
+        if (c1) c1.ResetForEpisode();
+        if (c2) c2.ResetForEpisode();
+
+        // Re-enable gameplay
+        EnableGamePlay();
+    }
+
 }

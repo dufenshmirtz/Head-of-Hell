@@ -11,6 +11,27 @@ public class Vander : Character
     int smallLifesteal = 3;
     bool katanaready = true;
 
+    // --- Flying passive ---
+    bool isFlying = false;
+    float flyUpSpeed = 6f;        // how fast he ascends while holding jump
+
+    // How quickly we cancel falling (units: velocity per second)
+    [SerializeField] float fallBrakePerSec = 20f;
+
+    // How quickly we ramp upward (units: velocity per second)
+    [SerializeField] float ascendAccelPerSec = 18f;
+
+    // Hard cap for upward speed
+    [SerializeField] float maxAscendSpeed = 4f;
+
+    // --- Flying passive tuning ---
+    [SerializeField] float fallStartEpsilon = 0.02f; // tiny buffer to detect start of fall
+
+
+    // Keep the gravity to restore on release
+    float baseGravity = 1f;
+
+
     #region HeavyAttack
     override public void HeavyAttack()
     {
@@ -20,7 +41,7 @@ public class Vander : Character
 
     override public void DealHeavyDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -28,7 +49,7 @@ public class Vander : Character
             audioManager.PlaySFX(audioManager.katanaHit, 1f);
             enemy.TakeDamage(heavyDamage, true);
             Lifesteal(smallLifesteal);
-            if (! enemy.isBlocking)
+            if (!enemy.isBlocking)
             {
                 enemy.Knockback(11f, 0.15f, true);
             }
@@ -53,7 +74,7 @@ public class Vander : Character
 
     public void DealStabDmg()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -61,7 +82,7 @@ public class Vander : Character
             enemy.BreakCharge();
             enemy.TakeDamage(stabDamage, true);
             Lifesteal(stabHeal);
-             healthbar.SetHealth( currHealth);
+            healthbar.SetHealth(currHealth);
             audioManager.PlaySFX(audioManager.stabHit, audioManager.doubleVol);
         }
         else
@@ -69,9 +90,9 @@ public class Vander : Character
             audioManager.PlaySFX(audioManager.stab, audioManager.swooshVolume);
         }
 
-         attackRange =  ogRange;
+        attackRange = ogRange;
 
-         OnCooldown(cooldown);
+        OnCooldown(cooldown);
         ignoreDamage = false;
 
     }
@@ -91,7 +112,7 @@ public class Vander : Character
 
     public void DealKatanaDmg1()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -107,7 +128,7 @@ public class Vander : Character
 
     public void DealKatanaDmg2()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
         {
@@ -145,13 +166,13 @@ public class Vander : Character
 
     public override void DealChargeDmg()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
         {
             enemy.StopPunching();
             enemy.BreakCharge();
-            enemy.TakeDamage(chargeDmg,false);
+            enemy.TakeDamage(chargeDmg, false);
             Lifesteal(8);
             enemy.Knockback(13f, 0.4f, false);
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
@@ -170,7 +191,7 @@ public class Vander : Character
             {
                 audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
             }
-            
+
         }
         chargeReset = true;
         knockable = true;
@@ -189,12 +210,77 @@ public class Vander : Character
 
     void Lifesteal(int amount)
     {
-         currHealth += amount;
-        if ( currHealth >  maxHealth)
+        currHealth += amount;
+        if (currHealth > maxHealth)
         {
-             currHealth =  maxHealth;
+            currHealth = maxHealth;
         }
-         healthbar.SetHealth( currHealth);
+        healthbar.SetHealth(currHealth);
     }
+
+    public override void Update()
+    {
+        // Run the base Character logic first (movement, jump, etc.)
+        base.Update();
+
+        // Then apply the flying passive on top
+        HandleFlightPassive();
+    }
+
+    void HandleFlightPassive()
+    {
+        // Don’t interfere if gameplay is locked or grounded
+        if (ignoreUpdate || casting || stunned || knocked || charging || isStatic || isGrounded)
+        {
+            StopFlightIfActive();
+            return;
+        }
+
+        // Use same "jump" input you already use
+        bool holdingJump =
+            input.GetKey(up) ||
+           (controller && input.GetAxis("Vertical" + playerString) > 0.5f);
+
+        if (!holdingJump)
+        {
+            StopFlightIfActive();
+            return;
+        }
+
+        float vy = rb.velocity.y;
+
+        // Only allow flight to ENGAGE once we start falling.
+        // This prevents the initial ground jump from helping you reach max speed.
+        if (!isFlying)
+        {
+            if (vy > -fallStartEpsilon)
+            {
+                // Still rising (or almost zero)? Wait until we’re truly falling.
+                return;
+            }
+
+            // Engage flight at the *moment of falling* and zero vertical speed.
+            isFlying = true;
+            rb.gravityScale = 0f;
+            animator.SetBool("IsFlying", true); // optional
+            vy = 0f; // start from rest for that floaty feel
+        }
+
+        // We’re flying: accelerate upward quickly but respect a hard cap.
+        vy = Mathf.MoveTowards(vy, maxAscendSpeed, ascendAccelPerSec * Time.deltaTime);
+
+        rb.velocity = new Vector2(rb.velocity.x, vy);
+    }
+
+    void StopFlightIfActive()
+    {
+        if (!isFlying) return;
+        isFlying = false;
+        rb.gravityScale = originalGravityScale; // from Character.Start()
+        animator.SetBool("IsFlying", false); // optional
+    }
+
+
+
     #endregion
 }

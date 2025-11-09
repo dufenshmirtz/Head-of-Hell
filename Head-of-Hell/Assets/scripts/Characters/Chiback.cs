@@ -40,7 +40,8 @@ public class Chiback : Character
         if (hitEnemy != null)
         {
             audioManager.PlaySFX(audioManager.katanaHit, 1.8f);
-            enemy.TakeDamage(heavyDamage,true);
+            enemy.TakeDamage(heavyDamage, true);
+            print("check: yes "+enemy);
 
             if (! enemy.isBlocking)
             {
@@ -50,6 +51,7 @@ public class Chiback : Character
         else
         {
             audioManager.PlaySFX(audioManager.swoosh, 1f);
+            print("check: noenemy"+enemy);
         }
     }
     #endregion
@@ -69,7 +71,7 @@ public class Chiback : Character
         IgnoreUpdate(true);
 
         // Calculate the movement direction (keyboard always, controller only if controller == true)
-        float moveDirection = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : (controller ? Input.GetAxis("Horizontal" + playerString) : 0f));
+        float moveDirection = input.GetKey(left) ? -1f : (input.GetKey(right) ? 1f : (controller ? input.GetAxis("Horizontal" + playerString) : 0f));
 
         // Only proceed if a direction is given
         if (moveDirection == 0f)
@@ -80,7 +82,7 @@ public class Chiback : Character
         }
 
         // Grounded vs air logic for keyboard/controller (keyboard always works, controller only when controller == true)
-        if (!Input.GetKey(KeyCode.W) && isGrounded || (controller && Input.GetAxis("Vertical" + playerString) <= 0.5f && isGrounded))
+        if (!input.GetKey(KeyCode.W) && isGrounded || (controller && input.GetAxis("Vertical" + playerString) <= 0.5f && isGrounded))
         {
             rb.AddForce(new Vector2(moveDirection * jumpSpeed, jumpHeight), ForceMode2D.Impulse);
         }
@@ -168,8 +170,9 @@ public class Chiback : Character
         {
             audioManager.PlaySFX(audioManager.lightattack, 0.5f);
             enemy.TakeDamage(5, true);
-
-            
+            if(!enemy.counterIsOn){
+                enemy.BreakCharge();
+            }
             if(!onCooldown){
                 enemy.Knockback(15f, 0.8f, true);
             }

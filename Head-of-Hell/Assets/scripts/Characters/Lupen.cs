@@ -119,6 +119,7 @@ public class Lupen : Character
         stayDynamic();
         enemy.ChangeEnemy(stolenCharacter);
         //SaveValues and change form
+        spirit.SetInput(GetInputProvider());        // NEW: give the same provider
         spirit.stolenCharacter = stolenCharacter;
         spirit.currentHealth = currHealth;
         spirit.whipDamage = wipDamage;
@@ -240,7 +241,7 @@ public class Lupen : Character
             ignoreMovement = true;
             if (charged)
             {
-                if (Input.GetKeyUp(charge) || (controller && Input.GetButtonUp("ChargeAttack" + playerString)))
+                if (input.GetKeyUp(charge) || (controller && input.GetButtonUp("ChargeAttack" + playerString)))
                 {
                     int randomIndex = Random.Range(0, 6); // if you have 6 hurt animations
                     animator.SetFloat("Index", randomIndex);
@@ -253,7 +254,7 @@ public class Lupen : Character
             }
             else
             {
-                if (Input.GetKeyUp(charge) || (controller && Input.GetButtonUp("ChargeAttack" + playerString)))
+                if (input.GetKeyUp(charge) || (controller && input.GetButtonUp("ChargeAttack" + playerString)))
                 {
                     stayDynamic();
                     ignoreMovement = false;

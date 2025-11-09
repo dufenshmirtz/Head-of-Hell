@@ -1,6 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+public enum CharacterType
+{
+    Steelager = 0,
+    Vander   = 1,
+    Rager    = 2,
+    Skipler  = 3,
+    Fin      = 4,
+    LazyBigus= 5,
+    Lithra   = 6,
+    Chiback  = 7,
+    Lupen    = 8,
+    Visvia   = 9
+}
 
 public class CharacterManager : MonoBehaviour
 {
@@ -47,6 +62,9 @@ public class CharacterManager : MonoBehaviour
 
     public int playerNum;
 
+    public event Action<Character> OnCharacterReady;    // fired once after Awake creates the initial character
+    public event Action<Character> OnCharacterChanged;  // fired on ChangeCharacter()
+
     void Awake()
     {
         // Fetch player character choices
@@ -67,7 +85,7 @@ public class CharacterManager : MonoBehaviour
 
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
-        
+
 
         // Assign character, color, and animator controller based on selection
         switch (characterName)
@@ -75,6 +93,7 @@ public class CharacterManager : MonoBehaviour
             case "Steelager":
                 steelager = this.gameObject.AddComponent<Steelager>();
                 character = steelager;
+                character.characterID = (int)CharacterType.Steelager;
                 spriteRenderer.color = SteelagerColor;
                 animator = GetComponent<Animator>();
                 animator.runtimeAnimatorController = SteelagerAnimatorController;
@@ -82,6 +101,7 @@ public class CharacterManager : MonoBehaviour
             case "Vander":
                 vander = this.gameObject.AddComponent<Vander>();
                 character = vander;
+                character.characterID = (int)CharacterType.Vander;
                 spriteRenderer.color = VanderColor;
                 animator = GetComponent<Animator>();
                 animator.runtimeAnimatorController = VanderAnimatorController;
@@ -89,6 +109,7 @@ public class CharacterManager : MonoBehaviour
             case "Rager":
                 rager = this.gameObject.AddComponent<Rager>();
                 character = rager;
+                character.characterID = (int)CharacterType.Rager;
                 spriteRenderer.color = RagerColor;
                 animator = GetComponent<Animator>();
                 animator.runtimeAnimatorController = RagerAnimatorController;
@@ -96,6 +117,7 @@ public class CharacterManager : MonoBehaviour
             case "Skipler":
                 skipler = this.gameObject.AddComponent<Skipler>();
                 character = skipler;
+                character.characterID = (int)CharacterType.Skipler;
                 spriteRenderer.color = SkiplerColor;
                 animator = GetComponent<Animator>();
                 animator.runtimeAnimatorController = SkiplerAnimatorController;
@@ -103,6 +125,7 @@ public class CharacterManager : MonoBehaviour
             case "Fin":
                 fin = this.gameObject.AddComponent<Fin>();
                 character = fin;
+                character.characterID = (int)CharacterType.Fin;
                 spriteRenderer.color = FinColor;
                 animator = GetComponent<Animator>();
                 animator.runtimeAnimatorController = FinAnimatorController;
@@ -110,6 +133,7 @@ public class CharacterManager : MonoBehaviour
             case "Lazy Bigus":
                 bigus = this.gameObject.AddComponent<LazyBigus>();
                 character = bigus;
+                character.characterID = (int)CharacterType.LazyBigus;
                 spriteRenderer.color = LazyBigusColor;
                 animator = GetComponent<Animator>();
                 animator.runtimeAnimatorController = LazyBigusAnimatorController;
@@ -117,12 +141,14 @@ public class CharacterManager : MonoBehaviour
             case "Lithra":
                 lithra = this.gameObject.AddComponent<Lithra>();
                 character = lithra;
+                character.characterID = (int)CharacterType.Lithra;
                 animator = GetComponent<Animator>();
                 animator.runtimeAnimatorController = LithraAnimatorController;
                 break;
             case "Chiback":
                 chiback = this.gameObject.AddComponent<Chiback>();
                 character = chiback;
+                character.characterID = (int)CharacterType.Chiback;
                 spriteRenderer.color = ChibackColor;
                 animator = GetComponent<Animator>();
                 animator.runtimeAnimatorController = ChibackAnimatorController;
@@ -130,6 +156,7 @@ public class CharacterManager : MonoBehaviour
             case "Lupen":
                 lupen = this.gameObject.AddComponent<Lupen>();
                 character = lupen;
+                character.characterID = (int)CharacterType.Lupen;
                 spriteRenderer.color = LupenColor;
                 animator = GetComponent<Animator>();
                 animator.runtimeAnimatorController = LupenAnimatorController;
@@ -137,11 +164,14 @@ public class CharacterManager : MonoBehaviour
             case "Visvia":
                 visvia = this.gameObject.AddComponent<Visvia>();
                 character = visvia;
+                character.characterID = (int)CharacterType.Visvia;
                 spriteRenderer.color = LupenColor;
                 animator = GetComponent<Animator>();
                 animator.runtimeAnimatorController = VisviaAnimatorController;
                 break;
         }
+
+        OnCharacterReady?.Invoke(character);  // <-- tell listeners initial character exists
     }
 
     void Start()
@@ -218,7 +248,7 @@ public class CharacterManager : MonoBehaviour
     {
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
-        characterName=givenName;
+        characterName = givenName;
         spriteRenderer.color = LupenSpiritColor;
 
         // Assign character, color, and animator controller based on selection
@@ -284,5 +314,10 @@ public class CharacterManager : MonoBehaviour
                 animator.runtimeAnimatorController = VisviaAnimatorController;
                 break;
         }
+
+        OnCharacterChanged?.Invoke(character); // <-- tell listeners we swapped
     }
+
+    // Small helper so others don’t need to know about CharacterChoice(1)
+    public Character GetCurrentCharacter() => character;
 }

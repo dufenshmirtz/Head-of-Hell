@@ -98,7 +98,7 @@ public class Lithra : Character
     public override void LightAttack()
     {
         // Check if air spin is ready and the player is moving either left or right (controller or keyboard)
-        if (airSpinready && (Input.GetKey(left) || Input.GetKey(right) || (controller && Input.GetAxis("Horizontal" + playerString) != 0)))
+        if (airSpinready && (input.GetKey(left) || input.GetKey(right) || (controller && input.GetAxis("Horizontal" + playerString) != 0)))
         {
             QuickAttackIndicatorDisable();
             StartCoroutine(PerformLightAttack());
@@ -114,7 +114,7 @@ public class Lithra : Character
         audioManager.PlaySFX(audioManager.bellDash, 1f);
 
         // Calculate the movement direction (keyboard or controller)
-        float moveDirection = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : Input.GetAxis("Horizontal" + playerString));
+        float moveDirection = input.GetKey(left) ? -1f : (input.GetKey(right) ? 1f : input.GetAxis("Horizontal" + playerString));
 
         // Only proceed if a direction is given (controller or keyboard)
         if (moveDirection == 0f)
@@ -125,7 +125,7 @@ public class Lithra : Character
         }
 
         // Grounded vs. air logic for keyboard/controller
-        if (!Input.GetKey(up) && isGrounded && (controller && Input.GetAxis("Vertical" + playerString) <= 0.5f))
+        if (!input.GetKey(up) && isGrounded && (controller && input.GetAxis("Vertical" + playerString) <= 0.5f))
         {
             rb.AddForce(new Vector2(moveDirection * airSpinSpeed, jumpHeight), ForceMode2D.Impulse);
         }
@@ -154,7 +154,7 @@ public class Lithra : Character
                 enemy.Stun(0.5f);
 
                 // Calculate move direction again after hitting (keyboard or controller)
-                float moveDirection2 = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : Input.GetAxis("Horizontal" + playerString));
+                float moveDirection2 = input.GetKey(left) ? -1f : (input.GetKey(right) ? 1f : input.GetAxis("Horizontal" + playerString));
 
                 // Jump back after hitting the enemy
                 rb.velocity = Vector2.zero; // Reset current velocity
@@ -209,10 +209,13 @@ public class Lithra : Character
         if (hitEnemy != null)
         {
             enemy.StopPunching();
-            enemy.BreakCharge();
+            if (!enemy.counterIsOn)
+            {
+                enemy.BreakCharge();
+            }
             enemy.TakeDamage(chargeDmg, false);
-            LuckyBell();
             enemy.Knockback(13f, 0.4f, false);
+            LuckyBell();
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
         }
         else

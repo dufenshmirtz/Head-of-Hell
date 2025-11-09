@@ -108,7 +108,7 @@ public class Skipler : Character
         Vector2 currentVelocity = rb.velocity;
 
         // Determine the dash direction based on input (keyboard always, controller only if controller == true)
-        float moveDirection = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : (controller ? Input.GetAxis("Horizontal" + playerString) : 0f));
+        float moveDirection = input.GetKey(left) ? -1f : (input.GetKey(right) ? 1f : (controller ? input.GetAxis("Horizontal" + playerString) : 0f));
 
         // If no direction input was given, default to right
         if (moveDirection == 0f)
@@ -212,7 +212,7 @@ public class Skipler : Character
         Vector2 currentVelocity = rb.velocity;
 
         // Determine the dash direction based on input (keyboard always, controller only if controller == true)
-        float moveDirection = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : (controller ? Input.GetAxis("Horizontal" + playerString) : 0f));
+        float moveDirection = input.GetKey(left) ? -1f : (input.GetKey(right) ? 1f : (controller ? input.GetAxis("Horizontal" + playerString) : 0f));
 
         // If no direction input was given, default to right
         if (moveDirection == 0f)

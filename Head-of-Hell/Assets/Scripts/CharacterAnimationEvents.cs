@@ -153,23 +153,11 @@ public class CharacterAnimationEvents : MonoBehaviour
     }
 
     //Fin
-    // public void CounterOffEvent()
-    // {
-    //     fin = (Fin)character;
-    //     fin.CounterOff();
-    // }
-
-    // public void CounterSuccessEvent()
-    // {
-    //     fin = (Fin)character;
-    //     fin.CounterSuccessOff();
-    // }
-
-    // public void CounterDamageEvent()
-    // {
-    //     fin = (Fin)character;
-    //     fin.DealCounterDmg();
-    // }
+    public void FlashingPriestEvent()
+    {
+        fin = (Fin)character;
+        fin.FlashingPriest();
+    }
 
     public void WaterSplashEvent()
     {

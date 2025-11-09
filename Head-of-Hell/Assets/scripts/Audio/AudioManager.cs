@@ -92,7 +92,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip volchBiteExtra;
 
     public AudioClip skipWin;
-    public AudioClip skipPick;
+    public AudioClip kalhaflash;
     public AudioClip gabaWin;
     public AudioClip gabaPick;
 
