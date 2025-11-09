@@ -178,6 +178,10 @@ public class LazyBigus : Character
         if (hitEnemy != null)
         {
             enemy.StopPunching();
+            if (!enemy.counterIsOn)
+            {
+                enemy.BreakCharge();
+            }
             enemy.BreakCharge();
             enemy.TakeDamage(chargeDmg, false);
             enemy.Knockback(13f, 0.4f, false);

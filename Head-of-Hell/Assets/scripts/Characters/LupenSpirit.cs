@@ -1,10 +1,5 @@
 using System.Collections;
-using Unity.VisualScripting;
-//using UnityEditor.PackageManager;
-//using UnityEditor.Playables;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
-using UnityEngine.UIElements.Experimental;
 
 public class LupenSpirit : MonoBehaviour
 {
@@ -16,71 +11,88 @@ public class LupenSpirit : MonoBehaviour
     public CharacterManager characterChoiceHandler;
     public Animator animator;
     public CharacterAnimationEvents cEvents;
-    public int whipDamage,robberyCounter;
-    public Character enemy,stolenCharacter;
+    public int whipDamage, robberyCounter;
+    public Character enemy, stolenCharacter;
     public int currentHealth;
     public helthbarscript healthbar;
     public int maxHealth;
     bool swapped;
-    bool healthswap=true;
+    bool healthswap = true;
+
+    // --- Injected input provider (same as the Character uses) ---
+    private IInputProvider input;
+    public void SetInput(IInputProvider provider) => input = provider;
 
     public void Start()
     {
         animator = GetComponent<Animator>();
+        // Fallback to keyboard if someone forgot to set us:
+        if (input == null) input = new KeyboardInputProvider();
     }
-
 
     void Update()
     {
-        if (!healthswap) //set his health right
+        if (!healthswap) // set stolen char health once we’ve swapped
         {
             stolenCharacter.SetCurrentHealth(currentHealth);
-            healthswap=true;
+            healthswap = true;
         }
 
-        if(swapped){  //case he dies in form
-            if(stolenCharacter.GetCurrentHealth() <= 0){
-                lupen.enabled=true;
+        // If we swapped forms and the form dies, return to Lupen and die.
+        if (swapped)
+        {
+            if (stolenCharacter.GetCurrentHealth() <= 0)
+            {
+                lupen.enabled = true;
                 lupenInFormSpell = false;
                 swapped = false;
-                currentHealth=stolenCharacter.GetCurrentHealth();
-                lupen.ReturnToLupen(whipDamage,robberyCounter,currentHealth);
+                currentHealth = stolenCharacter.GetCurrentHealth();
+                lupen.ReturnToLupen(whipDamage, robberyCounter, currentHealth);
                 lupen.Die();
             }
         }
-        
-        if (lupenInFormSpell && !animator.GetBool("Casting"))  //return after casting
+
+        // If Lupen is currently in-form spell and the animation finished, return.
+        if (lupenInFormSpell && !animator.GetBool("Casting"))
         {
-            lupen.enabled=true;
+            lupen.enabled = true;
             lupenInFormSpell = false;
             swapped = false;
-            currentHealth=stolenCharacter.GetCurrentHealth();
-            lupen.ReturnToLupen(whipDamage,robberyCounter,currentHealth);
+            currentHealth = stolenCharacter.GetCurrentHealth();
+            lupen.ReturnToLupen(whipDamage, robberyCounter, currentHealth);
         }
 
-        if ((Input.GetKeyDown(ability) || (controller && Input.GetButtonDown("Spell" + playerString)))&& lupen.isActiveAndEnabled==false && !enemy.AmICasting())
+        // *** INPUT: use provider instead of Input. ***
+        // Ability to trigger return while in stolen form:
+        bool abilityPressed =
+            input.GetKeyDown(ability) ||
+            (controller && input.GetButtonDown("Spell" + playerString));
+
+        if (abilityPressed && lupen.isActiveAndEnabled == false && !enemy.AmICasting())
         {
-            stolenCharacter.chargeDisable=true;
+            stolenCharacter.chargeDisable = true;
             StartCoroutine(SetLupenInFormSpellAfterDelay(1f));
         }
-        return;
     }
 
     private IEnumerator SetLupenInFormSpellAfterDelay(float delay)
     {
-        yield return new WaitForSeconds(delay); // Wait for the specified delay
-        lupenInFormSpell = true; // Set the variable to true
-        print("LupenInFormSpell is now true");
+        yield return new WaitForSeconds(delay);
+        lupenInFormSpell = true;
+        Debug.Log("LupenInFormSpell is now true");
     }
 
     public void Action()
     {
-        lupen.enabled=false;
-
+        lupen.enabled = false;
         swapped = true;
+        healthswap = false;
 
-        healthswap=false;
-
-        //stolenCharacter.TakeDamageNoAnimation(maxHealth - currentHealth, false);
+        // Ensure the *stolen form* receives the SAME input provider,
+        // so the Agent/keyboard keeps controlling seamlessly.
+        if (stolenCharacter != null)
+        {
+            stolenCharacter.SetInput(input);
+        }
     }
 }

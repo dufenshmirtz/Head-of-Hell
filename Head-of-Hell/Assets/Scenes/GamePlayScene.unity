@@ -327,6 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -335,6 +336,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
 --- !u!1 &27000638
 GameObject:
   m_ObjectHideFlags: 0
@@ -1159,9 +1161,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1496700717066874133, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1588322336008336028, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1588322336008336028, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_LocalScale.x
@@ -1218,7 +1228,7 @@ PrefabInstance:
     - target: {fileID: 2553929291879454509, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 11d5595fa0b947043b07da91212a5678, type: 2}
+      objectReference: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
     - target: {fileID: 2584085071129299450, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: P1Name
       value: 
@@ -1270,6 +1280,10 @@ PrefabInstance:
     - target: {fileID: 2705414560046700573, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5334421840855588726, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5341404983514887946, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: parry
@@ -1383,6 +1397,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.40240481
       objectReference: {fileID: 0}
+    - target: {fileID: 6920234910526868510, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Name
       value: P1
@@ -1495,6 +1513,21 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: -1
       addedObject: {fileID: 221568179}
+    - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 221568216}
+    - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 221568215}
+    - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 221568217}
+    - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 221568218}
+    - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 221568230}
   m_SourcePrefab: {fileID: 100100000, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
 --- !u!1 &57808467
 GameObject:
@@ -3630,6 +3663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -3638,6 +3672,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   mirrorFireAttackPoint: {fileID: 689308824}
   fireAttackPoint: {fileID: 2133402719}
 --- !u!1 &174624792
@@ -4244,6 +4279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -4252,6 +4288,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &184793119
@@ -5279,6 +5316,121 @@ CapsuleCollider2D:
   m_Offset: {x: -0.03, y: -0.13}
   m_Size: {x: 0.89, y: 1.6}
   m_Direction: 0
+--- !u!114 &221568215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221568178}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd19557386e32f14d9047b5a9971820e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  selfManager: {fileID: 221568179}
+  enemyManager: {fileID: 1367423825}
+  playerSuffix: _P1
+  rewardDamageDealt: 0.02
+  rewardDamageTaken: -0.02
+  rewardWin: 1
+  rewardLoss: -1
+  stepPenalty: -0.0005
+  buggedPenalty: -0.04
+  staticPenalty: -0.01
+  totalCharacterCount: 10
+  rewardCloseToOpponent: 0.0008
+  penaltyFarFromOpponent: -0.0008
+  centerStageBonus: 0.0006
+  stageMin: {x: -9, y: -3}
+  stageMax: {x: 9, y: 5}
+  engageDist: 3.5
+--- !u!114 &221568216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221568178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 58
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 0
+      BranchSizes: 030000000200000002000000020000000200000002000000020000000300000002000000
+    VectorActionSize: 030000000200000002000000020000000200000002000000020000000300000002000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
+  m_BehaviorName: Fighter
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_ObservableAttributeHandling: 0
+--- !u!114 &221568217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221568178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 5
+  TakeActionsBetweenDecisions: 1
+--- !u!114 &221568218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221568178}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a09c9c7404d8d54e9d78055e0134fd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idleSpeedEps: 0.02
+  noChangeSeconds: 6
+  activeColorStuckSeconds: 5
+  arenaBounds: {fileID: 1100116392}
+  boundLeft: {fileID: 279847380}
+  boundRight: {fileID: 1727173186}
+  boundFloor: {fileID: 866361085}
+  boundCeiling: {fileID: 1786861228}
+  fallbackMin: {x: -9, y: -3}
+  fallbackMax: {x: 9, y: 5}
+  oobPadding: 0.25
+  oobGraceSeconds: 0.25
+  oobPenalty: -0.02
+--- !u!114 &221568230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221568178}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e86e7fcfbd97b674fa2f437d38a3b4cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSeconds: 10000
 --- !u!1 &224284506
 GameObject:
   m_ObjectHideFlags: 0
@@ -6260,6 +6412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -6268,6 +6421,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1522488523}
   bombsParent: {fileID: 2100796710}
@@ -6713,7 +6867,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.6, y: 7.3}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -6724,7 +6878,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 14.66, y: 0.8}
+  m_Size: {x: 26.44, y: 15.34}
   m_EdgeRadius: 0
 --- !u!4 &279847380
 Transform:
@@ -8149,6 +8303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -8157,6 +8312,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
 --- !u!114 &355700673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9043,6 +9199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -9051,6 +9208,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -10184,6 +10342,83 @@ Transform:
   m_Children: []
   m_Father: {fileID: 448782095}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &420532702
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 420532703}
+  - component: {fileID: 420532704}
+  m_Layer: 0
+  m_Name: lowerBorder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &420532703
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420532702}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -3.0107503, y: 8.939737, z: 0.06273092}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1100116391}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+--- !u!61 &420532704
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420532702}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 23.54, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 10.24, y: 0.85}
+    newSize: {x: 10.24, y: 0.85}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 19.13, y: 24.6}
+  m_EdgeRadius: 0
 --- !u!1 &420996079
 GameObject:
   m_ObjectHideFlags: 0
@@ -10529,6 +10764,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -10537,6 +10773,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1670223497}
   bombsParent: {fileID: 2100796710}
@@ -11757,6 +11994,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -11765,6 +12003,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &541449327
@@ -12692,6 +12931,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -12700,6 +12940,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 343137453}
   bombsParent: {fileID: 2100796710}
@@ -14554,6 +14795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -14562,6 +14804,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -17145,6 +17388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -17153,6 +17397,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 569739573}
   bulletSpeed: 35
@@ -18931,7 +19176,7 @@ MonoBehaviour:
   volchBiteSuccess: {fileID: 8300000, guid: 2d85ec46f54633f449fb9d0522bc2443, type: 3}
   volchBiteExtra: {fileID: 8300000, guid: 61e0b31583ddc2f4e8b6c40a17d70e64, type: 3}
   skipWin: {fileID: 8300000, guid: eee410a3874a9dc43b842ba89fef0b63, type: 3}
-  skipPick: {fileID: 0}
+  kalhaflash: {fileID: 8300000, guid: 222271ddba694ae42970e6dd57676be3, type: 3}
   gabaWin: {fileID: 0}
   gabaPick: {fileID: 0}
   portal: {fileID: 8300000, guid: 3d93f537382f0524f96d0457207ad8b0, type: 3}
@@ -20104,6 +20349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -20112,6 +20358,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
 --- !u!1001 &882995806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20445,6 +20692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -20453,6 +20701,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
 --- !u!114 &892172695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23702,6 +23951,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -23710,6 +23960,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
 --- !u!1 &1025716889
 GameObject:
   m_ObjectHideFlags: 0
@@ -24955,6 +25206,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1100116391}
+  - component: {fileID: 1100116392}
   m_Layer: 0
   m_Name: Borders
   m_TagString: Untagged
@@ -24977,11 +25229,57 @@ Transform:
   m_Children:
   - {fileID: 866361085}
   - {fileID: 1786861228}
+  - {fileID: 420532703}
   - {fileID: 1727173186}
   - {fileID: 279847380}
   - {fileID: 119301199}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1100116392
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1100116390}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -2.8, y: 1.4}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 21.8, y: 12.07}
+  m_EdgeRadius: 0
 --- !u!4 &1100786215 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 503945095293883305, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
@@ -26147,6 +26445,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -26155,6 +26454,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
 --- !u!1 &1169185177
 GameObject:
   m_ObjectHideFlags: 0
@@ -26359,6 +26659,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -26367,6 +26668,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
 --- !u!1 &1185634414
 GameObject:
   m_ObjectHideFlags: 0
@@ -26829,6 +27131,72 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1208849196}
   m_CullTransparentMesh: 1
+--- !u!1 &1209792974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1209792977}
+  - component: {fileID: 1209792976}
+  - component: {fileID: 1209792975}
+  m_Layer: 0
+  m_Name: TrainingTool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1209792975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209792974}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d7dc8dd960dba44b8c59dc679fe250e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableForTraining: 1
+  arenaPrefab: {fileID: 3357780029740253133, guid: 7c3b2e9fb35926d4e90d708c3c187665, type: 3}
+  rows: 1
+  cols: 3
+  spacing: {x: 30, y: 18}
+  gm: {fileID: 2144866982}
+--- !u!114 &1209792976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209792974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1086f769dab6dd946a32309ecdaf3de0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enable: 1
+  timeScale: 40
+  fixedDeltaTime: 0.0167
+--- !u!4 &1209792977
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209792974}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5852381, y: 0.42142665, z: -0.05203793}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1209826581
 GameObject:
   m_ObjectHideFlags: 0
@@ -27121,6 +27489,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -27129,6 +27498,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
 --- !u!1 &1220970790
 GameObject:
   m_ObjectHideFlags: 0
@@ -27764,6 +28134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -27772,6 +28143,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
 --- !u!114 &1228552612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28055,6 +28427,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -28063,6 +28436,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -28502,6 +28876,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -28510,6 +28885,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -29275,6 +29651,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -29283,6 +29660,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   mirrorFireAttackPoint: {fileID: 1079567584}
   fireAttackPoint: {fileID: 1505197450}
 --- !u!114 &1300380414
@@ -29795,6 +30173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -29803,6 +30182,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1100786215}
   bombsParent: {fileID: 2100796710}
@@ -30901,6 +31281,121 @@ CapsuleCollider2D:
   m_Offset: {x: -0.03, y: -0.13}
   m_Size: {x: 0.89, y: 1.6}
   m_Direction: 0
+--- !u!114 &1367423861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367423824}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd19557386e32f14d9047b5a9971820e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  selfManager: {fileID: 1367423825}
+  enemyManager: {fileID: 221568179}
+  playerSuffix: _P2
+  rewardDamageDealt: 0.02
+  rewardDamageTaken: -0.02
+  rewardWin: 1
+  rewardLoss: -1
+  stepPenalty: -0.0005
+  buggedPenalty: -0.04
+  staticPenalty: -0.01
+  totalCharacterCount: 10
+  rewardCloseToOpponent: 0.0008
+  penaltyFarFromOpponent: -0.0008
+  centerStageBonus: 0.0006
+  stageMin: {x: -9, y: -3}
+  stageMax: {x: 9, y: 5}
+  engageDist: 3.5
+--- !u!114 &1367423862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367423824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 58
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 0
+      BranchSizes: 030000000200000002000000020000000200000002000000020000000300000002000000
+    VectorActionSize: 030000000200000002000000020000000200000002000000020000000300000002000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
+  m_BehaviorName: Fighter
+  TeamId: 1
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_ObservableAttributeHandling: 0
+--- !u!114 &1367423863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367423824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 5
+  TakeActionsBetweenDecisions: 1
+--- !u!114 &1367423864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367423824}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a09c9c7404d8d54e9d78055e0134fd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idleSpeedEps: 0.02
+  noChangeSeconds: 6
+  activeColorStuckSeconds: 5
+  arenaBounds: {fileID: 1100116392}
+  boundLeft: {fileID: 279847380}
+  boundRight: {fileID: 1727173186}
+  boundFloor: {fileID: 866361085}
+  boundCeiling: {fileID: 1786861228}
+  fallbackMin: {x: -9, y: -3}
+  fallbackMax: {x: 9, y: 5}
+  oobPadding: 0.25
+  oobGraceSeconds: 0.25
+  oobPenalty: -0.02
+--- !u!114 &1367423876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367423824}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e86e7fcfbd97b674fa2f437d38a3b4cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSeconds: 10000
 --- !u!1 &1369490559
 GameObject:
   m_ObjectHideFlags: 0
@@ -32555,6 +33050,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -32563,6 +33059,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
 --- !u!114 &1478511390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33820,6 +34317,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -33828,6 +34326,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   mirrorFireAttackPoint: {fileID: 79255834}
   fireAttackPoint: {fileID: 1247528379}
 --- !u!114 &1531342472
@@ -35560,6 +36059,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -35568,6 +36068,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1881472743}
   bulletSpeed: 35
@@ -36023,6 +36524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -36031,6 +36533,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1943892085}
   bulletSpeed: 35
@@ -37300,7 +37803,7 @@ PrefabInstance:
     - target: {fileID: 3775815256451319138, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: f71edc3b937f70a43934b1b47dee5d0a, type: 2}
+      objectReference: {fileID: 9100000, guid: cf96a39428a2f394ab233d360aaa22d9, type: 2}
     - target: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_LocalScale.x
       value: -1
@@ -37533,6 +38036,10 @@ PrefabInstance:
       propertyPath: m_ExcludeLayers.m_Bits
       value: 256
       objectReference: {fileID: 0}
+    - target: {fileID: 7614724473534664062, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 8458631637096272621, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -37569,6 +38076,21 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1367423825}
+    - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1367423862}
+    - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1367423861}
+    - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1367423863}
+    - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1367423864}
+    - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1367423876}
   m_SourcePrefab: {fileID: 100100000, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
 --- !u!1 &1660470422
 GameObject:
@@ -38163,6 +38685,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -38171,6 +38694,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 461525617}
   bulletSpeed: 35
@@ -38984,7 +39508,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -11.16}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -38995,7 +39519,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 16.99, y: 0.85}
+  m_Size: {x: 26.86, y: 23.2}
   m_EdgeRadius: 0
 --- !u!4 &1727173186
 Transform:
@@ -39439,6 +39963,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -39447,6 +39972,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
 --- !u!114 &1753174034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39900,7 +40426,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -7.42, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -39911,7 +40437,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.95, y: 24.6}
+  m_Size: {x: 19.13, y: 24.6}
   m_EdgeRadius: 0
 --- !u!4 &1786861228
 Transform:
@@ -42177,6 +42703,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -42185,6 +42712,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &1988288838 stripped
@@ -42902,6 +43430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -42910,6 +43439,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   mirrorFireAttackPoint: {fileID: 1584761535}
   fireAttackPoint: {fileID: 1839956112}
 --- !u!1 &2018083340
@@ -43477,6 +44007,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -43485,6 +44016,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1001 &2041432792
@@ -45090,7 +45622,12 @@ MonoBehaviour:
   - {fileID: 979127239}
   - {fileID: 616644771}
   - {fileID: 808757111}
-  maxHealth: -1
+  maxHealth: 100
+  trainingMode: 0
+  agentP1: {fileID: 221568215}
+  agentP2: {fileID: 1367423861}
+  p1Spawn: {fileID: 221568191}
+  p2Spawn: {fileID: 1367423837}
 --- !u!1 &2147385444
 GameObject:
   m_ObjectHideFlags: 0
@@ -45551,6 +46088,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  characterID: 0
   moveSpeed: 4
   blockDisabled: 0
   canAlterSpeed: 1
@@ -45559,6 +46097,7 @@ MonoBehaviour:
   counterIsOn: 0
   overrideDeath: 0
   justTeleported: 0
+  spawn: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -45575,3 +46114,4 @@ SceneRoots:
   - {fileID: 2100796710}
   - {fileID: 832730748}
   - {fileID: 75958759}
+  - {fileID: 1209792977}

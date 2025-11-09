@@ -3,11 +3,7 @@ using UnityEngine;
 
 public class Fin : Character
 {
-    float missCooldown = 10f, cooldown = 15f;
-    // bool ignoreCounterOff = false;
-    // int damage = 25;
-    // bool counterIsOn = false;
-    // bool counterDone = false;
+    float cooldown = 8f;
     //Roll
     float rollPower = 8f;
     float rollTime = 0.39f;
@@ -38,16 +34,13 @@ public class Fin : Character
 
         if (hitEnemy != null)
         {
-
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
             enemy.TakeDamage(heavyDamage, true);
-            enemy.TakeDamageNoAnimation(passiveDamage, true);
 
             if (! enemy.isBlocking)
             {
                 enemy.Knockback(11f, 0.15f, true);
             }
-
         }
         else
         {
@@ -58,94 +51,33 @@ public class Fin : Character
     #endregion
 
     #region Spell
-    // public override void Spell()
-    // {
-    //     audioManager.PlaySFX(audioManager.counterScream, 2.5f);
-    //     animator.SetTrigger("Spell");
-    //     counterIsOn = true;
-    //     safety = true;
-    //     UsingAbility(cooldown);
-    //     StartCoroutine(CounterOffSafety());
-    // }
+    public override void Spell()
+    {
+        attackRange += 0.5f;
+        audioManager.PlaySFX(audioManager.kalhaflash, 2f);
+        animator.SetTrigger("Spell");
+        UsingAbility(cooldown);
+    }
 
-    // public bool DetectCounter()
-    // {
-    //     if (counterIsOn)
-    //     {
-    //         if (!counterDone)
-    //         {
-    //             Countered();
-    //             return true;
-    //         }
-    //         return true;
-    //     }
+    public void FlashingPriest()
+    {
+        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
 
-    //     return false;
-    // }
+        if (hitEnemy != null)
+        {
+            enemy.StopPunching();
+            enemy.BreakCharge();
+            enemy.Stun(0.8f);
+        }
+        else
+        {
+            //audioManager.PlaySFX(audioManager.stab, audioManager.swooshVolume);
+        }
+        attackRange =  ogRange;
+        OnCooldown(cooldown);
+        ignoreDamage = false;
+    }
 
-    // public void CounterOff()
-    // {
-    //     if (!ignoreCounterOff)
-    //     {
-    //         // Start the cooldown timer
-    //         OnCooldown(missCooldown);
-    //         CounterVariablesOff();
-    //         safety = false;
-    //     }
-    //     else
-    //     {
-    //         ignoreCounterOff = false;
-    //     }
-        
-    // }
-
-    // private IEnumerator CounterOffSafety()
-    // {
-    //     yield return new WaitForSeconds(0.41f);
-    //     if (!counterDone && safety)
-    //     {
-    //         OnCooldown(missCooldown);
-    //         CounterVariablesOff();
-    //     }
-    // }
-
-    // public void CounterSuccessOff()
-    // {
-    //     CounterVariablesOff();
-    //     OnCooldown(cooldown);
-    // }
-
-    // public void Countered()
-    // {
-    //     animator.SetTrigger("counterHit");
-    //     audioManager.PlaySFX(audioManager.counterSucces, 1.5f);
-    //     enemy.stayStatic();
-    //     stayStatic();
-    //     ignoreCounterOff = true;
-    //     counterDone = true;
-    // }
-
-    // public void DealCounterDmg()
-    // {
-    //     enemy.StopPunching();
-    //     enemy.BreakCharge();
-
-    //     audioManager.PlaySFX(audioManager.counterClong, 0.5f);
-
-    //     enemy.TakeDamage(damage,true);
-
-    //      stayDynamic();
-    //     enemy.stayDynamic();
-
-    //     enemy.Knockback(10f, .3f, false);
-
-    // }
-
-    // public void CounterVariablesOff()
-    // {
-    //     counterDone = false;
-    //     counterIsOn = false;
-    // }
 
     #endregion
 
@@ -184,7 +116,7 @@ public class Fin : Character
 
 
         // Determine the roll direction based on the input (keyboard always, controller only if controller == true)
-        float moveDirection = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : (controller ? Input.GetAxis("Horizontal" + playerString) : 0f));
+        float moveDirection = input.GetKey(left) ? -1f : (input.GetKey(right) ? 1f : (controller ? input.GetAxis("Horizontal" + playerString) : 0f));
 
         // If no direction input was given, default to right
         if (moveDirection == 0f)
@@ -242,6 +174,17 @@ public class Fin : Character
     #endregion
 
     #region ChargeAttack
+
+    #region Passive
+    override public void DealCounterDmg()
+    {
+        base.DealCounterDmg();
+
+        enemy.TakeDamageNoAnimation(8,false,false);
+    }
+    #endregion
+
+    #region Animations
     public override void ChargeAttack()
     {
         base.ChargeAttack();
@@ -294,6 +237,6 @@ public class Fin : Character
         }
     }
 
-
+    #endregion
 
 }

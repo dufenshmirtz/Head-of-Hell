@@ -27,9 +27,11 @@ public abstract class Character : MonoBehaviour
     private Coroutine chargeCoroutine;
     float chargeTime = 0.5f;
     protected int chargeDmg = 34;
-    public bool isBlocking=false;
-    protected bool ignoreDamage=false;
+    public bool isBlocking = false;
+    protected bool ignoreDamage = false;
     protected int heavyDamage = 14;
+
+    public int characterID;
 
     //ps------------------------------------------
     protected TextMeshProUGUI P1Name, winner;
@@ -143,18 +145,18 @@ public abstract class Character : MonoBehaviour
     protected bool blockDisable = false;
     protected bool specialDisable = false;
     public bool chargeDisable = false;
-    bool ignoreStats=false;
+    bool ignoreStats = false;
 
     //parry
     protected bool canParry = true;
-    protected bool safety= true;
+    protected bool safety = true;
     protected bool ignoreCounterOff = false;
     protected int parryDamage = 16;
     public bool counterIsOn = false;
     protected bool counterDone = false;
 
 
-    public bool overrideDeath=false;
+    public bool overrideDeath = false;
 
     //handling variables
     int grounds = 0;
@@ -172,7 +174,10 @@ public abstract class Character : MonoBehaviour
 
     //teleport
     public bool justTeleported = false;
-    
+
+    public Transform spawn;
+
+    protected float originalGravityScale;
 
 
     #region Base
@@ -247,6 +252,12 @@ public abstract class Character : MonoBehaviour
 
         cooldownSlider.maxValue = 1f;
 
+        spawn = this.transform;
+
+        originalGravityScale = rb.gravityScale;
+
+        print(spawn.position);
+
         //Disable Indicators
         shield.gameObject.SetActive(false);
         poison.gameObject.SetActive(false);
@@ -256,7 +267,7 @@ public abstract class Character : MonoBehaviour
         stun.gameObject.SetActive(false);
         blockDisabledIndicator.gameObject.SetActive(false);
         robberyCountIndicator.gameObject.SetActive(false);
-        
+
     }
 
     public void InitializeCharacter()
@@ -302,13 +313,16 @@ public abstract class Character : MonoBehaviour
         P2Name = characterChoiceHandler.GetCharacterName(2);
         enemy = characterChoiceHandler.CharacterChoice(2);
 
-        if(playerNum==1)
+        print("check"+enemy + " - " + P2Name);
+
+        if (playerNum == 1)
         {
             playerString = "_P1";
             if (controllerCount >= 2)
             {
                 controller = true;
             }
+            print("i'm P1: my enemy is: "+enemy + " - " + enemyLayer);
         }
         else if (playerNum == 2)
         {
@@ -317,10 +331,25 @@ public abstract class Character : MonoBehaviour
             {
                 controller = true;
             }
+
+            print("i'm P2: my enemy is: "+enemy + " - " + enemyLayer);
         }
 
         animator = GetComponent<Animator>();
     }
+
+    // inside Character (fields)
+    protected IInputProvider input = new KeyboardInputProvider();
+
+    // optional: allow swapping to AI later
+    public void SetInput(IInputProvider provider)
+    {
+        input = provider ?? new KeyboardInputProvider();
+    }
+
+    // inside Character
+    public IInputProvider GetInputProvider() => input;
+
 
     public virtual void Update()
     {
@@ -405,7 +434,7 @@ public abstract class Character : MonoBehaviour
             }
         }
 
-        float moveDirection = Input.GetAxis("Horizontal"+playerString);
+        float moveDirection = input.GetAxis("Horizontal" + playerString);
         // Running animations...
         if (Mathf.Abs(moveDirection) > 0.1f && !isStatic)
         {
@@ -446,51 +475,51 @@ public abstract class Character : MonoBehaviour
         }
 
         // Jumping
-        if (Input.GetKeyDown(up) || Input.GetAxis("Vertical"+playerString) > 0.5f)
+        if (input.GetKeyDown(up) || input.GetAxis("Vertical" + playerString) > 0.5f)
         {
-            if (isGrounded && !jumpDisabled)
+            if (isGrounded && !jumpDisabled && !casting)
             {
                 Jump();
             }
         }
 
         // Heavy Punching
-        if (Input.GetKeyDown(heavyAttack) || (controller && Input.GetButtonDown("HeavyAttack" + playerString)))
+        if (input.GetKeyDown(heavyAttack) || (controller && input.GetButtonDown("HeavyAttack" + playerString)))
         {
-            if(!heavyDisable)
+            if (!heavyDisable && !casting)
             {
                 HeavyAttack();
-            }           
+            }
         }
 
         //Blocking
-        if (Input.GetKeyDown(block) && !casting || (controller && Input.GetButtonDown("Block" + playerString)))
+        if (input.GetKeyDown(block) || (controller && input.GetButtonDown("Block" + playerString)))
         {
-            if (!blockDisable)
+            if (!blockDisable && !casting)
             {
                 Block();
-            }            
+            }
         }
-        else if (Input.GetKeyUp(block) || (controller && Input.GetButtonUp("Block" + playerString)))
+        else if (input.GetKeyUp(block) || (controller && input.GetButtonUp("Block" + playerString)))
         {
-            if (!blockDisable)
+            if (!blockDisable && !casting)
             {
                 Unblock();
             }
         }
 
         //ChargeAttack
-        if (Input.GetKeyDown(charge)|| (controller && Input.GetButtonDown("ChargeAttack" + playerString)))
+        if (input.GetKeyDown(charge) || (controller && input.GetButtonDown("ChargeAttack" + playerString)))
         {
-            if(isGrounded && !chargeDisable)
+            if (isGrounded && !chargeDisable && !casting)
             {
                 ChargeAttack();
             }
-             
+
         }
 
         //Get down from pad
-        if (Input.GetKeyDown(down) || (controller && Input.GetAxis("Vertical" + playerString) < -0.5f))
+        if (input.GetKeyDown(down) || (controller && input.GetAxis("Vertical" + playerString) < -0.5f))
         {
             Collider2D[] colliders = GetComponents<Collider2D>();
 
@@ -498,46 +527,36 @@ public abstract class Character : MonoBehaviour
         }
 
         //LightAttack
-        if (Input.GetKeyDown(lightAttack) || (controller && Input.GetButtonDown("QuickAttack" + playerString)))
+        if (input.GetKeyDown(lightAttack) || (controller && input.GetButtonDown("QuickAttack" + playerString)))
         {
-            if (!quickDisable)
+            if (!quickDisable && !casting)
             {
                 moveSpeed = OGMoveSpeed;
                 LightAttack();
-            }          
+            }
         }
 
         //Spells
-        if (Input.GetKeyDown(ability) || (controller && controller && Input.GetButtonDown("Spell" + playerString)))
+        if (input.GetKeyDown(ability) || (controller && controller && input.GetButtonDown("Spell" + playerString)))
         {
-            if (!onCooldown && canCast && !casting &&!specialDisable)
+            if (!onCooldown && canCast && !casting && !specialDisable)
             {
                 Spell();
-            }           
+            }
         }
 
         //Parry
-        if (Input.GetKeyDown(parry))
+        if (input.GetKeyDown(parry))
         {
-            if (canParry && canCast)
+            if (canParry && canCast && !casting)
             {
                 Parry();
-            }          
+            }
         }
 
         // Animation control for jumping, falling, and landing
         animator.SetBool("IsGrounded", isGrounded);
         animator.SetFloat("VerticalSpeed", rb.velocity.y);
-
-        /*if(rb.velocity.y != 0)
-        {
-            preserveJump = true;
-            animator.SetBool("IsGrounded", !preserveJump);
-        }
-        else
-        {
-            preserveJump = false;
-        }*/
 
     }
 
@@ -548,7 +567,7 @@ public abstract class Character : MonoBehaviour
 
         // Now it's safe to assign the value
         maxHealth = gameManager.maxHealth;
-        print("..;"+maxHealth);
+        print("..;" + maxHealth);
     }
 
 
@@ -579,7 +598,7 @@ public abstract class Character : MonoBehaviour
         {
             isGrounded = true;
             animator.SetBool("Jump", false);
-            animator.SetBool("PlayerGrounded",true);
+            animator.SetBool("PlayerGrounded", true);
             grounds++;
         }
     }
@@ -746,6 +765,8 @@ public abstract class Character : MonoBehaviour
         cdbarimage.sprite = activeSprite;
         isBlocking = false;
         UpdateCooldownSlider(cd);
+
+        lastAbilityCD = cd; //ML
     }
 
     public void Casting(bool castin)
@@ -766,7 +787,7 @@ public abstract class Character : MonoBehaviour
             if (time == 0.3333f)
             {
                 enemyOnRight = !enemyOnRight;
-                knocked=true;
+                knocked = true;
                 StartCoroutine(ResetKnockedAfterDelay(0.3333f));
             }
             else
@@ -839,15 +860,15 @@ public abstract class Character : MonoBehaviour
 
     public virtual void DealChargeDmg()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
         {
             enemy.StopPunching();
-            if(!enemy.counterIsOn){
+            if (!enemy.counterIsOn) {
                 enemy.BreakCharge();
             }
-            enemy.TakeDamage(chargeDmg,false);
+            enemy.TakeDamage(chargeDmg, false);
             enemy.Knockback(13f, 0.4f, false);
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
             if (chargeHitSound != null)
@@ -865,7 +886,7 @@ public abstract class Character : MonoBehaviour
             {
                 audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
             }
-            
+
         }
         chargeReset = true;
         knockable = true;
@@ -883,7 +904,7 @@ public abstract class Character : MonoBehaviour
             ignoreMovement = true;
             if (charged)
             {
-                if (Input.GetKeyUp(charge) || (controller && Input.GetButtonUp("ChargeAttack" + playerString)))
+                if (input.GetKeyUp(charge) || (controller && input.GetButtonUp("ChargeAttack" + playerString)))
                 {
                     //stayDynamic();
                     animator.SetTrigger("ChargedHit");
@@ -895,7 +916,7 @@ public abstract class Character : MonoBehaviour
             }
             else
             {
-                if (Input.GetKeyUp(charge) || (controller && Input.GetButtonUp("ChargeAttack" + playerString)))
+                if (input.GetKeyUp(charge) || (controller && input.GetButtonUp("ChargeAttack" + playerString)))
                 {
                     stayDynamic();
                     ignoreMovement = false;
@@ -903,10 +924,10 @@ public abstract class Character : MonoBehaviour
                     charging = false;
                     knockable = true;
                     animator.ResetTrigger("tookDmg");
-                    chargeAttackActive=false;
+                    chargeAttackActive = false;
                 }
                 return true;
-            } 
+            }
         }
         return false;
     }
@@ -941,16 +962,15 @@ public abstract class Character : MonoBehaviour
         }
         animator.SetTrigger("critsi");
         animator.SetBool("Crouch", true);
-         PlayerBlock(true);
-        isBlocking=true;
+        PlayerBlock(true);
+        isBlocking = true;
         ResetQuickPunch();
     }
     public void Unblock()
     {
         animator.SetBool("cWalk", false);
         animator.SetBool("Crouch", false);
-        PlayerBlock(false);
-        isBlocking=false;
+        isBlocking = false;
 
         ResetQuickPunch();
     }
@@ -958,20 +978,20 @@ public abstract class Character : MonoBehaviour
     public void blockBreaker()
     {
         isBlocking = false;
-    } 
+    }
 
     public void PlayerBlock(bool blck)
     {
         isBlocking = blck;
     }
- 
+
     #endregion
 
     #region General
     public void Jump()
     {
-        rb.velocity = new Vector2( rb.velocity.x,  jumpForce);
-        animator.SetBool("Jump",true);
+        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        animator.SetBool("Jump", true);
         if (characterJump != null)
         {
             audioManager.PlaySFX(characterJump, audioManager.normalVol);
@@ -980,14 +1000,14 @@ public abstract class Character : MonoBehaviour
         {
             audioManager.PlaySFX(audioManager.jump, audioManager.jumpVolume);
         }
-        
+
 
         ResetQuickPunch();
     }
 
     public Collider2D HitEnemy()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
         return hitEnemy;
     }
 
@@ -1006,7 +1026,7 @@ public abstract class Character : MonoBehaviour
         if (canAlterSpeed)
         {
             moveSpeed = OGMoveSpeed;
-        }       
+        }
         animator.SetBool("isHeavyAttacking", false);
     }
 
@@ -1014,20 +1034,20 @@ public abstract class Character : MonoBehaviour
     {
 
         yield return new WaitForSeconds(0.49f);  // Waits for 0.49 seconds
-         moveSpeed =  OGMoveSpeed;
+        moveSpeed = OGMoveSpeed;
 
     }
 
-    void Parry(){
-        audioManager.PlaySFX(audioManager.counterScream, 2.5f);
-        animator.SetTrigger("Parry");
+    void Parry() {
         counterIsOn = true;
         safety = true;
-        canParry=false;
+        canParry = false;
         knockable = false;
         stayStatic();
         StartCoroutine(ResetParry());
         StartCoroutine(CounterOffSafety());
+        audioManager.PlaySFX(audioManager.counterScream, 2.5f);
+        animator.SetTrigger("Parry");
     }
 
     IEnumerator ResetParry()
@@ -1064,12 +1084,12 @@ public abstract class Character : MonoBehaviour
         {
             ignoreCounterOff = false;
         }
-        
+
     }
 
     private IEnumerator CounterOffSafety()
     {
-        yield return new WaitForSeconds(0.41f);
+        yield return new WaitForSeconds(0.43f);
         if (!counterDone && safety)
         {
             CounterVariablesOff();
@@ -1089,6 +1109,7 @@ public abstract class Character : MonoBehaviour
         stayStatic();
         ignoreCounterOff = true;
         counterDone = true;
+        print("kaka");
     }
 
     virtual public void DealCounterDmg()
@@ -1098,9 +1119,9 @@ public abstract class Character : MonoBehaviour
 
         audioManager.PlaySFX(audioManager.counterClong, 0.5f);
 
-        enemy.TakeDamage(parryDamage,true);
+        enemy.TakeDamage(parryDamage, true);
 
-         stayDynamic();
+        stayDynamic();
         enemy.stayDynamic();
 
         enemy.Knockback(10f, .3f, false);
@@ -1117,12 +1138,12 @@ public abstract class Character : MonoBehaviour
 
     protected void QuickAttackIndicatorEnable()
     {
-         quickAttackIndicator.SetActive(true);
+        quickAttackIndicator.SetActive(true);
     }
 
     protected void QuickAttackIndicatorDisable()
     {
-         quickAttackIndicator?.SetActive(false);
+        quickAttackIndicator?.SetActive(false);
     }
 
     public Character GetEnemy()
@@ -1132,7 +1153,7 @@ public abstract class Character : MonoBehaviour
 
     public void SetEnemy(Character changeEnemy)
     {
-        enemy=changeEnemy;
+        enemy = changeEnemy;
     }
 
     public bool AmICasting()
@@ -1146,15 +1167,24 @@ public abstract class Character : MonoBehaviour
         yield return new WaitForSeconds(2f);
         justTeleported = false;
     }
+
+    public bool IsCooldownBarActiveSprite
+    {
+        get
+        {
+            return cdbarimage != null && activeSprite != null && cdbarimage.sprite == activeSprite;
+        }
+    }
+
     #endregion
 
     #region Passive and Damage
 
-    virtual public void TakeDamage(int dmg, bool blockable, bool parryable=true)
+    virtual public void TakeDamage(int dmg, bool blockable, bool parryable = true)
     {
-        if(parryable)
+        if (parryable)
         {
-            if(DetectCounter())
+            if (DetectCounter())
             {
                 print("suvkkkk");
                 return;
@@ -1187,7 +1217,7 @@ public abstract class Character : MonoBehaviour
                 TakeDamageNoAnimation(dmg, blockable);
                 return;
             }
-            
+
         }
 
         ResetQuickPunch();
@@ -1245,7 +1275,7 @@ public abstract class Character : MonoBehaviour
 
     public void Die()
     {
-        if(overrideDeath){
+        if (overrideDeath) {
             return;
         }
         animator.SetBool("isDead", true);
@@ -1273,7 +1303,7 @@ public abstract class Character : MonoBehaviour
         if (enemy.currHealth == maxHealth)
         {
             gameManager.RoundEndFlawless(playerNum, P2Name);
-            KeepStats(P2Name,P1Name.text);
+            KeepStats(P2Name, P1Name.text);
         }
         else if (enemy.currHealth <= 0)
         {
@@ -1282,7 +1312,7 @@ public abstract class Character : MonoBehaviour
         else
         {
             gameManager.RoundEnd(playerNum, P2Name);
-            KeepStats(P2Name,P1Name.text);
+            KeepStats(P2Name, P1Name.text);
         }
 
     }
@@ -1308,16 +1338,16 @@ public abstract class Character : MonoBehaviour
         enemy.healthbar.gameObject.SetActive(true);
     }
 
-    virtual public void TakeDamageNoAnimation(int dmg, bool blockable, bool parryable=true)
+    virtual public void TakeDamageNoAnimation(int dmg, bool blockable, bool parryable = true)
     {
-        if(parryable)
+        if (parryable)
         {
-            if(DetectCounter())
+            if (DetectCounter())
             {
                 return;
             }
         }
-        
+
 
         if (ignoreDamage)
         {
@@ -1329,7 +1359,7 @@ public abstract class Character : MonoBehaviour
             if (blockSound != null)
             {
                 audioManager.PlaySFX(blockSound, audioManager.normalVol);
-            }           
+            }
         }
         else
         {
@@ -1354,9 +1384,9 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    IEnumerator TriggerDamageCounter(int damage){
+    IEnumerator TriggerDamageCounter(int damage) {
 
-        if(damageCounter.gameObject.activeSelf){
+        if (damageCounter.gameObject.activeSelf) {
             damage += int.Parse(damageCounter.text);
         }
         damageCounter.text = damage.ToString();
@@ -1370,7 +1400,7 @@ public abstract class Character : MonoBehaviour
 
     public void DealDamageToEnemy(int amount)
     {
-        enemy.TakeDamageNoAnimation(amount,false);
+        enemy.TakeDamageNoAnimation(amount, false);
     }
 
     public IEnumerator InterruptMovement(float time)
@@ -1402,7 +1432,7 @@ public abstract class Character : MonoBehaviour
         stun.gameObject.SetActive(false);
     }
 
-    public void Slow(float time,float amount)
+    public void Slow(float time, float amount)
     {
         if (canAlterSpeed)
         {
@@ -1414,7 +1444,7 @@ public abstract class Character : MonoBehaviour
     {
 
         stun.gameObject.SetActive(true);
-        moveSpeed = moveSpeed-amount;
+        moveSpeed = moveSpeed - amount;
 
         yield return new WaitForSeconds(time);
 
@@ -1425,7 +1455,7 @@ public abstract class Character : MonoBehaviour
 
     public void DisableBlock(bool whileKnocked)
     {
-        isBlocking = false;
+        Unblock();
         moveSpeed = OGMoveSpeed;
         blockDisabled = true;
         blockDisabledIndicator.gameObject.SetActive(true);
@@ -1499,7 +1529,7 @@ public abstract class Character : MonoBehaviour
     public void ResetQuickPunch()
     {
         animator.ResetTrigger("punch2");
-         animator.SetBool("QuickPunch", false);
+        animator.SetBool("QuickPunch", false);
     }
 
     public void Grabbed()
@@ -1537,13 +1567,13 @@ public abstract class Character : MonoBehaviour
     }
     public void ActivateblockBreaker(bool on)
     {
-        blockDisabledIndicator.gameObject.SetActive(on); 
+        blockDisabledIndicator.gameObject.SetActive(on);
     }
 
     public void Heal(int amount)
     {
-        if(!animator.GetBool("isDead")){
-            
+        if (!animator.GetBool("isDead")) {
+
             currHealth += amount;
             if (currHealth > maxHealth)
             {
@@ -1551,7 +1581,7 @@ public abstract class Character : MonoBehaviour
             }
             healthbar.SetHealth(currHealth);
         }
-        
+
     }
 
     public void ChangeEnemy(Character newEnemy)
@@ -1564,7 +1594,7 @@ public abstract class Character : MonoBehaviour
     #region PowerUps
     public void SpeedBoost()
     {
-        moveSpeed = moveSpeed +2;
+        moveSpeed = moveSpeed + 2;
 
         StartCoroutine(SpeedBoostCoroutine());
     }
@@ -1601,23 +1631,129 @@ public abstract class Character : MonoBehaviour
 
             Heal(amount);
         }
-        
+
     }
 
-    public void KeepStats(string winner,string loser)
+    public void KeepStats(string winner, string loser)
     {
-        if(winner==loser || ignoreStats){
+        if (winner == loser || ignoreStats)
+        {
             return;
         }
 
-        if (CharacterStatsManager.Instance!=null)
+        if (CharacterStatsManager.Instance != null)
         {
             CharacterStatsManager.Instance.KeepStats(winner, loser);
         }
         else
         {
             Debug.Log("Error.StatsManager not loaded properly.");
-        } 
+        }
+    }
+
+    #endregion
+
+    #region RL
+    // --- Public read-only state for RL ---
+    public bool IsGrounded => isGrounded;
+    public bool IsBlocking => isBlocking;
+    public bool IsCasting => casting;
+    public bool IsStunned => stunned;
+    public bool IsKnocked => knocked;
+    public bool IsCharging => charging;
+    public bool IsCharged => charged;
+    public bool OnAbilityCD => onCooldown;
+    public bool CanCast => canCast;
+    public bool CanParry => canParry;
+
+    public bool QuickDisabled => quickDisable;
+    public bool HeavyDisabled => heavyDisable;
+    public bool BlockDisabled => blockDisable;
+    public bool SpecialDisabled => specialDisable;
+    public bool ChargeDisabled => chargeDisable;
+    public bool JumpDisabled => jumpDisabled;
+
+    // Optional: normalized ability cooldown (0=ready, 1=just used).
+    // Store last used cooldown length so we can normalize.
+    private float lastAbilityCD = 0f;
+    public float AbilityCooldown01
+    {
+        get
+        {
+            if (!onCooldown || lastAbilityCD <= 0f) return 0f;
+            // cdTimer counts down each second; normalize remaining
+            return Mathf.Clamp01(cdTimer / lastAbilityCD);
+        }
+    }
+
+    public virtual void ResetForEpisode()
+    {
+        // Position & physics
+        if (rb == null) rb = GetComponent<Rigidbody2D>();
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        transform.position = spawn ? spawn.position : transform.position;
+        rb.gravityScale = originalGravityScale;
+
+        // Core flags
+        ignoreUpdate = false;
+        isBlocking = false;
+        casting = false;
+        stunned = false;
+        knocked = false;
+        knockable = true;
+        justTeleported = false;
+
+        // Charges / counters
+        charging = false;
+        charged = false;
+        chargeAttackActive = false;
+        counterIsOn = false;
+        counterDone = false;
+        canParry = true;
+
+        // Movement & stats
+        moveSpeed = OGMoveSpeed;
+        currHealth = maxHealth;
+        healthbar?.SetHealth(currHealth);
+        jumpDisabled = false;
+        blockDisabled = false;
+        damageShield = false;
+
+        // Cooldowns / UI bits
+        onCooldown = false;
+        cdTimer = 0f;
+        cooldownSlider?.SetValueWithoutNotify(0f);
+        cdbarimage.sprite = ogSprite;
+
+        // Indicators off
+        shield?.SetActive(false);
+        poison?.SetActive(false);
+        Stack1Poison?.SetActive(false);
+        Stack2Poison?.SetActive(false);
+        Stack3Poison?.SetActive(false);
+        stun?.SetActive(false);
+        blockDisabledIndicator?.SetActive(false);
+        quickAttackIndicator?.SetActive(false);
+
+        // Animator sanity
+        if (animator == null) animator = GetComponent<Animator>();
+        animator.Rebind();
+        animator.Update(0f);
+        animator.SetBool("isDead", false);
+        animator.ResetTrigger("tookDmg");
+        animator.ResetTrigger("ChargedHit");
+        animator.SetBool("Charging", false);
+        animator.SetBool("Casting", false);
+        animator.SetBool("IsRunning", false);
+        animator.SetBool("Crouch", false);
+
+        // Re-enable gameplay
+        stayDynamic();
+
+        ActivateColliders();
+        stayDynamic();
+        print("[wdreset]");
     }
 
     #endregion
