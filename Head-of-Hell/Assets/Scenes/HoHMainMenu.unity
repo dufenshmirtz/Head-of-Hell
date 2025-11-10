@@ -4898,16 +4898,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 11500000, guid: 0d3bbf84f6ef9854db4727e8b4682a2f, type: 3}
-        m_TargetAssemblyTypeName: UnityEngine.Object, UnityEngine
-        m_MethodName: set_name
-        m_Mode: 5
+      - m_Target: {fileID: 1586750640}
+        m_TargetAssemblyTypeName: SlotSelectionHandler, Assembly-CSharp
+        m_MethodName: EditSlot
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
-          m_StringArgument: EditSlot(2)
+          m_StringArgument: 2
           m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &218236827
@@ -7049,7 +7049,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &310275625
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7299,7 +7299,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1120789053}
+      - m_Target: {fileID: 319373947}
         m_TargetAssemblyTypeName: RulesetButtonsManager, Assembly-CSharp
         m_MethodName: SaveRuleToPlayerPrefs
         m_Mode: 1
@@ -10360,16 +10360,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 11500000, guid: 0d3bbf84f6ef9854db4727e8b4682a2f, type: 3}
-        m_TargetAssemblyTypeName: UnityEngine.Object, UnityEngine
-        m_MethodName: set_name
-        m_Mode: 5
+      - m_Target: {fileID: 1586750640}
+        m_TargetAssemblyTypeName: SlotSelectionHandler, Assembly-CSharp
+        m_MethodName: EditSlot
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
-          m_StringArgument: EditSlot(1)
+          m_StringArgument: 1
           m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &457894456
@@ -12186,16 +12186,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 11500000, guid: 0d3bbf84f6ef9854db4727e8b4682a2f, type: 3}
-        m_TargetAssemblyTypeName: UnityEngine.Object, UnityEngine
-        m_MethodName: set_name
-        m_Mode: 5
+      - m_Target: {fileID: 1586750640}
+        m_TargetAssemblyTypeName: SlotSelectionHandler, Assembly-CSharp
+        m_MethodName: EditSlot
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: EditSlot(0)
+          m_StringArgument: 0
           m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &548660782
@@ -13827,7 +13827,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1120789053}
+      - m_Target: {fileID: 606134511}
         m_TargetAssemblyTypeName: RulesetButtonsManager, Assembly-CSharp
         m_MethodName: SaveRuleToPlayerPrefs
         m_Mode: 1
@@ -15261,7 +15261,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1120789053}
+      - m_Target: {fileID: 678736623}
         m_TargetAssemblyTypeName: RulesetButtonsManager, Assembly-CSharp
         m_MethodName: SaveRuleToPlayerPrefs
         m_Mode: 1
@@ -22917,7 +22917,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1120789053}
+      - m_Target: {fileID: 1145295125}
         m_TargetAssemblyTypeName: RulesetButtonsManager, Assembly-CSharp
         m_MethodName: SaveRuleToPlayerPrefs
         m_Mode: 1
@@ -33631,7 +33631,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1586750639
 RectTransform:
   m_ObjectHideFlags: 0
@@ -33671,7 +33671,7 @@ MonoBehaviour:
   rulesetManager: {fileID: 1294468907}
   customSettingsMenu: {fileID: 1586750638}
   editSettingsPanel: {fileID: 89366903}
-  customRulesetUI: {fileID: 0}
+  customRulesetUI: {fileID: 89366905}
 --- !u!114 &1586750641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38876,16 +38876,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 11500000, guid: 0d3bbf84f6ef9854db4727e8b4682a2f, type: 3}
-        m_TargetAssemblyTypeName: UnityEngine.Object, UnityEngine
-        m_MethodName: set_name
-        m_Mode: 5
+      - m_Target: {fileID: 1586750640}
+        m_TargetAssemblyTypeName: SlotSelectionHandler, Assembly-CSharp
+        m_MethodName: EditSlot
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
-          m_StringArgument: EditSlot(3)
+          m_StringArgument: 3
           m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &1891507873
@@ -38957,7 +38957,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 834.00024, y: -150.6}
+  m_AnchoredPosition: {x: 833.99, y: -133}
   m_SizeDelta: {x: 347.45, y: 115.4016}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1895828392
@@ -40290,7 +40290,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1937351131
 RectTransform:
   m_ObjectHideFlags: 0
@@ -42898,16 +42898,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 11500000, guid: 0d3bbf84f6ef9854db4727e8b4682a2f, type: 3}
-        m_TargetAssemblyTypeName: UnityEngine.Object, UnityEngine
-        m_MethodName: set_name
-        m_Mode: 5
+      - m_Target: {fileID: 1586750640}
+        m_TargetAssemblyTypeName: SlotSelectionHandler, Assembly-CSharp
+        m_MethodName: EditSlot
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 4
           m_FloatArgument: 0
-          m_StringArgument: EditSlot(4)
+          m_StringArgument: 4
           m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &2027229464

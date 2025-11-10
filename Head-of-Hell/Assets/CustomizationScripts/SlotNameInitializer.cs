@@ -33,4 +33,16 @@ public class SlotNameInitializer : MonoBehaviour
             }
         }
     }
+
+    public void UpdateSlotName(int slotIndex)
+    {
+        // Load the saved ruleset
+        CustomRuleset ruleset = RulesetManager.Instance.LoadCustomRuleset(slotIndex);
+
+        if (ruleset != null && !string.IsNullOrEmpty(ruleset.slotName))
+            slotNameTexts[slotIndex].text = ruleset.slotName;
+        else
+            slotNameTexts[slotIndex].text = "Empty";
+    }
+
 }
