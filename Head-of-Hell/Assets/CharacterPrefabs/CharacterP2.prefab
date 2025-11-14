@@ -310,7 +310,6 @@ GameObject:
   - component: {fileID: 4347535998550953021}
   - component: {fileID: 4522731436071566128}
   - component: {fileID: 5020299007731939445}
-  - component: {fileID: -2415709111268102098}
   m_Layer: 7
   m_Name: CharacterP2
   m_TagString: Player
@@ -644,7 +643,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 503945095293883305}
-  bombParent: {fileID: 0}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 4001537087187685723}
   bulletParent: {fileID: 0}
@@ -655,6 +654,14 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
+  grabPoint: {fileID: 0}
 --- !u!114 &5020299007731939445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -676,6 +683,7 @@ MonoBehaviour:
   block: 98
   ability: 118
   charge: 32
+  parry: 0
   stages: []
   attackPoint: {fileID: 8014909859804838799}
   blockDisabledIndicator: {fileID: 8885339450381078220}
@@ -684,6 +692,9 @@ MonoBehaviour:
   Stack2Poison: {fileID: 1623289818334300811}
   Stack3Poison: {fileID: 4660763464746388388}
   stun: {fileID: 7011586489690261698}
+  shield: {fileID: 0}
+  robberyCountIndicator: {fileID: 0}
+  gameManager: {fileID: 0}
   rb: {fileID: 3903406055809569012}
   animator: {fileID: 3775815256451319138}
   enemyLayer:
@@ -699,31 +710,10 @@ MonoBehaviour:
   winner: {fileID: 0}
   playAgainButton: {fileID: 0}
   mainMenuButton: {fileID: 0}
+  saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
+  damageCounter: {fileID: 0}
   playerNum: 2
---- !u!114 &-2415709111268102098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3377343274039566659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a7da44d79e092b449bd5a2cffbbdef9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cdbarimage: {fileID: 0}
-  activeSprite: {fileID: 0}
-  ogSprite: {fileID: 0}
-  cooldownSlider: {fileID: 0}
-  audioManager: {fileID: 0}
-  healthbar: {fileID: 0}
-  P1Name: {fileID: 0}
-  winner: {fileID: 0}
-  playAgainButton: {fileID: 0}
-  mainMenuButton: {fileID: 0}
-  quickAttackIndicator: {fileID: 0}
 --- !u!1 &3834662137705986005
 GameObject:
   m_ObjectHideFlags: 0

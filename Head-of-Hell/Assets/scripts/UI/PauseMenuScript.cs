@@ -4,6 +4,8 @@ using UnityEngine.UI;
 public class PauseMenuScript : MonoBehaviour
 {
     public GameObject menu;  // Assign your menu panel in the Inspector
+    public GameObject soundMenu;
+    public GameObject baseMenu;
     public CharacterManager cChoice;
     public AudioManager sfx;
 
@@ -27,8 +29,10 @@ public class PauseMenuScript : MonoBehaviour
     // Method to toggle the menu
     public void ToggleMenu()
     {
+        baseMenu.SetActive(true);
         sfx.ButtonSound();
         menu.SetActive(!menu.activeSelf);
+        soundMenu.SetActive(false);
         if (!menu.activeSelf)
         {
             cChoice.CharacterChoice(1).stayDynamic();

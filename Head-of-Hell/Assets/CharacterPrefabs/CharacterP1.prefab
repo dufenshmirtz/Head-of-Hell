@@ -829,7 +829,6 @@ GameObject:
   - component: {fileID: 2116461168146166685}
   - component: {fileID: 8480700416817540739}
   - component: {fileID: 5341404983514887946}
-  - component: {fileID: 2584085071129299450}
   m_Layer: 8
   m_Name: CharacterP1
   m_TagString: Player
@@ -1163,7 +1162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 2333040048984794757}
-  bombParent: {fileID: 0}
+  trash: {fileID: 0}
   bullet: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   shootinPoint: {fileID: 797260943911005277}
   bulletParent: {fileID: 0}
@@ -1174,6 +1173,14 @@ MonoBehaviour:
   explosionPoint: {fileID: 0}
   firePoint: {fileID: 0}
   beam: {fileID: 0}
+  skiplerDouble: {fileID: 0}
+  skiplerPoint: {fileID: 0}
+  wipPoint: {fileID: 0}
+  fartPoint: {fileID: 0}
+  fart: {fileID: 0}
+  freebaby: {fileID: 0}
+  escapeRoute: {fileID: 0}
+  grabPoint: {fileID: 0}
 --- !u!114 &5341404983514887946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1195,6 +1202,7 @@ MonoBehaviour:
   block: 111
   ability: 112
   charge: 106
+  parry: 0
   stages: []
   attackPoint: {fileID: 1801436298822293366}
   blockDisabledIndicator: {fileID: 6333279455734038987}
@@ -1203,6 +1211,9 @@ MonoBehaviour:
   Stack2Poison: {fileID: 7677980445808530180}
   Stack3Poison: {fileID: 1317464999780313284}
   stun: {fileID: 8251266714951354077}
+  shield: {fileID: 0}
+  robberyCountIndicator: {fileID: 0}
+  gameManager: {fileID: 0}
   rb: {fileID: 7041898199079258052}
   animator: {fileID: 2553929291879454509}
   enemyLayer:
@@ -1218,31 +1229,10 @@ MonoBehaviour:
   winner: {fileID: 0}
   playAgainButton: {fileID: 0}
   mainMenuButton: {fileID: 0}
+  saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
+  damageCounter: {fileID: 0}
   playerNum: 1
---- !u!114 &2584085071129299450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7297720914251486795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a7da44d79e092b449bd5a2cffbbdef9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cdbarimage: {fileID: 0}
-  activeSprite: {fileID: 0}
-  ogSprite: {fileID: 0}
-  cooldownSlider: {fileID: 0}
-  audioManager: {fileID: 0}
-  healthbar: {fileID: 0}
-  P1Name: {fileID: 0}
-  winner: {fileID: 0}
-  playAgainButton: {fileID: 0}
-  mainMenuButton: {fileID: 0}
-  quickAttackIndicator: {fileID: 0}
 --- !u!1 &7677980445808530180
 GameObject:
   m_ObjectHideFlags: 0

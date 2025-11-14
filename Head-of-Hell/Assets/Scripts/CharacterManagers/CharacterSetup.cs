@@ -49,6 +49,7 @@ public class CharacterSetup : MonoBehaviour
     public TextMeshProUGUI P1Name, winner;
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
+    public GameObject saveReplayButton;
     public GameObject quickAttackIndicator;
     public TextMeshProUGUI damageCounter;
 

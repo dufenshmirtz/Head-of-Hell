@@ -13,6 +13,11 @@ public class CountdownManager : MonoBehaviour
 
     void Start()
     {
+        if (gameManager.trainingMode) //for training
+        {
+            return;
+        }
+
         string json = PlayerPrefs.GetString("SelectedRuleset", null);
 
         if (!string.IsNullOrEmpty(json))

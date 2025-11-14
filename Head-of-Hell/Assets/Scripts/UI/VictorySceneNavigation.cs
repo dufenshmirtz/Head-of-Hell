@@ -6,6 +6,7 @@ public class VictoryScreenNavigation : MonoBehaviour
 {
     public Button PlayAgainButton;
     public Button BackToMenuButton;
+    public Button SaveReplayButton;
     private bool isVictoryScreenActive = false;
 
     // Initialize the script as disabled (via Inspector checkbox)
