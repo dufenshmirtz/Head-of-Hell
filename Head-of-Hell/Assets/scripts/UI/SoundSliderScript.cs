@@ -29,16 +29,17 @@ public class SoundSliderScript : MonoBehaviour
     void Start()
     {
         // Load volume settings
-        float savedVolume = PlayerPrefs.GetFloat(VolumePrefKey, 1.0f);
-        volumeSlider.value = savedVolume;
-        UpdateVolume(volumeSlider.value);
+        //float savedVolume = PlayerPrefs.GetFloat(VolumePrefKey, 1.0f);
+        //volumeSlider.value = savedVolume;
+        //UpdateVolume(volumeSlider.value);
+        print("SFX KOLOSSSSSSSSSSSSSS");
     }
 
     public void ChangeVolume()
     {
-        UpdateVolume(volumeSlider.value);
+        //UpdateVolume(volumeSlider.value);
         // Save volume settings
-        PlayerPrefs.SetFloat(VolumePrefKey, volumeSlider.value);
+        //PlayerPrefs.SetFloat(VolumePrefKey, volumeSlider.value);
     }
 
     private void UpdateVolume(float volume)

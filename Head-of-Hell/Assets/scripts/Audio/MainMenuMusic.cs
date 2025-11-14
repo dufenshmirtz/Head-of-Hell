@@ -14,7 +14,7 @@ public class MainMenuMusic : MonoBehaviour
     public Slider musicSlider, sfxSlider;
     private static string firstPlay = "FirstPlay";
     private static string musicPref = "MusicPref";
-    private static string sfxPref = "SfxPref";
+    private static string SFXPref = "SFXPref";
     int firstPlayInt;
 
     public AudioClip counter;
@@ -47,17 +47,14 @@ public class MainMenuMusic : MonoBehaviour
             musicSlider.value = 1.0f;
             sfxSlider.value = 1.0f;
             PlayerPrefs.SetFloat(musicPref, musicVolume);
-            PlayerPrefs.SetFloat(sfxPref, sfxVolume);
+            PlayerPrefs.SetFloat(SFXPref, sfxVolume);
             PlayerPrefs.SetInt(firstPlay, -1);
         }
         else
         {
             musicVolume=PlayerPrefs.GetFloat(musicPref);
-            musicSlider.value=musicVolume;
-
-            
-
-            sfxVolume=PlayerPrefs.GetFloat(sfxPref);
+            musicSlider.value = musicVolume;
+            sfxVolume=PlayerPrefs.GetFloat(SFXPref);
             sfxSlider.value = sfxVolume;
         }
 
@@ -70,10 +67,11 @@ public class MainMenuMusic : MonoBehaviour
             AudioClip selectedSong = menuplaylist[randomIndex];
 
             // Assign the selected song to the music AudioSource
-           music.clip = selectedSong;
+            music.clip = selectedSong;
 
             // Set the music volume
             music.volume = musicVolume;
+            sfx.volume   = sfxVolume;
 
             // Play the selected song
             music.Play();
@@ -91,8 +89,20 @@ public class MainMenuMusic : MonoBehaviour
 
     public void SaveSoundSettings()
     {
-        PlayerPrefs.SetFloat(musicPref,musicSlider.value);
-        PlayerPrefs.SetFloat(sfxPref, sfxSlider.value);
+        PlayerPrefs.SetFloat(musicPref, musicSlider.value);
+        PlayerPrefs.SetFloat(SFXPref, sfxSlider.value);
+    }
+
+    public void UpdateMusicSettings()
+    {
+        music.volume = musicSlider.value;
+        PlayerPrefs.SetFloat(musicPref, musicSlider.value);
+    }
+    
+    public void UpdateSFXSettings()
+    {
+        sfx.volume = sfxSlider.value;
+        PlayerPrefs.SetFloat(SFXPref,sfxSlider.value);
     }
 
     private void OnApplicationFocus(bool focus)
@@ -110,8 +120,8 @@ public class MainMenuMusic : MonoBehaviour
 
     public void UpdateSound()
     {
-        music.volume=musicSlider.value;
-        sfx.volume =sfxSlider.value;
+        music.volume = musicSlider.value;
+        sfx.volume = sfxSlider.value;
         SaveSoundSettings();
     }
 
@@ -121,7 +131,8 @@ public class MainMenuMusic : MonoBehaviour
     }
     public void StartSound()
     {
-        
+
         sfx.PlayOneShot(startClick, 1f);
     }
+    
 }

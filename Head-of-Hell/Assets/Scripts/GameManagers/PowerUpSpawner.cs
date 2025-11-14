@@ -14,8 +14,11 @@ public class PowerUpSpawner : MonoBehaviour
 
     AudioManager audioManager;
 
+    public GameManager gameMngr;
+
     void Start()
     {
+
         audioManager = FindObjectOfType<AudioManager>();
 
         string json = PlayerPrefs.GetString("SelectedRuleset", null);

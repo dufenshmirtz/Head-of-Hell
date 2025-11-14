@@ -39,6 +39,7 @@ public abstract class Character : MonoBehaviour
     string playerEnemysString;
     protected GameObject playAgainButton;
     protected GameObject mainMenuButton;
+    protected GameObject saveReplayButton;
     protected Slider cooldownSlider;
 
     protected TextMeshProUGUI damageCounter;
@@ -113,16 +114,16 @@ public abstract class Character : MonoBehaviour
     protected bool stunned = false;
 
     //movement keys
-    protected KeyCode up;
-    protected KeyCode down;
-    protected KeyCode left;
-    protected KeyCode right;
-    protected KeyCode lightAttack;
-    protected KeyCode heavyAttack;
-    protected KeyCode block;
-    protected KeyCode ability;
-    protected KeyCode charge;
-    protected KeyCode parry;
+    public KeyCode up;
+    public KeyCode down;
+    public KeyCode left;
+    public KeyCode right;
+    public KeyCode lightAttack;
+    public KeyCode heavyAttack;
+    public KeyCode block;
+    public KeyCode ability;
+    public KeyCode charge;
+    public KeyCode parry;
 
     protected CharacterSetup characterSetup;
     protected CharacterManager characterChoiceHandler;
@@ -138,7 +139,7 @@ public abstract class Character : MonoBehaviour
     protected AudioClip winQuip;
 
 
-    protected string playerString;
+    public string playerString;
 
     protected bool quickDisable = false;
     protected bool heavyDisable = false;
@@ -246,6 +247,7 @@ public abstract class Character : MonoBehaviour
 
         playAgainButton.SetActive(false);
         mainMenuButton.SetActive(false);
+        saveReplayButton.SetActive(false);
 
         OGMoveSpeed = moveSpeed;
         heavySpeed = moveSpeed / 2;
@@ -303,6 +305,7 @@ public abstract class Character : MonoBehaviour
         winner = characterSetup.winner;
         playAgainButton = characterSetup.playAgainButton;
         mainMenuButton = characterSetup.mainMenuButton;
+        saveReplayButton = characterSetup.saveReplayButton;
         cooldownSlider = characterSetup.cooldownSlider;
         damageCounter = characterSetup.damageCounter;
         audioManager = characterSetup.audioManager;
@@ -488,6 +491,7 @@ public abstract class Character : MonoBehaviour
         {
             if (!heavyDisable && !casting)
             {
+                print("#heavy");
                 HeavyAttack();
             }
         }
@@ -497,6 +501,7 @@ public abstract class Character : MonoBehaviour
         {
             if (!blockDisable && !casting)
             {
+                print("#block");
                 Block();
             }
         }
@@ -513,6 +518,7 @@ public abstract class Character : MonoBehaviour
         {
             if (isGrounded && !chargeDisable && !casting)
             {
+                print("#charge");
                 ChargeAttack();
             }
 
@@ -531,6 +537,7 @@ public abstract class Character : MonoBehaviour
         {
             if (!quickDisable && !casting)
             {
+                print("#light");
                 moveSpeed = OGMoveSpeed;
                 LightAttack();
             }

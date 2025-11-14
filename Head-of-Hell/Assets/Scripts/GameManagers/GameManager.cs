@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public CharacterManager p1Manager, p2Manager;
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
+    public GameObject saveReplayButton;
     public AudioManager audioManager;
     public GameObject p1R1, p1R2, p1R3;
     public GameObject p2R1, p2R2, p2R3;
@@ -106,7 +107,12 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            //DontDestroyOnLoad(this.gameObject);
+            //I keep that useless awake in case I did need it for some reason and I should know that this is the reason behind a bug
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -219,6 +225,7 @@ public class GameManager : MonoBehaviour
 
             playAgainButton.SetActive(true);
             mainMenuButton.SetActive(true);
+            saveReplayButton.SetActive(true);
 
             CheckForRandomCharacters();
         }
@@ -368,6 +375,7 @@ public class GameManager : MonoBehaviour
         finalWinner.gameObject.SetActive(false);
         playAgainButton.SetActive(false);
         mainMenuButton.SetActive(false);
+        saveReplayButton.SetActive(false);
 
         // Reset state/flags you track
         tie = false;
