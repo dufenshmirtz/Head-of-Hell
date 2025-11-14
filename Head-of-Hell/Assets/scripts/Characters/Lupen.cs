@@ -119,6 +119,7 @@ public class Lupen : Character
         stayDynamic();
         enemy.ChangeEnemy(stolenCharacter);
         //SaveValues and change form
+        spirit.SetInput(GetInputProvider());        // NEW: give the same provider
         spirit.stolenCharacter = stolenCharacter;
         spirit.currentHealth = currHealth;
         spirit.whipDamage = wipDamage;
@@ -216,7 +217,7 @@ public class Lupen : Character
 
     IEnumerator TriggerRobberyIndicator()
     {
-        robberyCountIndicator.text = (wipDamage-1).ToString();
+        robberyCountIndicator.text = (wipDamage).ToString();
         robberyCountIndicator.gameObject.SetActive(true);
         yield return new WaitForSeconds(1f);
         robberyCountIndicator.gameObject.SetActive(false);
@@ -240,7 +241,7 @@ public class Lupen : Character
             ignoreMovement = true;
             if (charged)
             {
-                if (Input.GetKeyUp(charge) || (controller && Input.GetButtonUp("ChargeAttack" + playerString)))
+                if (input.GetKeyUp(charge) || (controller && input.GetButtonUp("ChargeAttack" + playerString)))
                 {
                     int randomIndex = Random.Range(0, 6); // if you have 6 hurt animations
                     animator.SetFloat("Index", randomIndex);
@@ -253,7 +254,7 @@ public class Lupen : Character
             }
             else
             {
-                if (Input.GetKeyUp(charge) || (controller && Input.GetButtonUp("ChargeAttack" + playerString)))
+                if (input.GetKeyUp(charge) || (controller && input.GetButtonUp("ChargeAttack" + playerString)))
                 {
                     stayDynamic();
                     ignoreMovement = false;
@@ -276,12 +277,13 @@ public class Lupen : Character
         robberyCountter++;
         if (robberyCountter == 1)
         {
-            
-            wipDamage++;
-            print("wipDamage: " + wipDamage);            
+            int randomDamage = Random.Range(0, 4); // 0, 1, 2, or 3
+            wipDamage += randomDamage;
+            print("wipDamage increased by: " + randomDamage + ", total: " + wipDamage);
             robberyCountter = 0;
         }
     }
+
     #endregion
 
     public override void TakeDamage(int dmg, bool blockable, bool parryable=true)

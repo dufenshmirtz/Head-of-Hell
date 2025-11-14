@@ -1,0 +1,30 @@
+{
+    "Fighter": {
+        "elo": 910.5781960889975,
+        "checkpoints": [
+            {
+                "steps": 23300,
+                "file_path": "results\\chiback_vs_lithra_training1\\Fighter\\Fighter-23300.onnx",
+                "reward": -1.0049562876130798,
+                "creation_time": 1762383599.1064134,
+                "auxillary_file_paths": [
+                    "results\\chiback_vs_lithra_training1\\Fighter\\Fighter-23300.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 23300,
+            "file_path": "results\\chiback_vs_lithra_training1\\Fighter.onnx",
+            "reward": -1.0049562876130798,
+            "creation_time": 1762383599.1064134,
+            "auxillary_file_paths": [
+                "results\\chiback_vs_lithra_training1\\Fighter\\Fighter-23300.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.28.0",
+        "torch_version": "2.4.1+cpu"
+    }
+}

@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Head-of-Hell.sln"
+    "dotnet.defaultSolution": "Head-of-Hell.slnx"
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
@@ -92,7 +93,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip volchBiteExtra;
 
     public AudioClip skipWin;
-    public AudioClip skipPick;
+    public AudioClip kalhaflash;
     public AudioClip gabaWin;
     public AudioClip gabaPick;
 
@@ -131,16 +132,19 @@ public class AudioManager : MonoBehaviour
 
     //settings
     private static string musicPref = "MusicPref";
-    private static string sfxPref = "SfxPref";
+
+    private static string SFXPref = "SFXPref";
     public float musicVolume = 1.0f;
     public float sfxVolume = 1.0f;
+
+    public Slider musicSlider, sfxSlider;
 
     private Dictionary<AudioClip, AudioSource> activeSoundEffects = new Dictionary<AudioClip, AudioSource>();
 
 
     private void Start()
     {
-              
+        
     }
 
     public void StopMusic()
@@ -161,7 +165,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySFX(AudioClip sfx,float volume)
     {
-        SFX.PlayOneShot(sfx,volume);
+        SFX.PlayOneShot(sfx,volume*SFX.volume);
     }
 
     public void StopSFX()
@@ -176,9 +180,11 @@ public class AudioManager : MonoBehaviour
 
     private void ContinueSettings()
     {
-        musicVolume = PlayerPrefs.GetFloat(musicPref);
-        sfxVolume = PlayerPrefs.GetFloat(sfxPref);
-
+        sfxVolume=PlayerPrefs.GetFloat(SFXPref);
+        musicVolume=PlayerPrefs.GetFloat(musicPref);
+        musicSlider.value=musicVolume;
+        sfxSlider.value = sfxVolume; 
+        
         music.volume = musicVolume;
         SFX.volume = sfxVolume;
     }
@@ -217,6 +223,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayAndStoreSFX(AudioClip sfx, float volume)
     {
+        volume *= SFX.volume;
         // Create a new AudioSource to play the sound effect
         AudioSource tempSource = gameObject.AddComponent<AudioSource>();
         tempSource.volume = volume;
@@ -255,6 +262,31 @@ public class AudioManager : MonoBehaviour
 
         // Remove the AudioSource from the dictionary and destroy it
         Destroy(source);
+    }
+
+    public void UpdateMusicSettings()
+    {
+        music.volume = musicSlider.value;
+        PlayerPrefs.SetFloat(musicPref, musicSlider.value);
+    }
+    
+    public void UpdateSFXSettings()
+    {
+        SFX.volume = sfxSlider.value;
+        PlayerPrefs.SetFloat(SFXPref,sfxSlider.value);
+    }
+
+    public void UpdateSound()
+    {
+        music.volume = musicSlider.value;
+        SFX.volume = sfxSlider.value;
+        SaveSoundSettings();
+    }
+    
+    public void SaveSoundSettings()
+    {
+        PlayerPrefs.SetFloat(musicPref,musicSlider.value);
+        PlayerPrefs.SetFloat(SFXPref,sfxSlider.value);
     }
 }
 
