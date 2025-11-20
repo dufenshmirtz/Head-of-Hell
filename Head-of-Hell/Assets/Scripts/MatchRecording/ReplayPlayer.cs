@@ -32,6 +32,10 @@ public class ReplayPlayer : MonoBehaviour
     void OnSceneLoaded(Scene s, LoadSceneMode m)
     {
         if (data == null) return;
+
+        // Only try to bind fighters in the real gameplay scene
+        if (s.name != gameplaySceneName) return;
+
         StartCoroutine(BindFightersWhenReady()); // wait one frame if needed
     }
 

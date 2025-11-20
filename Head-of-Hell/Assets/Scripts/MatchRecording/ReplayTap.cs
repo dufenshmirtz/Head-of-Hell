@@ -38,17 +38,6 @@ public class ReplayTap : MonoBehaviour
             registered = true;
         }
 
-        // The P1 tap advances the global tick once per frame
-        if (setup.playerNum == 1) ReplayRecorder.Instance.AdvanceTick();
-
-        // Gather axes for this side
-        float h = input.GetAxis(hAxis);
-        float v = input.GetAxis(vAxis);
-
-        // Ensure there is a frame shell with current axes (the other side may be 0/0)
-        if (setup.playerNum == 1) ReplayRecorder.Instance.StartFrameIfNeeded(h, v, 0f, 0f);
-        else                       ReplayRecorder.Instance.StartFrameIfNeeded(0f, 0f, h, v);
-
         // Gather keys for this side
         var b = new ReplayData.ButtonSample {
             up     = input.GetKey(setup.up),

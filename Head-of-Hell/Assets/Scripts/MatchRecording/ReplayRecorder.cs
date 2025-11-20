@@ -13,6 +13,10 @@ public class ReplayRecorder : MonoBehaviour
     string replaysDir;
     bool p1Registered, p2Registered;
 
+    bool haveP1ThisFrame, haveP2ThisFrame;
+
+    ReplayData.Frame pendingFrame;
+
     void Awake() {
         if (Instance != null) { Destroy(gameObject); return; }
         Instance = this;
@@ -50,16 +54,16 @@ public class ReplayRecorder : MonoBehaviour
             }
         };
         p1Registered = p2Registered = false;
+
+        haveP1ThisFrame = haveP2ThisFrame = false;
+        pendingFrame = null;
     }
 
     public void RegisterP1() => p1Registered = true;
     public void RegisterP2() => p2Registered = true;
 
     // Called once per Update by ReplayTap on one GameObject (see below)
-    public void AdvanceTick() { if (Recording) Tick++; }
-
-    // Called by each character’s ReplayTap every Update with that player’s sample.
-    ReplayData.Frame pendingFrame;
+    public void AdvanceTick() {}
 
     public void StartFrameIfNeeded(float p1H, float p1V, float p2H, float p2V)
     {
@@ -67,16 +71,38 @@ public class ReplayRecorder : MonoBehaviour
             pendingFrame = new ReplayData.Frame { tick = Tick, p1H = p1H, p1V = p1V, p2H = p2H, p2V = p2V, p1 = new(), p2 = new() };
     }
 
-    public void FillP1(ReplayData.ButtonSample b) { if (Recording) pendingFrame.p1 = b; }
-    public void FillP2(ReplayData.ButtonSample b) { if (Recording) pendingFrame.p2 = b; }
+    public void FillP1(ReplayData.ButtonSample b) {
+        if (!Recording || pendingFrame == null) return;
+        pendingFrame.p1 = b;
+        haveP1ThisFrame = true;
+    }
+    public void FillP2(ReplayData.ButtonSample b) {
+        if (!Recording || pendingFrame == null) return;
+        pendingFrame.p2 = b;
+        haveP2ThisFrame = true; 
+    }
 
     public void CommitFrameIfComplete()
     {
         if (!Recording || pendingFrame == null) return;
-        // store when both sides have registered or if it’s a 1P training
-        if ((p1Registered && p2Registered) || (p1Registered ^ p2Registered)) {
+
+        // What players do we expect this round?
+        bool needP1 = p1Registered;
+        bool needP2 = p2Registered;
+
+        // Frame is ready when every existing player has written this frame.
+        bool ready =
+            (!needP1 || haveP1ThisFrame) &&
+            (!needP2 || haveP2ThisFrame);
+
+        if (ready)
+        {
             data.frames.Add(pendingFrame);
+
             pendingFrame = null;
+            haveP1ThisFrame = haveP2ThisFrame = false;
+
+            Tick++;   // <-- tick now advances exactly once per committed frame
         }
     }
 

@@ -15,6 +15,9 @@ public class Lithra : Character
     public Transform bellPoint;
     public Transform bellStunPointTransf;
 
+    int airSpinDamage = 3;
+    float airSpinCD = 3f;
+
     public override void Start()
     {
         base.Start();
@@ -150,7 +153,7 @@ public class Lithra : Character
             if (hitEnemy != null)
             {
                 audioManager.PlaySFX(audioManager.bellDashHit, 1f);
-                enemy.TakeDamage(3, true);
+                enemy.TakeDamage(airSpinDamage, true);
                 enemy.Stun(0.5f);
 
                 // Calculate move direction again after hitting (keyboard or controller)
@@ -188,7 +191,7 @@ public class Lithra : Character
 
     IEnumerator ResetAirSpin()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(airSpinCD);
         audioManager.PlaySFX(audioManager.sworDashTada, audioManager.lessVol);
         airSpinready = true;
         QuickAttackIndicatorEnable();
