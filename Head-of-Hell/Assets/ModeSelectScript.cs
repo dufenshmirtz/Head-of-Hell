@@ -12,6 +12,8 @@ public class ModeSelectScript : MonoBehaviour
     private int selectedIndex = 0;
     public MainMenuMusic sfx;
     bool notSelected;
+    public GameObject onlineMenu;
+
 
     // Start is called before the first frame update
     void Start()
@@ -86,6 +88,11 @@ public class ModeSelectScript : MonoBehaviour
             notSelected = false;
         }
     }
+    public void OpenOnlineMenu()
+    {
+        onlineMenu.SetActive(true);
+    }
+
 
 }
 
