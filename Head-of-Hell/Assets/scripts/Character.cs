@@ -12,9 +12,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 using static Unity.Collections.AllocatorManager;
-
-public abstract class Character : MonoBehaviour
+using Photon.Pun;
+public abstract class Character : MonoBehaviourPun
 {
+    private PhotonView pv;
     protected Character enemy;
     protected Animator animator;
     protected AudioManager audioManager;
@@ -178,6 +179,12 @@ public abstract class Character : MonoBehaviour
     #region Base
     public virtual void Start()
     {
+        if (PhotonNetwork.InRoom)
+        {
+            StartCoroutine(FindEnemyOnline());
+        }
+
+        pv = GetComponent<PhotonView>();
         characterSetup = GetComponent<CharacterSetup>();
         characterChoiceHandler = GetComponent<CharacterManager>();
 
@@ -258,6 +265,24 @@ public abstract class Character : MonoBehaviour
         robberyCountIndicator.gameObject.SetActive(false);
         
     }
+    
+    private IEnumerator FindEnemyOnline()
+    {
+        // wait until both players spawned
+        while (GameObject.FindObjectsOfType<Character>().Length < 2)
+            yield return null;
+
+        foreach (Character c in GameObject.FindObjectsOfType<Character>())
+        {
+            if (c != this)
+                enemy = c;
+        }
+    }
+    [PunRPC]
+    public void RPC_TakeDamage(int dmg, bool blockable, bool parryable)
+    {
+        TakeDamage(dmg, blockable, parryable);
+    }
 
     public void InitializeCharacter()
     {
@@ -324,6 +349,9 @@ public abstract class Character : MonoBehaviour
 
     public virtual void Update()
     {
+        if (PhotonNetwork.InRoom && pv != null && !pv.IsMine)
+            return;
+
         //self knockback mechanic
         if (knockable)
         {
@@ -847,8 +875,10 @@ public abstract class Character : MonoBehaviour
             if(!enemy.counterIsOn){
                 enemy.BreakCharge();
             }
-            enemy.TakeDamage(chargeDmg,false);
-            enemy.Knockback(13f, 0.4f, false);
+            enemy.photonView.RPC("RPC_TakeDamage", RpcTarget.All, chargeDmg, false, true);
+
+            enemy.photonView.RPC("RPC_Knockback", RpcTarget.All, 13f, 0.4f, false);
+
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
             if (chargeHitSound != null)
             {
@@ -1095,12 +1125,14 @@ public abstract class Character : MonoBehaviour
 
         audioManager.PlaySFX(audioManager.counterClong, 0.5f);
 
-        enemy.TakeDamage(parryDamage,true);
+        enemy.photonView.RPC("RPC_TakeDamage", RpcTarget.All, parryDamage, true, false);
 
-         stayDynamic();
+
+        stayDynamic();
         enemy.stayDynamic();
 
-        enemy.Knockback(10f, .3f, false);
+        enemy.photonView.RPC("RPC_Knockback", RpcTarget.All, 13f, 0.4f, false);
+
 
     }
 
@@ -1239,6 +1271,16 @@ public abstract class Character : MonoBehaviour
             Die();
         }
     }
+    [PunRPC]
+    public void RPC_TakeDamageNoAnimation(int dmg, bool blockable, bool parryable)
+    {
+        TakeDamageNoAnimation(dmg, blockable, parryable);
+    }
+    [PunRPC]
+    public void RPC_Knockback(float force, float time, bool axis)
+    {
+        Knockback(force, time, axis);
+    }
 
     public void Die()
     {
@@ -1364,10 +1406,19 @@ public abstract class Character : MonoBehaviour
         damageCounter.gameObject.SetActive(false);
 
     }
+    [PunRPC]
+    public void RPC_BreakCharge()
+    {
+        BreakCharge();
+    }
+    [PunRPC] public void RPC_DisableBlock(bool x) => DisableBlock(x);
+    [PunRPC] public void RPC_DisableJump(bool x) => DisableJump(x);
+    [PunRPC] public void RPC_EnableBlock() => EnableBlock();
 
     public void DealDamageToEnemy(int amount)
     {
-        enemy.TakeDamageNoAnimation(amount,false);
+        enemy.photonView.RPC("RPC_TakeDamageNoAnimation", RpcTarget.All, amount, false, false);
+
     }
 
     public IEnumerator InterruptMovement(float time)

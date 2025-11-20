@@ -1609,6 +1609,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ConnectAndCreateRoom: 0
   DesiredRoomName: 
+  ConnectAndJoinRoom: 0
 --- !u!4 &76553802
 Transform:
   m_ObjectHideFlags: 0
@@ -2469,6 +2470,7 @@ RectTransform:
   m_Children:
   - {fileID: 242701514}
   - {fileID: 498554776}
+  - {fileID: 478282560}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3167,7 +3169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 1778471767}
   p1b: {fileID: 150284739}
-  menu: {fileID: 1305964959}
+  menu: {fileID: 0}
 --- !u!222 &150284738
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5901,7 +5903,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 239138883}
   p1b: {fileID: 258459144}
-  menu: {fileID: 1305964959}
+  menu: {fileID: 0}
 --- !u!114 &258459144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7271,7 +7273,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &310275625
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7629,7 +7631,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 1535784220}
   p1b: {fileID: 331964193}
-  menu: {fileID: 1305964959}
+  menu: {fileID: 0}
 --- !u!114 &331964193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9873,7 +9875,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 929281904}
   p1b: {fileID: 428049643}
-  menu: {fileID: 1305964959}
+  menu: {fileID: 0}
 --- !u!222 &428049642
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11091,6 +11093,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 477990145}
   m_CullTransparentMesh: 1
+--- !u!1 &478282559
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 478282560}
+  - component: {fileID: 478282561}
+  m_Layer: 5
+  m_Name: UIController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &478282560
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478282559}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 112913356}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &478282561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478282559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caf9fabf6ef16a44399786054c18bd5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onlineMenu: {fileID: 795584551}
+  characterChoiceMenu: {fileID: 893962519}
 --- !u!1 &497561466
 GameObject:
   m_ObjectHideFlags: 0
@@ -13600,7 +13652,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 55778444}
   p1b: {fileID: 589443543}
-  menu: {fileID: 1305964959}
+  menu: {fileID: 0}
 --- !u!114 &589443543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13847,7 +13899,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 1657667372}
   p1b: {fileID: 601038619}
-  menu: {fileID: 1305964959}
+  menu: {fileID: 0}
 --- !u!114 &601038619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17131,7 +17183,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &795584552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18717,6 +18769,8 @@ GameObject:
   m_Component:
   - component: {fileID: 893962520}
   - component: {fileID: 893962521}
+  - component: {fileID: 893962523}
+  - component: {fileID: 893962522}
   m_Layer: 5
   m_Name: CharacterChoiceMenu
   m_TagString: Untagged
@@ -18777,10 +18831,62 @@ MonoBehaviour:
   - {fileID: 1251873981}
   - {fileID: 156924021}
   - {fileID: 1269562321}
-  startButton: {fileID: 0}
+  startButton: {fileID: 1269562321}
   sfx: {fileID: 344690514}
-  characterChoiceMenu: {fileID: 1305964959}
+  characterChoiceMenu: {fileID: 893962523}
   bothpicked: 0
+--- !u!114 &893962522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 893962519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &893962523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 893962519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49077053c60b16e40b1a11548a96bff1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterButtons:
+  - {fileID: 1285657032}
+  - {fileID: 331964193}
+  - {fileID: 1898985023}
+  - {fileID: 258459144}
+  - {fileID: 601038619}
+  - {fileID: 1199149427}
+  - {fileID: 150284739}
+  - {fileID: 428049643}
+  - {fileID: 156924021}
+  - {fileID: 589443543}
+  - {fileID: 1251873981}
+  p1characterNameText: {fileID: 1913902883}
+  p2characterNameText: {fileID: 788905580}
+  startButton: {fileID: 1269562321}
+  randomButton: {fileID: 156924021}
+  audiomanager: {fileID: 344690514}
+  cscript: {fileID: 893962521}
 --- !u!1 &900113494
 GameObject:
   m_ObjectHideFlags: 0
@@ -25071,7 +25177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 141677898}
   p1b: {fileID: 1199149427}
-  menu: {fileID: 1305964959}
+  menu: {fileID: 0}
 --- !u!114 &1199149427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26095,7 +26201,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 4497804}
   p1b: {fileID: 1251873981}
-  menu: {fileID: 1305964959}
+  menu: {fileID: 0}
 --- !u!114 &1251873981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26710,18 +26816,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 310275626}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: PlayGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 344690514}
         m_TargetAssemblyTypeName: MainMenuMusic, Assembly-CSharp
         m_MethodName: ButtonSound
@@ -26736,7 +26830,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1269562324}
         m_TargetAssemblyTypeName: StartButtonScript, Assembly-CSharp
-        m_MethodName: OnStartButtonClicked
+        m_MethodName: StartOnlineMatch
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -27309,7 +27403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 1655459559}
   p1b: {fileID: 1285657032}
-  menu: {fileID: 1305964959}
+  menu: {fileID: 0}
 --- !u!114 &1285657037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28030,27 +28124,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 1305964952}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49077053c60b16e40b1a11548a96bff1, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f2dd3eb7143193419fc0add81107a31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterButtons:
+  buttons:
   - {fileID: 1285657032}
   - {fileID: 331964193}
   - {fileID: 1898985023}
   - {fileID: 258459144}
   - {fileID: 601038619}
   - {fileID: 1199149427}
+  - {fileID: 2104072078}
   - {fileID: 150284739}
   - {fileID: 428049643}
-  - {fileID: 156924021}
   - {fileID: 589443543}
   - {fileID: 1251873981}
-  p1characterNameText: {fileID: 1913902883}
-  p2characterNameText: {fileID: 788905580}
+  - {fileID: 156924021}
+  - {fileID: 1269562321}
   startButton: {fileID: 1269562321}
-  randomButton: {fileID: 156924021}
-  audiomanager: {fileID: 344690514}
-  cscript: {fileID: 893962521}
+  sfx: {fileID: 344690514}
+  characterChoiceMenu: {fileID: 0}
+  bothpicked: 0
 --- !u!1 &1309290016
 GameObject:
   m_ObjectHideFlags: 0
@@ -40488,7 +40582,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 1898985021}
   p1b: {fileID: 1898985023}
-  menu: {fileID: 1305964959}
+  menu: {fileID: 0}
 --- !u!114 &1898985023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41352,6 +41446,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 795584551}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1932726199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41737,7 +41843,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1937351131
 RectTransform:
   m_ObjectHideFlags: 0
@@ -45496,7 +45602,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1305964959}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CharacterChoiceMenu, Assembly-CSharp
         m_MethodName: ResetCharacterSelection
         m_Mode: 1

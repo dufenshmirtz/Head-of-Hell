@@ -32,7 +32,8 @@ public class OnlineMenuUI : MonoBehaviour
         if (string.IsNullOrEmpty(roomNameInput.text))
             return;
 
+        OnlineManager.instance.DesiredRoomName = roomNameInput.text;
+        OnlineManager.instance.ConnectAndJoinRoom = true;   // NEW
         OnlineManager.instance.Connect();
-        OnlineManager.instance.JoinRoom(roomNameInput.text);
     }
 }

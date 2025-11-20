@@ -1,7 +1,6 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-//using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
+using Photon.Pun;
 
 public class Chiback : Character
 {
@@ -21,9 +20,8 @@ public class Chiback : Character
     public override void Start()
     {
         base.Start();
-
-        mirrorFireAttackPoint=resources.mirrorFireAttackPoint;
-        fireAttackPoint=resources.fireAttackPoint;
+        mirrorFireAttackPoint = resources.mirrorFireAttackPoint;
+        fireAttackPoint = resources.fireAttackPoint;
     }
 
     #region HeavyAttack
@@ -35,16 +33,17 @@ public class Chiback : Character
 
     override public void DealHeavyDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
         {
             audioManager.PlaySFX(audioManager.katanaHit, 1.8f);
-            enemy.TakeDamage(heavyDamage,true);
 
-            if (! enemy.isBlocking)
+            enemy.photonView.RPC("RPC_TakeDamage", RpcTarget.All, heavyDamage, true, true);
+
+            if (!enemy.isBlocking)
             {
-                enemy.Knockback(11f, 0.15f, true);
+                enemy.photonView.RPC("RPC_Knockback", RpcTarget.All, 11f, 0.15f, true);
             }
         }
         else
@@ -68,10 +67,8 @@ public class Chiback : Character
     {
         IgnoreUpdate(true);
 
-        // Calculate the movement direction (keyboard always, controller only if controller == true)
         float moveDirection = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : (controller ? Input.GetAxis("Horizontal" + playerString) : 0f));
 
-        // Only proceed if a direction is given
         if (moveDirection == 0f)
         {
             IgnoreUpdate(false);
@@ -79,7 +76,6 @@ public class Chiback : Character
             yield break;
         }
 
-        // Grounded vs air logic for keyboard/controller (keyboard always works, controller only when controller == true)
         if (!Input.GetKey(KeyCode.W) && isGrounded || (controller && Input.GetAxis("Vertical" + playerString) <= 0.5f && isGrounded))
         {
             rb.AddForce(new Vector2(moveDirection * jumpSpeed, jumpHeight), ForceMode2D.Impulse);
@@ -90,49 +86,45 @@ public class Chiback : Character
             rb.AddForce(new Vector2(moveDirection * jumpSpeed, jumpHeight), ForceMode2D.Impulse);
         }
 
-        // Duration of the attack
         float elapsedTime = 0f;
 
         while (elapsedTime < jumpDuration)
         {
-            // Check for enemy collision
             Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
+
             if (hitEnemy != null)
             {
-                enemy.BreakCharge();
+                enemy.photonView.RPC("RPC_BreakCharge", RpcTarget.All);
+
                 animator.SetTrigger("SpellHit");
                 audioManager.PlaySFX(audioManager.sytheHit, 1f);
                 audioManager.PlaySFX(audioManager.sytheSlash, 1f);
 
-                // Apply damage based on elapsed time during the jump
                 if (elapsedTime < 0.33f)
                 {
-                    enemy.TakeDamage(shortJumpDamage, true);
+                    enemy.photonView.RPC("RPC_TakeDamage", RpcTarget.All, shortJumpDamage, true, true);
                     Enraged(shortJumpDamage);
                 }
                 else if (elapsedTime < 0.66f)
                 {
-                    enemy.TakeDamage(MedJumpDamage, true);
+                    enemy.photonView.RPC("RPC_TakeDamage", RpcTarget.All, MedJumpDamage, true, true);
                     Enraged(MedJumpDamage);
                 }
                 else
                 {
-                    enemy.TakeDamage(wideJumpDamage, true);
+                    enemy.photonView.RPC("RPC_TakeDamage", RpcTarget.All, wideJumpDamage, true, true);
                     Enraged(wideJumpDamage);
                 }
 
-                // Reset enraging hits if the threshold is reached
                 if (timesHit >= enragingNum)
                 {
                     timesHit = 0;
                 }
 
-                // Apply knockback to the enemy
-                enemy.Knockback(11f, 0.25f, false);
+                enemy.photonView.RPC("RPC_Knockback", RpcTarget.All, 11f, 0.25f, false);
 
-                // Reset velocity after hitting the enemy
                 rb.velocity = Vector2.zero;
-                break; // Exit the loop after hitting an enemy
+                break;
             }
 
             elapsedTime += Time.deltaTime;
@@ -143,13 +135,12 @@ public class Chiback : Character
         OnCooldown(cooldown);
         ignoreDamage = false;
     }
-
     #endregion
 
     #region LightAttack
     public override void LightAttack()
     {
-        if(fireReady)
+        if (fireReady)
         {
             QuickAttackIndicatorDisable();
             animator.SetTrigger("QuickAttack");
@@ -161,22 +152,24 @@ public class Chiback : Character
 
     public void DealFireDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( mirrorFireAttackPoint.position,  attackRange,  enemyLayer);
-        Collider2D hitEnemy2 = Physics2D.OverlapCircle( fireAttackPoint.position,  attackRange,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(mirrorFireAttackPoint.position, attackRange, enemyLayer);
+        Collider2D hitEnemy2 = Physics2D.OverlapCircle(fireAttackPoint.position, attackRange, enemyLayer);
 
-        if (hitEnemy != null || hitEnemy2!=null)
+        if (hitEnemy != null || hitEnemy2 != null)
         {
             audioManager.PlaySFX(audioManager.lightattack, 0.5f);
-            enemy.TakeDamage(5, true);
 
-            
-            if(!onCooldown){
-                enemy.Knockback(15f, 0.8f, true);
+            enemy.photonView.RPC("RPC_TakeDamage", RpcTarget.All, 5, true, true);
+
+            if (!onCooldown)
+            {
+                enemy.photonView.RPC("RPC_Knockback", RpcTarget.All, 15f, 0.8f, true);
             }
-            enemy.DisableBlock(true);
-            enemy.DisableJump(true);
+
+            enemy.photonView.RPC("RPC_DisableBlock", RpcTarget.All, true);
+            enemy.photonView.RPC("RPC_DisableJump", RpcTarget.All, true);
+
             StartCoroutine(ResetBlockability());
-            
         }
         else
         {
@@ -194,14 +187,11 @@ public class Chiback : Character
 
     private IEnumerator ResetBlockability()
     {
+        yield return new WaitForSeconds(jumpDuration + 0.1f);
 
-        // Wait for 1.1 seconds before enabling the block
-        yield return new WaitForSeconds(jumpDuration+0.1f);
-
-        enemy.EnableBlock();
-        enemy.DisableJump(false);
+        enemy.photonView.RPC("RPC_EnableBlock", RpcTarget.All);
+        enemy.photonView.RPC("RPC_DisableJump", RpcTarget.All, false);
     }
-
     #endregion
 
     #region ChargeAttack
@@ -213,18 +203,19 @@ public class Chiback : Character
     #endregion
 
     #region Passive
-    override public void TakeDamage(int dmg, bool blockable, bool parryable=true)
+    override public void TakeDamage(int dmg, bool blockable, bool parryable = true)
     {
         if (timesHit < enragingNum && !isBlocking)
         {
             timesHit++;
         }
 
-        if(timesHit == enragingNum && !roarPlayed)
+        if (timesHit == enragingNum && !roarPlayed)
         {
             audioManager.PlaySFX(audioManager.growl, 0.5f);
             roarPlayed = true;
         }
+
         base.TakeDamage(dmg, blockable);
     }
 
@@ -232,7 +223,7 @@ public class Chiback : Character
     {
         if (timesHit == enragingNum)
         {
-            enemy.TakeDamage(jumpDamage / 2,true);
+            enemy.photonView.RPC("RPC_TakeDamage", RpcTarget.All, jumpDamage / 2, true, true);
             roarPlayed = false;
         }
     }

@@ -1,4 +1,4 @@
-using Photon.Pun;
+﻿using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
@@ -7,6 +7,7 @@ public class OnlineManager : MonoBehaviourPunCallbacks
     public static OnlineManager instance;
     public bool ConnectAndCreateRoom = false;
     public string DesiredRoomName = "";
+    public bool ConnectAndJoinRoom = false;
 
     private void Awake()
     {
@@ -36,7 +37,6 @@ public class OnlineManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinLobby();
     }
 
-
     public override void OnJoinedLobby()
     {
         Debug.Log("Joined lobby");
@@ -44,8 +44,14 @@ public class OnlineManager : MonoBehaviourPunCallbacks
         if (ConnectAndCreateRoom)
         {
             ConnectAndCreateRoom = false;
-            Debug.Log("Now creating room: " + DesiredRoomName);
+            Debug.Log("Creating room: " + DesiredRoomName);
             CreateRoom(DesiredRoomName);
+        }
+        else if (ConnectAndJoinRoom)
+        {
+            ConnectAndJoinRoom = false;
+            Debug.Log("Joining room: " + DesiredRoomName);
+            JoinRoom(DesiredRoomName);
         }
     }
 
@@ -64,14 +70,23 @@ public class OnlineManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("Joined room: " + PhotonNetwork.CurrentRoom.Name);
-
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-            PhotonNetwork.LoadLevel("GamePlayScene");
+        TryStartCharacterSelect();
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-            PhotonNetwork.LoadLevel("GamePlayScene");
+        Debug.Log("Player joined: " + newPlayer.NickName);
+        TryStartCharacterSelect();
     }
+
+    private void TryStartCharacterSelect()
+    {
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        {
+            Debug.Log("Both players connected → Switching to CharacterChoiceMenu UI");
+
+            UIController.instance.OpenCharacterSelect();
+        }
+    }
+
 }

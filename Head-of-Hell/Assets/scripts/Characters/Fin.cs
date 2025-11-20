@@ -1,19 +1,15 @@
 using System.Collections;
 using UnityEngine;
+using Photon.Pun;
 
 public class Fin : Character
 {
     float missCooldown = 10f, cooldown = 15f;
-    // bool ignoreCounterOff = false;
-    // int damage = 25;
-    // bool counterIsOn = false;
-    // bool counterDone = false;
-    //Roll
     float rollPower = 8f;
     float rollTime = 0.39f;
     bool rollReady = true;
     int passiveDamage = 4;
-    // bool safety = true;
+
     Transform escapePoint;
     GameObject freeBaby;
 
@@ -34,123 +30,32 @@ public class Fin : Character
 
     override public void DealHeavyDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
         {
-
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
-            enemy.TakeDamage(heavyDamage, true);
-            enemy.TakeDamageNoAnimation(passiveDamage, true);
 
-            if (! enemy.isBlocking)
+            // main hit
+            enemy.photonView.RPC("RPC_TakeDamage", RpcTarget.All, heavyDamage, true, true);
+
+            // passive extra no-anim damage
+            enemy.photonView.RPC("RPC_TakeDamageNoAnimation", RpcTarget.All, passiveDamage, true, false);
+
+            if (!enemy.isBlocking)
             {
-                enemy.Knockback(11f, 0.15f, true);
+                enemy.photonView.RPC("RPC_Knockback", RpcTarget.All, 11f, 0.15f, true);
             }
-
         }
         else
         {
             audioManager.PlaySFX(audioManager.swoosh, 1f);
         }
-
     }
     #endregion
 
-    #region Spell
-    // public override void Spell()
-    // {
-    //     audioManager.PlaySFX(audioManager.counterScream, 2.5f);
-    //     animator.SetTrigger("Spell");
-    //     counterIsOn = true;
-    //     safety = true;
-    //     UsingAbility(cooldown);
-    //     StartCoroutine(CounterOffSafety());
-    // }
-
-    // public bool DetectCounter()
-    // {
-    //     if (counterIsOn)
-    //     {
-    //         if (!counterDone)
-    //         {
-    //             Countered();
-    //             return true;
-    //         }
-    //         return true;
-    //     }
-
-    //     return false;
-    // }
-
-    // public void CounterOff()
-    // {
-    //     if (!ignoreCounterOff)
-    //     {
-    //         // Start the cooldown timer
-    //         OnCooldown(missCooldown);
-    //         CounterVariablesOff();
-    //         safety = false;
-    //     }
-    //     else
-    //     {
-    //         ignoreCounterOff = false;
-    //     }
-        
-    // }
-
-    // private IEnumerator CounterOffSafety()
-    // {
-    //     yield return new WaitForSeconds(0.41f);
-    //     if (!counterDone && safety)
-    //     {
-    //         OnCooldown(missCooldown);
-    //         CounterVariablesOff();
-    //     }
-    // }
-
-    // public void CounterSuccessOff()
-    // {
-    //     CounterVariablesOff();
-    //     OnCooldown(cooldown);
-    // }
-
-    // public void Countered()
-    // {
-    //     animator.SetTrigger("counterHit");
-    //     audioManager.PlaySFX(audioManager.counterSucces, 1.5f);
-    //     enemy.stayStatic();
-    //     stayStatic();
-    //     ignoreCounterOff = true;
-    //     counterDone = true;
-    // }
-
-    // public void DealCounterDmg()
-    // {
-    //     enemy.StopPunching();
-    //     enemy.BreakCharge();
-
-    //     audioManager.PlaySFX(audioManager.counterClong, 0.5f);
-
-    //     enemy.TakeDamage(damage,true);
-
-    //      stayDynamic();
-    //     enemy.stayDynamic();
-
-    //     enemy.Knockback(10f, .3f, false);
-
-    // }
-
-    // public void CounterVariablesOff()
-    // {
-    //     counterDone = false;
-    //     counterIsOn = false;
-    // }
-
-    #endregion
-
     #region LightAttack
-    override public void LightAttack() 
+    override public void LightAttack()
     {
         if (rollReady)
         {
@@ -166,13 +71,8 @@ public class Fin : Character
         ignoreDamage = true;
         knockable = false;
 
-        // Store the original gravity scale
         float ogGravityScale = rb.gravityScale;
-
-        // Disable gravity while rolling
         rb.gravityScale = 0f;
-
-        // Store the current velocity
         Vector2 currentVelocity = rb.velocity;
 
         Collider2D[] colliders = GetComponents<Collider2D>();
@@ -182,34 +82,26 @@ public class Fin : Character
         }
         colliders[5].enabled = true;
 
+        float moveDirection = Input.GetKey(left)
+            ? -1f
+            : (Input.GetKey(right) ? 1f : (controller ? Input.GetAxis("Horizontal" + playerString) : 0f));
 
-        // Determine the roll direction based on the input (keyboard always, controller only if controller == true)
-        float moveDirection = Input.GetKey(left) ? -1f : (Input.GetKey(right) ? 1f : (controller ? Input.GetAxis("Horizontal" + playerString) : 0f));
-
-        // If no direction input was given, default to right
         if (moveDirection == 0f)
         {
-            moveDirection = 1f; // Default direction in case no input
+            moveDirection = 1f;
         }
 
         audioManager.PlaySFX(audioManager.roll, 1);
 
-        // Calculate the roll velocity
         Vector2 rollVelocity = new Vector2(moveDirection * rollPower, currentVelocity.y);
-
-        // Apply the roll velocity
         rb.velocity = rollVelocity;
 
-        // Trigger the roll animation
         animator.SetTrigger("QuickAttack");
 
-        // Wait for the roll duration
         yield return new WaitForSeconds(rollTime);
 
-        // Reset the velocity after the roll
         rb.velocity = currentVelocity;
 
-        // Re-enable colliders after rolling
         foreach (Collider2D collider in colliders)
         {
             if (collider != colliders[3])
@@ -220,7 +112,6 @@ public class Fin : Character
         colliders[5].enabled = false;
         colliders[4].enabled = false;
 
-        // Reset the gravity scale
         rb.gravityScale = ogGravityScale;
 
         IgnoreMovement(false);
@@ -230,10 +121,8 @@ public class Fin : Character
         StartCoroutine(ResetRoll());
     }
 
-
     IEnumerator ResetRoll()
     {
-
         yield return new WaitForSeconds(2f);
         audioManager.PlaySFX(audioManager.rollReady, audioManager.lessVol);
         rollReady = true;
@@ -254,6 +143,7 @@ public class Fin : Character
         audioManager.PlaySFX(audioManager.swoosh, audioManager.normalVol);
         audioManager.PlaySFX(audioManager.counterScream, audioManager.normalVol);
     }
+
     public void ThreePointBaptism()
     {
         audioManager.PlaySFX(audioManager.waterSplash, audioManager.normalVol);
@@ -269,31 +159,54 @@ public class Fin : Character
         StartCoroutine(SpawnBabiesWithDelay());
     }
 
+    [PunRPC]
+    void RPC_SpawnBaby(float x, float y, int direction)
+    {
+        GameObject baby = Instantiate(freeBaby, new Vector3(x, y, 0f), Quaternion.identity);
+
+        BabyRun mover = baby.GetComponent<BabyRun>();
+        if (mover != null)
+        {
+            mover.SetDirection(direction);
+        }
+        else
+        {
+            Debug.LogWarning("BabyRun script is missing on the prefab.");
+        }
+    }
+
     IEnumerator SpawnBabiesWithDelay()
     {
         for (int i = 0; i < 3; i++)
         {
-            // Instantiate the freeBaby prefab at the escapePoint position
-            GameObject baby = Instantiate(freeBaby, escapePoint.position, Quaternion.identity);
-
-            // Determine direction: -1 if facing right, 1 if facing left (inverted for opposite direction)
             int direction = transform.localScale.x > 0 ? -1 : 1;
 
-            // Set direction on the BabyRun script
-            BabyRun mover = baby.GetComponent<BabyRun>();
-            if (mover != null)
+            if (PhotonNetwork.InRoom)
             {
-                mover.SetDirection(direction);
+                photonView.RPC(
+                    "RPC_SpawnBaby",
+                    RpcTarget.All,
+                    escapePoint.position.x,
+                    escapePoint.position.y,
+                    direction
+                );
             }
             else
             {
-                Debug.LogWarning("BabyRun script is missing on the prefab.");
+                GameObject baby = Instantiate(freeBaby, escapePoint.position, Quaternion.identity);
+
+                BabyRun mover = baby.GetComponent<BabyRun>();
+                if (mover != null)
+                {
+                    mover.SetDirection(direction);
+                }
+                else
+                {
+                    Debug.LogWarning("BabyRun script is missing on the prefab.");
+                }
             }
 
-            yield return new WaitForSeconds(1.5f);  // Wait 2 seconds before next spawn
+            yield return new WaitForSeconds(1.5f);
         }
     }
-
-
-
 }

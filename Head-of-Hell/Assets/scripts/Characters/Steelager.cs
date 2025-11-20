@@ -1,15 +1,15 @@
 using System.Collections;
-//using UnityEditor.Build;
 using UnityEngine;
+using Photon.Pun;
 
 public class Steelager : Character
 {
     float cooldown = 16f;
     int damage = 20;
     float speedSaver = 4f;
-    //bombin
-    public GameObject bombPrefab; // The bullet prefab
-    public Transform bombPoint; // The point from where the bullet will be instantiated
+
+    public GameObject bombPrefab;
+    public Transform bombPoint;
     public Transform bombsParent;
     bool bombCharging = false;
     bombScript bomba;
@@ -19,9 +19,8 @@ public class Steelager : Character
     public override void Start()
     {
         base.Start();
-
-        firePoint=resources.firePoint;
-        explosionPoint=resources.explosionPoint;
+        firePoint = resources.firePoint;
+        explosionPoint = resources.explosionPoint;
     }
 
     #region HeavyAttack
@@ -33,37 +32,38 @@ public class Steelager : Character
 
     override public void DealHeavyDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
         {
             audioManager.PlaySFX(audioManager.explosion, audioManager.lessVol);
-            enemy.TakeDamage(heavyDamage, true);
 
-            if(knocked){
-                enemy.TakeDamageNoAnimation(3,false);
-            }else{
-                print(moveSpeed);
+            // MAIN DAMAGE
+            enemy.photonView.RPC("RPC_TakeDamage", RpcTarget.All, heavyDamage, true, true);
+
+            // EXTRA DAMAGE IF KNOCKED
+            if (knocked)
+            {
+                enemy.photonView.RPC("RPC_TakeDamageNoAnimation", RpcTarget.All, 3, false, false);
             }
 
+            // KNOCKBACK
             if (!enemy.isBlocking)
             {
-                enemy.Knockback(11f, 0.15f, true);
+                enemy.photonView.RPC("RPC_Knockback", RpcTarget.All, 11f, 0.15f, true);
             }
-
         }
         else
         {
             audioManager.PlaySFX(audioManager.explosion, audioManager.lessVol);
         }
-
     }
     #endregion
 
     #region Spell
     public override void Spell()
     {
-        ignoreDamage=true;
+        ignoreDamage = true;
         animator.SetTrigger("Spell");
         audioManager.PlaySFX(audioManager.bigExplosion, audioManager.doubleVol);
         UsingAbility(cooldown);
@@ -72,13 +72,18 @@ public class Steelager : Character
 
     public void DealExplosionDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( explosionPoint.position,  attackRange*4,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(explosionPoint.position, attackRange * 4, enemyLayer);
 
         if (hitEnemy != null)
         {
-            enemy.BreakCharge();
-            enemy.TakeDamage(damage, true);
-            enemy.Knockback(10f, 0.8f, false);
+            // RPC BreakCharge
+            enemy.photonView.RPC("RPC_BreakCharge", RpcTarget.All);
+
+            // RPC Damage
+            enemy.photonView.RPC("RPC_TakeDamage", RpcTarget.All, damage, true, true);
+
+            // RPC Knockback
+            enemy.photonView.RPC("RPC_Knockback", RpcTarget.All, 10f, 0.8f, false);
         }
     }
 
@@ -88,7 +93,6 @@ public class Steelager : Character
         stayDynamic();
         ignoreDamage = false;
     }
-
     #endregion
 
     #region LightAttack
@@ -101,21 +105,23 @@ public class Steelager : Character
         }
         else
         {
-            bomba.Explode();
+            bomba.Explode(); // NOTE: explosion damage must be RPC inside bombScript
         }
     }
+
     void ThrowBomb()
     {
         bombPrefab = resources.bomb;
-        bombPoint=resources.bombSpawner;
+        bombPoint = resources.bombSpawner;
         bombsParent = resources.trash;
 
         bombCharging = true;
         audioManager.PlaySFX(audioManager.fuse, audioManager.normalVol);
-        GameObject bomb = Instantiate(bombPrefab, bombPoint.position,  firePoint.rotation);
-        bomba=bomb.GetComponent<bombScript>();
-        Rigidbody2D rb = bomb.GetComponent<Rigidbody2D>();
+
+        GameObject bomb = Instantiate(bombPrefab, bombPoint.position, firePoint.rotation);
+        bomba = bomb.GetComponent<bombScript>();
         bomb.transform.SetParent(bombsParent);
+
         StartCoroutine(ResetBomb());
     }
 
@@ -129,7 +135,7 @@ public class Steelager : Character
 
     public void FuseSound()
     {
-        audioManager.PlaySFX(audioManager.fuse, 1f); 
+        audioManager.PlaySFX(audioManager.fuse, 1f);
     }
     #endregion
 
@@ -140,6 +146,4 @@ public class Steelager : Character
         animator.SetTrigger("Charge");
     }
     #endregion
-
-    //Passive
 }
