@@ -12,14 +12,16 @@ public class Skipler : Character
     bool dashHit = false;
     //LightAttack
     bool lightReady = true;
-    protected float swordDashPower = 10f;
-    protected float swordDashTime = 0.14f;
-    protected int swordDashDmg = 5;
+    protected float blinkPower = 10f;
+    protected float blinkTime = 0.14f;
+    protected int blinkDmg = 5;
+    protected float blinkCD = 3f;
     bool isIdlePlaying = false;
 
     public Transform skiplerPoint;
     public GameObject skiplerDouble;
 
+    #region configure
     public override void Start()
     {
         base.Start();
@@ -44,6 +46,8 @@ public class Skipler : Character
 
         base.Update();
     }
+    #endregion
+    
     #region HeavyAttack
     override public void HeavyAttack()
     {
@@ -194,11 +198,11 @@ public class Skipler : Character
         if (lightReady)
         {
             QuickAttackIndicatorDisable();
-            StartCoroutine(SwordDash());
+            StartCoroutine(Blink());
         }
     }
 
-    IEnumerator SwordDash()
+    IEnumerator Blink()
     {
         IgnoreMovement(true);
 
@@ -223,16 +227,16 @@ public class Skipler : Character
         audioManager.PlaySFX(audioManager.quickGlitch, 0.7f);
 
         // Calculate the dash velocity
-        Vector2 sworddashVelocity = new Vector2(moveDirection * swordDashPower, currentVelocity.y);
+        Vector2 blinkVelocity = new Vector2(moveDirection * blinkPower, currentVelocity.y);
 
         // Apply the dash velocity
-        rb.velocity = sworddashVelocity;
+        rb.velocity = blinkVelocity;
 
         // Trigger the dash animation
         animator.SetTrigger("QuickAttack");
 
         // Wait for the dash duration
-        yield return new WaitForSeconds(swordDashTime);
+        yield return new WaitForSeconds(blinkTime);
 
         // Reset the velocity after the dash
         rb.velocity = currentVelocity;
@@ -244,25 +248,25 @@ public class Skipler : Character
 
         IgnoreMovement(false);
 
-        StartCoroutine(ResetSwordDash());
+        StartCoroutine(ResetBlink());
     }
 
 
-    IEnumerator ResetSwordDash()
+    IEnumerator ResetBlink()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(blinkCD);
         audioManager.PlaySFX(audioManager.sworDashTada, audioManager.lessVol);
         lightReady = true;
         QuickAttackIndicatorEnable();
     }
 
-    public void DealSwordDashDmg()
+    public void DealBlinkDmg()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
         {
-            enemy.TakeDamage(swordDashDmg, true);
+            enemy.TakeDamage(blinkDmg, true);
             enemy.Knockback(10f, .15f, true);
             audioManager.PlaySFX(audioManager.dashHit, 0.8f);
             ReduceCD();
@@ -285,6 +289,7 @@ public class Skipler : Character
     }
     #endregion
 
+    #region Idle
     public void IdleGlitch()
     {
         audioManager.PlayAndStoreSFX(audioManager.idleGlitch, audioManager.normalVol);
@@ -296,4 +301,5 @@ public class Skipler : Character
         audioManager.StopAndStoreSFX(audioManager.idleGlitch);  
         isIdlePlaying = false;
     }
+    #endregion
 }

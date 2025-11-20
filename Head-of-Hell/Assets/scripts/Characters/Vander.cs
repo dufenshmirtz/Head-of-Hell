@@ -11,6 +11,10 @@ public class Vander : Character
     int smallLifesteal = 3;
     bool katanaready = true;
 
+    int chargeLifesteal=8;
+
+    float katanaCD=2f;
+
     // --- Flying passive ---
     bool isFlying = false;
     float flyUpSpeed = 6f;        // how fast he ascends while holding jump
@@ -147,7 +151,7 @@ public class Vander : Character
     IEnumerator ResetKatana()
     {
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(katanaCD);
         audioManager.PlaySFX(audioManager.katanaSeath, audioManager.doubleVol);
         katanaready = true;
         QuickAttackIndicatorEnable();
@@ -173,7 +177,7 @@ public class Vander : Character
             enemy.StopPunching();
             enemy.BreakCharge();
             enemy.TakeDamage(chargeDmg, false);
-            Lifesteal(8);
+            Lifesteal(chargeLifesteal);
             enemy.Knockback(13f, 0.4f, false);
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
             if (chargeHitSound != null)

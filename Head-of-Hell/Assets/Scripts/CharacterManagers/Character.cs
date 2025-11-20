@@ -544,7 +544,7 @@ public abstract class Character : MonoBehaviour
         }
 
         //Spells
-        if (input.GetKeyDown(ability) || (controller && controller && input.GetButtonDown("Spell" + playerString)))
+        if (input.GetKeyDown(ability) || (controller && input.GetButtonDown("Spell" + playerString)))
         {
             if (!onCooldown && canCast && !casting && !specialDisable)
             {
@@ -553,7 +553,7 @@ public abstract class Character : MonoBehaviour
         }
 
         //Parry
-        if (input.GetKeyDown(parry))
+        if (input.GetKeyDown(parry) || (controller && input.GetButtonDown("Parry" + playerString)))
         {
             if (canParry && canCast && !casting)
             {

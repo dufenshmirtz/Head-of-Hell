@@ -187,7 +187,7 @@ public class CharacterAnimationEvents : MonoBehaviour
     public void SwordDashDamageEvent()
     {
         skipler = (Skipler)character;
-        skipler.DealSwordDashDmg();
+        skipler.DealBlinkDmg();
     }
 
     public void IdleGlitchEvent()

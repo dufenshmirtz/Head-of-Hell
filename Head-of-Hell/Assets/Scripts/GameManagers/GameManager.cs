@@ -114,6 +114,9 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        QualitySettings.vSyncCount = 0;     // disable vsync
+        Application.targetFrameRate = 60;   // lock to 60 fps (or whatever you want)
     }
 
     public void RoundEnd(int playerNum, string winnerName)
