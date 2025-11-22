@@ -7,6 +7,7 @@ public class Steelager : Character
     float cooldown = 16f;
     int damage = 20;
     float speedSaver = 4f;
+    float resetBombs = 2f;
     //bombin
     public GameObject bombPrefab; // The bullet prefab
     public Transform bombPoint; // The point from where the bullet will be instantiated
@@ -121,7 +122,7 @@ public class Steelager : Character
 
     IEnumerator ResetBomb()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(resetBombs);
         audioManager.PlaySFX(audioManager.lighter, audioManager.normalVol);
         bombCharging = false;
         QuickAttackIndicatorEnable();
@@ -141,5 +142,4 @@ public class Steelager : Character
     }
     #endregion
 
-    //Passive
 }

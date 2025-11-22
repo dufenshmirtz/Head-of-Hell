@@ -34,8 +34,14 @@ public class PortalTeleport : MonoBehaviour
                 return;
             }
 
-            // Teleport to destination portal
-            other.transform.position = destinationPortal.position;
+            // Teleport to destination portal but keep original Z position
+            Vector3 newPos = new Vector3(
+                destinationPortal.position.x,
+                destinationPortal.position.y,
+                other.transform.position.z
+            );
+
+            other.transform.position = newPos;
 
             // Play sound
             if (audioManager != null)
