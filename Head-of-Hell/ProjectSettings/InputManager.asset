@@ -598,10 +598,10 @@ InputManager:
     axis: 1
     joyNum: 1
   - serializedVersion: 3
-    m_Name: Horizontal_P1
+    m_Name: Horizontal_P2
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 
+    negativeButton: left
     positiveButton: right
     altNegativeButton: 
     altPositiveButton: 
