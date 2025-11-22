@@ -8,7 +8,9 @@ public class Fin : Character
     float rollPower = 8f;
     float rollTime = 0.39f;
     bool rollReady = true;
-    int passiveDamage = 4;
+    int passiveDamage = 8;
+    float flashStunDuration = 0.8f;
+    float resetRoll = 2f;
     // bool safety = true;
     Transform escapePoint;
     GameObject freeBaby;
@@ -67,7 +69,7 @@ public class Fin : Character
         {
             enemy.StopPunching();
             enemy.BreakCharge();
-            enemy.Stun(0.8f);
+            enemy.Stun(flashStunDuration);
         }
         else
         {
@@ -166,7 +168,7 @@ public class Fin : Character
     IEnumerator ResetRoll()
     {
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(resetRoll);
         audioManager.PlaySFX(audioManager.rollReady, audioManager.lessVol);
         rollReady = true;
         QuickAttackIndicatorEnable();
@@ -180,7 +182,7 @@ public class Fin : Character
     {
         base.DealCounterDmg();
 
-        enemy.TakeDamageNoAnimation(8,false,false);
+        enemy.TakeDamageNoAnimation(passiveDamage,false,false);
     }
     #endregion
 
