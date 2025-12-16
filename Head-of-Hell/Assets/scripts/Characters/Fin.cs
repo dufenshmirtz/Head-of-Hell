@@ -9,7 +9,7 @@ public class Fin : Character
     float rollTime = 0.39f;
     bool rollReady = true;
     int passiveDamage = 8;
-    float flashStunDuration = 0.8f;
+    float flashStunDuration = 1.2f;
     float resetRoll = 2f;
     // bool safety = true;
     Transform escapePoint;
