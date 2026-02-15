@@ -51,7 +51,7 @@ public abstract class Character : MonoBehaviour
     protected float heavySpeed;
     protected float OGMoveSpeed;
     protected float jumpForce = 10f;
-    protected int maxHealth = 100;
+    public int maxHealth = 100;
     protected int currHealth;
     protected bool isGrounded;
 
@@ -171,7 +171,7 @@ public abstract class Character : MonoBehaviour
 
     protected bool jumpDisabled = false;
 
-    bool chanChan;
+    public bool chanChan;
 
     //teleport
     public bool justTeleported = false;
@@ -216,6 +216,8 @@ public abstract class Character : MonoBehaviour
             else
             {
                 maxHealth = loadedRuleset.health;
+                currHealth = maxHealth;
+                healthbar.SetMaxHealth(maxHealth);
             }
 
 
@@ -240,8 +242,6 @@ public abstract class Character : MonoBehaviour
         //basic variables assignment
         rb = GetComponent<Rigidbody2D>();
         resources = GetComponent<CharacterResources>();
-        currHealth = maxHealth;
-        healthbar.SetMaxHealth(maxHealth);
 
         winner.gameObject.SetActive(false);
 
@@ -574,7 +574,9 @@ public abstract class Character : MonoBehaviour
 
         // Now it's safe to assign the value
         maxHealth = gameManager.maxHealth;
-        print("..;" + maxHealth);
+        currHealth = maxHealth;
+        healthbar.SetMaxHealth(maxHealth);
+        print("@@@ max health= " + maxHealth);
     }
 
 
@@ -1307,8 +1309,10 @@ public abstract class Character : MonoBehaviour
 
         audioManager.StopMusic();
         audioManager.PlaySFX(audioManager.dearth, audioManager.doubleVol);
+        print("+++"+enemy.currHealth+" mx: "+maxHealth);
         if (enemy.currHealth == maxHealth)
         {
+            print("+++");
             gameManager.RoundEndFlawless(playerNum, P2Name);
             KeepStats(P2Name, P1Name.text);
         }

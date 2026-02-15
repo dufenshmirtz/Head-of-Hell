@@ -11,7 +11,7 @@ public class Lithra : Character
     public float jumpHeight = 5f; // Initial jump height
     private bool airSpinready = true;
     float cooldown = 10f;
-    int bellDamage = 10;
+    int bellDamage = 12;
     public Transform bellPoint;
     public Transform bellStunPointTransf;
 

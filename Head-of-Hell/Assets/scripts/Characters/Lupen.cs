@@ -27,7 +27,6 @@ public class Lupen : Character
 
         cEvents = this.GetComponent<CharacterAnimationEvents>();
         wipPoint = resources.wipPoint;
-
         spirit=this.gameObject.AddComponent<LupenSpirit>();
         spirit.lupen = this;
         spirit.ability=ability;
@@ -36,8 +35,7 @@ public class Lupen : Character
         spirit.characterChoiceHandler= characterChoiceHandler;
         spirit.cEvents = cEvents;
         spirit.enemy = enemy;
-        spirit.healthbar = healthbar;
-        spirit.maxHealth=maxHealth;
+        
 
         size = new Vector2(hitBoxWidth, hitBoxHeight);
     }
@@ -85,6 +83,8 @@ public class Lupen : Character
     override public void Spell()
     {
         stayStatic();
+        spirit.healthbar = healthbar;
+        spirit.maxHealth=maxHealth;
         audioManager.PlaySFX(audioManager.transformation, 1.8f);
         KnockNearbyEnemies();
         ignoreUpdate = true;

@@ -5,7 +5,7 @@ public class Rager : Character
 {
     //Spell
     float cooldown = 20f;
-    int hit1Damage = 2, hit2Damage = 7, hit3Damage = 10;
+    int hit1Damage = 2, hit2Damage = 7, hit3Damage = 10; //25 actual dmg these variables are ass
     //Lightattack
     int lightDamage = 4;
     bool spellHit = false;
