@@ -11,7 +11,7 @@ public class Visvia : Character
     float shotgunCooldown = 4f;
     float dashDuration = 0.3f;
     float shotgunRange = 1f;
-    int shotgunDamage = 5;
+    int shotgunDamage = 6;
 
     public int blastCounter=0;
     float overheatDuration = 8f;

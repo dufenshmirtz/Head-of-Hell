@@ -189,7 +189,7 @@ public class Chiback : Character
 
     IEnumerator ResetFire()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         audioManager.PlaySFX(audioManager.sworDashTada, audioManager.lessVol);
         fireReady = true;
         QuickAttackIndicatorEnable();
