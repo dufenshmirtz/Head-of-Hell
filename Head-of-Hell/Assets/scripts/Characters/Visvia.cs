@@ -228,7 +228,7 @@ public class Visvia : Character
                 Character target = hit.GetComponent<Character>();
                 if (target != null && target != this)
                 {
-                    target.TakeDamage(overheatDamage, false);
+                    target.TakeDamage(overheatDamage, false, false);
 
                 }
             }

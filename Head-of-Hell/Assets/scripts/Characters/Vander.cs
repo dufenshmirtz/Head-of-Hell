@@ -175,7 +175,11 @@ public class Vander : Character
         if (hitEnemy != null)
         {
             enemy.StopPunching();
-            enemy.BreakCharge();
+            enemy.StopPunching();
+            if (!enemy.counterIsOn)
+            {
+                enemy.BreakCharge();
+            }
             enemy.TakeDamage(chargeDmg, false);
             Lifesteal(chargeLifesteal);
             enemy.Knockback(13f, 0.4f, false);

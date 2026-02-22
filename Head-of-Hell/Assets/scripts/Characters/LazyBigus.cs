@@ -104,7 +104,7 @@ public class LazyBigus : Character
             yield return new WaitForSeconds(interval);
 
             // Deal damage to the enemy
-            enemy.TakeDamageNoAnimation(damageAmount,false);
+            enemy.TakeDamageNoAnimation(damageAmount,false,false);
         }
         enemy.ActivatePoison(false);
     }
