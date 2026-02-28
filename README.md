@@ -26,15 +26,12 @@
 -For github merging: always first merge main branch into your branch and for main merging consult XLR8© CEO
 
 
-# XLR8 Structure
+# XLR8 Devs Structure
 
 -Graphics and lore Moderator: Giannis Chrysomallis
 
--Graphics designer: Giorgos Benas
-
 -UI Moderator: Aris Hartopoulos
 
--Gameplay Moderator/General Manager: Fotis Chrysomallis
+-Gameplay Moderator/Project Manager: Fotis Chrysomallis
 
--SFX Moderator: Stathis Iliadis
 
