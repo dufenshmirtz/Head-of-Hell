@@ -29,6 +29,7 @@ public class Chiback : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Heavy");
         animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
     }
@@ -40,6 +41,8 @@ public class Chiback : Character
         if (hitEnemy != null)
         {
             audioManager.PlaySFX(audioManager.katanaHit, 1.8f);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
             enemy.TakeDamage(heavyDamage, true);
             print("check: yes "+enemy);
 
@@ -50,6 +53,7 @@ public class Chiback : Character
         }
         else
         {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Heavy);
             audioManager.PlaySFX(audioManager.swoosh, 1f);
             print("check: noenemy"+enemy);
         }
@@ -59,6 +63,7 @@ public class Chiback : Character
     #region Spell
     override public void Spell()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Special");
         animator.SetTrigger("Spell");
         UsingAbility(cooldown);
         audioManager.PlaySFX(audioManager.sytheDash, audioManager.normalVol);
@@ -69,6 +74,9 @@ public class Chiback : Character
     private IEnumerator ScytheJump()
     {
         IgnoreUpdate(true);
+
+        // Telemetry: track whether the special actually landed (for Miss logging)
+        bool landed = false;
 
         // Calculate the movement direction (keyboard always, controller only if controller == true)
         float moveDirection = input.GetKey(left) ? -1f : (input.GetKey(right) ? 1f : (controller ? input.GetAxis("Horizontal" + playerString) : 0f));
@@ -106,19 +114,28 @@ public class Chiback : Character
                 audioManager.PlaySFX(audioManager.sytheHit, 1f);
                 audioManager.PlaySFX(audioManager.sytheSlash, 1f);
 
+                // Telemetry: HitAttempt + context (Special / Spell)
+                TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
+                enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
+                landed = true;
+
                 // Apply damage based on elapsed time during the jump
                 if (elapsedTime < 0.33f)
                 {
+                    // Telemetry: ensure context is set right before TakeDamage
+                    enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
                     enemy.TakeDamage(shortJumpDamage, true);
                     Enraged(shortJumpDamage);
                 }
                 else if (elapsedTime < 0.66f)
                 {
+                    enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
                     enemy.TakeDamage(MedJumpDamage, true);
                     Enraged(MedJumpDamage);
                 }
                 else
                 {
+                    enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
                     enemy.TakeDamage(wideJumpDamage, true);
                     Enraged(wideJumpDamage);
                 }
@@ -141,17 +158,23 @@ public class Chiback : Character
             yield return null;
         }
 
+        // Telemetry: if the special ended without landing, log Miss
+        if (!landed)
+        {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Special);
+        }
+
         IgnoreUpdate(false);
         OnCooldown(cooldown);
         ignoreDamage = false;
     }
-
     #endregion
 
     #region LightAttack
     public override void LightAttack()
     {
-        if(fireReady)
+        TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
+        if (fireReady)
         {
             QuickAttackIndicatorDisable();
             animator.SetTrigger("QuickAttack");
@@ -169,6 +192,8 @@ public class Chiback : Character
         if (hitEnemy != null || hitEnemy2!=null)
         {
             audioManager.PlaySFX(audioManager.lightattack, 0.5f);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
             enemy.TakeDamage(5, true);
             if(!enemy.counterIsOn){
                 enemy.BreakCharge();
@@ -183,6 +208,7 @@ public class Chiback : Character
         }
         else
         {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Quick);
             audioManager.PlaySFX(audioManager.swoosh, 1f);
         }
     }

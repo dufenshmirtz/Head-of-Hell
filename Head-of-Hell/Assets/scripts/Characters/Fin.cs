@@ -26,6 +26,7 @@ public class Fin : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Heavy");
         animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.incense, audioManager.doubleVol);
     }
@@ -37,6 +38,8 @@ public class Fin : Character
         if (hitEnemy != null)
         {
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
             enemy.TakeDamage(heavyDamage, true);
 
             if (! enemy.isBlocking)
@@ -46,6 +49,7 @@ public class Fin : Character
         }
         else
         {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Heavy);
             audioManager.PlaySFX(audioManager.swoosh, 1f);
         }
 
@@ -55,6 +59,7 @@ public class Fin : Character
     #region Spell
     public override void Spell()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Special");
         attackRange += 0.5f;
         audioManager.PlaySFX(audioManager.kalhaflash, 2f);
         animator.SetTrigger("Spell");
@@ -63,24 +68,29 @@ public class Fin : Character
 
     public void FlashingPriest()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
         {
+            // Telemetry: successful special interaction (no damage, but still a "hit")
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
+
             enemy.StopPunching();
             enemy.BreakCharge();
             enemy.Stun(flashStunDuration);
         }
         else
         {
+            // Telemetry: special whiff (no target found)
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Special);
+
             //audioManager.PlaySFX(audioManager.stab, audioManager.swooshVolume);
         }
-        attackRange =  ogRange;
+
+        attackRange = ogRange;
         OnCooldown(cooldown);
         ignoreDamage = false;
     }
-
-
     #endregion
 
     #region LightAttack
@@ -88,6 +98,7 @@ public class Fin : Character
     {
         if (rollReady)
         {
+            
             QuickAttackIndicatorDisable();
             rollReady = false;
             StartCoroutine(Roll());
@@ -96,6 +107,7 @@ public class Fin : Character
 
     IEnumerator Roll()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
         IgnoreMovement(true);
         ignoreDamage = true;
         knockable = false;

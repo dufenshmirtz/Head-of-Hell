@@ -31,6 +31,7 @@ public class Lithra : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Heavy");
         animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
     }
@@ -43,6 +44,8 @@ public class Lithra : Character
         {
             audioManager.PlaySFX(audioManager.bellPunch, 1.8f);
             audioManager.PlaySFX(audioManager.lightattack, 0.5f);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
             enemy.TakeDamage(heavyDamage, true);
             LuckyBell();
             if (! enemy.isBlocking)
@@ -52,6 +55,7 @@ public class Lithra : Character
         }
         else
         {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Heavy);
             audioManager.PlaySFX(audioManager.swoosh, 1f);
         }
     }
@@ -60,6 +64,7 @@ public class Lithra : Character
     #region Spell
     override public void Spell()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Special");
         animator.SetTrigger("Spell");
         UsingAbility(cooldown);
         ignoreDamage = true;
@@ -68,15 +73,19 @@ public class Lithra : Character
 
     public void DealBellDmg()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( bellPoint.position,  attackRange*2,  enemyLayer);
-        Collider2D bellStunPoint = Physics2D.OverlapCircle(bellStunPointTransf.position,  attackRange / 3,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(bellPoint.position, attackRange * 2, enemyLayer);
+        Collider2D bellStunPoint = Physics2D.OverlapCircle(bellStunPointTransf.position, attackRange / 3, enemyLayer);
 
-        if (hitEnemy != null || bellStunPoint!=null)
+        if (hitEnemy != null || bellStunPoint != null)
         {
+            // Telemetry: successful special interaction + context for damage
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
+
             enemy.StopPunching();
             enemy.BreakCharge();
             enemy.TakeDamage(bellDamage, true);
-            
+
             if (bellStunPoint != null)
             {
                 enemy.Stun(0.8f);
@@ -86,14 +95,16 @@ public class Lithra : Character
         }
         else
         {
+            // Telemetry: special whiff
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Special);
+
             audioManager.PlaySFX(audioManager.bellPunch, audioManager.swooshVolume);
         }
 
-         attackRange =  ogRange;
+        attackRange = ogRange;
 
-         OnCooldown(cooldown);
+        OnCooldown(cooldown);
         ignoreDamage = false;
-
     }
     #endregion
 
@@ -103,6 +114,7 @@ public class Lithra : Character
         // Check if air spin is ready and the player is moving either left or right (controller or keyboard)
         if (airSpinready && (input.GetKey(left) || input.GetKey(right) || (controller && input.GetAxis("Horizontal" + playerString) != 0)))
         {
+            TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
             QuickAttackIndicatorDisable();
             StartCoroutine(PerformLightAttack());
         }
@@ -142,9 +154,13 @@ public class Lithra : Character
 
         // Duration of the attack
         float elapsedTime = 0f;
-
+        bool landed = false;
         while (elapsedTime < lightAttackDuration)
         {
+            if (!landed)
+            {
+                TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Quick);
+            }
             // Perform the air spin movement
             // transform.Translate(Vector2.right * moveDirection * airSpinSpeed * Time.deltaTime);
 
@@ -152,6 +168,9 @@ public class Lithra : Character
             Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
             if (hitEnemy != null)
             {
+                TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
+                enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
+                landed = true;
                 audioManager.PlaySFX(audioManager.bellDashHit, 1f);
                 enemy.TakeDamage(airSpinDamage, true);
                 enemy.Stun(0.5f);
