@@ -39,6 +39,7 @@ public class Vander : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Heavy");
         animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
     }
@@ -51,6 +52,8 @@ public class Vander : Character
         {
 
             audioManager.PlaySFX(audioManager.katanaHit, 1f);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
             enemy.TakeDamage(heavyDamage, true);
             Lifesteal(smallLifesteal);
             if (!enemy.isBlocking)
@@ -61,6 +64,7 @@ public class Vander : Character
         }
         else
         {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Heavy);
             audioManager.PlaySFX(audioManager.katanaSwoosh, 1f);
         }
 
@@ -70,6 +74,7 @@ public class Vander : Character
     #region Spell
     override public void Spell()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Special");
         attackRange += 0.5f;
         animator.SetTrigger("Spell");
         UsingAbility(cooldown);
@@ -82,15 +87,23 @@ public class Vander : Character
 
         if (hitEnemy != null)
         {
+            // Telemetry: successful special hit + context before damage
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
+
             enemy.StopPunching();
             enemy.BreakCharge();
             enemy.TakeDamage(stabDamage, true);
+
             Lifesteal(stabHeal);
             healthbar.SetHealth(currHealth);
             audioManager.PlaySFX(audioManager.stabHit, audioManager.doubleVol);
         }
         else
         {
+            // Telemetry: special whiff
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Special);
+
             audioManager.PlaySFX(audioManager.stab, audioManager.swooshVolume);
         }
 
@@ -98,7 +111,6 @@ public class Vander : Character
 
         OnCooldown(cooldown);
         ignoreDamage = false;
-
     }
     #endregion
 
@@ -107,6 +119,7 @@ public class Vander : Character
     {
         if (katanaready)
         {
+            TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
             QuickAttackIndicatorDisable();
             animator.SetTrigger("QuickAttack");
             katanaready = false;
@@ -120,11 +133,14 @@ public class Vander : Character
 
         if (hitEnemy != null)
         {
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
             enemy.TakeDamage(katanaDmg, true);
             audioManager.PlaySFX(audioManager.katanaHit, audioManager.lightAttackVolume);
         }
         else
         {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Quick);
             audioManager.PlaySFX(audioManager.katanaSwoosh, audioManager.swooshVolume);
         }
 

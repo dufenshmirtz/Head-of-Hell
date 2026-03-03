@@ -13,8 +13,32 @@ using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 using static Unity.Collections.AllocatorManager;
 
+public enum MoveType
+{
+    Quick,
+    Heavy,
+    Special,
+    Charge,
+    Projectile,
+    ParryCounter,
+    PoisonTick
+}
+public enum SourceType
+{
+    Melee,
+    Spell,
+    Projectile,
+    Dot,
+    Parry
+}
 public abstract class Character : MonoBehaviour
 {
+    public string PlayerId => playerNum == 1 ? "P1" : "P2";
+    public bool CanDropPlatform => isonpad > 0;
+    protected string incomingAttackerId;
+    protected MoveType incomingMoveType;
+    protected SourceType incomingSourceType;
+    
     protected Character enemy;
     protected Animator animator;
     protected AudioManager audioManager;
@@ -180,7 +204,12 @@ public abstract class Character : MonoBehaviour
 
     protected float originalGravityScale;
 
-
+    public void SetIncomingDamageContext(string attackerId, MoveType moveType, SourceType sourceType)
+    {
+        incomingAttackerId = attackerId;
+        incomingMoveType = moveType;
+        incomingSourceType = sourceType;
+    }
     #region Base
     public virtual void Start()
     {
@@ -271,6 +300,7 @@ public abstract class Character : MonoBehaviour
         robberyCountIndicator.gameObject.SetActive(false);
 
     }
+
 
     public void InitializeCharacter()
     {
@@ -528,7 +558,8 @@ public abstract class Character : MonoBehaviour
         if (input.GetKeyDown(down) || (controller && input.GetAxis("Vertical" + playerString) < -0.5f))
         {
             Collider2D[] colliders = GetComponents<Collider2D>();
-
+            if (CanDropPlatform)
+                TelemetryManager.Instance?.LogAction(PlayerId, "DropPlatform");
             colliders[3].enabled = false;
         }
 
@@ -838,6 +869,7 @@ public abstract class Character : MonoBehaviour
 
     #region ChargeAttack
     public virtual void ChargeAttack() {
+        TelemetryManager.Instance?.LogAction(PlayerId, "ChargeStart");
         knockable = false;
         charging = true;
         animator.SetBool("Charging", true);
@@ -869,6 +901,7 @@ public abstract class Character : MonoBehaviour
 
     public virtual void DealChargeDmg()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "ChargeRelease");
         Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
@@ -877,6 +910,8 @@ public abstract class Character : MonoBehaviour
             if (!enemy.counterIsOn) {
                 enemy.BreakCharge();
             }
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Charge);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Charge, SourceType.Melee);
             enemy.TakeDamage(chargeDmg, false);
             enemy.Knockback(13f, 0.4f, false);
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
@@ -893,6 +928,7 @@ public abstract class Character : MonoBehaviour
             }
             else
             {
+                TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Charge);
                 audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
             }
 
@@ -965,10 +1001,12 @@ public abstract class Character : MonoBehaviour
     #region Block
     public void Block()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "BlockStart");
         if (blockDisabled)
         {
             return;
         }
+
         animator.SetTrigger("critsi");
         animator.SetBool("Crouch", true);
         PlayerBlock(true);
@@ -977,6 +1015,7 @@ public abstract class Character : MonoBehaviour
     }
     public void Unblock()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "BlockEnd");
         animator.SetBool("cWalk", false);
         animator.SetBool("Crouch", false);
         isBlocking = false;
@@ -999,6 +1038,7 @@ public abstract class Character : MonoBehaviour
     #region General
     public void Jump()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Jump");
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         animator.SetBool("Jump", true);
         if (characterJump != null)
@@ -1048,6 +1088,7 @@ public abstract class Character : MonoBehaviour
     }
 
     void Parry() {
+        TelemetryManager.Instance?.LogAction(PlayerId, "ParryAttempt");
         counterIsOn = true;
         safety = true;
         canParry = false;
@@ -1200,11 +1241,14 @@ public abstract class Character : MonoBehaviour
             }
         }
 
+        // Invulnerability / i-frames (e.g., roll)
         if (ignoreDamage)
         {
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                0, false, true);
             return;
         }
-
 
         if (dmg == chargeDmg)
         {
@@ -1226,10 +1270,11 @@ public abstract class Character : MonoBehaviour
                 TakeDamageNoAnimation(dmg, blockable);
                 return;
             }
-
         }
 
         ResetQuickPunch();
+
+        int hpBefore = currHealth;
 
         if (isBlocking && blockable)
         {
@@ -1263,6 +1308,12 @@ public abstract class Character : MonoBehaviour
             {
                 damageShield = false;
                 shield.gameObject.SetActive(false);
+
+                // Optional: treat shield as "negated" (0 damage). If you DON'T want this log, remove these lines.
+                TelemetryManager.Instance?.LogDamageApplied(
+                    incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                    0, false, true);
+
                 return;
             }
             currHealth -= dmg;
@@ -1274,6 +1325,22 @@ public abstract class Character : MonoBehaviour
             StartCoroutine(TriggerDamageCounter(dmg));
 
             Debug.Log("Took " + dmg + " damage.");
+        }
+
+        int actualDamage = hpBefore - currHealth;
+
+        if (actualDamage > 0)
+        {
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                actualDamage, (isBlocking && blockable), false);
+        }
+        else if (isBlocking && blockable)
+        {
+            // blocked 0 damage (important for defense metrics)
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                0, true, false);
         }
 
         if (currHealth <= 0)
@@ -1359,11 +1426,16 @@ public abstract class Character : MonoBehaviour
             }
         }
 
-
+        // Invulnerability / i-frames (e.g., roll)
         if (ignoreDamage)
         {
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                0, false, true);
             return;
         }
+
+        int hpBefore = currHealth;
 
         if (isBlocking && blockable)
         {
@@ -1371,6 +1443,7 @@ public abstract class Character : MonoBehaviour
             {
                 audioManager.PlaySFX(blockSound, audioManager.normalVol);
             }
+            // No HP change here (blocked)
         }
         else
         {
@@ -1378,8 +1451,15 @@ public abstract class Character : MonoBehaviour
             {
                 damageShield = false;
                 shield.gameObject.SetActive(false);
+
+                // Optional: treat shield as "negated" (0 damage). If you DON'T want this log, remove these lines.
+                TelemetryManager.Instance?.LogDamageApplied(
+                    incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                    0, false, true);
+
                 return;
             }
+
             currHealth -= dmg;
 
             healthbar.SetHealth(currHealth);
@@ -1387,6 +1467,23 @@ public abstract class Character : MonoBehaviour
             StartCoroutine(TriggerDamageCounter(dmg));
 
             Debug.Log("Took " + dmg + " damage.");
+        }
+
+        int actualDamage = hpBefore - currHealth;
+
+        // Log outcome (only if something meaningful happened)
+        if (actualDamage > 0)
+        {
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                actualDamage, (isBlocking && blockable), false);
+        }
+        else if (isBlocking && blockable)
+        {
+            // blocked 0 damage (important for defense metrics)
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                0, true, false);
         }
 
         if (currHealth <= 0)

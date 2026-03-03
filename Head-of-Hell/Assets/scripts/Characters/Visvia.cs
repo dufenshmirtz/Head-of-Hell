@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Visvia : Character
 {
-
+    private bool grabLandedThisCast = false;
     bool shotgunReady = true;
     float shotgunForce = 15f;
     float upwardsForce = 6f;
@@ -40,6 +40,7 @@ public class Visvia : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Heavy");
         animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
     }
@@ -52,6 +53,8 @@ public class Visvia : Character
         {
 
             audioManager.PlaySFX(audioManager.katanaHit, 1f);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
             enemy.TakeDamage(heavyDamage, true);
             if (! enemy.isBlocking)
             {
@@ -61,6 +64,7 @@ public class Visvia : Character
         }
         else
         {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Heavy);
             audioManager.PlaySFX(audioManager.katanaSwoosh, 1f);
         }
 
@@ -70,6 +74,11 @@ public class Visvia : Character
     #region Spell
     override public void Spell()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Special");
+
+        // Telemetry: reset per-cast landing state (for Miss logging + avoid double HitAttempt)
+        grabLandedThisCast = false;
+
         animator.SetTrigger("Spell");
         blastCounter++;
         StartCoroutine(HeatCounter());
@@ -84,6 +93,16 @@ public class Visvia : Character
 
         if (hitEnemy != null)
         {
+            // Telemetry: log HitAttempt only once per cast (first time we connect)
+            if (!grabLandedThisCast)
+            {
+                TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
+                grabLandedThisCast = true;
+            }
+
+            // Telemetry: context before damage
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
+
             audioManager.PlaySFX(audioManager.stabHit, 2f);
             enemy.StopPunching();
             enemy.TakeDamage(grabDamage, true);
@@ -96,7 +115,6 @@ public class Visvia : Character
         }
     }
 
-
     public void GrabStartDmg()
     {
         Vector2 capsuleSize = new Vector2(7f, 0.5f); // Long in X-axis, thin in Y-axis
@@ -104,11 +122,20 @@ public class Visvia : Character
 
         if (hitEnemy != null)
         {
+            // Telemetry: log HitAttempt only once per cast (first time we connect)
+            if (!grabLandedThisCast)
+            {
+                TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
+                grabLandedThisCast = true;
+            }
+
+            // Telemetry: context before damage
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
+
             enemy.StopPunching();
             enemy.TakeDamage(grabDamage, true);
             enemy.BreakCharge();
             audioManager.PlaySFX(audioManager.katanaSwoosh, 2f);
-
         }
         else
         {
@@ -116,14 +143,19 @@ public class Visvia : Character
         }
     }
 
-    IEnumerator GrabEnd(){
+    IEnumerator GrabEnd()
+    {
         yield return new WaitForSeconds(0.59f);
+
+        // Telemetry: if neither damage frame connected, count as a miss
+        if (!grabLandedThisCast)
+        {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Special);
+        }
+
         OnCooldown(cooldown);
         OverheatCheck();
     }
-
-    
-
     #endregion
 
     #region LightAttack
@@ -131,6 +163,7 @@ public class Visvia : Character
     {
         if (shotgunReady)
         {
+            TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
             blastCounter++;
             shotgunReady = false;
             QuickAttackIndicatorDisable();
@@ -161,10 +194,17 @@ public class Visvia : Character
         
         if (hit != null)
         {
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
             enemy.TakeDamage(shotgunDamage, true);
             if (!enemy.isBlocking)
             {
                 enemy.Knockback(10f, 0.2f, true);
+            }
+            else
+            {
+                TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
+                enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
             }
         }
         //Unlock Rotation
