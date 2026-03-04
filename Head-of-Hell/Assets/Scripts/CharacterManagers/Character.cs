@@ -182,6 +182,12 @@ public abstract class Character : MonoBehaviour
 
     protected float originalGravityScale;
 
+    private bool debugControllers = false;
+
+    // --- Episode spawn ---
+    private Vector3 _spawnPos;
+    public void SetSpawnPosition(Vector3 pos) => _spawnPos = pos;
+
 
     #region Base
     public virtual void Start()
@@ -256,11 +262,11 @@ public abstract class Character : MonoBehaviour
 
         cooldownSlider.maxValue = 1f;
 
-        spawn = this.transform;
+        _spawnPos = transform.position;
 
         originalGravityScale = rb.gravityScale;
+        print(_spawnPos);
 
-        print(spawn.position);
 
         //Disable Indicators
         shield.gameObject.SetActive(false);
@@ -438,17 +444,21 @@ public abstract class Character : MonoBehaviour
             return;
         }
 
-        for (int i = 1; i <= 4; i++)
+        #if UNITY_EDITOR
+        if (debugControllers)
         {
-            // Check if any button on joystick i was pressed
-            for (int button = 0; button <= 19; button++) // Joystick buttons range from 0 to 19
+            for (int i = 1; i <= 4; i++)
             {
-                if (Input.GetKeyDown("joystick " + i + " button " + button))
+                for (int button = 0; button <= 19; button++)
                 {
-                    Debug.Log("Joystick " + i + " Button " + button + " is pressed");
+                    if (Input.GetKeyDown("joystick " + i + " button " + button))
+                    {
+                        Debug.Log("Joystick " + i + " Button " + button + " is pressed");
+                    }
                 }
             }
         }
+        #endif
 
         float moveDirection = input.GetAxis("Horizontal" + playerString);
         // Running animations...
@@ -741,17 +751,17 @@ public abstract class Character : MonoBehaviour
 
     public IEnumerator AbilityCooldown(float duration)
     {
+    // cdTimer already set in OnCooldown()
+    while (cdTimer > 0f)
+    {
+        cdTimer -= Time.deltaTime;
+        UpdateCooldownSlider(duration);
+        yield return null; // next frame
+    }
 
-        while (cdTimer > 0)
-        {
-            yield return new WaitForSeconds(1f);
-            cdTimer -= 1f;
-            UpdateCooldownSlider(duration); // Update the cooldown slider every second
-        }
-
-        // Reset the cooldown flag
-        onCooldown = false;
-        cdTimer = 0f;
+    onCooldown = false;
+    cdTimer = 0f;
+    UpdateCooldownSlider(duration);
     }
 
     void UpdateCooldownSlider(float duration)
@@ -1720,7 +1730,7 @@ public abstract class Character : MonoBehaviour
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         rb.velocity = Vector2.zero;
         rb.angularVelocity = 0f;
-        transform.position = spawn ? spawn.position : transform.position;
+        transform.position = _spawnPos;
         rb.gravityScale = originalGravityScale;
 
         // Core flags
@@ -1749,6 +1759,8 @@ public abstract class Character : MonoBehaviour
         damageShield = false;
 
         // Cooldowns / UI bits
+        // Stop any running coroutines that control timing (prevents “ghost timers”)
+        StopAllCoroutines();
         onCooldown = false;
         cdTimer = 0f;
         cooldownSlider?.SetValueWithoutNotify(0f);
@@ -1781,7 +1793,46 @@ public abstract class Character : MonoBehaviour
 
         ActivateColliders();
         stayDynamic();
-        print("[wdreset]");
+        print("[wdreset]"+playerNum);
+    }
+
+    public virtual void ResetForEpisode2()
+    {
+        // Position & physics
+        if (rb == null) rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = 1.8f;
+        if (playerNum == 1)
+        {
+            transform.position=new Vector3(-7.3f,-2.77f,0f);
+            print("(*)ass");
+        }
+        else
+        {
+            transform.position=new Vector3(7.4f,-2.77f,0f);
+            print("(*)ass2");
+        }
+        
+
+        if (animator == null) animator = GetComponent<Animator>();
+        animator.SetBool("isDead", false);
+        animator.ResetTrigger("tookDmg");
+        animator.ResetTrigger("ChargedHit");
+        animator.SetBool("Charging", false);
+        animator.SetBool("Casting", false);
+        animator.SetBool("IsRunning", false);
+        animator.SetBool("Crouch", false);
+        //animator.SetBool("Jump", false);
+        //animator.SetBool("isGrounded", true);
+
+        // Core flags
+        ignoreUpdate = false;
+        isBlocking = false;
+        casting = false;
+        stunned = false;
+        knocked = false;
+        knockable = true;
+        justTeleported = false;
+        ActivateColliders();
     }
 
     #endregion
