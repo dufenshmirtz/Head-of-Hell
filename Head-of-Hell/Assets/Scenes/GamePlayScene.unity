@@ -329,6 +329,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -346,6 +347,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   fallBrakePerSec: 20
@@ -4257,6 +4259,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -4274,6 +4277,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   mirrorFireAttackPoint: {fileID: 689308824}
@@ -4884,6 +4888,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -4901,6 +4906,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   skiplerPoint: {fileID: 0}
@@ -7167,6 +7173,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -7184,6 +7191,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
@@ -9179,6 +9187,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -9196,6 +9205,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   fallBrakePerSec: 20
@@ -10091,6 +10101,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -10108,6 +10119,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   airSpinSpeed: 5
@@ -11874,6 +11886,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -11891,6 +11904,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
@@ -13543,6 +13557,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -13560,6 +13575,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   skiplerPoint: {fileID: 0}
@@ -14492,6 +14508,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -14509,6 +14526,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
@@ -16834,6 +16852,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -16851,6 +16870,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   airSpinSpeed: 5
@@ -19602,6 +19622,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -19619,6 +19640,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
@@ -22742,6 +22764,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -22759,6 +22782,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
 --- !u!1001 &882995806
@@ -23096,6 +23120,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -23113,6 +23138,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   fallBrakePerSec: 20
@@ -26466,6 +26492,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -26483,6 +26510,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
 --- !u!1 &1020480611
@@ -29144,6 +29172,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -29161,6 +29190,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
 --- !u!1 &1169185177
@@ -29369,6 +29399,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -29386,6 +29417,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
 --- !u!1 &1185634414
@@ -30185,6 +30217,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -30202,6 +30235,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   fallBrakePerSec: 20
@@ -30983,6 +31017,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -31000,6 +31035,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
 --- !u!114 &1228552612
@@ -31288,6 +31324,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -31305,6 +31342,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   airSpinSpeed: 5
@@ -31748,6 +31786,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -31765,6 +31804,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   airSpinSpeed: 5
@@ -32640,6 +32680,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -32657,6 +32698,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   mirrorFireAttackPoint: {fileID: 1079567584}
@@ -33174,6 +33216,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -33191,6 +33234,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
@@ -35137,6 +35181,55 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1401103370
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1401103372}
+  - component: {fileID: 1401103373}
+  m_Layer: 0
+  m_Name: TelemetryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1401103372
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1401103370}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1401103373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1401103370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1e4c04af9bfe1f4ba3c3bb043546173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableTelemetry: 1
+  debugToConsole: 0
+  prettyPrintJson: 1
+  autoStartOnFirstEvent: 1
+  autoSaveOnQuit: 1
 --- !u!1 &1409518961
 GameObject:
   m_ObjectHideFlags: 0
@@ -36398,6 +36491,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -36415,6 +36509,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
 --- !u!114 &1478511390
@@ -37767,6 +37862,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -37784,6 +37880,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   mirrorFireAttackPoint: {fileID: 79255834}
@@ -39556,6 +39653,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -39573,6 +39671,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
@@ -40032,6 +40131,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -40049,6 +40149,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
@@ -42295,6 +42396,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -42312,6 +42414,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
@@ -43785,6 +43888,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -43802,6 +43906,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
 --- !u!114 &1753174034
@@ -47223,6 +47328,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -47240,6 +47346,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   skiplerPoint: {fileID: 0}
@@ -48069,6 +48176,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -48086,6 +48194,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   mirrorFireAttackPoint: {fileID: 1584761535}
@@ -48657,6 +48766,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -48674,6 +48784,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
   skiplerPoint: {fileID: 0}
@@ -51320,6 +51431,7 @@ MonoBehaviour:
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
+  maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
   ignoreUpdate: 0
@@ -51337,6 +51449,7 @@ MonoBehaviour:
   chargeDisable: 0
   counterIsOn: 0
   overrideDeath: 0
+  chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
@@ -51356,3 +51469,4 @@ SceneRoots:
   - {fileID: 832730748}
   - {fileID: 75958759}
   - {fileID: 1020480613}
+  - {fileID: 1401103372}
