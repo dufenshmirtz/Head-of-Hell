@@ -28,6 +28,8 @@ public class BulletScript : MonoBehaviour
             Character character = other.GetComponent<Character>();
             if (character != null)
             {
+                TelemetryManager.Instance?.LogHitAttempt(initiator.PlayerId, character.PlayerId, MoveType.Projectile);
+                character.SetIncomingDamageContext(initiator.PlayerId, MoveType.Projectile, SourceType.Projectile);
                 character.TakeDamage(3, true);
                 initiator.StackPoison();
             }
