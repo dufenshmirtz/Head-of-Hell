@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CharacterAnimationEvents : MonoBehaviour
 {
-    Character character;
+    [SerializeField] private Character character;
     Skipler skipler;
     Rager rager;
     Fin fin;
@@ -265,5 +265,10 @@ public class CharacterAnimationEvents : MonoBehaviour
     {
         visvia = (Visvia)character;
         visvia.GrabStartDmg();
+    }
+
+    public void SetCharacter(Character c)
+    {
+        character = c;
     }
 }

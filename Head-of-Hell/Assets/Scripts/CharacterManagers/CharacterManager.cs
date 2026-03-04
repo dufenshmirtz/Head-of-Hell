@@ -65,6 +65,10 @@ public class CharacterManager : MonoBehaviour
     public event Action<Character> OnCharacterReady;    // fired once after Awake creates the initial character
     public event Action<Character> OnCharacterChanged;  // fired on ChangeCharacter()
 
+    public bool training = false;
+
+    private CharacterAnimationEvents animEvents;
+
     void Awake()
     {
         // Fetch player character choices
@@ -77,6 +81,11 @@ public class CharacterManager : MonoBehaviour
             characterName = PlayerPrefs.GetString("Player2Choice");
         }
 
+        if (training)
+        {
+            characterName = "Random";
+        }
+
         // Handle "Random" selections
         if (characterName == "Random")
         {
@@ -85,7 +94,10 @@ public class CharacterManager : MonoBehaviour
 
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
-
+        animEvents = GetComponent<CharacterAnimationEvents>();
+        if (animEvents == null)
+            Debug.LogError($"[{name}] Missing CharacterAnimationEvents component!");
+            
 
         // Assign character, color, and animator controller based on selection
         switch (characterName)
@@ -318,6 +330,130 @@ public class CharacterManager : MonoBehaviour
         OnCharacterChanged?.Invoke(character); // <-- tell listeners we swapped
     }
 
+    public void ChangeCharacterTraining(String name)
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        // Assign character, color, and animator controller based on selection
+        switch (name)
+        {
+            case "Steelager":
+                steelager = this.gameObject.AddComponent<Steelager>();
+                character = steelager;
+                character.characterID = (int)CharacterType.Steelager;
+                spriteRenderer.color = SteelagerColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = SteelagerAnimatorController;
+                break;
+            case "Vander":
+                vander = this.gameObject.AddComponent<Vander>();
+                character = vander;
+                character.characterID = (int)CharacterType.Vander;
+                spriteRenderer.color = VanderColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = VanderAnimatorController;
+                break;
+            case "Rager":
+                rager = this.gameObject.AddComponent<Rager>();
+                character = rager;
+                character.characterID = (int)CharacterType.Rager;
+                spriteRenderer.color = RagerColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = RagerAnimatorController;
+                break;
+            case "Skipler":
+                skipler = this.gameObject.AddComponent<Skipler>();
+                character = skipler;
+                character.characterID = (int)CharacterType.Skipler;
+                spriteRenderer.color = SkiplerColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = SkiplerAnimatorController;
+                break;
+            case "Fin":
+                fin = this.gameObject.AddComponent<Fin>();
+                character = fin;
+                character.characterID = (int)CharacterType.Fin;
+                spriteRenderer.color = FinColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = FinAnimatorController;
+                break;
+            case "Lazy Bigus":
+                bigus = this.gameObject.AddComponent<LazyBigus>();
+                character = bigus;
+                character.characterID = (int)CharacterType.LazyBigus;
+                spriteRenderer.color = LazyBigusColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = LazyBigusAnimatorController;
+                break;
+            case "Lithra":
+                lithra = this.gameObject.AddComponent<Lithra>();
+                character = lithra;
+                character.characterID = (int)CharacterType.Lithra;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = LithraAnimatorController;
+                break;
+            case "Chiback":
+                chiback = this.gameObject.AddComponent<Chiback>();
+                character = chiback;
+                character.characterID = (int)CharacterType.Chiback;
+                spriteRenderer.color = ChibackColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = ChibackAnimatorController;
+                break;
+            case "Lupen":
+                lupen = this.gameObject.AddComponent<Lupen>();
+                character = lupen;
+                character.characterID = (int)CharacterType.Lupen;
+                spriteRenderer.color = LupenColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = LupenAnimatorController;
+                break;
+            case "Visvia":
+                visvia = this.gameObject.AddComponent<Visvia>();
+                character = visvia;
+                character.characterID = (int)CharacterType.Visvia;
+                spriteRenderer.color = LupenColor;
+                animator = GetComponent<Animator>();
+                animator.runtimeAnimatorController = VisviaAnimatorController;
+                break;
+        }
+
+        OnCharacterReady?.Invoke(character);  // <-- tell listeners initial character exists
+
+        animEvents.SetCharacter(character);
+    }
+
     // Small helper so others don’t need to know about CharacterChoice(1)
     public Character GetCurrentCharacter() => character;
+
+    public IEnumerator RerollRandomCharacter_TrainingOnly_Co()
+    {
+        if (!training) yield break;
+
+        // 1) διάλεξε νέο
+        string name = PickRandomCharacter();
+        int guard = 20;
+        while (name == characterName && guard-- > 0)
+            name = PickRandomCharacter();
+
+        // 2) “κλείδωσε” τον παλιό για να μην τρέχει άλλο
+        // if (character != null)
+        // {
+        //     character.ignoreUpdate = true;
+        //     character.DeactivateColliders();
+        // }
+
+        // 3) καταστροφή παλιού component
+        if (character != null)
+        {
+            Destroy(character);
+            character = null;
+        }
+
+        // 4) περίμενε να ολοκληρωθεί το Destroy end-of-frame
+        yield return new WaitForEndOfFrame();
+
+        // 5) φτιάξε νέο character component
+        ChangeCharacterTraining(name); // αυτό κάνει AddComponent + set runtime controller + OnCharacterChanged
+
+    }
 }

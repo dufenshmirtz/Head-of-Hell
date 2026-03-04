@@ -74,9 +74,14 @@ public class GameManager : MonoBehaviour
 
         if(chanChan)
         {
-            maxHealth = Random.Range(100, 201);
+            //maxHealth = Random.Range(100, 201);
             portalNumber = Random.Range(0, 5);
             print("..; " + portalNumber);
+        }
+
+        if (trainingMode)
+        {
+            portalNumber=0;
         }
 
         switch (portalNumber)
@@ -123,7 +128,6 @@ public class GameManager : MonoBehaviour
     {
         if (trainingMode)//training
         {
-            ShortWins(playerNum, winnerName); // keep your stat logic if you want
             SoftResetRound(playerNum);
             return;
         }
@@ -169,7 +173,6 @@ public class GameManager : MonoBehaviour
     {
         if (trainingMode)
         {
-            ShortWins(playerNum, winnerName);
             SoftResetRound(playerNum);
             return;
         }
@@ -366,35 +369,55 @@ public class GameManager : MonoBehaviour
     // Training
     public void SoftResetRound(int winnerPlayerNum = 0)
     {
-        // End episodes (if training)
-        if (trainingMode)
-        {
-            if (agentP1) agentP1.EndEpisode();
-            if (agentP2) agentP2.EndEpisode();
-        }
+        print("(*)srr1");
+        StartCoroutine(SoftResetRound_Co());
+    }
 
-        // Hide victory UI
+    private IEnumerator SoftResetRound_Co()
+    {
+        // Hide UI
         winner.gameObject.SetActive(false);
         finalWinner.gameObject.SetActive(false);
         playAgainButton.SetActive(false);
         mainMenuButton.SetActive(false);
         saveReplayButton.SetActive(false);
 
-        // Reset state/flags you track
         tie = false;
         gameEnd = false;
-        // Do NOT change roundCounter/player wins here for training;
-        // the trainer needs shorter, frequent episodes.
-        // (In human play your existing logic still runs.)
 
-        // Reset both characters
-        var c1 = p1Manager.CharacterChoice(1);
-        var c2 = p2Manager.CharacterChoice(2);
-        if (c1) c1.ResetForEpisode();
-        if (c2) c2.ResetForEpisode();
+        if (trainingMode)
+        {
+            // 0) ΤΕΛΕΙΩΣΕ ΤΑ EPISODES ΠΡΩΤΑ
+            if (agentP1) agentP1.EndEpisode();
+            if (agentP2) agentP2.EndEpisode();
 
-        // Re-enable gameplay
+            // 1) περίμενε 1 frame να "καθαρίσει" animator/coroutines/destroy
+            yield return null;
+
+            // 2) Reroll (και περίμενε να τελειώσει)
+            if (p1Manager) yield return StartCoroutine(p1Manager.RerollRandomCharacter_TrainingOnly_Co());
+            if (p2Manager) yield return StartCoroutine(p2Manager.RerollRandomCharacter_TrainingOnly_Co());
+
+            // 3) rebind enemies (πρόσεχε τα σωστά refs)
+            var p1 = p1Manager ? p1Manager.GetCurrentCharacter() : null;
+            var p2 = p2Manager ? p2Manager.GetCurrentCharacter() : null;
+            if (p1 && p2) p1.ChangeEnemy(p2);
+            if (p2 && p1) p2.ChangeEnemy(p1);
+        }
+
+        // 2) Πάρε τους current χαρακτήρες (ΤΩΡΑ είναι οι σωστοί)
+        var c1 = p1Manager ? p1Manager.GetCurrentCharacter() : null;
+        var c2 = p2Manager ? p2Manager.GetCurrentCharacter() : null;
+
+        Debug.Log("(*) SoftReset");
+
+        // 3) Reset χαρακτήρων
+        if (c1) c1.ResetForEpisode2();
+        if (c2) c2.ResetForEpisode2();
+
+        // 4) Re-enable gameplay
         EnableGamePlay();
-    }
 
+        // 5) ΤΕΛΟΣ, τώρα κλείσε το episode (ώστε OnEpisodeBegin να δει καθαρό state)
+    }
 }

@@ -1,0 +1,47 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1772455655",
+        "python_version": "3.8.20 (default, Oct  3 2024, 15:19:54) [MSC v.1929 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\fchry\\anaconda3\\envs\\mlagents38\\Scripts\\mlagents-learn ML-Agents\\config\\hoh_selfplay.yaml --run-id=hoh_run590212",
+        "mlagents_version": "0.28.0",
+        "mlagents_envs_version": "0.28.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.4.1+cpu",
+        "numpy_version": "1.23.5",
+        "end_time_seconds": "1772455713"
+    },
+    "total": 58.299764100000004,
+    "count": 1,
+    "self": 0.029069800000002033,
+    "children": {
+        "run_training.setup": {
+            "total": 0.40062150000000063,
+            "count": 1,
+            "self": 0.40062150000000063
+        },
+        "TrainerController.start_learning": {
+            "total": 57.8700728,
+            "count": 1,
+            "self": 0.0013169000000061715,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 57.868733,
+                    "count": 1,
+                    "self": 57.868733
+                },
+                "trainer_threads": {
+                    "total": 1.900000000887303e-06,
+                    "count": 1,
+                    "self": 1.900000000887303e-06
+                },
+                "TrainerController._save_models": {
+                    "total": 2.099999999671809e-05,
+                    "count": 1,
+                    "self": 2.099999999671809e-05
+                }
+            }
+        }
+    }
+}

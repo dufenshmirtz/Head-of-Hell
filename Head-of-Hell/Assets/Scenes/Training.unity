@@ -1664,16 +1664,13 @@ PrefabInstance:
       addedObject: {fileID: 221568243}
     - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 221568216}
-    - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 221568215}
     - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 221568217}
+      addedObject: {fileID: 221568216}
     - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 221568218}
+      addedObject: {fileID: 221568217}
     - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: -1
       addedObject: {fileID: 221568230}
@@ -6098,6 +6095,7 @@ MonoBehaviour:
   VisviaAnimatorController: {fileID: 9100000, guid: 8349b7f4e453b9e4b966cd6122db6b70, type: 2}
   enemyHandler: {fileID: 1367423825}
   playerNum: 1
+  training: 1
 --- !u!4 &221568191 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
@@ -6164,13 +6162,16 @@ MonoBehaviour:
   stepPenalty: -0.0005
   buggedPenalty: -0.04
   staticPenalty: -0.01
-  totalCharacterCount: 10
-  rewardCloseToOpponent: 0.0008
-  penaltyFarFromOpponent: -0.0008
-  centerStageBonus: 0.0006
-  stageMin: {x: -9, y: -3}
-  stageMax: {x: 9, y: 5}
   engageDist: 3.5
+  dirReward: 0.002
+  dirPenalty: -0.002
+  farIdlePenalty: -0.0005
+  inRangeBonus: 0.001
+  farDistancePenaltyScale: -0.0003
+  relXScale: 9
+  relYScale: 5
+  velScale: 10
+  totalCharacterCount: 10
 --- !u!114 &221568216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6213,33 +6214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 5
+  DecisionPeriod: 1
   TakeActionsBetweenDecisions: 1
---- !u!114 &221568218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 221568178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a09c9c7404d8d54e9d78055e0134fd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  idleSpeedEps: 0.02
-  noChangeSeconds: 6
-  activeColorStuckSeconds: 5
-  arenaBounds: {fileID: 1100116392}
-  boundLeft: {fileID: 279847380}
-  boundRight: {fileID: 1727173186}
-  boundFloor: {fileID: 866361085}
-  boundCeiling: {fileID: 1786861228}
-  fallbackMin: {x: -9, y: -3}
-  fallbackMax: {x: 9, y: 5}
-  oobPadding: 0.25
-  oobGraceSeconds: 0.25
-  oobPenalty: -0.02
 --- !u!114 &221568230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27912,7 +27888,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 21.8, y: 12.07}
+  m_Size: {x: 20.73, y: 11.9}
   m_EdgeRadius: 0
 --- !u!4 &1100786215 stripped
 Transform:
@@ -34401,6 +34377,7 @@ MonoBehaviour:
   VisviaAnimatorController: {fileID: 9100000, guid: 8349b7f4e453b9e4b966cd6122db6b70, type: 2}
   enemyHandler: {fileID: 221568179}
   playerNum: 2
+  training: 1
 --- !u!4 &1367423837 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
@@ -34467,13 +34444,16 @@ MonoBehaviour:
   stepPenalty: -0.0005
   buggedPenalty: -0.04
   staticPenalty: -0.01
-  totalCharacterCount: 10
-  rewardCloseToOpponent: 0.0008
-  penaltyFarFromOpponent: -0.0008
-  centerStageBonus: 0.0006
-  stageMin: {x: -9, y: -3}
-  stageMax: {x: 9, y: 5}
   engageDist: 3.5
+  dirReward: 0.002
+  dirPenalty: -0.002
+  farIdlePenalty: -0.0005
+  inRangeBonus: 0.001
+  farDistancePenaltyScale: -0.0003
+  relXScale: 9
+  relYScale: 5
+  velScale: 10
+  totalCharacterCount: 10
 --- !u!114 &1367423862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34516,33 +34496,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 5
+  DecisionPeriod: 1
   TakeActionsBetweenDecisions: 1
---- !u!114 &1367423864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1367423824}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a09c9c7404d8d54e9d78055e0134fd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  idleSpeedEps: 0.02
-  noChangeSeconds: 6
-  activeColorStuckSeconds: 5
-  arenaBounds: {fileID: 1100116392}
-  boundLeft: {fileID: 279847380}
-  boundRight: {fileID: 1727173186}
-  boundFloor: {fileID: 866361085}
-  boundCeiling: {fileID: 1786861228}
-  fallbackMin: {x: -9, y: -3}
-  fallbackMax: {x: 9, y: 5}
-  oobPadding: 0.25
-  oobGraceSeconds: 0.25
-  oobPenalty: -0.02
 --- !u!114 &1367423876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36560,6 +36515,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf612604b37b6f4dbe2dac1d745614d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: 0}
 --- !u!70 &1478511393
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -41663,9 +41619,6 @@ PrefabInstance:
       addedObject: {fileID: 1367423863}
     - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1367423864}
-    - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1367423876}
   m_SourcePrefab: {fileID: 100100000, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
 --- !u!1 &1660255940
@@ -46340,7 +46293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1904178138
 Transform:
   m_ObjectHideFlags: 0
@@ -50813,6 +50766,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2144866981}
   - component: {fileID: 2144866982}
+  - component: {fileID: 2144866983}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -50876,6 +50830,35 @@ MonoBehaviour:
   agentP2: {fileID: 1367423861}
   p1Spawn: {fileID: 221568191}
   p2Spawn: {fileID: 1367423837}
+--- !u!114 &2144866983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144866980}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a09c9c7404d8d54e9d78055e0134fd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enable: 1
+  onlyWhenTrainingConnected: 1
+  gameManager: {fileID: 2144866982}
+  p1Manager: {fileID: 221568179}
+  p2Manager: {fileID: 1367423825}
+  agentP1: {fileID: 221568215}
+  agentP2: {fileID: 1367423861}
+  arenaBounds: {fileID: 1100116392}
+  oobPadding: 0.5
+  oobSeconds: 1
+  stallSecondsBoth: 10
+  stallSecondsSingle: 20
+  velEps: 0.05
+  posEps: 0.02
+  invalidStateSeconds: 10
+  episodeTimeoutSeconds: 500
+  useScaledTime: 1
 --- !u!1 &2147385444
 GameObject:
   m_ObjectHideFlags: 0
@@ -51252,6 +51235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf612604b37b6f4dbe2dac1d745614d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: 0}
 --- !u!50 &6993232257568019892
 Rigidbody2D:
   serializedVersion: 4

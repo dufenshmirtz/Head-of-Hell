@@ -73,7 +73,11 @@ public class AIInputProvider : IInputProvider
     public bool GetButtonUp(string name)
     {
         if (name == "Block" + playerSuffix)        return !current.blockHold && last.blockHold;
-        if (name == "ChargeAttack" + playerSuffix) return (!current.chargeHold && last.chargeHold);
+
+        // IMPORTANT: allow explicit release command OR key-up transition
+        if (name == "ChargeAttack" + playerSuffix) 
+            return current.chargeRelease || (!current.chargeHold && last.chargeHold);
+
         return false;
     }
 
@@ -101,8 +105,9 @@ public class AIInputProvider : IInputProvider
 
         if (key == blockKey) return !current.blockHold && last.blockHold;
 
-        // Release for charge: expose as KeyUp when agent issues chargeRelease
-        if (key == chargeKey) return (!current.chargeHold && last.chargeHold);
+        // IMPORTANT: allow explicit release command OR key-up transition
+        if (key == chargeKey) 
+            return current.chargeRelease || (!current.chargeHold && last.chargeHold);
 
         return false;
     }
