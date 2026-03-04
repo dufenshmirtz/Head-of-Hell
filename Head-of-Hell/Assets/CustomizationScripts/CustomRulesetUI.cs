@@ -91,6 +91,7 @@ public class CustomRulesetUI : MonoBehaviour
             SetAbilityStates(ruleset.quickDisabled, ruleset.heavyDisabled, ruleset.blockDisabled, ruleset.specialDisabled, ruleset.chargeDisabled);
             SetDevTools(ruleset.devTools);
             Setportals(ruleset.portals);
+            SetChanChanMode(ruleset.chanChan);
         }
         else
         {
@@ -104,6 +105,7 @@ public class CustomRulesetUI : MonoBehaviour
             SetAbilityStates(false, false, false, false, false);
             SetDevTools(false);
             Setportals(0);
+            SetChanChanMode(false);
         }
     }
 
