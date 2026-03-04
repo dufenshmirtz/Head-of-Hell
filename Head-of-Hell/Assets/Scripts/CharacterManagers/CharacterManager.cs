@@ -333,6 +333,8 @@ public class CharacterManager : MonoBehaviour
     public void ChangeCharacterTraining(String name)
     {
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+
+        characterName = name;
         // Assign character, color, and animator controller based on selection
         switch (name)
         {
@@ -420,6 +422,7 @@ public class CharacterManager : MonoBehaviour
         OnCharacterReady?.Invoke(character);  // <-- tell listeners initial character exists
 
         animEvents.SetCharacter(character);
+
     }
 
     // Small helper so others don’t need to know about CharacterChoice(1)
@@ -431,10 +434,6 @@ public class CharacterManager : MonoBehaviour
 
         // 1) διάλεξε νέο
         string name = PickRandomCharacter();
-        int guard = 20;
-        while (name == characterName && guard-- > 0)
-            name = PickRandomCharacter();
-
         // 2) “κλείδωσε” τον παλιό για να μην τρέχει άλλο
         // if (character != null)
         // {
@@ -455,5 +454,10 @@ public class CharacterManager : MonoBehaviour
         // 5) φτιάξε νέο character component
         ChangeCharacterTraining(name); // αυτό κάνει AddComponent + set runtime controller + OnCharacterChanged
 
+        var me = GetCurrentCharacter();
+        var enemy = enemyHandler.GetCurrentCharacter();
+
+        me.SetEnemy(enemy);
+        enemy.SetEnemy(me);
     }
 }

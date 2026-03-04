@@ -50,6 +50,11 @@ public class TrainingSafety : MonoBehaviour
     [Tooltip("If true, timers use scaled time (affected by Time.timeScale). This makes thresholds 'scale' when you speed up training.")]
     public bool useScaledTime = true;
 
+    public float minX = -9.5f;
+    public float maxX = 9.5f;
+    public float minY = -3f;
+    public float maxY = 6f;
+
     // --- internal timers ---
     float oobTimer;
     float stallTimerBoth;
@@ -141,11 +146,12 @@ public class TrainingSafety : MonoBehaviour
         lastPos2 = c2.transform.position;
     }
 
-    bool IsOutOfBounds(Vector3 worldPos)
+    bool IsOutOfBounds(Vector3 p)
     {
-        var b = arenaBounds.bounds;
-        b.Expand(new Vector3(-2f * oobPadding, -2f * oobPadding, 0f)); // shrink bounds by padding
-        return !b.Contains(worldPos);
+        return (p.x < minX + oobPadding ||
+                p.x > maxX - oobPadding ||
+                p.y < minY + oobPadding ||
+                p.y > maxY - oobPadding);
     }
 
     float UpdateInvalidTimer(Character c, float timer, float dt)

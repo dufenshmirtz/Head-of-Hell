@@ -327,12 +327,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -345,8 +346,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -4254,12 +4255,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -4272,8 +4274,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -4883,12 +4885,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -4901,8 +4904,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -7147,12 +7150,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -7165,8 +7169,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -9161,12 +9165,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -9179,8 +9184,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -10075,12 +10080,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -10093,8 +10099,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -11860,12 +11866,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -11878,8 +11885,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -13531,12 +13538,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -13549,8 +13557,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -14482,12 +14490,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -14500,8 +14509,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -16826,12 +16835,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -16844,8 +16854,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -19596,12 +19606,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -19614,8 +19625,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -22738,12 +22749,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -22756,8 +22768,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -23094,12 +23106,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -23112,8 +23125,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -26466,12 +26479,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -26484,8 +26498,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -29146,12 +29160,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -29164,8 +29179,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -29373,12 +29388,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -29391,8 +29407,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -30191,12 +30207,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -30209,8 +30226,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -30991,12 +31008,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -31009,8 +31027,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -31298,12 +31316,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -31316,8 +31335,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -31760,12 +31779,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -31778,8 +31798,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -32654,12 +32674,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -32672,8 +32693,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -33190,12 +33211,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -33208,8 +33230,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -36395,12 +36417,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -36413,8 +36436,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -37767,12 +37790,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -37785,8 +37809,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -39558,12 +39582,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -39576,8 +39601,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -40036,12 +40061,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -40054,8 +40080,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -42298,12 +42324,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -42316,8 +42343,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -43790,12 +43817,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -43808,8 +43836,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -47230,12 +47258,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -47248,8 +47277,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -47913,6 +47942,7 @@ MonoBehaviour:
   baseMenu: {fileID: 940830954}
   cChoice: {fileID: 221568179}
   sfx: {fileID: 832730747}
+  manager: {fileID: 2144866982}
 --- !u!1 &2003082946
 GameObject:
   m_ObjectHideFlags: 0
@@ -48078,12 +48108,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -48096,8 +48127,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -48668,12 +48699,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -48686,8 +48718,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -51364,12 +51396,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  counterIsOn: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -51382,8 +51415,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
