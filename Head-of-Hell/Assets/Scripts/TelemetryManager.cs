@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -115,7 +115,30 @@ public class TelemetryManager : MonoBehaviour
     {
         if (!enableTelemetry) return;
         EnsureSessionStarted();
-        currentSession.meta = meta ?? new TelemetryMatchMeta();
+        if (currentSession == null) return;
+
+        if (currentSession.meta == null)
+            currentSession.meta = new TelemetryMatchMeta();
+
+        if (meta == null) return;
+
+        // Merge (όχι replace)
+        if (!string.IsNullOrEmpty(meta.map)) currentSession.meta.map = meta.map;
+        if (!string.IsNullOrEmpty(meta.mode)) currentSession.meta.mode = meta.mode;
+        if (meta.roundNumber != 0) currentSession.meta.roundNumber = meta.roundNumber;
+
+        // bool -> πάντα assign
+        currentSession.meta.trainingMode = meta.trainingMode;
+
+        if (!string.IsNullOrEmpty(meta.p1Id)) currentSession.meta.p1Id = meta.p1Id;
+        if (!string.IsNullOrEmpty(meta.p1Character)) currentSession.meta.p1Character = meta.p1Character;
+
+        if (!string.IsNullOrEmpty(meta.p2Id)) currentSession.meta.p2Id = meta.p2Id;
+        if (!string.IsNullOrEmpty(meta.p2Character)) currentSession.meta.p2Character = meta.p2Character;
+
+        // winner μπορεί να είναι "" σε tie, οπότε assign και όταν είναι empty
+        if (meta.winnerId != null) currentSession.meta.winnerId = meta.winnerId;
+        if (meta.winnerCharacter != null) currentSession.meta.winnerCharacter = meta.winnerCharacter;
     }
 
     /// <summary>
@@ -182,14 +205,17 @@ public class TelemetryManager : MonoBehaviour
     }
 
     public void LogDamageApplied(
-        string attackerId,
-        string defenderId,
-        MoveType moveType,
-        SourceType sourceType,
-        int finalDamage,
-        bool wasBlocked,
-        bool wasDodged
-    )
+    string attackerId,
+    string defenderId,
+    MoveType moveType,
+    SourceType sourceType,
+    int finalDamage,
+    int hpBefore,
+    int hpAfter,
+    float distance,
+    bool wasBlocked,
+    bool wasDodged
+)
     {
         if (!enableTelemetry) return;
         EnsureSessionStarted();
@@ -202,6 +228,9 @@ public class TelemetryManager : MonoBehaviour
         ev.finalDamage = finalDamage;
         ev.wasBlocked = wasBlocked;
         ev.wasDodged = wasDodged;
+        ev.hpDefenderBefore = hpBefore;
+        ev.hpDefenderAfter = hpAfter;
+        ev.distance = distance;
 
         AddEvent(ev);
 
@@ -357,6 +386,9 @@ public class TelemetryEvent
     public bool wasBlocked;      // DamageApplied only
     public bool wasDodged;       // DamageApplied only
 
+    public float distance;          // -1 if unknown
+    public int hpDefenderBefore;    // -1 if unknown
+    public int hpDefenderAfter;     // -1 if unknown
     public static TelemetryEvent CreateBase(EventType type, float sessionStartTime)
     {
         return new TelemetryEvent
@@ -376,7 +408,11 @@ public class TelemetryEvent
 
             finalDamage = 0,
             wasBlocked = false,
-            wasDodged = false
+            wasDodged = false,
+
+            distance = -1f,
+            hpDefenderBefore = -1,
+            hpDefenderAfter = -1
         };
     }
 }
