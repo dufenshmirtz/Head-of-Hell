@@ -387,6 +387,9 @@ public class GameManager : MonoBehaviour
 
         if (trainingMode)
         {
+            p1Manager.CharacterChoice(1).ClearDynamicScripts();
+            p1Manager.CharacterChoice(2).ClearDynamicScripts();
+            
             // 0) ΤΕΛΕΙΩΣΕ ΤΑ EPISODES ΠΡΩΤΑ
             if (agentP1) agentP1.EndEpisode();
             if (agentP2) agentP2.EndEpisode();

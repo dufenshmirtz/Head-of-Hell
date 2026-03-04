@@ -8,6 +8,7 @@ public class PauseMenuScript : MonoBehaviour
     public GameObject baseMenu;
     public CharacterManager cChoice;
     public AudioManager sfx;
+    public GameManager manager;
 
 
     void Start()
@@ -22,6 +23,11 @@ public class PauseMenuScript : MonoBehaviour
         // Check if the ESC key is pressed
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+        if (manager.trainingMode)
+        {
+            manager.SoftResetRound(0);
+            return;
+        }
             ToggleMenu();
         }
     }

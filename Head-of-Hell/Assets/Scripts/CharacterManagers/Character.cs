@@ -20,56 +20,27 @@ public abstract class Character : MonoBehaviour
     protected AudioManager audioManager;
     protected Rigidbody2D rb;
     protected CharacterResources resources;
-    protected bool usingAbility;
+    
+
     //Charge
     protected bool charged = false;
     protected bool charging = false;
     private Coroutine chargeCoroutine;
     float chargeTime = 0.5f;
     protected int chargeDmg = 34;
+
+    //Flags
     public bool isBlocking = false;
     protected bool ignoreDamage = false;
-    protected int heavyDamage = 14;
-
-    public int characterID;
-
-    //ps------------------------------------------
-    protected TextMeshProUGUI P1Name, winner;
-    protected string P2Name;
-    string playerEnemysString;
-    protected GameObject playAgainButton;
-    protected GameObject mainMenuButton;
-    protected GameObject saveReplayButton;
-    protected Slider cooldownSlider;
-
-    protected TextMeshProUGUI damageCounter;
-
-    bool damageCounterReseted = true;
-
-    //basic stats
-    public float moveSpeed = 4f; // Initialize moveSpeed
-    protected float heavySpeed;
-    protected float OGMoveSpeed;
-    protected float jumpForce = 10f;
-    public int maxHealth = 100;
-    protected int currHealth;
-    protected bool isGrounded;
-
-    protected int playerNum;
-
-    protected helthbarscript healthbar;
-
-    string stageName;
-    protected GameObject[] stages;
-
-    //additional
+  
     protected bool isStatic = false;
     protected bool casting = false;
     protected bool canCast = true;
     protected bool knocked = false;
     protected bool canRotate = true;
-
-    private bool jumpAxisHeld;
+    protected bool usingAbility;
+    protected int currHealth;
+    protected bool isGrounded;
 
     //knockback
 
@@ -80,10 +51,53 @@ public abstract class Character : MonoBehaviour
     protected bool knockbackXaxis;
     protected bool knockable = true;
 
-    protected Transform attackPoint;
+    //parry
+    protected bool canParry = true;
+    protected bool safety = true;
+    protected bool ignoreCounterOff = false;
+    protected int parryDamage = 16;
+    public bool counterIsOn = false;
+    protected bool counterDone = false;
 
+    //cd
+    protected bool onCooldown = false;
+    protected float cdTimer = 0f;
+
+    public bool ignoreUpdate = false;
+
+    //ps------------------------------------------
+    protected TextMeshProUGUI P1Name, winner;
+    protected string P2Name;
+    string playerEnemysString;
+    protected GameObject playAgainButton;
+    protected GameObject mainMenuButton;
+    protected GameObject saveReplayButton;
+    protected Slider cooldownSlider;
+    protected TextMeshProUGUI damageCounter;
+    bool damageCounterReseted = true;
+    protected helthbarscript healthbar;
+
+    //basic stats
+    public int characterID;
+    public float moveSpeed = 4f; // Initialize moveSpeed
+    protected float heavySpeed;
+    protected float OGMoveSpeed;
+    protected float jumpForce = 10f;
+    public int maxHealth = 100;
+    protected int heavyDamage = 14;
+    protected int playerNum;
     protected float attackRange = 0.5f;
     protected float ogRange = 0.5f;
+
+    //Stages
+    string stageName;
+    protected GameObject[] stages;
+
+    private bool jumpAxisHeld;
+
+    protected Transform attackPoint;
+
+
 
     protected LayerMask enemyLayer;
 
@@ -95,12 +109,6 @@ public abstract class Character : MonoBehaviour
     //bar images
     protected Image cdbarimage;
     protected Sprite activeSprite, ogSprite;
-
-    //cd
-    protected bool onCooldown = false;
-    protected float cdTimer = 0f;
-
-    public bool ignoreUpdate = false;
 
     //Indicators
     protected GameObject blockDisabledIndicator;
@@ -150,19 +158,11 @@ public abstract class Character : MonoBehaviour
     public bool chargeDisable = false;
     bool ignoreStats = false;
 
-    //parry
-    protected bool canParry = true;
-    protected bool safety = true;
-    protected bool ignoreCounterOff = false;
-    protected int parryDamage = 16;
-    public bool counterIsOn = false;
-    protected bool counterDone = false;
-
 
     public bool overrideDeath = false;
 
     //handling variables
-    int grounds = 0;
+    public int grounds = 0;
     int isonpad = 0;
 
     int controllerCount = 0;
@@ -646,8 +646,9 @@ public abstract class Character : MonoBehaviour
         {
             grounds--;
 
-            if (grounds == 0)
+            if (grounds <= 0)
             {
+                grounds=0;
                 isGrounded = false;
             }
         }
@@ -671,8 +672,9 @@ public abstract class Character : MonoBehaviour
             grounds--;
             animator.SetBool("PlayerGrounded", false);
 
-            if (grounds == 0)
+            if (grounds <= 0)
             {
+                grounds=0;
                 isGrounded = false;
             }
         }
@@ -690,6 +692,7 @@ public abstract class Character : MonoBehaviour
         }
 
         colliders[4].enabled = false;
+        colliders[5].enabled = false;
     }
 
     public void DeactivateColliders()
@@ -1798,22 +1801,28 @@ public abstract class Character : MonoBehaviour
 
     public virtual void ResetForEpisode2()
     {
+
         // Position & physics
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 1.8f;
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+
         if (playerNum == 1)
         {
-            transform.position=new Vector3(-7.3f,-2.77f,0f);
+            transform.position=new Vector3(-7.3f,-2.50f,0f);
             print("(*)ass");
         }
         else
         {
-            transform.position=new Vector3(7.4f,-2.77f,0f);
+            transform.position=new Vector3(7.4f,-2.50f,0f);
             print("(*)ass2");
         }
         
-
+        // Animator sanity
         if (animator == null) animator = GetComponent<Animator>();
+        animator.Rebind();
+        animator.Update(0f);
         animator.SetBool("isDead", false);
         animator.ResetTrigger("tookDmg");
         animator.ResetTrigger("ChargedHit");
@@ -1832,7 +1841,27 @@ public abstract class Character : MonoBehaviour
         knocked = false;
         knockable = true;
         justTeleported = false;
+        isonpad=0;
+        onCooldown = false;
         ActivateColliders();
+
+        StopAllCoroutines();
+    }
+
+    public void ClearDynamicScripts()
+    {
+        // Remove LupenSpirit if it exists
+        LupenSpirit spirit = GetComponent<LupenSpirit>();
+        if (spirit != null)
+        {
+            Destroy(spirit);
+        }
+        // Remove Lupen if it exists
+        Lupen lup = GetComponent<Lupen>();
+        if (lup != null)
+        {
+            Destroy(lup);
+        }
     }
 
     #endregion
