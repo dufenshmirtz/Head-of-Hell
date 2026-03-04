@@ -13,4 +13,15 @@ public class ProfileData
         id = Guid.NewGuid().ToString();
         profileName = name;
     }
+
+    public ProfileData() { }
+    //HELPER FOR GUEST
+    public static ProfileData CreateGuest()
+    {
+        return new ProfileData
+        {
+            id = "GUEST",
+            profileName = "Guest"
+        };
+    }
 }
