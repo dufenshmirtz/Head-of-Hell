@@ -182,7 +182,6 @@ public class LazyBigus : Character
             {
                 enemy.BreakCharge();
             }
-            enemy.BreakCharge();
             enemy.TakeDamage(chargeDmg, false);
             enemy.Knockback(13f, 0.4f, false);
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
