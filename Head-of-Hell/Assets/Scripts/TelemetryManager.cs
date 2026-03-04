@@ -335,6 +335,13 @@ public class TelemetryMatchMeta
 
     // NEW: training flag
     public bool trainingMode = false;
+
+     // NEW: profile identity
+    public string p1ProfileId = "";
+    public string p1ProfileName = "";
+
+    public string p2ProfileId = "";
+    public string p2ProfileName = "";
 }
 
 [Serializable]
