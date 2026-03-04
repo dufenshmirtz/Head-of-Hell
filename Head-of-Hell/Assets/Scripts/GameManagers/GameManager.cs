@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     {
         roundTelemetryClosed = false;
 
-        stageName = PlayerPrefs.GetString("SelectedStage");
+        stageName = PlayerPrefs.GetString("SelectedStage", "Stage 1");
         if (stageName == "Stage 1")
         {
             stages[0].SetActive(true);
@@ -59,8 +59,10 @@ public class GameManager : MonoBehaviour
             stages[2].SetActive(true);
         }
 
-        // ✅ Telemetry: start a NEW session per round + set basic round meta
+
+
         TelemetryManager.Instance?.StartSession();
+
         TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
         {
             map = stageName,
@@ -69,13 +71,25 @@ public class GameManager : MonoBehaviour
             trainingMode = trainingMode
         });
 
-        // ✅ Optional (recommended): set player ids + characters in meta
         TelemetryManager.Instance?.SetPlayers(
             "P1", p1Manager ? p1Manager.GetCharacterName(1) : "",
             "P2", p2Manager ? p2Manager.GetCharacterName(2) : ""
         );
 
-        string json = PlayerPrefs.GetString("SelectedRuleset", null);
+        // Profile telemetry
+        var p1Profile = ProfileManager.I?.GetTelemetryIdentity(1) ?? ("NONE", "None");
+        var p2Profile = ProfileManager.I?.GetTelemetryIdentity(2) ?? ("NONE", "None");
+
+        TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
+        {
+            p1ProfileId = p1Profile.id,
+            p1ProfileName = p1Profile.name,
+            p2ProfileId = p2Profile.id,
+            p2ProfileName = p2Profile.name
+        });
+    
+
+    string json = PlayerPrefs.GetString("SelectedRuleset", null);
 
         if (!string.IsNullOrEmpty(json))
         {
