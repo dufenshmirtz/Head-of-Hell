@@ -27,6 +27,26 @@ public class ProfileManager : MonoBehaviour
         Load();
     }
 
+    public (string id, string name) GetTelemetryIdentity(int playerNum)
+    {
+        EnsureGuest();
+
+        int idx = GetSelectedIndex(playerNum);
+
+        if (idx == GUEST)
+            return ("GUEST", "Guest");
+
+        if (idx >= 0)
+        {
+            var p = db.GetAt(idx);
+            if (p == null) return ("NONE", "None");
+
+            return (p.id, p.profileName);
+        }
+
+        return ("NONE", "None");
+    }
+
     private void EnsureGuest()
     {
         if (guestProfile == null || guestProfile.id != "GUEST")
