@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
 
         if (chanChan)
         {
-            maxHealth = Random.Range(100, 201);
+            //maxHealth = Random.Range(100, 201);
             portalNumber = Random.Range(0, 5);
             print("..; " + portalNumber);
         }

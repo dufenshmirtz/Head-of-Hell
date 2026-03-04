@@ -4,7 +4,6 @@ using Transform = UnityEngine.Transform;
 
 public class LazyBigus : Character
 {
-    private bool beamLandedThisCast = false;
     public GameObject bulletPrefab; // The bullet prefab
     public Transform firePoint; // The point from where the bullet will be instantiated
     Transform bulletParent; 
@@ -29,7 +28,6 @@ public class LazyBigus : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
-        TelemetryManager.Instance?.LogAction(PlayerId, "Heavy");
         animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.volchBite, 1.5f);
         audioManager.PlaySFX(audioManager.volchBiteExtra, 2f);
@@ -43,8 +41,6 @@ public class LazyBigus : Character
         {
 
             audioManager.PlaySFX(audioManager.volchBiteSuccess, 1.5f);
-            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
             enemy.TakeDamage(heavyDamage, true);
             ToxicTouch();
 
@@ -56,7 +52,6 @@ public class LazyBigus : Character
         }
         else
         {
-            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Heavy);
             //audioManager.PlaySFX(audioManager.swoosh, 1f);
         }
 
@@ -66,11 +61,6 @@ public class LazyBigus : Character
     #region Spell
     override public void Spell()
     {
-        TelemetryManager.Instance?.LogAction(PlayerId, "Special");
-
-        // Telemetry: reset landed flag for this beam cast (for Miss logging)
-        beamLandedThisCast = false;
-
         IgnoreUpdate(true);
         stayStatic();
         UsingAbility(cooldown);
@@ -85,29 +75,22 @@ public class LazyBigus : Character
 
     public void BeamHitEnemy()
     {
-        if (!beamHit)
-        {
-            // Telemetry: Beam "attempt" (throttled by your existing gate) + context for the damage
-            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
-
-            beamLandedThisCast = true;
-
-            enemy.TakeDamage(10, true);
+        if(!beamHit){
+            enemy.TakeDamage(10,true);
             enemy.Knockback(13f, 0.5f, true);
             audioManager.PlaySFX(audioManager.beamHit, 1.8f);
-            StartCoroutine(Poison(2, 1f, 5));
+            StartCoroutine(Poison(2,1f,5));
             StartCoroutine(BeamDetectorReset());
         }
     }
 
-    private IEnumerator BeamDetectorReset()
-    {
-        beamHit = true;
+    private IEnumerator BeamDetectorReset(){
+
+        beamHit=true;
 
         yield return new WaitForSeconds(1f);
 
-        beamHit = false;
+        beamHit=false;
     }
 
     private IEnumerator Poison(int damageAmount, float interval, int times)
@@ -120,28 +103,20 @@ public class LazyBigus : Character
         {
             yield return new WaitForSeconds(interval);
 
-            // Telemetry: DOT tick context only (no HitAttempt spam)
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.PoisonTick, SourceType.Dot);
-
             // Deal damage to the enemy
-            enemy.TakeDamageNoAnimation(damageAmount, false);
+            enemy.TakeDamageNoAnimation(damageAmount,false,false);
         }
         enemy.ActivatePoison(false);
     }
 
     public void BeamEnd()
     {
-        // Telemetry: if beam ended without ever landing, treat as a Special miss
-        if (!beamLandedThisCast)
-        {
-            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Special);
-        }
-
-        OnCooldown(cooldown);
-        IgnoreUpdate(false);
-        stayDynamic();
-        ignoreDamage = false;
+         OnCooldown(cooldown);
+         IgnoreUpdate(false);
+         stayDynamic();
+        ignoreDamage=false;
     }
+    
     #endregion
 
     #region LightAttack
@@ -149,10 +124,7 @@ public class LazyBigus : Character
     public override void LightAttack()
     {
         if (!isShootin)
-
         {
-            TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
-
             QuickAttackIndicatorDisable();
             animator.SetTrigger("QuickAttack");
             StartCoroutine(ResetShooting());
@@ -210,7 +182,6 @@ public class LazyBigus : Character
             {
                 enemy.BreakCharge();
             }
-            enemy.BreakCharge();
             enemy.TakeDamage(chargeDmg, false);
             enemy.Knockback(13f, 0.4f, false);
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);

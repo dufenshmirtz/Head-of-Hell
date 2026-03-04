@@ -93,6 +93,8 @@ public abstract class Character : MonoBehaviour
     protected bool knocked = false;
     protected bool canRotate = true;
 
+    private bool jumpAxisHeld;
+
     //knockback
 
     protected float KBForce;
@@ -383,6 +385,17 @@ public abstract class Character : MonoBehaviour
     // inside Character
     public IInputProvider GetInputProvider() => input;
 
+    int ControllerNum(int pNum)
+    {
+        if (pNum == 1)
+        {
+            return 2;
+        }
+        else
+        {
+            return 1;
+        }
+    }
 
     public virtual void Update()
     {
@@ -507,17 +520,21 @@ public abstract class Character : MonoBehaviour
             animator.SetBool("cWalk", false);
         }
 
+        float v = input.GetAxis("Vertical" + playerString);
+        bool axisUp = v > 0.5f;
+
         // Jumping
-        if (input.GetKeyDown(up) || input.GetAxis("Vertical" + playerString) > 0.5f)
+        if (input.GetKeyDown(up) || (axisUp && !jumpAxisHeld))
         {
             if (isGrounded && !jumpDisabled && !casting)
             {
                 Jump();
             }
         }
+        jumpAxisHeld = axisUp;
 
         // Heavy Punching
-        if (input.GetKeyDown(heavyAttack) || (controller && input.GetButtonDown("HeavyAttack" + playerString)))
+        if (input.GetKeyDown(heavyAttack) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 2")))
         {
             if (!heavyDisable && !casting)
             {
@@ -527,7 +544,7 @@ public abstract class Character : MonoBehaviour
         }
 
         //Blocking
-        if (input.GetKeyDown(block) || (controller && input.GetButtonDown("Block" + playerString)))
+        if (input.GetKeyDown(block) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 5")))
         {
             if (!blockDisable && !casting)
             {
@@ -535,7 +552,7 @@ public abstract class Character : MonoBehaviour
                 Block();
             }
         }
-        else if (input.GetKeyUp(block) || (controller && input.GetButtonUp("Block" + playerString)))
+        else if (input.GetKeyUp(block) || (controller && Input.GetKeyUp("joystick "+ControllerNum(playerNum)+" button 5")))
         {
             if (!blockDisable && !casting)
             {
@@ -544,7 +561,7 @@ public abstract class Character : MonoBehaviour
         }
 
         //ChargeAttack
-        if (input.GetKeyDown(charge) || (controller && input.GetButtonDown("ChargeAttack" + playerString)))
+        if (input.GetKeyDown(charge) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 1")))
         {
             if (isGrounded && !chargeDisable && !casting)
             {
@@ -564,7 +581,7 @@ public abstract class Character : MonoBehaviour
         }
 
         //LightAttack
-        if (input.GetKeyDown(lightAttack) || (controller && input.GetButtonDown("QuickAttack" + playerString)))
+        if (input.GetKeyDown(lightAttack) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 0")))
         {
             if (!quickDisable && !casting)
             {
@@ -575,7 +592,7 @@ public abstract class Character : MonoBehaviour
         }
 
         //Spells
-        if (input.GetKeyDown(ability) || (controller && input.GetButtonDown("Spell" + playerString)))
+        if (input.GetKeyDown(ability) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 3")))
         {
             if (!onCooldown && canCast && !casting && !specialDisable)
             {
@@ -584,7 +601,7 @@ public abstract class Character : MonoBehaviour
         }
 
         //Parry
-        if (input.GetKeyDown(parry) || (controller && input.GetButtonDown("Parry" + playerString)))
+        if (input.GetKeyDown(parry) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 4")))
         {
             if (canParry && canCast && !casting)
             {
@@ -949,7 +966,7 @@ public abstract class Character : MonoBehaviour
             ignoreMovement = true;
             if (charged)
             {
-                if (input.GetKeyUp(charge) || (controller && input.GetButtonUp("ChargeAttack" + playerString)))
+                if (input.GetKeyUp(charge) || (controller && Input.GetKeyUp("joystick "+ControllerNum(playerNum)+" button 1")))
                 {
                     //stayDynamic();
                     animator.SetTrigger("ChargedHit");
@@ -961,7 +978,7 @@ public abstract class Character : MonoBehaviour
             }
             else
             {
-                if (input.GetKeyUp(charge) || (controller && input.GetButtonUp("ChargeAttack" + playerString)))
+                if (input.GetKeyUp(charge) || (controller && Input.GetKeyUp("joystick "+ControllerNum(playerNum)+" button 1")))
                 {
                     stayDynamic();
                     ignoreMovement = false;
@@ -1139,7 +1156,7 @@ public abstract class Character : MonoBehaviour
 
     private IEnumerator CounterOffSafety()
     {
-        yield return new WaitForSeconds(0.43f);
+        yield return new WaitForSeconds(0.22f);
         if (!counterDone && safety)
         {
             CounterVariablesOff();
