@@ -9,7 +9,7 @@ public class bombScript : MonoBehaviour
     int player;
     int enemy;
     bool exploded = false;
-    bool dmgEnd=false;
+    bool dmgEnd = false;
     bool damageDealt = false;
     Character playa;
     Steelager steelager;
@@ -18,7 +18,7 @@ public class bombScript : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {       
+    {
         player = 0;
         audioManager = FindObjectOfType<AudioManager>(); // Find and assign the AudioManager
 
@@ -31,7 +31,7 @@ public class bombScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -41,7 +41,7 @@ public class bombScript : MonoBehaviour
 
         if ((player == 0))
         {
-            if(other.gameObject.layer == player1Layer)
+            if (other.gameObject.layer == player1Layer)
             {
                 player = 1;
                 enemy = player2Layer;
@@ -53,16 +53,18 @@ public class bombScript : MonoBehaviour
                 enemy = player1Layer;
                 playa = other.GetComponent<Character>();
             }
-            
+
             return;
         }
 
         if (other.gameObject.layer == enemy && exploded && !dmgEnd && !damageDealt)
         {
-
             Character character = other.GetComponent<Character>();
             if (character != null)
             {
+                TelemetryManager.Instance?.LogHitAttempt(playa.PlayerId, character.PlayerId, MoveType.Projectile);
+                character.SetIncomingDamageContext(playa.PlayerId, MoveType.Projectile, SourceType.Projectile);
+
                 character.TakeDamage(6, true);
                 damageDealt = true;
             }
@@ -70,11 +72,15 @@ public class bombScript : MonoBehaviour
 
         if (other.gameObject.layer == enemy && !exploded && !dmgEnd && !damageDealt)
         {
-            
+
             Character character = other.GetComponent<Character>();
             if (character != null)
             {
                 Explode();
+
+                TelemetryManager.Instance?.LogHitAttempt(playa.PlayerId, character.PlayerId, MoveType.Projectile);
+                character.SetIncomingDamageContext(playa.PlayerId, MoveType.Projectile, SourceType.Projectile);
+
                 character.TakeDamage(6, true);
                 damageDealt = true;
             }
@@ -105,7 +111,7 @@ public class bombScript : MonoBehaviour
 
     public void Explode()
     {
-        if(!exploded)
+        if (!exploded)
         {
             exploded = true;
             Collider2D[] colliders = GetComponents<Collider2D>();
@@ -115,7 +121,7 @@ public class bombScript : MonoBehaviour
                 audioManager.BoomSound();
             }
             animator.SetTrigger("Explode");
- 
+
         }
     }
 

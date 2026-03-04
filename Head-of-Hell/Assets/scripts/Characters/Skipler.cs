@@ -51,6 +51,7 @@ public class Skipler : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Heavy");
         animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.heavyGlitch, 0.8f);
     }
@@ -63,6 +64,8 @@ public class Skipler : Character
         {
 
             audioManager.PlaySFX(audioManager.heavyGlitchHit, 1.3f);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
             enemy.TakeDamage(heavyDamage, true);
 
             if (!enemy.isBlocking)
@@ -73,6 +76,7 @@ public class Skipler : Character
         }
         else
         {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Heavy);
             audioManager.PlaySFX(audioManager.nothitGlitch, 1.8f);
         }
 
@@ -82,6 +86,7 @@ public class Skipler : Character
     #region Spell
     override public void Spell()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Special");
         UsingAbility(cooldown);
         ignoreDamage = true;
         StartCoroutine(Dash());
@@ -89,6 +94,7 @@ public class Skipler : Character
 
     IEnumerator Dash()
     {
+        bool landed = false;
         skiplerDouble = resources.skiplerDouble;
         skiplerPoint = resources.skiplerPoint;
 
@@ -145,6 +151,12 @@ public class Skipler : Character
         // Wait for the dash duration
         yield return new WaitForSeconds(dashingTime);
 
+        // Telemetry: dash ended without landing a hit
+        if (!dashHit)
+        {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Special);
+        }
+
         // Reset the velocity after the dash
         rb.velocity = currentVelocity;
 
@@ -171,11 +183,15 @@ public class Skipler : Character
         OnCooldown(cooldown);
     }
 
-
     public void DealDashDmg()
     {
         enemy.StopPunching();
         enemy.BreakCharge();
+
+        // Telemetry: HitAttempt + context before damage
+        TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
+        enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
+
         enemy.TakeDamage(DashDamage, true);
         audioManager.PlaySFX(audioManager.dashHit, 3f);
     }
@@ -197,6 +213,7 @@ public class Skipler : Character
     {
         if (lightReady)
         {
+            TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
             QuickAttackIndicatorDisable();
             StartCoroutine(Blink());
         }
@@ -266,10 +283,16 @@ public class Skipler : Character
 
         if (hitEnemy != null)
         {
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
             enemy.TakeDamage(blinkDmg, true);
             enemy.Knockback(10f, .15f, true);
             audioManager.PlaySFX(audioManager.dashHit, 0.8f);
             ReduceCD();
+        }
+        else
+        {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Quick);
         }
     }
     #endregion

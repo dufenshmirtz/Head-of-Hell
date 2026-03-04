@@ -28,6 +28,7 @@ public class Steelager : Character
     #region HeavyAttack
     override public void HeavyAttack()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Heavy");
         animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
     }
@@ -39,6 +40,8 @@ public class Steelager : Character
         if (hitEnemy != null)
         {
             audioManager.PlaySFX(audioManager.explosion, audioManager.lessVol);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
             enemy.TakeDamage(heavyDamage, true);
 
             if(knocked){
@@ -55,6 +58,7 @@ public class Steelager : Character
         }
         else
         {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Heavy);
             audioManager.PlaySFX(audioManager.explosion, audioManager.lessVol);
         }
 
@@ -64,7 +68,8 @@ public class Steelager : Character
     #region Spell
     public override void Spell()
     {
-        ignoreDamage=true;
+        TelemetryManager.Instance?.LogAction(PlayerId, "Special");
+        ignoreDamage = true;
         animator.SetTrigger("Spell");
         audioManager.PlaySFX(audioManager.bigExplosion, audioManager.doubleVol);
         UsingAbility(cooldown);
@@ -73,13 +78,22 @@ public class Steelager : Character
 
     public void DealExplosionDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( explosionPoint.position,  attackRange*4,  enemyLayer);
+        Collider2D hitEnemy = Physics2D.OverlapCircle(explosionPoint.position, attackRange * 4, enemyLayer);
 
         if (hitEnemy != null)
         {
+            // Telemetry: successful special hit + context before damage
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
+
             enemy.BreakCharge();
             enemy.TakeDamage(damage, true);
             enemy.Knockback(10f, 0.8f, false);
+        }
+        else
+        {
+            // Telemetry: special whiff (no target in AoE)
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Special);
         }
     }
 
@@ -89,7 +103,6 @@ public class Steelager : Character
         stayDynamic();
         ignoreDamage = false;
     }
-
     #endregion
 
     #region LightAttack
@@ -97,6 +110,7 @@ public class Steelager : Character
     {
         if (!bombCharging)
         {
+            TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
             QuickAttackIndicatorDisable();
             ThrowBomb();
         }

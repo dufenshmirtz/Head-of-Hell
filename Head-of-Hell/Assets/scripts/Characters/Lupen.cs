@@ -47,6 +47,7 @@ public class Lupen : Character
         {
             return;
         }
+        TelemetryManager.Instance?.LogAction(PlayerId, "Heavy");
         animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.heavyswoosh, audioManager.heavySwooshVolume);
         ResetQuickPunch();
@@ -82,9 +83,10 @@ public class Lupen : Character
     #region Spell
     override public void Spell()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Special");
         stayStatic();
         spirit.healthbar = healthbar;
-        spirit.maxHealth=maxHealth;
+        spirit.maxHealth = maxHealth;
         audioManager.PlaySFX(audioManager.transformation, 1.8f);
         KnockNearbyEnemies();
         ignoreUpdate = true;
@@ -98,20 +100,28 @@ public class Lupen : Character
     {
         if (IsEnemyClose())
         {
+            // Telemetry: special interaction (no damage, but successful effect on enemy)
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
+
             enemy.Knockback(9f, 0.5f, false);
+        }
+        else
+        {
+            // Telemetry: special had no effect (no enemy in range)
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Special);
         }
     }
 
     public void Transformation()
     {
         ignoreUpdate = false;
-        ignoreDamage=false;
+        ignoreDamage = false;
         knockable = true;
         do
         {
             randomCharacter = characterChoiceHandler.PickRandomCharacter();
-        } while (randomCharacter=="Lupen" || randomCharacter=="Visvia");
-        
+        } while (randomCharacter == "Lupen" || randomCharacter == "Visvia");
+
         characterChoiceHandler.ChangeCharacter(randomCharacter);
         cEvents.ChangeCharacterEvents(1);
         stolenCharacter = characterChoiceHandler.CharacterChoice(1);
@@ -123,14 +133,14 @@ public class Lupen : Character
         spirit.stolenCharacter = stolenCharacter;
         spirit.currentHealth = currHealth;
         spirit.whipDamage = wipDamage;
-        spirit.robberyCounter=robberyCountter;
+        spirit.robberyCounter = robberyCountter;
         spirit.Action();
     }
 
-    public void ReturnToLupen(int wdmg,int rc,int currentHealth)
+    public void ReturnToLupen(int wdmg, int rc, int currentHealth)
     {
-        wipDamage=wdmg;
-        robberyCountter=rc;
+        wipDamage = wdmg;
+        robberyCountter = rc;
         currHealth = currentHealth;
         RemoveLastAttachedScript();
         OnCooldown(cooldown);
@@ -161,10 +171,7 @@ public class Lupen : Character
         {
             Debug.LogWarning("No scripts to remove on this GameObject.");
         }
-
-
     }
-
     #endregion
 
     #region LightAttack
@@ -172,6 +179,7 @@ public class Lupen : Character
     {
         if (wipReady)
         {
+            TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
             QuickAttackIndicatorDisable();
             animator.SetTrigger("QuickAttack");
             wipReady = false;
@@ -186,12 +194,18 @@ public class Lupen : Character
 
         if (hitEnemy != null)
         {
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
             enemy.TakeDamage(wipDamage, true);
             Robbed();
             enemy.Slow(1.5f,2f);
             StartCoroutine(SpeedUpCoroutine(1.5f,2f));
             audioManager.PlaySFX(audioManager.coinSound, audioManager.normalVol);
             StartCoroutine(TriggerRobberyIndicator());
+        }
+        else
+        {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Quick);
         }
         
 
