@@ -1115,7 +1115,7 @@ public abstract class Character : MonoBehaviour
 
     private IEnumerator CounterOffSafety()
     {
-        yield return new WaitForSeconds(0.43f);
+        yield return new WaitForSeconds(0.22f);
         if (!counterDone && safety)
         {
             CounterVariablesOff();
