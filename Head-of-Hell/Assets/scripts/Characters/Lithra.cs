@@ -157,10 +157,6 @@ public class Lithra : Character
         bool landed = false;
         while (elapsedTime < lightAttackDuration)
         {
-            if (!landed)
-            {
-                TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Quick);
-            }
             // Perform the air spin movement
             // transform.Translate(Vector2.right * moveDirection * airSpinSpeed * Time.deltaTime);
 
@@ -195,6 +191,11 @@ public class Lithra : Character
 
             elapsedTime += Time.deltaTime;
             yield return null;
+        }
+
+        if (!landed)
+        {
+            TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Quick);
         }
 
         // Wait until the player is grounded

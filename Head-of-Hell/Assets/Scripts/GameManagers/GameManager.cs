@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
 
         TelemetryManager.Instance?.SetPlayers(
             "P1", p1Manager ? p1Manager.GetCharacterName(1) : "",
-            "P2", p2Manager ? p2Manager.GetCharacterName(2) : ""
+            "P2", p2Manager ? p2Manager.GetCharacterName(1) : ""
         );
 
         // Profile telemetry
