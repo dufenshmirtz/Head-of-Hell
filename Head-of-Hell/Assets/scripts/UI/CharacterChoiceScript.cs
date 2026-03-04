@@ -1,10 +1,12 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement; // Import SceneManager
+// using UnityEngine.SceneManagement; // Δεν χρησιμοποιείται εδώ, μπορείς να το αφαιρέσεις
 
 public class CharacterChoiceScript : MonoBehaviour
 {
+    private Button lastHighlightedButton = null;
+
     public Button[] buttons;  // Assign your buttons in the Inspector
     public Button startButton; // Assign your Start button in the Inspector
     public MainMenuMusic sfx;
@@ -16,20 +18,33 @@ public class CharacterChoiceScript : MonoBehaviour
     {
         notSelected = true;
 
-        // Automatically assign OnSelect event for each button
+        // Automatically assign OnSelect / OnDeselect event for each button
         foreach (Button btn in buttons)
         {
+            // Hide all borders at start
+            Transform border = btn.transform.Find("Border");
+            if (border != null)
+            {
+                border.gameObject.SetActive(false);
+            }
+
             EventTrigger trigger = btn.gameObject.GetComponent<EventTrigger>();
             if (trigger == null)
             {
                 trigger = btn.gameObject.AddComponent<EventTrigger>();
             }
 
-            EventTrigger.Entry entry = new EventTrigger.Entry();
-            entry.eventID = EventTriggerType.Select;
-            entry.callback.AddListener((eventData) => { OnButtonHighlighted(btn); });
+            // SELECT event
+            EventTrigger.Entry selectEntry = new EventTrigger.Entry();
+            selectEntry.eventID = EventTriggerType.Select;
+            selectEntry.callback.AddListener((eventData) => { OnButtonHighlighted(btn); });
+            trigger.triggers.Add(selectEntry);
 
-            trigger.triggers.Add(entry);
+            // DESELECT event
+            EventTrigger.Entry deselectEntry = new EventTrigger.Entry();
+            deselectEntry.eventID = EventTriggerType.Deselect;
+            deselectEntry.callback.AddListener((eventData) => { OnButtonUnhighlighted(btn); });
+            trigger.triggers.Add(deselectEntry);
         }
     }
 
@@ -75,6 +90,30 @@ public class CharacterChoiceScript : MonoBehaviour
         {
             sfx.ButtonSound();
             characterChoiceMenu.HoveringIn(button.name);
+
+            // Show border on the currently highlighted button
+            Transform border = button.transform.Find("Border");
+            if (border != null)
+            {
+                border.gameObject.SetActive(true);
+            }
+
+            lastHighlightedButton = button;
+        }
+    }
+
+    public void OnButtonUnhighlighted(Button button)
+    {
+        // Hide border when button is no longer selected
+        Transform border = button.transform.Find("Border");
+        if (border != null)
+        {
+            border.gameObject.SetActive(false);
+        }
+
+        if (lastHighlightedButton == button)
+        {
+            lastHighlightedButton = null;
         }
     }
 
