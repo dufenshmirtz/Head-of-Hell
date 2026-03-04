@@ -117,4 +117,45 @@ public class ReplayRecorder : MonoBehaviour
     }
 
     public void Discard() { data = null; pendingFrame = null; }
+
+    public void LogCombatEvent(ReplayData.CombatEvent e)
+    {
+        if (!Recording) return;
+        e.tick = Tick; // χρησιμοποιούμε το tick του input recorder
+        data.combatEvents.Add(e);
+    }
+
+    public void LogSnapshot(Character p1, Character p2, int combatEventIndex)
+    {
+        if (!Recording) return;
+
+        data.snapshots.Add(new ReplayData.StateSnapshot {
+            tick = Tick,
+            combatEventIndex = combatEventIndex,
+            p1 = MakeSnap(p1),
+            p2 = MakeSnap(p2)
+        });
+    }
+
+    ReplayData.FighterSnapshot MakeSnap(Character c)
+    {
+        var rb = c.GetComponent<Rigidbody2D>();
+        float facing = Mathf.Sign(c.transform.localScale.x);
+
+        return new ReplayData.FighterSnapshot {
+            playerId = c.PlayerId,
+            px = c.transform.position.x,
+            py = c.transform.position.y,
+            vx = rb ? rb.velocity.x : 0f,
+            vy = rb ? rb.velocity.y : 0f,
+            hp = c.currHealth,
+            isBlocking = c.isBlocking,
+            isGrounded = c.isGrounded,
+            stunned = c.stunned,
+            casting = c.casting,
+            knocked = c.knocked,
+            ignoreDamage = c.ignoreDamage,
+            facing = facing
+        };
+    }
 }

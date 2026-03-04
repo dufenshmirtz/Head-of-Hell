@@ -29,7 +29,7 @@ public class StartButtonScript : MonoBehaviour
         {
             CustomRuleset ruleset = new CustomRuleset();
             ruleset.health = 100;
-            ruleset.powerupsEnabled = true;
+            ruleset.powerupsEnabled = false;
             ruleset.rounds = 1;
             ruleset.playerSpeed = 4;
             ruleset.quickDisabled = false;
@@ -40,7 +40,7 @@ public class StartButtonScript : MonoBehaviour
             ruleset.hideHealth = false;
             ruleset.devTools = false;
             ruleset.portals = 0;
-            ruleset.chanChan = true;
+            ruleset.chanChan = false;
 
             // Save to PlayerPrefs
             string json = JsonUtility.ToJson(ruleset);

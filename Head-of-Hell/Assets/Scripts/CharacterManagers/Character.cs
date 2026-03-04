@@ -52,7 +52,7 @@ public abstract class Character : MonoBehaviour
     float chargeTime = 0.5f;
     protected int chargeDmg = 34;
     public bool isBlocking = false;
-    protected bool ignoreDamage = false;
+    public bool ignoreDamage = false;
     protected int heavyDamage = 14;
 
     public int characterID;
@@ -76,8 +76,8 @@ public abstract class Character : MonoBehaviour
     protected float OGMoveSpeed;
     protected float jumpForce = 10f;
     public int maxHealth = 100;
-    protected int currHealth;
-    protected bool isGrounded;
+    public int currHealth;
+    public bool isGrounded;
 
     protected int playerNum;
 
@@ -88,9 +88,9 @@ public abstract class Character : MonoBehaviour
 
     //additional
     protected bool isStatic = false;
-    protected bool casting = false;
+    public bool casting = false;
     protected bool canCast = true;
-    protected bool knocked = false;
+    public bool knocked = false;
     protected bool canRotate = true;
 
     private bool jumpAxisHeld;
@@ -137,7 +137,7 @@ public abstract class Character : MonoBehaviour
     protected GameObject shield;
 
     protected TextMeshPro robberyCountIndicator;
-    protected bool stunned = false;
+    public bool stunned = false;
 
     //movement keys
     public KeyCode up;

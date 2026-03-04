@@ -44,4 +44,62 @@ public class ReplayData
     }
 
     public List<Frame> frames = new();
+
+    public List<CombatEvent> combatEvents = new();
+    public List<StateSnapshot> snapshots = new();
+
+    public enum CombatKind { DamageApplied, KnockbackApplied, BlockStart, BlockEnd, ParryAttempt, CounterTriggered, RoundEnd }
+
+    [Serializable]
+    public class CombatEvent
+    {
+        public int tick;
+        public CombatKind kind;
+
+        public string attackerId;
+        public string victimId;
+
+        public string moveType;    // ή enum αν θες
+        public string sourceType;
+
+        public int hpBefore;
+        public int hpAfter;
+
+        public int damageApplied;  // actualDamage
+        public bool blocked;
+        public bool ignored;       // i-frames / shield negation κλπ
+
+        // Knockback info (για το event KnockbackApplied)
+        public bool kbAxisXOnly;
+        public float kbForce;
+        public float kbTime;
+        public bool kbFromRight;
+    }
+
+    [Serializable]
+    public class FighterSnapshot
+    {
+        public string playerId;
+        public float px, py;
+        public float vx, vy;
+        public int hp;
+        public bool isBlocking;
+        public bool isGrounded;
+        public bool stunned;
+        public bool casting;
+        public bool knocked;
+        public bool ignoreDamage;
+        public float facing; // +1 / -1
+    }
+
+    [Serializable]
+    public class StateSnapshot
+    {
+        public int tick;
+        public FighterSnapshot p1;
+        public FighterSnapshot p2;
+
+        // προαιρετικά: context του event που το προκάλεσε
+        public int combatEventIndex;
+    }
 }
