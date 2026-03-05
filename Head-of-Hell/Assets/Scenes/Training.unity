@@ -327,7 +327,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -4255,7 +4268,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -4885,7 +4911,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -6099,6 +6138,7 @@ MonoBehaviour:
   enemyHandler: {fileID: 1367423825}
   playerNum: 1
   training: 1
+  mngr: {fileID: 2144866982}
 --- !u!4 &221568191 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
@@ -6217,7 +6257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 1
+  DecisionPeriod: 3
   TakeActionsBetweenDecisions: 1
 --- !u!114 &221568230
 MonoBehaviour:
@@ -7150,7 +7190,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -9165,7 +9218,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -10080,7 +10146,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -11866,7 +11945,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -13538,7 +13630,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -14490,7 +14595,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -16835,7 +16953,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -19606,7 +19737,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -22749,7 +22893,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -23106,7 +23263,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -26479,7 +26649,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -29160,7 +29343,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -29388,7 +29584,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -30207,7 +30416,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -31008,7 +31230,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -31316,7 +31551,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -31779,7 +32027,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -32674,7 +32935,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -33211,7 +33485,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -34400,6 +34687,7 @@ MonoBehaviour:
   enemyHandler: {fileID: 221568179}
   playerNum: 2
   training: 1
+  mngr: {fileID: 2144866982}
 --- !u!4 &1367423837 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
@@ -34518,7 +34806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 1
+  DecisionPeriod: 3
   TakeActionsBetweenDecisions: 1
 --- !u!114 &1367423876
 MonoBehaviour:
@@ -36417,7 +36705,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -37790,7 +38091,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -39582,7 +39896,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -40061,7 +40388,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -42324,7 +42664,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -43817,7 +44170,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -47258,7 +47624,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -48108,7 +48487,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -48699,7 +49091,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
@@ -50862,6 +51267,7 @@ MonoBehaviour:
   agentP2: {fileID: 1367423861}
   p1Spawn: {fileID: 221568191}
   p2Spawn: {fileID: 1367423837}
+  tScale: 1
 --- !u!114 &2144866983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50869,28 +51275,34 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2144866980}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a09c9c7404d8d54e9d78055e0134fd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enable: 1
-  onlyWhenTrainingConnected: 1
+  onlyWhenTrainingConnected: 0
   gameManager: {fileID: 2144866982}
   p1Manager: {fileID: 221568179}
   p2Manager: {fileID: 1367423825}
-  agentP1: {fileID: 221568215}
-  agentP2: {fileID: 1367423861}
-  arenaBounds: {fileID: 1100116392}
-  oobPadding: 0.5
+  useUnscaledTime: 1
+  minX: -9.5
+  maxX: 9.5
+  minY: -3
+  maxY: 6
   oobSeconds: 1
+  episodeTimeoutSeconds: 500
   stallSecondsBoth: 10
   stallSecondsSingle: 20
   velEps: 0.05
   posEps: 0.02
-  invalidStateSeconds: 10
-  episodeTimeoutSeconds: 500
-  useScaledTime: 1
+  weirdStateSeconds: 10
+  castingSeconds: 6
+  chargingSeconds: 3
+  applyPenaltyOnSafetyReset: 1
+  penaltyValue: -0.05
+  agentP1: {fileID: 221568215}
+  agentP2: {fileID: 1367423861}
 --- !u!1 &2147385444
 GameObject:
   m_ObjectHideFlags: 0
@@ -51396,7 +51808,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
   counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
   ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4

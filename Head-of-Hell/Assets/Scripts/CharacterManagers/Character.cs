@@ -31,16 +31,16 @@ public abstract class Character : MonoBehaviour
 
     //Flags
     public bool isBlocking = false;
-    protected bool ignoreDamage = false;
+    public bool ignoreDamage = false;
   
-    protected bool isStatic = false;
-    protected bool casting = false;
-    protected bool canCast = true;
-    protected bool knocked = false;
-    protected bool canRotate = true;
-    protected bool usingAbility;
-    protected int currHealth;
-    protected bool isGrounded;
+    public bool isStatic = false;
+    public bool casting = false;
+    public bool canCast = true;
+    public bool knocked = false;
+    public bool canRotate = true;
+    public bool usingAbility;
+    public int currHealth;
+    public bool isGrounded;
 
     //knockback
 
@@ -49,10 +49,10 @@ public abstract class Character : MonoBehaviour
     protected float KBTotalTime;
     protected bool knockfromright;
     protected bool knockbackXaxis;
-    protected bool knockable = true;
+    public bool knockable = true;
 
     //parry
-    protected bool canParry = true;
+    public bool canParry = true;
     protected bool safety = true;
     protected bool ignoreCounterOff = false;
     protected int parryDamage = 16;
@@ -60,8 +60,8 @@ public abstract class Character : MonoBehaviour
     protected bool counterDone = false;
 
     //cd
-    protected bool onCooldown = false;
-    protected float cdTimer = 0f;
+    public bool onCooldown = false;
+    public float cdTimer = 0f;
 
     public bool ignoreUpdate = false;
 
@@ -265,7 +265,6 @@ public abstract class Character : MonoBehaviour
         _spawnPos = transform.position;
 
         originalGravityScale = rb.gravityScale;
-        print(_spawnPos);
 
 
         //Disable Indicators
@@ -324,7 +323,6 @@ public abstract class Character : MonoBehaviour
         P2Name = characterChoiceHandler.GetCharacterName(2);
         enemy = characterChoiceHandler.CharacterChoice(2);
 
-        print("check"+enemy + " - " + P2Name);
 
         if (playerNum == 1)
         {
@@ -333,7 +331,6 @@ public abstract class Character : MonoBehaviour
             {
                 controller = true;
             }
-            print("i'm P1: my enemy is: "+enemy + " - " + enemyLayer);
         }
         else if (playerNum == 2)
         {
@@ -343,10 +340,15 @@ public abstract class Character : MonoBehaviour
                 controller = true;
             }
 
-            print("i'm P2: my enemy is: "+enemy + " - " + enemyLayer);
         }
 
         animator = GetComponent<Animator>();
+
+        if (gameManager != null && gameManager.trainingMode)
+        {
+            animator.updateMode = AnimatorUpdateMode.AnimatePhysics; // δένει με FixedUpdate
+            animator.cullingMode = AnimatorCullingMode.AlwaysAnimate; // ΔΕΝ σταματάει όταν δεν φαίνεται
+        }
     }
 
     // inside Character (fields)
@@ -473,7 +475,6 @@ public abstract class Character : MonoBehaviour
             else
             {
                 animator.SetBool("IsRunning", false);
-                animator.SetBool("IsJumping", false);
                 animator.SetTrigger("Jump");
             }
 
@@ -518,7 +519,6 @@ public abstract class Character : MonoBehaviour
         {
             if (!heavyDisable && !casting)
             {
-                print("#heavy");
                 HeavyAttack();
             }
         }
@@ -528,7 +528,6 @@ public abstract class Character : MonoBehaviour
         {
             if (!blockDisable && !casting)
             {
-                print("#block");
                 Block();
             }
         }
@@ -545,7 +544,6 @@ public abstract class Character : MonoBehaviour
         {
             if (isGrounded && !chargeDisable && !casting)
             {
-                print("#charge");
                 ChargeAttack();
             }
 
@@ -564,7 +562,6 @@ public abstract class Character : MonoBehaviour
         {
             if (!quickDisable && !casting)
             {
-                print("#light");
                 moveSpeed = OGMoveSpeed;
                 LightAttack();
             }
@@ -603,7 +600,6 @@ public abstract class Character : MonoBehaviour
         maxHealth = gameManager.maxHealth;
         currHealth = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
-        print("@@@ max health= " + maxHealth);
     }
 
 
@@ -634,7 +630,6 @@ public abstract class Character : MonoBehaviour
         {
             isGrounded = true;
             animator.SetBool("Jump", false);
-            animator.SetBool("PlayerGrounded", true);
             grounds++;
         }
     }
@@ -670,7 +665,6 @@ public abstract class Character : MonoBehaviour
         if (other.CompareTag("Player"))  //--here
         {
             grounds--;
-            animator.SetBool("PlayerGrounded", false);
 
             if (grounds <= 0)
             {
@@ -775,6 +769,7 @@ public abstract class Character : MonoBehaviour
 
     public void EnemyAbilityBlock()
     {
+        if (enemy == null) return;
         enemy.AbilityDisabled();
     }
 
@@ -846,7 +841,6 @@ public abstract class Character : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         // Reset the knocked variable
-        print("l");
         knocked = false;
     }
 
@@ -1057,7 +1051,7 @@ public abstract class Character : MonoBehaviour
             moveSpeed = heavySpeed;
             StartCoroutine(WaitAndSetSpeed());
         }
-        animator.SetBool("isHeavyAttacking", true);
+        animator.SetBool("IsHeavyAttacking", true);
     }
 
     public void HeavyAttackEnd()
@@ -1066,7 +1060,7 @@ public abstract class Character : MonoBehaviour
         {
             moveSpeed = OGMoveSpeed;
         }
-        animator.SetBool("isHeavyAttacking", false);
+        animator.SetBool("IsHeavyAttacking", false);
     }
 
     private IEnumerator WaitAndSetSpeed()
@@ -1148,7 +1142,6 @@ public abstract class Character : MonoBehaviour
         stayStatic();
         ignoreCounterOff = true;
         counterDone = true;
-        print("kaka");
     }
 
     virtual public void DealCounterDmg()
@@ -1225,7 +1218,6 @@ public abstract class Character : MonoBehaviour
         {
             if (DetectCounter())
             {
-                print("suvkkkk");
                 return;
             }
         }
@@ -1245,14 +1237,12 @@ public abstract class Character : MonoBehaviour
         {
             if (chargeReset)
             {
-                print("kolok1");
                 stayDynamic();
                 ignoreMovement = false;
                 chargeReset = false;
             }
             else
             {
-                print("kolok2");
                 TakeDamageNoAnimation(dmg, blockable);
                 return;
             }
@@ -1339,10 +1329,9 @@ public abstract class Character : MonoBehaviour
 
         audioManager.StopMusic();
         audioManager.PlaySFX(audioManager.dearth, audioManager.doubleVol);
-        print("+++"+enemy.currHealth+" mx: "+maxHealth);
+
         if (enemy.currHealth == maxHealth)
         {
-            print("+++");
             gameManager.RoundEndFlawless(playerNum, P2Name);
             KeepStats(P2Name, P1Name.text);
         }
@@ -1540,7 +1529,7 @@ public abstract class Character : MonoBehaviour
 
     public void StopPunching()
     {
-        animator.SetBool("isHeavyAttacking", false);
+        animator.SetBool("IsHeavyAttacking", false);
     }
 
     private void Awake()
@@ -1569,8 +1558,10 @@ public abstract class Character : MonoBehaviour
     //Rager
     public void ResetQuickPunch()
     {
-        animator.ResetTrigger("punch2");
-        animator.SetBool("QuickPunch", false);
+        if(this is Rager)
+        {
+            animator.SetBool("QuickPunch", false);
+        }       
     }
 
     public void Grabbed()
@@ -1796,11 +1787,11 @@ public abstract class Character : MonoBehaviour
 
         ActivateColliders();
         stayDynamic();
-        print("[wdreset]"+playerNum);
     }
 
     public virtual void ResetForEpisode2()
     {
+        StopAllCoroutines();
 
         // Position & physics
         if (rb == null) rb = GetComponent<Rigidbody2D>();
@@ -1811,12 +1802,10 @@ public abstract class Character : MonoBehaviour
         if (playerNum == 1)
         {
             transform.position=new Vector3(-7.3f,-2.50f,0f);
-            print("(*)ass");
         }
         else
         {
             transform.position=new Vector3(7.4f,-2.50f,0f);
-            print("(*)ass2");
         }
         
         // Animator sanity
@@ -1844,8 +1833,6 @@ public abstract class Character : MonoBehaviour
         isonpad=0;
         onCooldown = false;
         ActivateColliders();
-
-        StopAllCoroutines();
     }
 
     public void ClearDynamicScripts()
