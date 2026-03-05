@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
     public FighterAgent agentP1, agentP2;       // drag the two FighterAgent components
     public Transform p1Spawn, p2Spawn;          // empty transforms as spawn points
 
+    public float tScale = 1f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -76,12 +78,12 @@ public class GameManager : MonoBehaviour
         {
             //maxHealth = Random.Range(100, 201);
             portalNumber = Random.Range(0, 5);
-            print("..; " + portalNumber);
         }
 
         if (trainingMode)
         {
             portalNumber=0;
+            Time.timeScale = tScale;
         }
 
         switch (portalNumber)
@@ -120,8 +122,12 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        QualitySettings.vSyncCount = 0;     // disable vsync
-        Application.targetFrameRate = 60;   // lock to 60 fps (or whatever you want)
+        QualitySettings.vSyncCount = 0;
+
+        if (trainingMode)
+            Application.targetFrameRate = -1;   // unlimited
+        else
+            Application.targetFrameRate = 60;
     }
 
     public void RoundEnd(int playerNum, string winnerName)
@@ -326,7 +332,6 @@ public class GameManager : MonoBehaviour
 
     public void CheckForRandomCharacters()
     {
-        print(roundCounter+" rc");
         if(PlayerPrefs.GetString("Player1Choice")=="Random"  && roundCounter>1)
         {
             c1Name = p1Manager.GetCharacterName(1);
@@ -369,12 +374,12 @@ public class GameManager : MonoBehaviour
     // Training
     public void SoftResetRound(int winnerPlayerNum = 0)
     {
-        print("(*)srr1");
         StartCoroutine(SoftResetRound_Co());
     }
 
     private IEnumerator SoftResetRound_Co()
     {
+        DisableGamePlay();
         // Hide UI
         winner.gameObject.SetActive(false);
         finalWinner.gameObject.SetActive(false);
@@ -386,10 +391,7 @@ public class GameManager : MonoBehaviour
         gameEnd = false;
 
         if (trainingMode)
-        {
-            p1Manager.CharacterChoice(1).ClearDynamicScripts();
-            p1Manager.CharacterChoice(2).ClearDynamicScripts();
-            
+        {            
             // 0) ΤΕΛΕΙΩΣΕ ΤΑ EPISODES ΠΡΩΤΑ
             if (agentP1) agentP1.EndEpisode();
             if (agentP2) agentP2.EndEpisode();
@@ -400,6 +402,8 @@ public class GameManager : MonoBehaviour
             // 2) Reroll (και περίμενε να τελειώσει)
             if (p1Manager) yield return StartCoroutine(p1Manager.RerollRandomCharacter_TrainingOnly_Co());
             if (p2Manager) yield return StartCoroutine(p2Manager.RerollRandomCharacter_TrainingOnly_Co());
+
+            yield return null;
 
             // 3) rebind enemies (πρόσεχε τα σωστά refs)
             var p1 = p1Manager ? p1Manager.GetCurrentCharacter() : null;

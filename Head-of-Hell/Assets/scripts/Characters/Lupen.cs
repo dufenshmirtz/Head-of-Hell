@@ -279,7 +279,6 @@ public class Lupen : Character
         {
             int randomDamage = Random.Range(0, 4); // 0, 1, 2, or 3
             wipDamage += randomDamage;
-            print("wipDamage increased by: " + randomDamage + ", total: " + wipDamage);
             robberyCountter = 0;
         }
     }

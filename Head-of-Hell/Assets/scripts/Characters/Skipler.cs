@@ -102,9 +102,6 @@ public class Skipler : Character
         ignoreDamage = true;
         dashing = true;
 
-        // Store the original gravity scale
-        float ogGravityScale = rb.gravityScale;
-
         // Disable gravity while dashing
         rb.gravityScale = 0f;
 
@@ -149,7 +146,8 @@ public class Skipler : Character
         rb.velocity = currentVelocity;
 
         // Reset the gravity scale
-        rb.gravityScale = ogGravityScale;
+        rb.gravityScale = originalGravityScale;
+
 
         // Re-enable damage and colliders
         foreach (Collider2D collider in colliders)
@@ -206,9 +204,6 @@ public class Skipler : Character
     {
         IgnoreMovement(true);
 
-        // Store the original gravity scale
-        float ogGravityScale = rb.gravityScale;
-
         // Disable gravity while dashing
         rb.gravityScale = 0f;
 
@@ -242,7 +237,7 @@ public class Skipler : Character
         rb.velocity = currentVelocity;
 
         // Reset the gravity scale
-        rb.gravityScale = ogGravityScale;
+        rb.gravityScale = originalGravityScale;
 
         lightReady = false;
 

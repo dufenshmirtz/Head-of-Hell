@@ -40,7 +40,7 @@ public class StartButtonScript : MonoBehaviour
             ruleset.hideHealth = false;
             ruleset.devTools = false;
             ruleset.portals = 0;
-            ruleset.chanChan = true;
+            ruleset.chanChan = false;
 
             // Save to PlayerPrefs
             string json = JsonUtility.ToJson(ruleset);

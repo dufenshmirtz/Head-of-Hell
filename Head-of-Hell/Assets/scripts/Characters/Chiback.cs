@@ -41,7 +41,6 @@ public class Chiback : Character
         {
             audioManager.PlaySFX(audioManager.katanaHit, 1.8f);
             enemy.TakeDamage(heavyDamage, true);
-            print("check: yes "+enemy);
 
             if (! enemy.isBlocking)
             {
@@ -51,7 +50,6 @@ public class Chiback : Character
         else
         {
             audioManager.PlaySFX(audioManager.swoosh, 1f);
-            print("check: noenemy"+enemy);
         }
     }
     #endregion

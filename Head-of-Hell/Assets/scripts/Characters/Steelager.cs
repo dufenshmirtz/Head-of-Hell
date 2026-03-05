@@ -43,8 +43,6 @@ public class Steelager : Character
 
             if(knocked){
                 enemy.TakeDamageNoAnimation(3,false);
-            }else{
-                print(moveSpeed);
             }
 
             if (!enemy.isBlocking)

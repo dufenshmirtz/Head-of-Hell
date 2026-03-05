@@ -69,6 +69,8 @@ public class CharacterManager : MonoBehaviour
 
     private CharacterAnimationEvents animEvents;
 
+    public GameManager mngr;
+
     void Awake()
     {
         // Fetch player character choices
@@ -207,6 +209,14 @@ public class CharacterManager : MonoBehaviour
 
         // Randomly select an index
         int randomIndex = UnityEngine.Random.Range(0, characterTypeNames.Length);
+
+        if (mngr.trainingMode)
+        {
+            while (characterTypeNames[randomIndex]=="Lupen")
+            {
+                randomIndex = UnityEngine.Random.Range(0, characterTypeNames.Length);
+            }
+        }
 
         return characterTypeNames[randomIndex];
     }
@@ -390,6 +400,7 @@ public class CharacterManager : MonoBehaviour
                 lithra = this.gameObject.AddComponent<Lithra>();
                 character = lithra;
                 character.characterID = (int)CharacterType.Lithra;
+                spriteRenderer.color = LithraColor;
                 animator = GetComponent<Animator>();
                 animator.runtimeAnimatorController = LithraAnimatorController;
                 break;
