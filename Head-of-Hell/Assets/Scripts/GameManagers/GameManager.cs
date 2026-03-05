@@ -154,6 +154,7 @@ public class GameManager : MonoBehaviour
 
     public void RoundEnd(int playerNum, string winnerName)
     {
+
         if (trainingMode)//training
         {
             ShortWins(playerNum, winnerName); // keep your stat logic if you want
@@ -246,6 +247,7 @@ public class GameManager : MonoBehaviour
 
     public void RoundEndFlawless(int playerNum, string winnerName)
     {
+
         if (trainingMode)
         {
             ShortWins(playerNum, winnerName);
@@ -272,7 +274,7 @@ public class GameManager : MonoBehaviour
                 p1Id = "P1",
                 p1Character = p1Manager ? p1Manager.GetCharacterName(1) : "",
                 p2Id = "P2",
-                p2Character = p2Manager ? p2Manager.GetCharacterName(2) : "",
+                p2Character = p2Manager ? p2Manager.GetCharacterName(1) : "",
 
                 winnerId = (playerNum == 1) ? "P1" : "P2",
                 winnerCharacter = winnerName
@@ -289,15 +291,17 @@ public class GameManager : MonoBehaviour
     {
         if (playerNum == 1)
         {
-            player2Wins++;
-        }
-        else
-        {
             player1Wins++;
         }
+        else if (playerNum == 2)
+        {
+            {
+                player2Wins++;
+            }
 
-        ActivateIndicators();
+            ActivateIndicators();
 
+        }
     }
 
     public void CheckForEnd(int playerNum, string winnerName)

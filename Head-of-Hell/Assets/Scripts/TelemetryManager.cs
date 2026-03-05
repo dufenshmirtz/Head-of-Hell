@@ -139,6 +139,13 @@ public class TelemetryManager : MonoBehaviour
         // winner μπορεί να είναι "" σε tie, οπότε assign και όταν είναι empty
         if (meta.winnerId != null) currentSession.meta.winnerId = meta.winnerId;
         if (meta.winnerCharacter != null) currentSession.meta.winnerCharacter = meta.winnerCharacter;
+
+        // --- Profile identity merge ---
+        if (!string.IsNullOrEmpty(meta.p1ProfileId)) currentSession.meta.p1ProfileId = meta.p1ProfileId;
+        if (!string.IsNullOrEmpty(meta.p1ProfileName)) currentSession.meta.p1ProfileName = meta.p1ProfileName;
+
+        if (!string.IsNullOrEmpty(meta.p2ProfileId)) currentSession.meta.p2ProfileId = meta.p2ProfileId;
+        if (!string.IsNullOrEmpty(meta.p2ProfileName)) currentSession.meta.p2ProfileName = meta.p2ProfileName;
     }
 
     /// <summary>
