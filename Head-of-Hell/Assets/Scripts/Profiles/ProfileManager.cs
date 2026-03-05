@@ -39,12 +39,12 @@ public class ProfileManager : MonoBehaviour
         if (idx >= 0)
         {
             var p = db.GetAt(idx);
-            if (p == null) return ("NONE", "None");
+            if (p == null) return ("GUEST", "Guest");
 
             return (p.id, p.profileName);
         }
 
-        return ("NONE", "None");
+        return ("GUEST", "Guest");
     }
 
     private void EnsureGuest()

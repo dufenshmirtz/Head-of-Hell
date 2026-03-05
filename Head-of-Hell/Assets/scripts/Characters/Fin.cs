@@ -107,7 +107,7 @@ public class Fin : Character
 
     IEnumerator Roll()
     {
-        TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
+        TelemetryManager.Instance?.LogAction(PlayerId, "Roll");
         IgnoreMovement(true);
         ignoreDamage = true;
         knockable = false;

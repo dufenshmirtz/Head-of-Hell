@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
@@ -33,12 +33,17 @@ public enum SourceType
 }
 public abstract class Character : MonoBehaviour
 {
+
+
     public string PlayerId => playerNum == 1 ? "P1" : "P2";
     public bool CanDropPlatform => isonpad > 0;
     protected string incomingAttackerId;
     protected MoveType incomingMoveType;
     protected SourceType incomingSourceType;
-    
+    // --- Telemetry: movement logging (edge-triggered) ---
+    private int lastMoveDir = 0; // -1 = left, 0 = idle, +1 = right
+    [SerializeField] private float moveLogCooldown = 0.20f; // seconds, anti-spam
+    private float nextMoveLogTime = 0f;
     protected Character enemy;
     protected Animator animator;
     protected AudioManager audioManager;
@@ -481,6 +486,13 @@ public abstract class Character : MonoBehaviour
         }
 
         float moveDirection = input.GetAxis("Horizontal" + playerString);
+        int dir = (moveDirection > 0.1f) ? 1 : (moveDirection < -0.1f) ? -1 : 0;
+
+        
+        if (!ignoreMovement && !knocked && !isStatic && !stunned && !ignoreUpdate)
+        {
+            LogMoveIfChanged(dir);
+        }
         // Running animations...
         if (Mathf.Abs(moveDirection) > 0.1f && !isStatic)
         {
@@ -614,6 +626,28 @@ public abstract class Character : MonoBehaviour
         animator.SetFloat("VerticalSpeed", rb.velocity.y);
 
     }
+
+    private void LogMoveIfChanged(int dir)
+    {
+        if (TelemetryManager.Instance == null) return;
+
+        // log only on changes: idle->move, move->idle, left<->right
+        if (dir == lastMoveDir) return;
+
+        // extra safety: anti-spam cooldown
+        if (Time.time < nextMoveLogTime) return;
+        nextMoveLogTime = Time.time + moveLogCooldown;
+
+        if (dir == -1)
+            TelemetryManager.Instance.LogAction(PlayerId, "MoveLeft");
+        else if (dir == 1)
+            TelemetryManager.Instance.LogAction(PlayerId, "MoveRight");
+        else
+            TelemetryManager.Instance.LogAction(PlayerId, "MoveStop");
+
+        lastMoveDir = dir;
+    }
+
 
     IEnumerator WaitForMaxHealth()
     {
@@ -1407,6 +1441,7 @@ public abstract class Character : MonoBehaviour
 
     public void Die()
     {
+        int winnerNum = (playerNum == 1) ? 2 : 1;   // ή: int winnerNum = enemy.playerNum;
         if (overrideDeath) {
             return;
         }
@@ -1436,7 +1471,7 @@ public abstract class Character : MonoBehaviour
         if (enemy.currHealth == maxHealth)
         {
             print("+++");
-            gameManager.RoundEndFlawless(playerNum, P2Name);
+            gameManager.RoundEndFlawless(winnerNum, P2Name);
             KeepStats(P2Name, P1Name.text);
         }
         else if (enemy.currHealth <= 0)
@@ -1445,7 +1480,7 @@ public abstract class Character : MonoBehaviour
         }
         else
         {
-            gameManager.RoundEnd(playerNum, P2Name);
+            gameManager.RoundEnd(winnerNum, P2Name);
             KeepStats(P2Name, P1Name.text);
         }
 
