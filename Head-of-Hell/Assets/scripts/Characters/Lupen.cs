@@ -21,6 +21,10 @@ public class Lupen : Character
     public float hitBoxHeight = 0.5f; // Thinness in the Y-axi
     Vector2 size;
 
+    float resetWip=2f;
+
+    int passiveRange = 4;
+
     public override void Start()
     {
         base.Start();
@@ -209,7 +213,7 @@ public class Lupen : Character
 
     IEnumerator ResetWip()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(resetWip);
         audioManager.PlaySFX(audioManager.katanaSeath, audioManager.doubleVol);
         wipReady = true;
         QuickAttackIndicatorEnable();
@@ -277,7 +281,7 @@ public class Lupen : Character
         robberyCountter++;
         if (robberyCountter == 1)
         {
-            int randomDamage = Random.Range(0, 4); // 0, 1, 2, or 3
+            int randomDamage = Random.Range(0, passiveRange); // 0, 1, 2, or 3
             wipDamage += randomDamage;
             robberyCountter = 0;
         }

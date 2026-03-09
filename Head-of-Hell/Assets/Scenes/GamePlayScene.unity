@@ -327,12 +327,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -345,8 +359,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -1624,6 +1638,50 @@ PrefabInstance:
       propertyPath: mirrorFireAttackPoint
       value: 
       objectReference: {fileID: 1739945226}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0f913870751d5c848bbe838f872540c9, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8987149a37677e346b3d4b879ff3e90e, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: d5e33651ab1a45a49b78e520fd36feb5, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: e7787d4bf5421754f82065cc29abf293, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0436f3a4d21eebb46be974b18e41ed81, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: c588cf8d4d719b74eabdf5550f30fcde, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: 66d144869d00b984490c7f69c87c1eb5, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: 29d284668f05b084ba41d9a24a4019c4, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[8]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4c15626686b7986459f3d4e0ddb2d8c8, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[9]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4b94f759a9d0ad14aa1407a1db5926f2, type: 2}
     - target: {fileID: 9159698240938344579, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.4
@@ -4257,12 +4315,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -4275,8 +4347,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -4886,12 +4958,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -4904,8 +4990,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -4975,6 +5061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 277780955}
   trash: {fileID: 0}
@@ -6098,6 +6185,8 @@ MonoBehaviour:
   VisviaAnimatorController: {fileID: 9100000, guid: 8349b7f4e453b9e4b966cd6122db6b70, type: 2}
   enemyHandler: {fileID: 1367423825}
   playerNum: 1
+  training: 0
+  mngr: {fileID: 0}
 --- !u!4 &221568191 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
@@ -6164,13 +6253,16 @@ MonoBehaviour:
   stepPenalty: -0.0005
   buggedPenalty: -0.04
   staticPenalty: -0.01
-  totalCharacterCount: 10
-  rewardCloseToOpponent: 0.0008
-  penaltyFarFromOpponent: -0.0008
-  centerStageBonus: 0.0006
-  stageMin: {x: -9, y: -3}
-  stageMax: {x: 9, y: 5}
   engageDist: 3.5
+  dirReward: 0.002
+  dirPenalty: -0.002
+  farIdlePenalty: -0.003
+  inRangeBonus: 0.001
+  farDistancePenaltyScale: -0.0003
+  relXScale: 9
+  relYScale: 5
+  velScale: 10
+  totalCharacterCount: 10
 --- !u!114 &221568216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6227,19 +6319,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a09c9c7404d8d54e9d78055e0134fd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idleSpeedEps: 0.02
-  noChangeSeconds: 6
-  activeColorStuckSeconds: 5
-  arenaBounds: {fileID: 1100116392}
-  boundLeft: {fileID: 279847380}
-  boundRight: {fileID: 1727173186}
-  boundFloor: {fileID: 866361085}
-  boundCeiling: {fileID: 1786861228}
-  fallbackMin: {x: -9, y: -3}
-  fallbackMax: {x: 9, y: 5}
-  oobPadding: 0.25
-  oobGraceSeconds: 0.25
-  oobPenalty: -0.02
+  enable: 1
+  onlyWhenTrainingConnected: 1
+  gameManager: {fileID: 0}
+  p1Manager: {fileID: 0}
+  p2Manager: {fileID: 0}
+  useUnscaledTime: 1
+  minX: -9.5
+  maxX: 9.5
+  minY: -3
+  maxY: 6
+  oobSeconds: 1
+  episodeTimeoutSeconds: 500
+  stallSecondsBoth: 10
+  stallSecondsSingle: 20
+  velEps: 0.05
+  posEps: 0.02
+  weirdStateSeconds: 10
+  castingSeconds: 10
+  chargingSeconds: 10
+  applyPenaltyOnSafetyReset: 0
+  penaltyValue: -0.02
+  agentP1: {fileID: 0}
+  agentP2: {fileID: 0}
 --- !u!114 &221568230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7171,12 +7273,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -7189,8 +7305,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -9185,12 +9301,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -9203,8 +9333,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -9276,6 +9406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 112308069}
   trash: {fileID: 0}
@@ -10099,12 +10230,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -10117,8 +10262,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -10192,6 +10337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 778165903}
   trash: {fileID: 0}
@@ -11884,12 +12030,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -11902,8 +12062,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -11976,6 +12136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1670223497}
   trash: {fileID: 0}
@@ -12728,6 +12889,50 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &502303719
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 502303722}
+  - component: {fileID: 502303721}
+  m_Layer: 0
+  m_Name: MatchData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &502303721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502303719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1432c3c3cb3927f40b01b91f20f06e00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &502303722
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502303719}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.6397605, y: -0.6910636, z: -0.018377881}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &502965388
 GameObject:
   m_ObjectHideFlags: 0
@@ -13555,12 +13760,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -13573,8 +13792,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -13644,6 +13863,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1776539105}
   trash: {fileID: 0}
@@ -14506,12 +14726,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -14524,8 +14758,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -14598,6 +14832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 343137453}
   trash: {fileID: 0}
@@ -16850,12 +17085,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -16868,8 +17117,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -16943,6 +17192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1086519415}
   trash: {fileID: 0}
@@ -18379,6 +18629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1604138820}
   trash: {fileID: 0}
@@ -19620,12 +19871,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -19638,8 +19903,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -19713,6 +19978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 2124878124}
   trash: {fileID: 0}
@@ -22762,12 +23028,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -22780,8 +23060,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -23118,12 +23398,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -23136,8 +23430,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -23209,6 +23503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 302230613}
   trash: {fileID: 0}
@@ -26490,12 +26785,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -26508,8 +26817,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -29170,12 +29479,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -29188,8 +29511,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -29397,12 +29720,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -29415,8 +29752,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -30215,12 +30552,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -30233,8 +30584,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -31015,12 +31366,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -31033,8 +31398,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -31102,6 +31467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 530979623}
   trash: {fileID: 0}
@@ -31322,12 +31688,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -31340,8 +31720,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -31784,12 +32164,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -31802,8 +32196,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -32678,12 +33072,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -32696,8 +33104,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -32767,6 +33175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1961157082}
   trash: {fileID: 0}
@@ -33214,12 +33623,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -33232,8 +33655,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -34401,6 +34824,8 @@ MonoBehaviour:
   VisviaAnimatorController: {fileID: 9100000, guid: 8349b7f4e453b9e4b966cd6122db6b70, type: 2}
   enemyHandler: {fileID: 221568179}
   playerNum: 2
+  training: 0
+  mngr: {fileID: 0}
 --- !u!4 &1367423837 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
@@ -34467,13 +34892,16 @@ MonoBehaviour:
   stepPenalty: -0.0005
   buggedPenalty: -0.04
   staticPenalty: -0.01
-  totalCharacterCount: 10
-  rewardCloseToOpponent: 0.0008
-  penaltyFarFromOpponent: -0.0008
-  centerStageBonus: 0.0006
-  stageMin: {x: -9, y: -3}
-  stageMax: {x: 9, y: 5}
   engageDist: 3.5
+  dirReward: 0.002
+  dirPenalty: -0.002
+  farIdlePenalty: -0.003
+  inRangeBonus: 0.001
+  farDistancePenaltyScale: -0.0003
+  relXScale: 9
+  relYScale: 5
+  velScale: 10
+  totalCharacterCount: 10
 --- !u!114 &1367423862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34530,19 +34958,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a09c9c7404d8d54e9d78055e0134fd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idleSpeedEps: 0.02
-  noChangeSeconds: 6
-  activeColorStuckSeconds: 5
-  arenaBounds: {fileID: 1100116392}
-  boundLeft: {fileID: 279847380}
-  boundRight: {fileID: 1727173186}
-  boundFloor: {fileID: 866361085}
-  boundCeiling: {fileID: 1786861228}
-  fallbackMin: {x: -9, y: -3}
-  fallbackMax: {x: 9, y: 5}
-  oobPadding: 0.25
-  oobGraceSeconds: 0.25
-  oobPenalty: -0.02
+  enable: 1
+  onlyWhenTrainingConnected: 1
+  gameManager: {fileID: 0}
+  p1Manager: {fileID: 0}
+  p2Manager: {fileID: 0}
+  useUnscaledTime: 1
+  minX: -9.5
+  maxX: 9.5
+  minY: -3
+  maxY: 6
+  oobSeconds: 1
+  episodeTimeoutSeconds: 500
+  stallSecondsBoth: 10
+  stallSecondsSingle: 20
+  velEps: 0.05
+  posEps: 0.02
+  weirdStateSeconds: 10
+  castingSeconds: 10
+  chargingSeconds: 10
+  applyPenaltyOnSafetyReset: 0
+  penaltyValue: -0.02
+  agentP1: {fileID: 0}
+  agentP2: {fileID: 0}
 --- !u!114 &1367423876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36440,12 +36878,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -36458,8 +36910,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -36527,6 +36979,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1936941808}
   trash: {fileID: 0}
@@ -36560,6 +37013,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf612604b37b6f4dbe2dac1d745614d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: 0}
 --- !u!70 &1478511393
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -37811,12 +38265,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -37829,8 +38297,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -37900,6 +38368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1848321332}
   trash: {fileID: 0}
@@ -39602,12 +40071,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -39620,8 +40103,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -40080,12 +40563,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -40098,8 +40595,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -40173,6 +40670,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1666705483}
   trash: {fileID: 0}
@@ -41494,6 +41992,50 @@ PrefabInstance:
       propertyPath: mirrorFireAttackPoint
       value: 
       objectReference: {fileID: 1799592992}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0f913870751d5c848bbe838f872540c9, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8987149a37677e346b3d4b879ff3e90e, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: d5e33651ab1a45a49b78e520fd36feb5, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: e7787d4bf5421754f82065cc29abf293, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0436f3a4d21eebb46be974b18e41ed81, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: c588cf8d4d719b74eabdf5550f30fcde, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: 66d144869d00b984490c7f69c87c1eb5, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: 29d284668f05b084ba41d9a24a4019c4, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[8]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4c15626686b7986459f3d4e0ddb2d8c8, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[9]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4b94f759a9d0ad14aa1407a1db5926f2, type: 2}
     - target: {fileID: 5020299007731939445, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: parry
       value: 44
@@ -42345,12 +42887,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -42363,8 +42919,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -43837,12 +44393,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -43855,8 +44425,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -43924,6 +44494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 2070115600}
   trash: {fileID: 0}
@@ -47277,12 +47848,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -47295,8 +47880,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -47960,6 +48545,7 @@ MonoBehaviour:
   baseMenu: {fileID: 940830954}
   cChoice: {fileID: 221568179}
   sfx: {fileID: 832730747}
+  manager: {fileID: 0}
 --- !u!1 &2003082946
 GameObject:
   m_ObjectHideFlags: 0
@@ -48125,12 +48711,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -48143,8 +48743,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -48715,12 +49315,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -48733,8 +49347,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -50876,6 +51490,7 @@ MonoBehaviour:
   agentP2: {fileID: 1367423861}
   p1Spawn: {fileID: 221568191}
   p2Spawn: {fileID: 1367423837}
+  tScale: 1
 --- !u!1 &2147385444
 GameObject:
   m_ObjectHideFlags: 0
@@ -51252,6 +51867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf612604b37b6f4dbe2dac1d745614d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: 0}
 --- !u!50 &6993232257568019892
 Rigidbody2D:
   serializedVersion: 4
@@ -51380,12 +51996,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -51398,8 +52028,8 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
@@ -51420,3 +52050,4 @@ SceneRoots:
   - {fileID: 832730748}
   - {fileID: 75958759}
   - {fileID: 1020480613}
+  - {fileID: 502303722}

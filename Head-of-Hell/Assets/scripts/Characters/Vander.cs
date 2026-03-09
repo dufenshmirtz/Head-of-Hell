@@ -17,7 +17,7 @@ public class Vander : Character
 
     // --- Flying passive ---
     bool isFlying = false;
-    float flyUpSpeed = 6f;        // how fast he ascends while holding jump
+    //float flyUpSpeed = 6f;        // how fast he ascends while holding jump
 
     // How quickly we cancel falling (units: velocity per second)
     [SerializeField] float fallBrakePerSec = 20f;
@@ -33,7 +33,7 @@ public class Vander : Character
 
 
     // Keep the gravity to restore on release
-    float baseGravity = 1f;
+    //float baseGravity = 1f;
 
 
     #region HeavyAttack

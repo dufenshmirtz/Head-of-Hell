@@ -314,7 +314,7 @@ public class FighterAgent : Agent
         // -------------------
         // BLOCK
         // -------------------
-        if (self.BlockDisabled)
+        if (locked || self.BlockDisabled)
             actionMask.SetActionEnabled(5, 1, false);
 
         // -------------------

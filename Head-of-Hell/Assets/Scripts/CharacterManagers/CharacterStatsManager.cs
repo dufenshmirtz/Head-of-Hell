@@ -27,7 +27,7 @@ public class CharacterStatsManager : MonoBehaviour
         LoadCharacterStats();
     }
 
-    public void KeepStats(string winner, string loser)
+    public void KeepStats(string winner,string loser)
     {
         if (characterStatsDict.ContainsKey(winner))
         {
@@ -85,18 +85,12 @@ public class CharacterStatsManager : MonoBehaviour
     }
     public void ResetAllStats()
     {
-        print("kolosssrs");
         foreach (var characterName in characterNames)
         {
             if (characterStatsDict.ContainsKey(characterName))
             {
                 characterStatsDict[characterName].wins = 0;
                 characterStatsDict[characterName].totalGames = 0;
-                print("kolos2");
-            }
-            else
-            {
-                print("kolossss");
             }
         }
 
