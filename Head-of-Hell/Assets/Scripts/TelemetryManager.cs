@@ -47,7 +47,7 @@ public class TelemetryManager : MonoBehaviour
     // ---------------------------
     // Public API (Lifecycle)
     // ---------------------------
-
+    
     /// <summary>
     /// Starts a new telemetry session (match). Safe to call multiple times; will end the previous session if needed.
     /// </summary>
