@@ -1,18 +1,18 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SteelagerSpecs", menuName = "Characters/Steelager Specs")]
-public class SteelagerSpecs : ScriptableObject
+public class SteelagerSpecs : CharacterSpecsBase
 {
-    [Header("Spell")]
-    public float cooldown = 16f;
-    public int damage = 20;
+    //[Header("Spell")]
+    public override float cooldown => 16f;
+    public override int damage => 20;
 
     [Header("Light Attack")]
-    public float rollPower = 8f;
-    public float rollTime = 0.39f;
-    public float resetRoll = 2f;
+    public int bombDamage = 6;
+    public float resetBomb = 2f;
+    public override float utility => bombDamage/resetBomb;
 
     [Header("Passive")]
-    public int passiveDamage = 8;
+     public int comboDamage = 3;
     
 }

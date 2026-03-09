@@ -50,7 +50,7 @@ public class TrainingSafety : MonoBehaviour
     public float castingSeconds = 10f;
 
     [Tooltip("If IsCharging stays true continuously for this long -> reset (prevents charge-hold exploits/stucks).")]
-    public float chargingSeconds = 10f;
+    public float chargingSeconds = 15f;
 
     [Header("Optional penalties (apply before reset)")]
     public bool applyPenaltyOnSafetyReset = false;
@@ -110,7 +110,6 @@ public class TrainingSafety : MonoBehaviour
         if (dt <= 0f) return;
 
         episodeTimer += dt;
-
         // 1) OOB (manual bounds)
         if (IsOutOfBounds(c1.transform.position) || IsOutOfBounds(c2.transform.position))
             oobTimer += dt;
@@ -183,7 +182,6 @@ public class TrainingSafety : MonoBehaviour
     bool IsOutOfBounds(Vector3 p)
     {
         oob=p.x < minX  || p.x > maxX || p.y < minY || p.y > maxY;
-        print(p.x+" ?? "+p.y+" "+ oob);
         return oob;
     }
 

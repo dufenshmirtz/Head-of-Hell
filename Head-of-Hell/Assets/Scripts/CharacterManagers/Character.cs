@@ -74,7 +74,7 @@ public abstract class Character : MonoBehaviour
     protected GameObject saveReplayButton;
     protected Slider cooldownSlider;
     protected TextMeshProUGUI damageCounter;
-    bool damageCounterReseted = true;
+    //bool damageCounterReseted = true;
     protected helthbarscript healthbar;
 
     //basic stats
@@ -139,7 +139,7 @@ public abstract class Character : MonoBehaviour
     protected CharacterManager characterChoiceHandler;
     protected GameManager gameManager;
 
-    bool preserveJump = false;
+    //bool preserveJump = false;
 
     protected bool damageShield = false;
 
@@ -1333,7 +1333,7 @@ public abstract class Character : MonoBehaviour
         if (enemy.currHealth == maxHealth)
         {
             gameManager.RoundEndFlawless(playerNum, P2Name);
-            KeepStats(P2Name, P1Name.text);
+            KeepStats(P2Name,enemy.GetCharID(), P1Name.text,characterID);
         }
         else if (enemy.currHealth <= 0)
         {
@@ -1342,7 +1342,7 @@ public abstract class Character : MonoBehaviour
         else
         {
             gameManager.RoundEnd(playerNum, P2Name);
-            KeepStats(P2Name, P1Name.text);
+            KeepStats(P2Name,enemy.GetCharID(), P1Name.text,characterID);
         }
 
     }
@@ -1666,8 +1666,13 @@ public abstract class Character : MonoBehaviour
 
     }
 
-    public void KeepStats(string winner, string loser)
+    public void KeepStats(string winner,int winnerID, string loser,int loserID)
     {
+        if (gameManager.trainingMode)
+        {
+            return;
+        }
+        
         if (winner == loser || ignoreStats)
         {
             return;
@@ -1681,6 +1686,59 @@ public abstract class Character : MonoBehaviour
         {
             Debug.Log("Error.StatsManager not loaded properly.");
         }
+
+        KeepData(winnerID,loserID,playerNum);
+    }
+
+    public void KeepData(int winnerID, int loserID, int setupNum)
+    {
+        if (MatchDataLogger.Instance == null)
+        {
+            Debug.LogError("MatchDataLogger not found.");
+            return;
+        }
+
+        int charA, charB;
+        int aWins;
+
+        if (setupNum == 2)
+        {
+            charA = winnerID;
+            charB = loserID;
+            aWins = 1;
+        }
+        else
+        {
+            charA = loserID;
+            charB = winnerID;
+            aWins = 0;
+        }
+
+        CharacterSpecsBase specsA = resources.GetSpecsByID(charA);
+        CharacterSpecsBase specsB = resources.GetSpecsByID(charB);
+
+        if (specsA == null || specsB == null)
+        {
+            Debug.LogError("Could not load specs.");
+            return;
+        }
+
+        MatchDataLogger.Instance.LogMatchRow(
+            charA,
+            charB,
+            specsA.damage,
+            specsA.cooldown,
+            specsA.utility,
+            specsB.damage,
+            specsB.cooldown,
+            specsB.utility,
+            aWins
+        );
+    }
+
+    public int GetCharID()
+    {
+        return characterID;
     }
 
     #endregion

@@ -6,7 +6,7 @@ public class Steelager : Character
 {
     float cooldown = 16f;
     int damage = 20;
-    float speedSaver = 4f;
+    //float speedSaver = 4f;
     float resetBombs = 2f;
     //bombin
     public GameObject bombPrefab; // The bullet prefab
@@ -14,6 +14,7 @@ public class Steelager : Character
     public Transform bombsParent;
     bool bombCharging = false;
     bombScript bomba;
+    int comboDamage = 3;
     public Transform firePoint;
     public Transform explosionPoint;
 
@@ -42,7 +43,7 @@ public class Steelager : Character
             enemy.TakeDamage(heavyDamage, true);
 
             if(knocked){
-                enemy.TakeDamageNoAnimation(3,false);
+                enemy.TakeDamageNoAnimation(comboDamage,false);
             }
 
             if (!enemy.isBlocking)
