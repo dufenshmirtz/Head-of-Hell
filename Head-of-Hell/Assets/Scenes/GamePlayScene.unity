@@ -326,6 +326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f147db0553337344862593914dda28a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -1677,6 +1678,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: -1
       addedObject: {fileID: 221568230}
+    - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 221568256}
   m_SourcePrefab: {fileID: 100100000, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
 --- !u!1 &57808467
 GameObject:
@@ -4256,6 +4260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce9d25f139ebd644b82ae0aa368bfef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -4885,6 +4890,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45580a4c381f424ab955b7bf58228a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -6266,6 +6272,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   side: 0
+--- !u!114 &221568245 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5341404983514887946, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+  m_PrefabInstance: {fileID: 55097439}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221568178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 299935f4373516b488b961c552d4f8af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &221568256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221568178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b492f403ccb837e46bb46538b1575d22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 0}
+  setup: {fileID: 221568245}
+  target: {fileID: 0}
+  preferredRange: 0.95
+  tooCloseRange: 0.3
+  randomRetreatChance: 0
+  thinkIntervalMin: 0.12
+  thinkIntervalMax: 0.3
+  actionCooldownMin: 0.35
+  actionCooldownMax: 0.9
+  quickChance: 0.22
+  heavyChance: 0.45
+  specialChance: 0.1
+  chargeChance: 0
+  jumpChance: 0.08
+  blockChance: 0.05
+  parryChance: 0.02
+  sameLevelTolerance: 0.9
+  jumpToTargetChance: 0.25
+  logDebug: 0
 --- !u!1 &224284506
 GameObject:
   m_ObjectHideFlags: 0
@@ -7170,6 +7219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654129d6cad6bc149a6e4cdd914d6d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -9184,6 +9234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f147db0553337344862593914dda28a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -10098,6 +10149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6998d57695752804ca4547096e6a4673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -11883,6 +11935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654129d6cad6bc149a6e4cdd914d6d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -13554,6 +13607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45580a4c381f424ab955b7bf58228a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -14505,6 +14559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654129d6cad6bc149a6e4cdd914d6d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -16849,6 +16904,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6998d57695752804ca4547096e6a4673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -19619,6 +19675,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83bc2e325808824ab233587b3d8da4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -22761,6 +22818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee14e5ef9e5575408a48f14c588dfa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -23117,6 +23175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f147db0553337344862593914dda28a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -26489,6 +26548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187a91747899a5f4da73dbe80614cf50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -29169,6 +29229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187a91747899a5f4da73dbe80614cf50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -29396,6 +29457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee14e5ef9e5575408a48f14c588dfa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -30214,6 +30276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f147db0553337344862593914dda28a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -31014,6 +31077,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee14e5ef9e5575408a48f14c588dfa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -31321,6 +31385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6998d57695752804ca4547096e6a4673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -31783,6 +31848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6998d57695752804ca4547096e6a4673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -32677,6 +32743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce9d25f139ebd644b82ae0aa368bfef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -33213,6 +33280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654129d6cad6bc149a6e4cdd914d6d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -34569,6 +34637,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   side: 1
+--- !u!114 &1367423890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367423824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b492f403ccb837e46bb46538b1575d22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 0}
+  setup: {fileID: 1367423891}
+  target: {fileID: 0}
+  preferredRange: 0.95
+  tooCloseRange: 0.3
+  randomRetreatChance: 0
+  thinkIntervalMin: 0.12
+  thinkIntervalMax: 0.3
+  actionCooldownMin: 0.35
+  actionCooldownMax: 0.9
+  quickChance: 0.22
+  heavyChance: 0.45
+  specialChance: 0.1
+  chargeChance: 0
+  jumpChance: 0.08
+  blockChance: 0.05
+  parryChance: 0.02
+  sameLevelTolerance: 0.9
+  jumpToTargetChance: 0.25
+  logDebug: 0
+--- !u!114 &1367423891 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5020299007731939445, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+  m_PrefabInstance: {fileID: 1656577412}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367423824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 299935f4373516b488b961c552d4f8af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1369490559
 GameObject:
   m_ObjectHideFlags: 0
@@ -36488,6 +36599,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187a91747899a5f4da73dbe80614cf50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -37859,6 +37971,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce9d25f139ebd644b82ae0aa368bfef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -39650,6 +39763,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83bc2e325808824ab233587b3d8da4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -40128,6 +40242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83bc2e325808824ab233587b3d8da4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -41716,6 +41831,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1367423876}
+    - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1367423890}
   m_SourcePrefab: {fileID: 100100000, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
 --- !u!1 &1660255940
 GameObject:
@@ -42393,6 +42511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83bc2e325808824ab233587b3d8da4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -43885,6 +44004,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee14e5ef9e5575408a48f14c588dfa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -47325,6 +47445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45580a4c381f424ab955b7bf58228a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -48173,6 +48294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce9d25f139ebd644b82ae0aa368bfef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -48763,6 +48885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45580a4c381f424ab955b7bf58228a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4
@@ -50920,6 +51043,9 @@ MonoBehaviour:
   - {fileID: 616644771}
   - {fileID: 808757111}
   maxHealth: 100
+  autoRunMatches: 1
+  autoNextMatchDelay: 2
+  maxAutoMatches: 0
   trainingMode: 0
   agentP1: {fileID: 221568215}
   agentP2: {fileID: 1367423861}
@@ -51428,6 +51554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187a91747899a5f4da73dbe80614cf50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   characterID: 0
   moveSpeed: 4

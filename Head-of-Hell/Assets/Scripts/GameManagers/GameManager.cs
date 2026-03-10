@@ -33,7 +33,37 @@ public class GameManager : MonoBehaviour
     public GameObject[] portalPairs;
     bool chanChan;
     public int maxHealth = -1;
-    
+
+    //AUTO MATCH RESTART FOR BOTS (DELETE LATER) 
+    [Header("Auto Match Runner")]
+    [SerializeField] private bool autoRunMatches = false;
+    [SerializeField] private float autoNextMatchDelay = 2f;
+    [SerializeField] private int maxAutoMatches = 0; // 0 = infinite
+    private bool restartQueued = false;
+    private static int autoMatchCounter = 0;
+    //HELPER METHOD FOR BOT MATHCES//
+    private void QueueNextAutoMatch()
+    {
+        if (!autoRunMatches || restartQueued)
+            return;
+
+        if (maxAutoMatches > 0 && autoMatchCounter >= maxAutoMatches)
+        {
+            Debug.Log($"[AutoMatchRunner] Reached max auto matches: {maxAutoMatches}");
+            return;
+        }
+
+        restartQueued = true;
+        autoMatchCounter++;
+        StartCoroutine(RestartMatchRoutine());
+    }
+    //-------------------------------------------//
+
+    private IEnumerator RestartMatchRoutine()
+    {
+        yield return new WaitForSeconds(autoNextMatchDelay);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
     //training
     public bool trainingMode = false;           // tick this for training scene
     public FighterAgent agentP1, agentP2;       // drag the two FighterAgent components
@@ -58,8 +88,6 @@ public class GameManager : MonoBehaviour
         {
             stages[2].SetActive(true);
         }
-
-
 
         TelemetryManager.Instance?.StartSession();
 
@@ -191,7 +219,14 @@ public class GameManager : MonoBehaviour
             roundTelemetryClosed = true;
         }
 
-        StartCoroutine(WaitAndCheck(playerNum, winnerName));
+        if (autoRunMatches)
+        {
+            QueueNextAutoMatch();
+        }
+        else
+        {
+            StartCoroutine(WaitAndCheck(playerNum, winnerName));
+        }
     }
 
     public void RoundEndTie(int playerNum)
@@ -284,7 +319,14 @@ public class GameManager : MonoBehaviour
             roundTelemetryClosed = true;
         }
 
-        StartCoroutine(WaitAndCheck(playerNum, winnerName));
+        if (autoRunMatches)
+        {
+            QueueNextAutoMatch();
+        }
+        else
+        {
+            StartCoroutine(WaitAndCheck(playerNum, winnerName));
+        }
     }
 
     public void ShortWins(int playerNum, string winnerName)
