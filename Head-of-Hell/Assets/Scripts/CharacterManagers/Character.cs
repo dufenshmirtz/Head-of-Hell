@@ -584,12 +584,18 @@ public abstract class Character : MonoBehaviour
         }
 
         //Get down from pad
-        if (input.GetKeyDown(down) || (controller && input.GetAxis("Vertical" + playerString) < -0.5f))
+        // Get down from platform
+        float verticalInput = input.GetAxis("Vertical" + playerString);
+        bool wantsDrop = input.GetKeyDown(down) || verticalInput < -0.5f;
+
+        if (wantsDrop && CanDropPlatform)
         {
             Collider2D[] colliders = GetComponents<Collider2D>();
-            if (CanDropPlatform)
-                TelemetryManager.Instance?.LogAction(PlayerId, "DropPlatform");
-            colliders[3].enabled = false;
+
+            TelemetryManager.Instance?.LogAction(PlayerId, "DropPlatform");
+
+            if (colliders.Length > 3 && colliders[3] != null)
+                colliders[3].enabled = false;
         }
 
         //LightAttack
