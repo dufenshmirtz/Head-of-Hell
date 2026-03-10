@@ -6298,22 +6298,34 @@ MonoBehaviour:
   character: {fileID: 0}
   setup: {fileID: 221568245}
   target: {fileID: 0}
-  preferredRange: 0.95
-  tooCloseRange: 0.3
+  preferredRange: 1.2
+  tooCloseRange: 0.45
   randomRetreatChance: 0
   thinkIntervalMin: 0.12
-  thinkIntervalMax: 0.3
-  actionCooldownMin: 0.35
-  actionCooldownMax: 0.9
-  quickChance: 0.22
-  heavyChance: 0.45
-  specialChance: 0.1
+  thinkIntervalMax: 0.2
+  actionCooldownMin: 0.3
+  actionCooldownMax: 0.65
+  quickChance: 0.35
+  heavyChance: 0.25
+  specialChance: 0.08
   chargeChance: 0
-  jumpChance: 0.08
+  jumpChance: 0.06
   blockChance: 0.05
-  parryChance: 0.02
-  sameLevelTolerance: 0.9
-  jumpToTargetChance: 0.25
+  parryChance: 0
+  sameLevelTolerance: 0.85
+  jumpToTargetChance: 0.05
+  engageRange: 1.35
+  dropToTargetChance: 1
+  underTargetDeadzone: 0.6
+  sideStepWhenBelow: 1
+  forcedDropChance: 0.9
+  dropHoldDuration: 0.18
+  dropMinXAlign: 1
+  faceToFaceAttackBias: 0.8
+  idleInEngageChance: 0.08
+  stuckUnderTargetMoveTime: 0.24
+  stuckUnderTargetSpeed: 1
+  forcedDropIfStackedChance: 1
   logDebug: 0
 --- !u!1 &224284506
 GameObject:
@@ -34652,22 +34664,34 @@ MonoBehaviour:
   character: {fileID: 0}
   setup: {fileID: 1367423891}
   target: {fileID: 0}
-  preferredRange: 0.95
-  tooCloseRange: 0.3
+  preferredRange: 1.2
+  tooCloseRange: 0.45
   randomRetreatChance: 0
   thinkIntervalMin: 0.12
-  thinkIntervalMax: 0.3
-  actionCooldownMin: 0.35
-  actionCooldownMax: 0.9
-  quickChance: 0.22
-  heavyChance: 0.45
-  specialChance: 0.1
+  thinkIntervalMax: 0.2
+  actionCooldownMin: 0.3
+  actionCooldownMax: 0.65
+  quickChance: 0.35
+  heavyChance: 0.25
+  specialChance: 0.08
   chargeChance: 0
-  jumpChance: 0.08
+  jumpChance: 0.06
   blockChance: 0.05
-  parryChance: 0.02
-  sameLevelTolerance: 0.9
-  jumpToTargetChance: 0.25
+  parryChance: 0
+  sameLevelTolerance: 0.85
+  jumpToTargetChance: 0.05
+  engageRange: 1.35
+  dropToTargetChance: 1
+  underTargetDeadzone: 0.45
+  sideStepWhenBelow: 1
+  forcedDropChance: 0.9
+  dropHoldDuration: 0.15
+  dropMinXAlign: 1
+  faceToFaceAttackBias: 0.8
+  idleInEngageChance: 0.08
+  stuckUnderTargetMoveTime: 0.24
+  stuckUnderTargetSpeed: 1
+  forcedDropIfStackedChance: 1
   logDebug: 0
 --- !u!114 &1367423891 stripped
 MonoBehaviour:
