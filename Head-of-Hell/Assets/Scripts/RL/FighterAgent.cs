@@ -183,6 +183,9 @@ public class FighterAgent : Agent
         sensor.AddObservation(self.AbilityCooldown01);
         sensor.AddObservation(self.CanCast);
         sensor.AddObservation(self.CanParry);
+        sensor.AddObservation(self.LightAttacking);
+        sensor.AddObservation(self.HeavyAttacking);
+        sensor.AddObservation(self.Parrying);
 
         // disabled flags
         sensor.AddObservation(self.QuickDisabled);
@@ -204,6 +207,10 @@ public class FighterAgent : Agent
         sensor.AddObservation(opp.AbilityCooldown01);
         sensor.AddObservation(opp.CanCast);
         sensor.AddObservation(opp.CanParry);
+        sensor.AddObservation(opp.LightAttacking);
+        sensor.AddObservation(opp.HeavyAttacking);
+        sensor.AddObservation(opp.Parrying);
+        
 
         // facing hint (cheap, helps approach)
         sensor.AddObservation(Mathf.Sign(rel.x));                  // where opponent is

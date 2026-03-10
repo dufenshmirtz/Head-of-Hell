@@ -188,6 +188,11 @@ public abstract class Character : MonoBehaviour
     private Vector3 _spawnPos;
     public void SetSpawnPosition(Vector3 pos) => _spawnPos = pos;
 
+    //helpers
+    public bool isLightAttacking=false;
+    public bool heavyAttacking=false;
+    
+
 
     #region Base
     public virtual void Start()
@@ -519,6 +524,7 @@ public abstract class Character : MonoBehaviour
         {
             if (!heavyDisable && !casting)
             {
+                heavyAttacking=true;
                 HeavyAttack();
             }
         }
@@ -562,8 +568,10 @@ public abstract class Character : MonoBehaviour
         {
             if (!quickDisable && !casting)
             {
+                isLightAttacking=true;
                 moveSpeed = OGMoveSpeed;
                 LightAttack();
+                StartCoroutine(ResetLightAttackIndicator());
             }
         }
 
@@ -589,6 +597,12 @@ public abstract class Character : MonoBehaviour
         animator.SetBool("IsGrounded", isGrounded);
         animator.SetFloat("VerticalSpeed", rb.velocity.y);
 
+    }
+
+    IEnumerator ResetLightAttackIndicator()
+    {
+        yield return null;
+        isLightAttacking=false;
     }
 
     IEnumerator WaitForMaxHealth()
@@ -1061,6 +1075,7 @@ public abstract class Character : MonoBehaviour
             moveSpeed = OGMoveSpeed;
         }
         animator.SetBool("IsHeavyAttacking", false);
+        heavyAttacking=false;
     }
 
     private IEnumerator WaitAndSetSpeed()
@@ -1068,6 +1083,7 @@ public abstract class Character : MonoBehaviour
 
         yield return new WaitForSeconds(0.49f);  // Waits for 0.49 seconds
         moveSpeed = OGMoveSpeed;
+        heavyAttacking=false;
 
     }
 
@@ -1321,6 +1337,7 @@ public abstract class Character : MonoBehaviour
         }
 
         ignoreDamage = true;
+        knockable = false;
 
         ActivateHealthBars(); //In case they are hidden
 
@@ -1762,6 +1779,9 @@ public abstract class Character : MonoBehaviour
     public bool SpecialDisabled => specialDisable;
     public bool ChargeDisabled => chargeDisable;
     public bool JumpDisabled => jumpDisabled;
+    public bool Parrying => counterIsOn;
+    public bool HeavyAttacking => heavyAttacking;
+    public bool LightAttacking => isLightAttacking;
 
     // Optional: normalized ability cooldown (0=ready, 1=just used).
     // Store last used cooldown length so we can normalize.
@@ -1793,6 +1813,8 @@ public abstract class Character : MonoBehaviour
         knocked = false;
         knockable = true;
         justTeleported = false;
+        heavyAttacking = false;
+        isLightAttacking = false;
 
         // Charges / counters
         charging = false;
