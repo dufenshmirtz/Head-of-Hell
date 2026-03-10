@@ -6319,13 +6319,15 @@ MonoBehaviour:
   underTargetDeadzone: 0.6
   sideStepWhenBelow: 1
   forcedDropChance: 0.9
-  dropHoldDuration: 0.18
+  dropHoldDuration: 0.35
   dropMinXAlign: 1
   faceToFaceAttackBias: 0.8
   idleInEngageChance: 0.08
   stuckUnderTargetMoveTime: 0.24
   stuckUnderTargetSpeed: 1
   forcedDropIfStackedChance: 1
+  stackedDropDelay: 1.25
+  stackedXThreshold: 0.6
   logDebug: 0
 --- !u!1 &224284506
 GameObject:
@@ -34685,13 +34687,15 @@ MonoBehaviour:
   underTargetDeadzone: 0.45
   sideStepWhenBelow: 1
   forcedDropChance: 0.9
-  dropHoldDuration: 0.15
+  dropHoldDuration: 0.35
   dropMinXAlign: 1
   faceToFaceAttackBias: 0.8
   idleInEngageChance: 0.08
   stuckUnderTargetMoveTime: 0.24
   stuckUnderTargetSpeed: 1
   forcedDropIfStackedChance: 1
+  stackedDropDelay: 1.25
+  stackedXThreshold: 0.6
   logDebug: 0
 --- !u!114 &1367423891 stripped
 MonoBehaviour:
