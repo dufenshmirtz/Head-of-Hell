@@ -1735,6 +1735,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: -1
       addedObject: {fileID: 221568230}
+    - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 221568244}
   m_SourcePrefab: {fileID: 100100000, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
 --- !u!1 &57808467
 GameObject:
@@ -4459,7 +4462,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 181110691}
-  - component: {fileID: 181110694}
   - component: {fileID: 181110693}
   - component: {fileID: 181110692}
   m_Layer: 8
@@ -4622,14 +4624,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!222 &181110694
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 181110690}
-  m_CullTransparentMesh: 1
 --- !u!1 &184576785
 GameObject:
   m_ObjectHideFlags: 0
@@ -6186,7 +6180,7 @@ MonoBehaviour:
   enemyHandler: {fileID: 1367423825}
   playerNum: 1
   training: 0
-  mngr: {fileID: 0}
+  mngr: {fileID: 2144866982}
 --- !u!4 &221568191 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
@@ -6362,12 +6356,37 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 221568178}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bccf09bb0b723bf45959849e53264fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   side: 0
+--- !u!114 &221568244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221568178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7596297e9d07cf4469ef38cd9a01fa65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selfManager: {fileID: 221568179}
+  enemyManager: {fileID: 1367423825}
+  enableLogging: 1
+  logOnlyWhenGameplayActive: 1
+  autoStart: 1
+  prettyDebug: 0
+  relXScale: 9
+  relYScale: 5
+  velScale: 10
+  totalCharacterCount: 10
+  folderName: ILLogs
+  filePrefix: imitation
+  controlledPlayerLabel: P1
 --- !u!1 &224284506
 GameObject:
   m_ObjectHideFlags: 0
@@ -27246,7 +27265,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1052106695}
-  - component: {fileID: 1052106698}
   - component: {fileID: 1052106697}
   - component: {fileID: 1052106696}
   - component: {fileID: 1052106699}
@@ -27410,14 +27428,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!222 &1052106698
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1052106694}
-  m_CullTransparentMesh: 1
 --- !u!114 &1052106699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34825,7 +34835,7 @@ MonoBehaviour:
   enemyHandler: {fileID: 221568179}
   playerNum: 2
   training: 0
-  mngr: {fileID: 0}
+  mngr: {fileID: 2144866982}
 --- !u!4 &1367423837 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
@@ -35001,12 +35011,37 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367423824}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bccf09bb0b723bf45959849e53264fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   side: 1
+--- !u!114 &1367423890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367423824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7596297e9d07cf4469ef38cd9a01fa65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selfManager: {fileID: 1367423825}
+  enemyManager: {fileID: 221568179}
+  enableLogging: 1
+  logOnlyWhenGameplayActive: 1
+  autoStart: 1
+  prettyDebug: 0
+  relXScale: 9
+  relYScale: 5
+  velScale: 10
+  totalCharacterCount: 10
+  folderName: ILLogs
+  filePrefix: imitation
+  controlledPlayerLabel: P2
 --- !u!1 &1369490559
 GameObject:
   m_ObjectHideFlags: 0
@@ -42209,6 +42244,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1367423876}
+    - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1367423890}
   m_SourcePrefab: {fileID: 100100000, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
 --- !u!1 &1660255940
 GameObject:

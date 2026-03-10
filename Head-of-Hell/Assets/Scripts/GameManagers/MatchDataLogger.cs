@@ -1,4 +1,5 @@
 using System.IO;
+using System;
 using UnityEngine;
 
 public class MatchDataLogger : MonoBehaviour
@@ -20,9 +21,20 @@ public class MatchDataLogger : MonoBehaviour
             return;
         }
 
-        filePath = Path.Combine(Application.persistentDataPath, "ml_data.csv");
+        string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-        print("ass: "+Application.persistentDataPath);
+        string folder = Path.Combine(
+            documentsPath,
+            "My Games",
+            "Head of Hell",
+            "BalanceLogs"
+        );
+
+        Directory.CreateDirectory(folder);
+
+        filePath = Path.Combine(folder, "ml_data.csv");
+
+        Debug.Log("Balance ML data path: " + filePath);
 
         if (!File.Exists(filePath))
         {
