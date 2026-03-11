@@ -326,6 +326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f147db0553337344862593914dda28a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -364,6 +365,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -4254,6 +4271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce9d25f139ebd644b82ae0aa368bfef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -4292,6 +4310,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   mirrorFireAttackPoint: {fileID: 689308824}
   fireAttackPoint: {fileID: 2133402719}
 --- !u!1 &174624792
@@ -4897,6 +4931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45580a4c381f424ab955b7bf58228a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -4935,6 +4970,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &184793119
@@ -6216,7 +6267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 58
+    VectorObservationSize: 64
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -7177,6 +7228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654129d6cad6bc149a6e4cdd914d6d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -7215,6 +7267,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1522488523}
   bombsParent: {fileID: 2100796710}
@@ -9205,6 +9273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f147db0553337344862593914dda28a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -9243,6 +9312,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -10134,6 +10219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6998d57695752804ca4547096e6a4673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -10172,6 +10258,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -11934,6 +12036,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654129d6cad6bc149a6e4cdd914d6d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -11972,6 +12075,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1670223497}
   bombsParent: {fileID: 2100796710}
@@ -13620,6 +13739,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45580a4c381f424ab955b7bf58228a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -13658,6 +13778,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &541449327
@@ -14586,6 +14722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654129d6cad6bc149a6e4cdd914d6d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -14624,6 +14761,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 343137453}
   bombsParent: {fileID: 2100796710}
@@ -16945,6 +17098,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6998d57695752804ca4547096e6a4673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -16983,6 +17137,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -19731,6 +19901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83bc2e325808824ab233587b3d8da4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -19769,6 +19940,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 569739573}
   bulletSpeed: 35
@@ -21576,9 +21763,9 @@ MonoBehaviour:
   volchBiteSuccess: {fileID: 8300000, guid: 2d85ec46f54633f449fb9d0522bc2443, type: 3}
   volchBiteExtra: {fileID: 8300000, guid: 61e0b31583ddc2f4e8b6c40a17d70e64, type: 3}
   skipWin: {fileID: 8300000, guid: eee410a3874a9dc43b842ba89fef0b63, type: 3}
-  kalhaflash: {fileID: 0}
-  gabaWin: {fileID: 0}
-  gabaPick: {fileID: 0}
+  kalhaflash: {fileID: 8300000, guid: 09efd9d06a4056242ad125c29d3a3160, type: 3}
+  gabaWin: {fileID: 8300000, guid: 09efd9d06a4056242ad125c29d3a3160, type: 3}
+  gabaPick: {fileID: 8300000, guid: 09efd9d06a4056242ad125c29d3a3160, type: 3}
   portal: {fileID: 8300000, guid: 3d93f537382f0524f96d0457207ad8b0, type: 3}
   incense: {fileID: 8300000, guid: ceb3230fffc7bec49a29f08f696200cf, type: 3}
   waterSplash: {fileID: 8300000, guid: c280083b5534f02448eca00e2bd6950a, type: 3}
@@ -22888,6 +23075,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee14e5ef9e5575408a48f14c588dfa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -22926,6 +23114,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1001 &882995806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23258,6 +23462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f147db0553337344862593914dda28a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -23296,6 +23501,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -26645,6 +26866,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187a91747899a5f4da73dbe80614cf50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -26683,6 +26905,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1025716889
 GameObject:
   m_ObjectHideFlags: 0
@@ -29295,6 +29533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187a91747899a5f4da73dbe80614cf50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -29333,6 +29572,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1169185177
 GameObject:
   m_ObjectHideFlags: 0
@@ -29536,6 +29791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee14e5ef9e5575408a48f14c588dfa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -29574,6 +29830,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1185634414
 GameObject:
   m_ObjectHideFlags: 0
@@ -30368,6 +30640,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f147db0553337344862593914dda28a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -30406,6 +30679,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -31182,6 +31471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee14e5ef9e5575408a48f14c588dfa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -31220,6 +31510,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &1228552612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31504,6 +31810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6998d57695752804ca4547096e6a4673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -31542,6 +31849,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -31980,6 +32303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6998d57695752804ca4547096e6a4673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -32018,6 +32342,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -32888,6 +33228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce9d25f139ebd644b82ae0aa368bfef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -32926,6 +33267,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   mirrorFireAttackPoint: {fileID: 1079567584}
   fireAttackPoint: {fileID: 1505197450}
 --- !u!114 &1300380414
@@ -33439,6 +33796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654129d6cad6bc149a6e4cdd914d6d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -33477,6 +33835,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1100786215}
   bombsParent: {fileID: 2100796710}
@@ -34732,7 +35106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 58
+    VectorObservationSize: 64
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -36659,6 +37033,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187a91747899a5f4da73dbe80614cf50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -36697,6 +37072,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &1478511390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38046,6 +38437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce9d25f139ebd644b82ae0aa368bfef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -38084,6 +38476,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   mirrorFireAttackPoint: {fileID: 79255834}
   fireAttackPoint: {fileID: 1247528379}
 --- !u!114 &1531342472
@@ -39852,6 +40260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83bc2e325808824ab233587b3d8da4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -39890,6 +40299,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1881472743}
   bulletSpeed: 35
@@ -40344,6 +40769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83bc2e325808824ab233587b3d8da4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -40382,6 +40808,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1943892085}
   bulletSpeed: 35
@@ -42621,6 +43063,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83bc2e325808824ab233587b3d8da4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -42659,6 +43102,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 461525617}
   bulletSpeed: 35
@@ -44127,6 +44586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee14e5ef9e5575408a48f14c588dfa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -44165,6 +44625,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &1753174034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47582,6 +48058,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45580a4c381f424ab955b7bf58228a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -47620,6 +48097,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &1985498623
@@ -48445,6 +48938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce9d25f139ebd644b82ae0aa368bfef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -48483,6 +48977,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   mirrorFireAttackPoint: {fileID: 1584761535}
   fireAttackPoint: {fileID: 1839956112}
 --- !u!1 &2018083340
@@ -49049,6 +49559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45580a4c381f424ab955b7bf58228a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -49087,6 +49598,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &2039720494
@@ -51766,6 +52293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187a91747899a5f4da73dbe80614cf50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
   ignoreDamage: 0
   isStatic: 0
@@ -51804,6 +52332,22 @@ MonoBehaviour:
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
