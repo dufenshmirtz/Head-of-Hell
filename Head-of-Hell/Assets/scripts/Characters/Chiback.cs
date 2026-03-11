@@ -14,6 +14,7 @@ public class Chiback : Character
     int enragingNum = 3;
     int shortJumpDamage = 5, MedJumpDamage = 10, wideJumpDamage = 15;
     bool roarPlayed = false;
+    float resetDisable = 1f;
 
     public Transform mirrorFireAttackPoint;
     public Transform fireAttackPoint;
@@ -44,7 +45,6 @@ public class Chiback : Character
             TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
             enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
             enemy.TakeDamage(heavyDamage, true);
-            print("check: yes "+enemy);
 
             if (! enemy.isBlocking)
             {
@@ -55,7 +55,6 @@ public class Chiback : Character
         {
             TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Heavy);
             audioManager.PlaySFX(audioManager.swoosh, 1f);
-            print("check: noenemy"+enemy);
         }
     }
     #endregion
@@ -215,7 +214,7 @@ public class Chiback : Character
 
     IEnumerator ResetFire()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(resetDisable);
         audioManager.PlaySFX(audioManager.sworDashTada, audioManager.lessVol);
         fireReady = true;
         QuickAttackIndicatorEnable();
@@ -261,7 +260,7 @@ public class Chiback : Character
     {
         if (timesHit == enragingNum)
         {
-            enemy.TakeDamage(jumpDamage / 2,true);
+            enemy.TakeDamageNoAnimation(jumpDamage / 2,true);
             roarPlayed = false;
         }
     }

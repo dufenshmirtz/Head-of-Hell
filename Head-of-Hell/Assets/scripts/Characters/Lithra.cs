@@ -264,7 +264,7 @@ public class Lithra : Character
     }
     bool StunChance()
     {
-        return Random.value < 0.25f;
+        return Random.value < 0.33f;
     }
     #endregion
 
