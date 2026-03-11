@@ -326,13 +326,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f147db0553337344862593914dda28a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -345,11 +360,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -1624,6 +1655,50 @@ PrefabInstance:
       propertyPath: mirrorFireAttackPoint
       value: 
       objectReference: {fileID: 1739945226}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0f913870751d5c848bbe838f872540c9, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8987149a37677e346b3d4b879ff3e90e, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: d5e33651ab1a45a49b78e520fd36feb5, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: e7787d4bf5421754f82065cc29abf293, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0436f3a4d21eebb46be974b18e41ed81, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: c588cf8d4d719b74eabdf5550f30fcde, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: 66d144869d00b984490c7f69c87c1eb5, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: 29d284668f05b084ba41d9a24a4019c4, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[8]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4c15626686b7986459f3d4e0ddb2d8c8, type: 2}
+    - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[9]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4b94f759a9d0ad14aa1407a1db5926f2, type: 2}
     - target: {fileID: 9159698240938344579, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.4
@@ -1677,6 +1752,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: -1
       addedObject: {fileID: 221568230}
+    - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 221568244}
   m_SourcePrefab: {fileID: 100100000, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
 --- !u!1 &57808467
 GameObject:
@@ -4256,13 +4334,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce9d25f139ebd644b82ae0aa368bfef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -4275,11 +4368,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   mirrorFireAttackPoint: {fileID: 689308824}
   fireAttackPoint: {fileID: 2133402719}
 --- !u!1 &174624792
@@ -4387,7 +4496,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 181110691}
-  - component: {fileID: 181110694}
   - component: {fileID: 181110693}
   - component: {fileID: 181110692}
   m_Layer: 8
@@ -4550,14 +4658,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!222 &181110694
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 181110690}
-  m_CullTransparentMesh: 1
 --- !u!1 &184576785
 GameObject:
   m_ObjectHideFlags: 0
@@ -4885,13 +4985,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45580a4c381f424ab955b7bf58228a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -4904,11 +5019,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &184793119
@@ -4975,6 +5106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 277780955}
   trash: {fileID: 0}
@@ -6098,6 +6230,8 @@ MonoBehaviour:
   VisviaAnimatorController: {fileID: 9100000, guid: 8349b7f4e453b9e4b966cd6122db6b70, type: 2}
   enemyHandler: {fileID: 1367423825}
   playerNum: 1
+  training: 0
+  mngr: {fileID: 2144866982}
 --- !u!4 &221568191 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
@@ -6164,13 +6298,16 @@ MonoBehaviour:
   stepPenalty: -0.0005
   buggedPenalty: -0.04
   staticPenalty: -0.01
-  totalCharacterCount: 10
-  rewardCloseToOpponent: 0.0008
-  penaltyFarFromOpponent: -0.0008
-  centerStageBonus: 0.0006
-  stageMin: {x: -9, y: -3}
-  stageMax: {x: 9, y: 5}
   engageDist: 3.5
+  dirReward: 0.002
+  dirPenalty: -0.002
+  farIdlePenalty: -0.003
+  inRangeBonus: 0.001
+  farDistancePenaltyScale: -0.0003
+  relXScale: 9
+  relYScale: 5
+  velScale: 10
+  totalCharacterCount: 10
 --- !u!114 &221568216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6227,19 +6364,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a09c9c7404d8d54e9d78055e0134fd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idleSpeedEps: 0.02
-  noChangeSeconds: 6
-  activeColorStuckSeconds: 5
-  arenaBounds: {fileID: 1100116392}
-  boundLeft: {fileID: 279847380}
-  boundRight: {fileID: 1727173186}
-  boundFloor: {fileID: 866361085}
-  boundCeiling: {fileID: 1786861228}
-  fallbackMin: {x: -9, y: -3}
-  fallbackMax: {x: 9, y: 5}
-  oobPadding: 0.25
-  oobGraceSeconds: 0.25
-  oobPenalty: -0.02
+  enable: 1
+  onlyWhenTrainingConnected: 1
+  gameManager: {fileID: 0}
+  p1Manager: {fileID: 0}
+  p2Manager: {fileID: 0}
+  useUnscaledTime: 1
+  minX: -9.5
+  maxX: 9.5
+  minY: -3
+  maxY: 6
+  oobSeconds: 1
+  episodeTimeoutSeconds: 500
+  stallSecondsBoth: 10
+  stallSecondsSingle: 20
+  velEps: 0.05
+  posEps: 0.02
+  weirdStateSeconds: 10
+  castingSeconds: 10
+  chargingSeconds: 10
+  applyPenaltyOnSafetyReset: 0
+  penaltyValue: -0.02
+  agentP1: {fileID: 0}
+  agentP2: {fileID: 0}
 --- !u!114 &221568230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6260,12 +6407,37 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 221568178}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bccf09bb0b723bf45959849e53264fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   side: 0
+--- !u!114 &221568244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221568178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7596297e9d07cf4469ef38cd9a01fa65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selfManager: {fileID: 221568179}
+  enemyManager: {fileID: 1367423825}
+  enableLogging: 1
+  logOnlyWhenGameplayActive: 1
+  autoStart: 1
+  prettyDebug: 0
+  relXScale: 9
+  relYScale: 5
+  velScale: 10
+  totalCharacterCount: 10
+  folderName: ILLogs
+  filePrefix: imitation
+  controlledPlayerLabel: P1
 --- !u!1 &224284506
 GameObject:
   m_ObjectHideFlags: 0
@@ -7170,13 +7342,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654129d6cad6bc149a6e4cdd914d6d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -7189,11 +7376,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1522488523}
   bombsParent: {fileID: 2100796710}
@@ -9184,13 +9387,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f147db0553337344862593914dda28a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -9203,11 +9421,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -9276,6 +9510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 112308069}
   trash: {fileID: 0}
@@ -10098,13 +10333,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6998d57695752804ca4547096e6a4673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -10117,11 +10367,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -10192,6 +10458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 778165903}
   trash: {fileID: 0}
@@ -11467,7 +11734,7 @@ GameObject:
   m_Component:
   - component: {fileID: 420532703}
   - component: {fileID: 420532704}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: lowerBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11483,7 +11750,7 @@ Transform:
   m_GameObject: {fileID: 420532702}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -3.0107503, y: 8.939737, z: 0.06273092}
+  m_LocalPosition: {x: -3.0107503, y: 9.93, z: 0.06273092}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11883,13 +12150,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654129d6cad6bc149a6e4cdd914d6d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -11902,11 +12184,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1670223497}
   bombsParent: {fileID: 2100796710}
@@ -11976,6 +12274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1670223497}
   trash: {fileID: 0}
@@ -12728,6 +13027,50 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &502303719
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 502303722}
+  - component: {fileID: 502303721}
+  m_Layer: 0
+  m_Name: MatchData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &502303721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502303719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1432c3c3cb3927f40b01b91f20f06e00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &502303722
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502303719}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.6397605, y: -0.6910636, z: -0.018377881}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &502965388
 GameObject:
   m_ObjectHideFlags: 0
@@ -13554,13 +13897,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45580a4c381f424ab955b7bf58228a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -13573,11 +13931,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &541449327
@@ -13644,6 +14018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1776539105}
   trash: {fileID: 0}
@@ -14505,13 +14880,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654129d6cad6bc149a6e4cdd914d6d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -14524,11 +14914,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 343137453}
   bombsParent: {fileID: 2100796710}
@@ -14598,6 +15004,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 343137453}
   trash: {fileID: 0}
@@ -16849,13 +17256,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6998d57695752804ca4547096e6a4673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -16868,11 +17290,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -16943,6 +17381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1086519415}
   trash: {fileID: 0}
@@ -18379,6 +18818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1604138820}
   trash: {fileID: 0}
@@ -19619,13 +20059,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83bc2e325808824ab233587b3d8da4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -19638,11 +20093,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 569739573}
   bulletSpeed: 35
@@ -19713,6 +20184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 2124878124}
   trash: {fileID: 0}
@@ -22761,13 +23233,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee14e5ef9e5575408a48f14c588dfa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -22780,11 +23267,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1001 &882995806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23117,13 +23620,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f147db0553337344862593914dda28a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -23136,11 +23654,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -23209,6 +23743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 302230613}
   trash: {fileID: 0}
@@ -26489,13 +27024,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187a91747899a5f4da73dbe80614cf50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -26508,11 +27058,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1020480611
 GameObject:
   m_ObjectHideFlags: 0
@@ -26937,7 +27503,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1052106695}
-  - component: {fileID: 1052106698}
   - component: {fileID: 1052106697}
   - component: {fileID: 1052106696}
   - component: {fileID: 1052106699}
@@ -27101,14 +27666,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!222 &1052106698
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1052106694}
-  m_CullTransparentMesh: 1
 --- !u!114 &1052106699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29169,13 +29726,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187a91747899a5f4da73dbe80614cf50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -29188,11 +29760,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1169185177
 GameObject:
   m_ObjectHideFlags: 0
@@ -29396,13 +29984,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee14e5ef9e5575408a48f14c588dfa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -29415,11 +30018,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1185634414
 GameObject:
   m_ObjectHideFlags: 0
@@ -30214,13 +30833,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f147db0553337344862593914dda28a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -30233,11 +30867,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -31014,13 +31664,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee14e5ef9e5575408a48f14c588dfa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -31033,11 +31698,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &1228552612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31102,6 +31783,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 530979623}
   trash: {fileID: 0}
@@ -31321,13 +32003,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6998d57695752804ca4547096e6a4673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -31340,11 +32037,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -31783,13 +32496,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6998d57695752804ca4547096e6a4673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -31802,11 +32530,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -32344,6 +33088,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1290822003}
   m_CullTransparentMesh: 1
+--- !u!1 &1291379658
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1291379660}
+  - component: {fileID: 1291379659}
+  m_Layer: 0
+  m_Name: TelemetryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1291379659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291379658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1e4c04af9bfe1f4ba3c3bb043546173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableTelemetry: 1
+  debugToConsole: 0
+  prettyPrintJson: 1
+  autoStartOnFirstEvent: 1
+  autoSaveOnQuit: 1
+--- !u!4 &1291379660
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291379658}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.24049407, y: -0.2421082, z: -0.04881542}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1298516029 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2378293063446369796, guid: a1ca33235a8bbac47ad82e4a9ff8b033, type: 3}
@@ -32677,13 +33470,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce9d25f139ebd644b82ae0aa368bfef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -32696,11 +33504,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   mirrorFireAttackPoint: {fileID: 1079567584}
   fireAttackPoint: {fileID: 1505197450}
 --- !u!114 &1300380414
@@ -32767,6 +33591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1961157082}
   trash: {fileID: 0}
@@ -33213,13 +34038,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654129d6cad6bc149a6e4cdd914d6d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -33232,11 +34072,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1100786215}
   bombsParent: {fileID: 2100796710}
@@ -34401,6 +35257,8 @@ MonoBehaviour:
   VisviaAnimatorController: {fileID: 9100000, guid: 8349b7f4e453b9e4b966cd6122db6b70, type: 2}
   enemyHandler: {fileID: 221568179}
   playerNum: 2
+  training: 0
+  mngr: {fileID: 2144866982}
 --- !u!4 &1367423837 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
@@ -34467,13 +35325,16 @@ MonoBehaviour:
   stepPenalty: -0.0005
   buggedPenalty: -0.04
   staticPenalty: -0.01
-  totalCharacterCount: 10
-  rewardCloseToOpponent: 0.0008
-  penaltyFarFromOpponent: -0.0008
-  centerStageBonus: 0.0006
-  stageMin: {x: -9, y: -3}
-  stageMax: {x: 9, y: 5}
   engageDist: 3.5
+  dirReward: 0.002
+  dirPenalty: -0.002
+  farIdlePenalty: -0.003
+  inRangeBonus: 0.001
+  farDistancePenaltyScale: -0.0003
+  relXScale: 9
+  relYScale: 5
+  velScale: 10
+  totalCharacterCount: 10
 --- !u!114 &1367423862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34530,19 +35391,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a09c9c7404d8d54e9d78055e0134fd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idleSpeedEps: 0.02
-  noChangeSeconds: 6
-  activeColorStuckSeconds: 5
-  arenaBounds: {fileID: 1100116392}
-  boundLeft: {fileID: 279847380}
-  boundRight: {fileID: 1727173186}
-  boundFloor: {fileID: 866361085}
-  boundCeiling: {fileID: 1786861228}
-  fallbackMin: {x: -9, y: -3}
-  fallbackMax: {x: 9, y: 5}
-  oobPadding: 0.25
-  oobGraceSeconds: 0.25
-  oobPenalty: -0.02
+  enable: 1
+  onlyWhenTrainingConnected: 1
+  gameManager: {fileID: 0}
+  p1Manager: {fileID: 0}
+  p2Manager: {fileID: 0}
+  useUnscaledTime: 1
+  minX: -9.5
+  maxX: 9.5
+  minY: -3
+  maxY: 6
+  oobSeconds: 1
+  episodeTimeoutSeconds: 500
+  stallSecondsBoth: 10
+  stallSecondsSingle: 20
+  velEps: 0.05
+  posEps: 0.02
+  weirdStateSeconds: 10
+  castingSeconds: 10
+  chargingSeconds: 10
+  applyPenaltyOnSafetyReset: 0
+  penaltyValue: -0.02
+  agentP1: {fileID: 0}
+  agentP2: {fileID: 0}
 --- !u!114 &1367423876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34563,12 +35434,37 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367423824}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bccf09bb0b723bf45959849e53264fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   side: 1
+--- !u!114 &1367423890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367423824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7596297e9d07cf4469ef38cd9a01fa65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selfManager: {fileID: 1367423825}
+  enemyManager: {fileID: 221568179}
+  enableLogging: 1
+  logOnlyWhenGameplayActive: 1
+  autoStart: 1
+  prettyDebug: 0
+  relXScale: 9
+  relYScale: 5
+  velScale: 10
+  totalCharacterCount: 10
+  folderName: ILLogs
+  filePrefix: imitation
+  controlledPlayerLabel: P2
 --- !u!1 &1369490559
 GameObject:
   m_ObjectHideFlags: 0
@@ -35181,55 +36077,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!1 &1401103370
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1401103372}
-  - component: {fileID: 1401103373}
-  m_Layer: 0
-  m_Name: TelemetryManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1401103372
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1401103370}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1401103373
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1401103370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1e4c04af9bfe1f4ba3c3bb043546173, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enableTelemetry: 1
-  debugToConsole: 0
-  prettyPrintJson: 1
-  autoStartOnFirstEvent: 1
-  autoSaveOnQuit: 1
 --- !u!1 &1409518961
 GameObject:
   m_ObjectHideFlags: 0
@@ -36488,13 +37335,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187a91747899a5f4da73dbe80614cf50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -36507,11 +37369,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &1478511390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36576,6 +37454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1936941808}
   trash: {fileID: 0}
@@ -36609,6 +37488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf612604b37b6f4dbe2dac1d745614d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: 0}
 --- !u!70 &1478511393
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -37859,13 +38739,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce9d25f139ebd644b82ae0aa368bfef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -37878,11 +38773,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   mirrorFireAttackPoint: {fileID: 79255834}
   fireAttackPoint: {fileID: 1247528379}
 --- !u!114 &1531342472
@@ -37949,6 +38860,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1848321332}
   trash: {fileID: 0}
@@ -39650,13 +40562,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83bc2e325808824ab233587b3d8da4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -39669,11 +40596,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1881472743}
   bulletSpeed: 35
@@ -40128,13 +41071,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83bc2e325808824ab233587b3d8da4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -40147,11 +41105,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1943892085}
   bulletSpeed: 35
@@ -40222,6 +41196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 1666705483}
   trash: {fileID: 0}
@@ -41543,6 +42518,50 @@ PrefabInstance:
       propertyPath: mirrorFireAttackPoint
       value: 
       objectReference: {fileID: 1799592992}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0f913870751d5c848bbe838f872540c9, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8987149a37677e346b3d4b879ff3e90e, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: d5e33651ab1a45a49b78e520fd36feb5, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: e7787d4bf5421754f82065cc29abf293, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0436f3a4d21eebb46be974b18e41ed81, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: c588cf8d4d719b74eabdf5550f30fcde, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: 66d144869d00b984490c7f69c87c1eb5, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: 29d284668f05b084ba41d9a24a4019c4, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[8]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4c15626686b7986459f3d4e0ddb2d8c8, type: 2}
+    - target: {fileID: 4522731436071566128, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: allCharacterSpecs.Array.data[9]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4b94f759a9d0ad14aa1407a1db5926f2, type: 2}
     - target: {fileID: 5020299007731939445, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: parry
       value: 44
@@ -41716,6 +42735,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1367423876}
+    - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1367423890}
   m_SourcePrefab: {fileID: 100100000, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
 --- !u!1 &1660255940
 GameObject:
@@ -42393,13 +43415,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83bc2e325808824ab233587b3d8da4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -42412,11 +43449,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 461525617}
   bulletSpeed: 35
@@ -43885,13 +44938,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee14e5ef9e5575408a48f14c588dfa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -43904,11 +44972,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &1753174034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43973,6 +45057,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27569496aa57a2b4aba33fda5ffeb9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCharacterSpecs: []
   bomb: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombSpawner: {fileID: 2070115600}
   trash: {fileID: 0}
@@ -44430,7 +45515,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1786861228}
   - component: {fileID: 1786861227}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: UpperBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47325,13 +48410,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45580a4c381f424ab955b7bf58228a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -47344,11 +48444,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &1985498623
@@ -48009,6 +49125,7 @@ MonoBehaviour:
   baseMenu: {fileID: 940830954}
   cChoice: {fileID: 221568179}
   sfx: {fileID: 832730747}
+  manager: {fileID: 2144866982}
 --- !u!1 &2003082946
 GameObject:
   m_ObjectHideFlags: 0
@@ -48173,13 +49290,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce9d25f139ebd644b82ae0aa368bfef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -48192,11 +49324,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   mirrorFireAttackPoint: {fileID: 1584761535}
   fireAttackPoint: {fileID: 1839956112}
 --- !u!1 &2018083340
@@ -48763,13 +49911,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45580a4c381f424ab955b7bf58228a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -48782,11 +49945,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &2039720494
@@ -50925,6 +52104,7 @@ MonoBehaviour:
   agentP2: {fileID: 1367423861}
   p1Spawn: {fileID: 221568191}
   p2Spawn: {fileID: 1367423837}
+  tScale: 1
 --- !u!1 &2147385444
 GameObject:
   m_ObjectHideFlags: 0
@@ -51301,6 +52481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf612604b37b6f4dbe2dac1d745614d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: 0}
 --- !u!50 &6993232257568019892
 Rigidbody2D:
   serializedVersion: 4
@@ -51428,13 +52609,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187a91747899a5f4da73dbe80614cf50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveLogCooldown: 0.2
   isBlocking: 0
+  ignoreDamage: 0
+  isStatic: 0
+  casting: 0
+  canCast: 1
+  knocked: 0
+  canRotate: 1
+  usingAbility: 0
+  currHealth: 0
+  isGrounded: 0
+  knockable: 1
+  canParry: 1
+  counterIsOn: 0
+  onCooldown: 0
+  cdTimer: 0
+  ignoreUpdate: 0
   characterID: 0
   moveSpeed: 4
   maxHealth: 100
   blockDisabled: 0
   canAlterSpeed: 1
-  ignoreUpdate: 0
   up: 0
   down: 0
   left: 0
@@ -51447,11 +52643,27 @@ MonoBehaviour:
   parry: 0
   playerString: 
   chargeDisable: 0
-  counterIsOn: 0
   overrideDeath: 0
+  grounds: 0
   chanChan: 0
   justTeleported: 0
   spawn: {fileID: 0}
+  isLightAttacking: 0
+  heavyAttacking: 0
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.15
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  solidGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  platformLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerGroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -51469,4 +52681,5 @@ SceneRoots:
   - {fileID: 832730748}
   - {fileID: 75958759}
   - {fileID: 1020480613}
-  - {fileID: 1401103372}
+  - {fileID: 502303722}
+  - {fileID: 1291379660}

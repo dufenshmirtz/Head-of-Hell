@@ -1,17 +1,19 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "VanderSpecs", menuName = "Characters/Vander Specs")]
-public class VanderSpecs : ScriptableObject
+public class VanderSpecs : CharacterSpecsBase
 {
     [Header("Spell")]
     public int stabDamage = 10, stabHeal = 5;
-    public float cooldown = 12f;
+    public override float cooldown => 12f;
+    public override int damage => stabDamage + stabHeal;
 
     [Header("Light Attack")]
     
     public int katanaDmg = 3;
     public int smallLifesteal = 3;
     public float katanaCD=2f;
+    public override float utility => (2*katanaDmg+smallLifesteal)/katanaCD;
 
     [Header("Charge")]
     public int chargeLifesteal=8;

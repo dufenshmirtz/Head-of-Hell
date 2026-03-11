@@ -5,10 +5,13 @@ public class Rager : Character
 {
     //Spell
     float cooldown = 20f;
-    int hit1Damage = 2, hit2Damage = 7, hit3Damage = 10; //25 actual dmg these variables are ass
+    int hit1Damage = 2, hit2Damage = 7; //25 actual dmg these variables are ass
+    int spellDamage2 = 10;
+    int spellDamage1 = 15;
     //Lightattack
     int lightDamage = 4;
     bool spellHit = false;
+
 
     #region HeavyAttack
     override public void HeavyAttack()
@@ -105,7 +108,8 @@ public class Rager : Character
         if (spellHit)
         {
             animator.SetTrigger("Combo");
-            StartCoroutine(DealComboDamageOverTime(2f, 15));
+
+            StartCoroutine(DealComboDamageOverTime(2f, spellDamage1));
         }
     }
 
@@ -141,8 +145,7 @@ public class Rager : Character
 
     public void ThirdHit()
     {
-        enemy.GetComponent<Character>().SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
-        enemy.GetComponent<Character>().TakeDamage(hit3Damage, true); //--here
+        enemy.GetComponent<Character>().TakeDamage(spellDamage2,true); //--here
         audioManager.PlaySFX(audioManager.klong, audioManager.doubleVol);
 
         // player state reset
