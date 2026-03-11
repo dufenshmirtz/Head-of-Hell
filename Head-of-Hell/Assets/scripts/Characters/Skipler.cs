@@ -94,7 +94,6 @@ public class Skipler : Character
 
     IEnumerator Dash()
     {
-        bool landed = false;
         skiplerDouble = resources.skiplerDouble;
         skiplerPoint = resources.skiplerPoint;
 

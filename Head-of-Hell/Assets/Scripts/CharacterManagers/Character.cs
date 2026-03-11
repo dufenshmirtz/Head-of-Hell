@@ -1016,7 +1016,7 @@ public abstract class Character : MonoBehaviour
         {
             charged = true;
             audioManager.PlaySFX(audioManager.charged, 0.7f);
-            //animator.SetTrigger("Charged");
+            animator.SetTrigger("Charged");
         }
     }
 
@@ -1403,15 +1403,36 @@ public abstract class Character : MonoBehaviour
         return Vector2.Distance(transform.position, enemy.transform.position);
     }
     virtual public void TakeDamage(int dmg, bool blockable, bool parryable = true)
-{
-    if (parryable)
     {
-        if (DetectCounter())
+        if (parryable)
         {
-            print("suvkkkk");
-            return;
+            if (DetectCounter())
+            {
+                print("suvkkkk");
+                return;
+            }
         }
 
+        // cache distance once for this damage call
+        float distance = GetDistanceToEnemy();
+
+        // Invulnerability / i-frames (e.g., roll)
+        if (ignoreDamage)
+        {
+            int hpBeforeInv = currHealth;
+            int hpAfterInv = currHealth;
+
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                0,
+                hpBeforeInv,
+                hpAfterInv,
+                distance,
+                false,
+                true
+            );
+            return;
+        }
 
         if (dmg == chargeDmg)
         {
@@ -1422,19 +1443,22 @@ public abstract class Character : MonoBehaviour
         {
             if (chargeReset)
             {
+                print("kolok1");
                 stayDynamic();
                 ignoreMovement = false;
                 chargeReset = false;
             }
             else
             {
+                print("kolok2");
                 TakeDamageNoAnimation(dmg, blockable);
                 return;
             }
-
         }
 
         ResetQuickPunch();
+
+        int hpBefore = currHealth;
 
         if (isBlocking && blockable)
         {
@@ -1442,15 +1466,14 @@ public abstract class Character : MonoBehaviour
             {
                 audioManager.PlaySFX(blockSound, audioManager.normalVol);
             }
-            if (dmg == heavyDamage) //if its heavy attack take half the damage
+
+            if (dmg == heavyDamage) // heavy attack: half-ish damage (your rule)
             {
                 currHealth -= 5;
                 Debug.Log("Took 5 damage.");
                 healthbar.SetHealth(currHealth);
-
                 StartCoroutine(TriggerDamageCounter(5));
             }
-            //if its light attack take no dmg
 
             if (dmg == chargeDmg)
             {
@@ -1458,9 +1481,10 @@ public abstract class Character : MonoBehaviour
                 Debug.Log("Took " + dmg + " damage.");
                 healthbar.SetHealth(currHealth);
                 moveSpeed = OGMoveSpeed;
-
                 StartCoroutine(TriggerDamageCounter(dmg));
             }
+
+            // NOTE: light attack blocked takes 0 dmg in your code (no HP change)
         }
         else
         {
@@ -1468,17 +1492,61 @@ public abstract class Character : MonoBehaviour
             {
                 damageShield = false;
                 shield.gameObject.SetActive(false);
+
+                int hpBeforeShield = currHealth;
+                int hpAfterShield = currHealth;
+
+                // Treat shield as negated / dodged
+                TelemetryManager.Instance?.LogDamageApplied(
+                    incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                    0,
+                    hpBeforeShield,
+                    hpAfterShield,
+                    distance,
+                    false,
+                    true
+                );
+
                 return;
             }
+
             currHealth -= dmg;
 
             animator.SetTrigger("tookDmg");
-
             healthbar.SetHealth(currHealth);
-
             StartCoroutine(TriggerDamageCounter(dmg));
 
             Debug.Log("Took " + dmg + " damage.");
+        }
+
+        int hpAfter = currHealth;
+        int actualDamage = hpBefore - hpAfter;
+
+        // Log outcome (always meaningful: damage, or blocked 0)
+        if (actualDamage > 0)
+        {
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                actualDamage,
+                hpBefore,
+                hpAfter,
+                distance,
+                (isBlocking && blockable),
+                false
+            );
+        }
+        else if (isBlocking && blockable)
+        {
+            // blocked 0 damage (important for defense metrics)
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                0,
+                hpBefore,
+                hpAfter,
+                distance,
+                true,
+                false
+            );
         }
 
         if (currHealth <= 0)
@@ -1486,148 +1554,6 @@ public abstract class Character : MonoBehaviour
             Die();
         }
     }
-
-    // cache distance once for this damage call
-    float distance = GetDistanceToEnemy();
-
-    // Invulnerability / i-frames (e.g., roll)
-    if (ignoreDamage)
-    {
-        int hpBeforeInv = currHealth;
-        int hpAfterInv = currHealth;
-
-        TelemetryManager.Instance?.LogDamageApplied(
-            incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
-            0,
-            hpBeforeInv,
-            hpAfterInv,
-            distance,
-            false,
-            true
-        );
-        return;
-    }
-
-    if (dmg == chargeDmg)
-    {
-        StopCHarge();
-    }
-
-    if (chargeAttackActive)
-    {
-        if (chargeReset)
-        {
-            print("kolok1");
-            stayDynamic();
-            ignoreMovement = false;
-            chargeReset = false;
-        }
-        else
-        {
-            print("kolok2");
-            TakeDamageNoAnimation(dmg, blockable);
-            return;
-        }
-    }
-
-    ResetQuickPunch();
-
-    int hpBefore = currHealth;
-
-    if (isBlocking && blockable)
-    {
-        if (blockSound != null)
-        {
-            audioManager.PlaySFX(blockSound, audioManager.normalVol);
-        }
-
-        if (dmg == heavyDamage) // heavy attack: half-ish damage (your rule)
-        {
-            currHealth -= 5;
-            Debug.Log("Took 5 damage.");
-            healthbar.SetHealth(currHealth);
-            StartCoroutine(TriggerDamageCounter(5));
-        }
-
-        if (dmg == chargeDmg)
-        {
-            currHealth -= dmg;
-            Debug.Log("Took " + dmg + " damage.");
-            healthbar.SetHealth(currHealth);
-            moveSpeed = OGMoveSpeed;
-            StartCoroutine(TriggerDamageCounter(dmg));
-        }
-
-        // NOTE: light attack blocked takes 0 dmg in your code (no HP change)
-    }
-    else
-    {
-        if (damageShield)
-        {
-            damageShield = false;
-            shield.gameObject.SetActive(false);
-
-            int hpBeforeShield = currHealth;
-            int hpAfterShield = currHealth;
-
-            // Treat shield as negated / dodged
-            TelemetryManager.Instance?.LogDamageApplied(
-                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
-                0,
-                hpBeforeShield,
-                hpAfterShield,
-                distance,
-                false,
-                true
-            );
-
-            return;
-        }
-
-        currHealth -= dmg;
-
-        animator.SetTrigger("tookDmg");
-        healthbar.SetHealth(currHealth);
-        StartCoroutine(TriggerDamageCounter(dmg));
-
-        Debug.Log("Took " + dmg + " damage.");
-    }
-
-    int hpAfter = currHealth;
-    int actualDamage = hpBefore - hpAfter;
-
-    // Log outcome (always meaningful: damage, or blocked 0)
-    if (actualDamage > 0)
-    {
-        TelemetryManager.Instance?.LogDamageApplied(
-            incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
-            actualDamage,
-            hpBefore,
-            hpAfter,
-            distance,
-            (isBlocking && blockable),
-            false
-        );
-    }
-    else if (isBlocking && blockable)
-    {
-        // blocked 0 damage (important for defense metrics)
-        TelemetryManager.Instance?.LogDamageApplied(
-            incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
-            0,
-            hpBefore,
-            hpAfter,
-            distance,
-            true,
-            false
-        );
-    }
-
-    if (currHealth <= 0)
-    {
-        Die();
-    }
-}
 
     public void Die()
     {
