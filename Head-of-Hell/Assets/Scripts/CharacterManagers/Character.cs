@@ -1287,7 +1287,7 @@ public abstract class Character : MonoBehaviour
         return Vector2.Distance(transform.position, enemy.transform.position);
     }
     virtual public void TakeDamage(int dmg, bool blockable, bool parryable = true)
-{
+    {
     if (parryable)
     {
         if (DetectCounter())
