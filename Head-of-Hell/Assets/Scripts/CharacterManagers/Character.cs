@@ -222,12 +222,11 @@ public abstract class Character : MonoBehaviour
     public bool heavyAttacking=false;
 
     //new grounded logic experiement
-    [SerializeField] private Transform groundCheck;
+    private Transform groundCheck;
     [SerializeField] private float groundCheckRadius = 0.15f;
-    [SerializeField] private LayerMask groundLayers;
-    [SerializeField] private LayerMask solidGroundLayers;
-    [SerializeField] private LayerMask platformLayers;
-    [SerializeField] private LayerMask playerGroundLayers;
+    private LayerMask solidGroundLayers;
+    private LayerMask platformLayers;
+    private LayerMask playerGroundLayers;
 
     protected Collider2D feetTrigger;
     
@@ -319,6 +318,9 @@ public abstract class Character : MonoBehaviour
 
         feetTrigger = colliders[0];
 
+        solidGroundLayers = LayerMask.GetMask("Ground");
+        platformLayers    = LayerMask.GetMask("PlatformLayer");
+
         //Disable Indicators
         shield.gameObject.SetActive(false);
         poison.gameObject.SetActive(false);
@@ -370,8 +372,9 @@ public abstract class Character : MonoBehaviour
         damageCounter = characterSetup.damageCounter;
         audioManager = characterSetup.audioManager;
         quickAttackIndicator = characterSetup.quickAttackIndicator;
+        groundCheck = characterSetup.groundCheck;
 
-
+        playerGroundLayers = enemyLayer;
         P1Name.text = characterChoiceHandler.GetCharacterName(1);
         P2Name = characterChoiceHandler.GetCharacterName(2);
         enemy = characterChoiceHandler.CharacterChoice(2);
@@ -430,6 +433,8 @@ public abstract class Character : MonoBehaviour
 
     public virtual void Update()
     {
+        GroundedSafeguard();
+        StaticSafeguard();
         //UpdateGroundedState(); in the future
         //self knockback mechanic
         if (knockable)
@@ -851,6 +856,41 @@ public abstract class Character : MonoBehaviour
         if (colliders.Length > 3)
         {
             colliders[3].enabled = onPlatform;
+        }
+    }
+
+    private void GroundedSafeguard()
+    {
+        if (groundCheck == null) return;
+
+        bool touchingGround = Physics2D.OverlapCircle(
+            groundCheck.position,
+            groundCheckRadius,
+            solidGroundLayers | platformLayers | enemyLayer
+        );
+
+        // Αν ακουμπάς έδαφος αλλά δεν είσαι grounded → διόρθωσε
+        if (touchingGround && !isGrounded)
+        {
+            isGrounded = true;
+            animator.SetBool("IsGrounded", true);
+            animator.SetBool("Jump", false);
+        }
+
+        // Αν ΔΕΝ ακουμπάς έδαφος αλλά είσαι grounded → διόρθωσε
+        else if (!touchingGround && isGrounded)
+        {
+            isGrounded = false;
+            animator.SetBool("IsGrounded", false);
+        }
+    }
+
+    public void StaticSafeguard()
+    {
+        if(rb.bodyType == RigidbodyType2D.Static && !isStatic)
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            Debug.Log("Static Error.");
         }
     }
     #endregion
@@ -1571,7 +1611,7 @@ public abstract class Character : MonoBehaviour
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            rb.bodyType = RigidbodyType2D.Static;
+            stayStatic();
         }
 
         ignoreDamage = true;

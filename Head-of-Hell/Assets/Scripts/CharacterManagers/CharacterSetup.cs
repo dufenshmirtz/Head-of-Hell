@@ -52,8 +52,17 @@ public class CharacterSetup : MonoBehaviour
     public GameObject saveReplayButton;
     public GameObject quickAttackIndicator;
     public TextMeshProUGUI damageCounter;
-
+    public Transform groundCheck;
 
     public int playerNum;
+    private float groundCheckRadius = 0.15f;
+
+    private void OnDrawGizmosSelected()
+    {
+        if (groundCheck == null) return;
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+    }
 
 }
