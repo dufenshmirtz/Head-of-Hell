@@ -125,6 +125,7 @@ public class Skipler : Character
         }
         colliders[3].enabled = true;  // Keep specific colliders enabled
         colliders[4].enabled = true;
+        colliders[5].enabled = true;
 
         // Play dash sound effects
         audioManager.PlaySFX(audioManager.dash, 1);
@@ -195,6 +196,8 @@ public class Skipler : Character
     {
         if (lightReady)
         {
+            
+            lightReady = false;
             QuickAttackIndicatorDisable();
             StartCoroutine(Blink());
         }
@@ -239,7 +242,6 @@ public class Skipler : Character
         // Reset the gravity scale
         rb.gravityScale = originalGravityScale;
 
-        lightReady = false;
 
         IgnoreMovement(false);
 

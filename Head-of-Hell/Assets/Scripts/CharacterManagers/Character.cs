@@ -180,7 +180,7 @@ public abstract class Character : MonoBehaviour
 
     public Transform spawn;
 
-    protected float originalGravityScale;
+    protected float originalGravityScale=1.8f;
 
     private bool debugControllers = false;
 
@@ -191,6 +191,16 @@ public abstract class Character : MonoBehaviour
     //helpers
     public bool isLightAttacking=false;
     public bool heavyAttacking=false;
+
+    //new grounded logic experiement
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckRadius = 0.15f;
+    [SerializeField] private LayerMask groundLayers;
+    [SerializeField] private LayerMask solidGroundLayers;
+    [SerializeField] private LayerMask platformLayers;
+    [SerializeField] private LayerMask playerGroundLayers;
+
+    protected Collider2D feetTrigger;
     
 
 
@@ -271,6 +281,9 @@ public abstract class Character : MonoBehaviour
 
         originalGravityScale = rb.gravityScale;
 
+        Collider2D[] colliders = GetComponents<Collider2D>();
+
+        feetTrigger = colliders[0];
 
         //Disable Indicators
         shield.gameObject.SetActive(false);
@@ -382,6 +395,7 @@ public abstract class Character : MonoBehaviour
 
     public virtual void Update()
     {
+        //UpdateGroundedState(); in the future
         //self knockback mechanic
         if (knockable)
         {
@@ -691,16 +705,12 @@ public abstract class Character : MonoBehaviour
     {
         Collider2D[] colliders = GetComponents<Collider2D>();
 
-        foreach (Collider2D collider in colliders)
-        {
-            if (collider != colliders[3])
-            {
-                collider.enabled = true;
-            }
-        }
-
-        colliders[4].enabled = false;
-        colliders[5].enabled = false;
+        colliders[0].enabled = true; //feetTrigger
+        colliders[1].enabled = true; //head
+        colliders[2].enabled = true; //body
+        colliders[3].enabled = false; //exclude enemylayer featTrigger
+        colliders[4].enabled = false; //bodytrigger
+        colliders[5].enabled = false; //Border-only Collider
     }
 
     public void DeactivateColliders()
@@ -716,6 +726,7 @@ public abstract class Character : MonoBehaviour
     {
         isStatic = true;
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale=originalGravityScale; //safety
         if (rb != null)
         {
             rb.bodyType = RigidbodyType2D.Static;
@@ -738,6 +749,44 @@ public abstract class Character : MonoBehaviour
     {
         Collider2D[] colliders = GetComponents<Collider2D>();
         return colliders;
+    }
+
+    private void UpdateGroundedState()
+    {
+        if (groundCheck == null) return;
+
+        bool onSolidGround = Physics2D.OverlapCircle(
+            groundCheck.position,
+            groundCheckRadius,
+            solidGroundLayers
+        );
+
+        bool onPlatform = Physics2D.OverlapCircle(
+            groundCheck.position,
+            groundCheckRadius,
+            platformLayers
+        );
+
+        bool onPlayer = Physics2D.OverlapCircle(
+            groundCheck.position,
+            groundCheckRadius,
+            playerGroundLayers
+        );
+
+        isGrounded = onSolidGround || onPlatform || onPlayer;
+
+        animator.SetBool("IsGrounded", isGrounded);
+
+        if (isGrounded)
+        {
+            animator.SetBool("Jump", false);
+        }
+
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        if (colliders.Length > 3)
+        {
+            colliders[3].enabled = onPlatform;
+        }
     }
     #endregion
 
@@ -901,7 +950,7 @@ public abstract class Character : MonoBehaviour
         {
             charged = true;
             audioManager.PlaySFX(audioManager.charged, 0.7f);
-            animator.SetTrigger("Charged");
+            //animator.SetTrigger("Charged");
         }
     }
 
@@ -1032,6 +1081,23 @@ public abstract class Character : MonoBehaviour
         isBlocking = blck;
     }
 
+    protected void ClearChargeState()
+    {
+        charging = false;
+        charged = false;
+        chargeAttackActive = false;
+        chargeReset = false;
+
+        ignoreMovement = false;
+        knockable = true;
+
+        animator.SetBool("Charging", false);
+        animator.SetBool("Casting", false);
+        animator.ResetTrigger("ChargedHit");
+
+        stayDynamic();
+    }
+
     #endregion
 
     #region General
@@ -1147,7 +1213,7 @@ public abstract class Character : MonoBehaviour
 
     public void CounterSuccessOff()
     {
-        CounterVariablesOff();
+        ClearParryState();
     }
 
     public void Countered()
@@ -1181,6 +1247,34 @@ public abstract class Character : MonoBehaviour
         counterDone = false;
         counterIsOn = false;
         knockable = true;
+        safety = true;
+        ignoreCounterOff = false;
+        stayDynamic();
+    }
+
+    protected void ClearParryState()
+    {
+        counterDone = false;
+        counterIsOn = false;
+        knockable = true;
+        safety = true;
+        ignoreCounterOff = false;
+        enemy.stayDynamic();
+        stayDynamic();
+    }
+
+    protected void ClearTemporaryCombatState()
+    {
+        ignoreMovement = false;
+        ignoreDamage = false;
+        knockable = true;
+        casting = false;
+        isBlocking = false;
+
+        animator.SetBool("Casting", false);
+        animator.SetBool("Crouch", false);
+        animator.SetBool("IsRunning", false);
+
         stayDynamic();
     }
 
@@ -1912,6 +2006,8 @@ public abstract class Character : MonoBehaviour
         justTeleported = false;
         isonpad=0;
         onCooldown = false;
+        ignoreUpdate = false;
+        ignoreDamage = false;
         ActivateColliders();
     }
 

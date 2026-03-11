@@ -284,7 +284,7 @@ public class Vander : Character
         if (!isFlying) return;
         isFlying = false;
         rb.gravityScale = originalGravityScale; // from Character.Start()
-        animator.SetBool("IsFlying", false); // optional
+        //animator.SetBool("IsFlying", false); // optional
     }
 
 
