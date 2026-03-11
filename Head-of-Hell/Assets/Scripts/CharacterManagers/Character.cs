@@ -1587,7 +1587,7 @@ public abstract class Character : MonoBehaviour
 
         if (enemy.currHealth == maxHealth)
         {
-            gameManager.RoundEndFlawless(playerNum, P2Name);
+            gameManager.RoundEndFlawless(winnerNum, P2Name);
             KeepStats(P2Name,enemy.GetCharID(), P1Name.text,characterID);
         }
         else if (enemy.currHealth <= 0)
