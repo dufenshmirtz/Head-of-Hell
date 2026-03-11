@@ -196,7 +196,14 @@ public class StageChoiceManager : MonoBehaviour
             gameSetupMenu.SetActive(false);
 
         if (characterSelectionMenu != null)
+        {
             characterSelectionMenu.SetActive(true);
+        }
+        else
+        {
+            print("sakede");
+        }
+            
     }
 
     private Button GetRandomStageButton()
