@@ -13,7 +13,7 @@ public class ProfilesMenuUI : MonoBehaviour
     }
 
     [Header("Slots (size=5)")]
-    public SlotUI[] slots = new SlotUI[5];
+    public SlotUI[] slots = new SlotUI[12];
 
     [Header("Panels")]
     public GameObject profilesMenuRoot;   // το panel της λίστας

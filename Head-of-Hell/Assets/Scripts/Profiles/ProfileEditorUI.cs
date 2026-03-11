@@ -13,16 +13,6 @@ public class ProfileEditorUI : MonoBehaviour
     public GameObject profilesMenuRoot;
     public GameObject profileEditorRoot;
 
-    private void OnEnable()
-    {
-        saveButton.onClick.RemoveAllListeners();
-        backButton.onClick.RemoveAllListeners();
-
-        saveButton.onClick.AddListener(Save);
-        backButton.onClick.AddListener(Back);
-
-        StartCoroutine(LoadNextFrame());
-    }
 
     private System.Collections.IEnumerator LoadNextFrame()
     {
@@ -36,7 +26,7 @@ public class ProfileEditorUI : MonoBehaviour
         nameInput.ActivateInputField();
     }
 
-    private void Save()
+    public void Save()
     {
         int idx = ProfileEditContext.EditingIndex;
         if (idx < 0) { Back(); return; }
@@ -45,11 +35,8 @@ public class ProfileEditorUI : MonoBehaviour
 
     }
 
-    private void Back()
+    public void Back()
     {
-        profileEditorRoot.SetActive(false);
-        profilesMenuRoot.SetActive(true);
-
         // refresh τη λίστα, αν υπάρχει ProfilesMenuUI πάνω στο menu root
         var menu = profilesMenuRoot.GetComponent<ProfilesMenuUI>();
         if (menu != null) menu.Refresh();
