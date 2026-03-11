@@ -12,7 +12,7 @@ public class ProfilesMenuUI : MonoBehaviour
         public Button editButton;     // το edit κουμπί
     }
 
-    [Header("Slots (size=5)")]
+    [Header("Slots (size=12)")]
     public SlotUI[] slots = new SlotUI[12];
 
     [Header("Panels")]
@@ -59,6 +59,7 @@ public class ProfilesMenuUI : MonoBehaviour
             // Select/View
             slots[index].slotButton.onClick.AddListener(() =>
             {
+                Debug.Log("CLICK SLOT " + index);
                 ProfileManager.I.SelectProfile(playerNum,index);
                 Refresh();
             });
