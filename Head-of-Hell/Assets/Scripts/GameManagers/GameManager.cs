@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
 
         // Profile telemetry
         var p1Profile = ProfileManager.I?.GetTelemetryIdentity(1) ?? ("NONE", "None");
-        var p2Profile = ProfileManager.I?.GetTelemetryIdentity(2) ?? ("NONE", "None");
+        var p2Profile = ProfileManager.I?.GetTelemetryIdentity(1) ?? ("NONE", "None");
 
         TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
         {
@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour
                 p1Id = "P1",
                 p1Character = p1Manager ? p1Manager.GetCharacterName(1) : "",
                 p2Id = "P2",
-                p2Character = p2Manager ? p2Manager.GetCharacterName(2) : "",
+                p2Character = p2Manager ? p2Manager.GetCharacterName(1) : "",
 
                 winnerId = (playerNum == 1) ? "P1" : "P2",
                 winnerCharacter = winnerName
@@ -231,7 +231,7 @@ public class GameManager : MonoBehaviour
                 p1Id = "P1",
                 p1Character = p1Manager ? p1Manager.GetCharacterName(1) : "",
                 p2Id = "P2",
-                p2Character = p2Manager ? p2Manager.GetCharacterName(2) : "",
+                p2Character = p2Manager ? p2Manager.GetCharacterName(1) : "",
 
                 winnerId = "",
                 winnerCharacter = ""
