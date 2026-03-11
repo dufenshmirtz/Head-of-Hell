@@ -223,7 +223,7 @@ public abstract class Character : MonoBehaviour
 
     //new grounded logic experiement
     private Transform groundCheck;
-    [SerializeField] private float groundCheckRadius = 0.15f;
+    private float groundCheckRadius = 0.15f;
     private LayerMask solidGroundLayers;
     private LayerMask platformLayers;
     private LayerMask playerGroundLayers;
