@@ -40,14 +40,20 @@ public class TelemetryManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        telemetryFolderPath = Path.Combine(Application.persistentDataPath, "Telemetry");
+        telemetryFolderPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            "My Games",
+            "Head of Hell",
+            "Telemetry"
+        );
+
         Directory.CreateDirectory(telemetryFolderPath);
     }
 
     // ---------------------------
     // Public API (Lifecycle)
     // ---------------------------
-    
+
     /// <summary>
     /// Starts a new telemetry session (match). Safe to call multiple times; will end the previous session if needed.
     /// </summary>
@@ -382,7 +388,7 @@ public class TelemetryMatchMeta
     // NEW: training flag
     public bool trainingMode = false;
 
-     // NEW: profile identity
+    // NEW: profile identity
     public string p1ProfileId = "";
     public string p1ProfileName = "";
 
