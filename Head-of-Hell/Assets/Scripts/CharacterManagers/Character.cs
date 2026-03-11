@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
@@ -13,8 +13,37 @@ using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 using static Unity.Collections.AllocatorManager;
 
+public enum MoveType
+{
+    Quick,
+    Heavy,
+    Special,
+    Charge,
+    Projectile,
+    ParryCounter,
+    PoisonTick
+}
+public enum SourceType
+{
+    Melee,
+    Spell,
+    Projectile,
+    Dot,
+    Parry
+}
 public abstract class Character : MonoBehaviour
 {
+
+
+    public string PlayerId => playerNum == 1 ? "P1" : "P2";
+    public bool CanDropPlatform => isonpad > 0;
+    protected string incomingAttackerId;
+    protected MoveType incomingMoveType;
+    protected SourceType incomingSourceType;
+    // --- Telemetry: movement logging (edge-triggered) ---
+    private int lastMoveDir = 0; // -1 = left, 0 = idle, +1 = right
+    [SerializeField] private float moveLogCooldown = 0.20f; // seconds, anti-spam
+    private float nextMoveLogTime = 0f;
     protected Character enemy;
     protected Animator animator;
     protected AudioManager audioManager;
@@ -203,7 +232,12 @@ public abstract class Character : MonoBehaviour
     protected Collider2D feetTrigger;
     
 
-
+    public void SetIncomingDamageContext(string attackerId, MoveType moveType, SourceType sourceType)
+    {
+        incomingAttackerId = attackerId;
+        incomingMoveType = moveType;
+        incomingSourceType = sourceType;
+    }
     #region Base
     public virtual void Start()
     {
@@ -296,6 +330,7 @@ public abstract class Character : MonoBehaviour
         robberyCountIndicator.gameObject.SetActive(false);
 
     }
+
 
     public void InitializeCharacter()
     {
@@ -482,6 +517,13 @@ public abstract class Character : MonoBehaviour
         #endif
 
         float moveDirection = input.GetAxis("Horizontal" + playerString);
+        int dir = (moveDirection > 0.1f) ? 1 : (moveDirection < -0.1f) ? -1 : 0;
+
+        
+        if (!ignoreMovement && !knocked && !isStatic && !stunned && !ignoreUpdate)
+        {
+            LogMoveIfChanged(dir);
+        }
         // Running animations...
         if (Mathf.Abs(moveDirection) > 0.1f && !isStatic)
         {
@@ -573,7 +615,8 @@ public abstract class Character : MonoBehaviour
         if (input.GetKeyDown(down) || (controller && input.GetAxis("Vertical" + playerString) < -0.5f))
         {
             Collider2D[] colliders = GetComponents<Collider2D>();
-
+            if (CanDropPlatform)
+                TelemetryManager.Instance?.LogAction(PlayerId, "DropPlatform");
             colliders[3].enabled = false;
         }
 
@@ -618,6 +661,28 @@ public abstract class Character : MonoBehaviour
         yield return null;
         isLightAttacking=false;
     }
+
+    private void LogMoveIfChanged(int dir)
+    {
+        if (TelemetryManager.Instance == null) return;
+
+        // log only on changes: idle->move, move->idle, left<->right
+        if (dir == lastMoveDir) return;
+
+        // extra safety: anti-spam cooldown
+        if (Time.time < nextMoveLogTime) return;
+        nextMoveLogTime = Time.time + moveLogCooldown;
+
+        if (dir == -1)
+            TelemetryManager.Instance.LogAction(PlayerId, "MoveLeft");
+        else if (dir == 1)
+            TelemetryManager.Instance.LogAction(PlayerId, "MoveRight");
+        else
+            TelemetryManager.Instance.LogAction(PlayerId, "MoveStop");
+
+        lastMoveDir = dir;
+    }
+
 
     IEnumerator WaitForMaxHealth()
     {
@@ -925,6 +990,7 @@ public abstract class Character : MonoBehaviour
 
     #region ChargeAttack
     public virtual void ChargeAttack() {
+        TelemetryManager.Instance?.LogAction(PlayerId, "ChargeStart");
         knockable = false;
         charging = true;
         animator.SetBool("Charging", true);
@@ -956,6 +1022,7 @@ public abstract class Character : MonoBehaviour
 
     public virtual void DealChargeDmg()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "ChargeRelease");
         Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
@@ -964,6 +1031,8 @@ public abstract class Character : MonoBehaviour
             if (!enemy.counterIsOn) {
                 enemy.BreakCharge();
             }
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Charge);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Charge, SourceType.Melee);
             enemy.TakeDamage(chargeDmg, false);
             enemy.Knockback(13f, 0.4f, false);
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
@@ -980,6 +1049,7 @@ public abstract class Character : MonoBehaviour
             }
             else
             {
+                TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Charge);
                 audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
             }
 
@@ -1052,10 +1122,12 @@ public abstract class Character : MonoBehaviour
     #region Block
     public void Block()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "BlockStart");
         if (blockDisabled)
         {
             return;
         }
+
         animator.SetTrigger("critsi");
         animator.SetBool("Crouch", true);
         PlayerBlock(true);
@@ -1064,6 +1136,7 @@ public abstract class Character : MonoBehaviour
     }
     public void Unblock()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "BlockEnd");
         animator.SetBool("cWalk", false);
         animator.SetBool("Crouch", false);
         isBlocking = false;
@@ -1103,6 +1176,7 @@ public abstract class Character : MonoBehaviour
     #region General
     public void Jump()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Jump");
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         animator.SetBool("Jump", true);
         if (characterJump != null)
@@ -1154,6 +1228,7 @@ public abstract class Character : MonoBehaviour
     }
 
     void Parry() {
+        TelemetryManager.Instance?.LogAction(PlayerId, "ParryAttempt");
         counterIsOn = true;
         safety = true;
         canParry = false;
@@ -1204,7 +1279,7 @@ public abstract class Character : MonoBehaviour
 
     private IEnumerator CounterOffSafety()
     {
-        yield return new WaitForSeconds(0.43f);
+        yield return new WaitForSeconds(0.22f);
         if (!counterDone && safety)
         {
             CounterVariablesOff();
@@ -1321,19 +1396,19 @@ public abstract class Character : MonoBehaviour
     #endregion
 
     #region Passive and Damage
-
-    virtual public void TakeDamage(int dmg, bool blockable, bool parryable = true)
+    // --- Telemetry helper ---
+    protected float GetDistanceToEnemy()
     {
-        if (parryable)
+        if (enemy == null) return -1f;
+        return Vector2.Distance(transform.position, enemy.transform.position);
+    }
+    virtual public void TakeDamage(int dmg, bool blockable, bool parryable = true)
+{
+    if (parryable)
+    {
+        if (DetectCounter())
         {
-            if (DetectCounter())
-            {
-                return;
-            }
-        }
-
-        if (ignoreDamage)
-        {
+            print("suvkkkk");
             return;
         }
 
@@ -1412,8 +1487,151 @@ public abstract class Character : MonoBehaviour
         }
     }
 
+    // cache distance once for this damage call
+    float distance = GetDistanceToEnemy();
+
+    // Invulnerability / i-frames (e.g., roll)
+    if (ignoreDamage)
+    {
+        int hpBeforeInv = currHealth;
+        int hpAfterInv = currHealth;
+
+        TelemetryManager.Instance?.LogDamageApplied(
+            incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+            0,
+            hpBeforeInv,
+            hpAfterInv,
+            distance,
+            false,
+            true
+        );
+        return;
+    }
+
+    if (dmg == chargeDmg)
+    {
+        StopCHarge();
+    }
+
+    if (chargeAttackActive)
+    {
+        if (chargeReset)
+        {
+            print("kolok1");
+            stayDynamic();
+            ignoreMovement = false;
+            chargeReset = false;
+        }
+        else
+        {
+            print("kolok2");
+            TakeDamageNoAnimation(dmg, blockable);
+            return;
+        }
+    }
+
+    ResetQuickPunch();
+
+    int hpBefore = currHealth;
+
+    if (isBlocking && blockable)
+    {
+        if (blockSound != null)
+        {
+            audioManager.PlaySFX(blockSound, audioManager.normalVol);
+        }
+
+        if (dmg == heavyDamage) // heavy attack: half-ish damage (your rule)
+        {
+            currHealth -= 5;
+            Debug.Log("Took 5 damage.");
+            healthbar.SetHealth(currHealth);
+            StartCoroutine(TriggerDamageCounter(5));
+        }
+
+        if (dmg == chargeDmg)
+        {
+            currHealth -= dmg;
+            Debug.Log("Took " + dmg + " damage.");
+            healthbar.SetHealth(currHealth);
+            moveSpeed = OGMoveSpeed;
+            StartCoroutine(TriggerDamageCounter(dmg));
+        }
+
+        // NOTE: light attack blocked takes 0 dmg in your code (no HP change)
+    }
+    else
+    {
+        if (damageShield)
+        {
+            damageShield = false;
+            shield.gameObject.SetActive(false);
+
+            int hpBeforeShield = currHealth;
+            int hpAfterShield = currHealth;
+
+            // Treat shield as negated / dodged
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                0,
+                hpBeforeShield,
+                hpAfterShield,
+                distance,
+                false,
+                true
+            );
+
+            return;
+        }
+
+        currHealth -= dmg;
+
+        animator.SetTrigger("tookDmg");
+        healthbar.SetHealth(currHealth);
+        StartCoroutine(TriggerDamageCounter(dmg));
+
+        Debug.Log("Took " + dmg + " damage.");
+    }
+
+    int hpAfter = currHealth;
+    int actualDamage = hpBefore - hpAfter;
+
+    // Log outcome (always meaningful: damage, or blocked 0)
+    if (actualDamage > 0)
+    {
+        TelemetryManager.Instance?.LogDamageApplied(
+            incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+            actualDamage,
+            hpBefore,
+            hpAfter,
+            distance,
+            (isBlocking && blockable),
+            false
+        );
+    }
+    else if (isBlocking && blockable)
+    {
+        // blocked 0 damage (important for defense metrics)
+        TelemetryManager.Instance?.LogDamageApplied(
+            incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+            0,
+            hpBefore,
+            hpAfter,
+            distance,
+            true,
+            false
+        );
+    }
+
+    if (currHealth <= 0)
+    {
+        Die();
+    }
+}
+
     public void Die()
     {
+        int winnerNum = (playerNum == 1) ? 2 : 1;   // ή: int winnerNum = enemy.playerNum;
         if (overrideDeath) {
             return;
         }
@@ -1452,8 +1670,8 @@ public abstract class Character : MonoBehaviour
         }
         else
         {
-            gameManager.RoundEnd(playerNum, P2Name);
             KeepStats(P2Name,enemy.GetCharID(), P1Name.text,characterID);
+            gameManager.RoundEnd(winnerNum, P2Name);
         }
 
     }
@@ -1489,11 +1707,27 @@ public abstract class Character : MonoBehaviour
             }
         }
 
+        float distance = GetDistanceToEnemy();
 
+        // Invulnerability / i-frames
         if (ignoreDamage)
         {
+            int hpBeforeInv = currHealth;
+            int hpAfterInv = currHealth;
+
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                0,
+                hpBeforeInv,
+                hpAfterInv,
+                distance,
+                false,
+                true
+            );
             return;
         }
+
+        int hpBefore = currHealth;
 
         if (isBlocking && blockable)
         {
@@ -1501,6 +1735,7 @@ public abstract class Character : MonoBehaviour
             {
                 audioManager.PlaySFX(blockSound, audioManager.normalVol);
             }
+            // No HP change here (blocked)
         }
         else
         {
@@ -1508,15 +1743,56 @@ public abstract class Character : MonoBehaviour
             {
                 damageShield = false;
                 shield.gameObject.SetActive(false);
+
+                int hpBeforeShield = currHealth;
+                int hpAfterShield = currHealth;
+
+                TelemetryManager.Instance?.LogDamageApplied(
+                    incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                    0,
+                    hpBeforeShield,
+                    hpAfterShield,
+                    distance,
+                    false,
+                    true
+                );
+
                 return;
             }
+
             currHealth -= dmg;
 
             healthbar.SetHealth(currHealth);
-
             StartCoroutine(TriggerDamageCounter(dmg));
-
             Debug.Log("Took " + dmg + " damage.");
+        }
+
+        int hpAfter = currHealth;
+        int actualDamage = hpBefore - hpAfter;
+
+        if (actualDamage > 0)
+        {
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                actualDamage,
+                hpBefore,
+                hpAfter,
+                distance,
+                (isBlocking && blockable),
+                false
+            );
+        }
+        else if (isBlocking && blockable)
+        {
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                0,
+                hpBefore,
+                hpAfter,
+                distance,
+                true,
+                false
+            );
         }
 
         if (currHealth <= 0)

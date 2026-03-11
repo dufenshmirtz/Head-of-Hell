@@ -18,7 +18,7 @@ public class SlotNameInitializer : MonoBehaviour
         for (int i = 0; i < slotNameTexts.Count; i++)  // Loop through all TMP Texts
         {
             // Load the CustomRuleset for this slot (slots are 1-indexed, so i + 1)
-            CustomRuleset ruleset = RulesetManager.Instance.LoadCustomRuleset(i);
+            CustomRuleset ruleset = RulesetManager.Instance.LoadCustomRuleset(i+1);
 
             // Check if a ruleset exists for this slot
             if (ruleset != null)
@@ -33,4 +33,16 @@ public class SlotNameInitializer : MonoBehaviour
             }
         }
     }
+
+    public void UpdateSlotName(int slotIndex)
+    {
+        // Load the saved ruleset
+        CustomRuleset ruleset = RulesetManager.Instance.LoadCustomRuleset(slotIndex);
+
+        if (ruleset != null && !string.IsNullOrEmpty(ruleset.slotName))
+            slotNameTexts[slotIndex].text = ruleset.slotName;
+        else
+            slotNameTexts[slotIndex].text = "Empty";
+    }
+
 }

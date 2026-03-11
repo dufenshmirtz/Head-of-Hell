@@ -1,177 +1,209 @@
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class StageChoiceManager : MonoBehaviour
 {
-    public Button[] buttons;  // Assign your buttons in the Inspector
-    private int selectedIndex = 0;
-    public MainMenuMusic sfx;
-    bool notSelected;
+    public Button defaultButton;
+    public Button customButton;
+    public Button[] stageButtons; // 0–3 (1 row or 2x2 logic is irrelevant here)
+    public Button proceedButton;
+    public Button randomButton;
 
-    private int rows = 2;  // Number of rows in your button grid
-    private int cols = 3;  // Number of columns in your button grid
+    public GameObject gameSetupMenu;
+    public GameObject characterSelectionMenu;
 
-    private bool clickProcessed = false;
+    public TextMeshProUGUI selectionText;
 
-    public StageChoiceButtons stageChoiceButtons;  // Reference to the stageChoiceButtons script
+    private int selectedModeIndex = 0; // 0 = default, 1 = custom
+    private int selectedStageIndex = 0;
 
-    public bool picked = false;
+    private bool gameModePicked = false;
+    private bool stagePicked = false;
+    private bool readyToProceed = false;
 
     void Start()
     {
-        notSelected = true;
+        HighlightCurrentSelection();
+        RefreshCurrentSettingText();
+        if (selectionText != null)
+        {
+            
+        }
     }
-
     void Update()
     {
-        // Navigate through the buttons with the arrow keys
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (!gameModePicked)
         {
-            if (notSelected)
-            {
-                AutoSelectButton();
-                return;
-            }
-            NavigateVertical(1);
+            HandleModeSelection();
         }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        else if (!stagePicked)
         {
-            if (notSelected)
-            {
-                AutoSelectButton();
-                return;
-            }
-            NavigateVertical(-1);
+            HandleStageSelection();
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (readyToProceed)
         {
-            if (notSelected)
-            {
-                AutoSelectButton();
-                return;
-            }
-            NavigateHorizontal(1);
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            if (notSelected)
-            {
-                AutoSelectButton();
-                return;
-            }
-            NavigateHorizontal(-1);
+            HandleProceed();
         }
 
-        
+        if (Input.GetMouseButtonDown(1)) // Right click to reset
+        {
+            ResetAll();
+        }
+
+        // Global fallback: if proceed is selected and Enter is pressed, invoke
+        if (Input.GetKeyDown(KeyCode.Return) &&
+            EventSystem.current.currentSelectedGameObject == proceedButton.gameObject)
+        {
+            proceedButton.onClick.Invoke();
+        }
     }
 
-    void NavigateVertical(int direction)
+    void HandleModeSelection()
     {
-        sfx.ButtonSound();
-        buttons[selectedIndex].OnDeselect(null);
-
-        if (picked)
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
         {
-            // When both players picked, only navigate between "Back" (index 6) and "Start" (index 7)
-            if (direction > 0)
+            selectedModeIndex = Mathf.Max(0, selectedModeIndex - 1);
+            HighlightCurrentSelection();
+            RefreshCurrentSettingText();
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+        {
+            selectedModeIndex = Mathf.Min(1, selectedModeIndex + 1);
+            HighlightCurrentSelection();
+            RefreshCurrentSettingText();
+        }
+        else if (Input.GetKeyDown(KeyCode.Return))
+        {
+            gameModePicked = true;
+            HighlightStageSelection();
+            RefreshCurrentSettingText();
+        }
+    }
+
+    void HandleStageSelection()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+        {
+            if (selectedStageIndex > 0)
+                selectedStageIndex--;
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+        {
+            if (selectedStageIndex < stageButtons.Length - 1)
+                selectedStageIndex++;
+        }
+        else if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Button selectedButton = stageButtons[selectedStageIndex];
+
+            if (selectedButton == randomButton)
             {
-                selectedIndex = selectedIndex == 4 ? 5 : 4;
+                Button randomStage = GetRandomStageButton();
+                randomStage.onClick.Invoke();
+
+                // Update selectedStageIndex to match randomly selected button
+                for (int i = 0; i < stageButtons.Length; i++)
+                {
+                    if (stageButtons[i] == randomStage)
+                    {
+                        selectedStageIndex = i;
+                        break;
+                    }
+                }
+
+                Debug.Log("Randomly selected stage: " + randomStage.name);
+                HighlightStageSelection();
             }
             else
             {
-                selectedIndex = selectedIndex == 5 ? 4 : 5;
+                selectedButton.onClick.Invoke();
             }
+
+            stagePicked = true;
+            readyToProceed = true;
+            HighlightProceed();
+            return;
+        }
+
+        HighlightStageSelection();
+    }
+
+    void HandleProceed()
+    {
+        HighlightProceed(); // Just highlight — Enter is handled globally in Update()
+    }
+
+    void HighlightCurrentSelection()
+    {
+        if (selectedModeIndex == 0)
+            defaultButton.Select();
+        else
+            customButton.Select();
+    }
+
+    void HighlightStageSelection()
+    {
+        if (stageButtons != null && stageButtons.Length > selectedStageIndex)
+        {
+            stageButtons[selectedStageIndex].Select();
+        }
+    }
+
+    void HighlightProceed()
+    {
+        proceedButton.Select();
+    }
+
+    void ResetAll()
+    {
+        gameModePicked = false;
+        stagePicked = false;
+        readyToProceed = false;
+
+        selectedModeIndex = 0;
+        selectedStageIndex = 0;
+
+        HighlightCurrentSelection();
+    }
+    void OnEnable()
+    {
+        RefreshCurrentSettingText();
+    }
+
+    void RefreshCurrentSettingText()
+    {
+        if (selectionText == null) return;
+
+        if (CustomRulesetScreenManager.currentRuleset != null &&
+            !string.IsNullOrEmpty(CustomRulesetScreenManager.currentRuleset.slotName))
+        {
+            selectionText.text = "Current Setting : " +
+                CustomRulesetScreenManager.currentRuleset.slotName;
         }
         else
         {
-            int newIndex = selectedIndex + direction * cols;
-            if (newIndex >= buttons.Length) newIndex %= buttons.Length;
-            if (newIndex < 0) newIndex += buttons.Length;
-
-            selectedIndex = newIndex;
-
-            if (selectedIndex > 4)
-            {
-                selectedIndex = 0;
-            }
-        }
-
-        
-
-        EventSystem.current.SetSelectedGameObject(buttons[selectedIndex].gameObject);
-        buttons[selectedIndex].Select();
-
-        if (!picked && selectedIndex != 4 && selectedIndex != 5)
-        {
-            
-        }
-
-    }
-
-    void NavigateHorizontal(int direction)
-    {
-        sfx.ButtonSound();
-        buttons[selectedIndex].OnDeselect(null);
-
-        if (picked)
-        {
-            // When both players picked, only navigate between "Back" (index 6) and "Start" (index 7)
-            if (direction > 0)
-            {
-                selectedIndex = selectedIndex == 6 ? 7 : 6;
-            }
-            else
-            {
-                selectedIndex = selectedIndex == 7 ? 6 : 7;
-            }
-        }
-        else
-        {
-            int newIndex = selectedIndex + direction;
-            int currentRow = selectedIndex / cols;
-
-            // Ensure new index is within the same row
-            if (newIndex >= (currentRow + 1) * cols) newIndex = currentRow * cols;
-            if (newIndex < currentRow * cols) newIndex = (currentRow + 1) * cols - 1;
-
-            selectedIndex = newIndex;
-            if (selectedIndex > 6)
-            {
-                selectedIndex = 0;
-            }
-        }
-        
-        EventSystem.current.SetSelectedGameObject(buttons[selectedIndex].gameObject);
-        buttons[selectedIndex].Select();
-
-        if (!picked && selectedIndex != 6 && selectedIndex != 7)
-        {
-            
-        }
-
-
-
-    }
-
-    
-    void AutoSelectButton()
-    {
-        // Ensure the first button is selected by default
-        if (buttons.Length > 0)
-        {
-            sfx.ButtonSound();
-            EventSystem.current.SetSelectedGameObject(buttons[0].gameObject);
-            buttons[0].Select();
-            notSelected = false;
-
-            // Update character name display
-            
+            selectionText.text = "Current Setting : Default";
         }
     }
 
-    public void Picked(bool didthey)
+    // Call this from the Proceed Button OnClick
+    public void OnProceed()
     {
-        picked = didthey;
+        if (gameSetupMenu != null)
+            gameSetupMenu.SetActive(false);
+
+        if (characterSelectionMenu != null)
+            characterSelectionMenu.SetActive(true);
+    }
+
+    private Button GetRandomStageButton()
+    {
+        List<Button> availableButtons = new List<Button>(stageButtons);
+        availableButtons.Remove(randomButton); // Exclude the random button itself
+        int randomIndex = Random.Range(0, availableButtons.Count);
+        return availableButtons[randomIndex];
     }
 }

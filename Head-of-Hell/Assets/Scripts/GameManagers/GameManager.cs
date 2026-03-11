@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    private bool roundTelemetryClosed = false;
     static int player1Wins = 0;
     static int player2Wins = 0;
     public GameObject[] stages;
@@ -44,7 +45,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        stageName = PlayerPrefs.GetString("SelectedStage");
+        roundTelemetryClosed = false;
+
+        stageName = PlayerPrefs.GetString("SelectedStage", "Stage 1");
         if (stageName == "Stage 1")
         {
             stages[0].SetActive(true);
@@ -58,7 +61,37 @@ public class GameManager : MonoBehaviour
             stages[2].SetActive(true);
         }
 
-        string json = PlayerPrefs.GetString("SelectedRuleset", null);
+
+
+        TelemetryManager.Instance?.StartSession();
+
+        TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
+        {
+            map = stageName,
+            mode = trainingMode ? "training" : "1v1",
+            roundNumber = roundCounter,
+            trainingMode = trainingMode
+        });
+
+        TelemetryManager.Instance?.SetPlayers(
+            "P1", p1Manager ? p1Manager.GetCharacterName(1) : "",
+            "P2", p2Manager ? p2Manager.GetCharacterName(1) : ""
+        );
+
+        // Profile telemetry
+        var p1Profile = ProfileManager.I?.GetTelemetryIdentity(1) ?? ("NONE", "None");
+        var p2Profile = ProfileManager.I?.GetTelemetryIdentity(2) ?? ("NONE", "None");
+
+        TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
+        {
+            p1ProfileId = p1Profile.id,
+            p1ProfileName = p1Profile.name,
+            p2ProfileId = p2Profile.id,
+            p2ProfileName = p2Profile.name
+        });
+    
+
+    string json = PlayerPrefs.GetString("SelectedRuleset", null);
 
         if (!string.IsNullOrEmpty(json))
         {
@@ -74,7 +107,7 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("No ruleset found in PlayerPrefs.");
         }
 
-        if(chanChan)
+        if (chanChan)
         {
             //maxHealth = Random.Range(100, 201);
             portalNumber = Random.Range(0, 5);
@@ -88,14 +121,14 @@ public class GameManager : MonoBehaviour
 
         switch (portalNumber)
         {
-            case 0: 
+            case 0:
                 break;
             case 1:
-                portalPairs[0].SetActive (true);
+                portalPairs[0].SetActive(true);
                 break;
             case 2:
                 portalPairs[0].SetActive(true);
-                portalPairs[1].SetActive (true);
+                portalPairs[1].SetActive(true);
                 break;
             case 3:
                 portalPairs[2].SetActive(true);
@@ -132,17 +165,41 @@ public class GameManager : MonoBehaviour
 
     public void RoundEnd(int playerNum, string winnerName)
     {
+
         if (trainingMode)//training
         {
             SoftResetRound(playerNum);
             return;
         }
-        
+
         winner.gameObject.SetActive(true);
         DisableGamePlay();
         winner.text = winnerName + " prevails!";
 
         ShortWins(playerNum, winnerName);
+
+        if (!roundTelemetryClosed)
+        {
+            // ✅ Update meta with winner/outcome right before writing JSON
+            TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
+            {
+                map = stageName,
+                mode = trainingMode ? "training" : "1v1",
+                roundNumber = roundCounter,
+                trainingMode = trainingMode,
+
+                p1Id = "P1",
+                p1Character = p1Manager ? p1Manager.GetCharacterName(1) : "",
+                p2Id = "P2",
+                p2Character = p2Manager ? p2Manager.GetCharacterName(2) : "",
+
+                winnerId = (playerNum == 1) ? "P1" : "P2",
+                winnerCharacter = winnerName
+            });
+
+            TelemetryManager.Instance?.EndSession($"RoundEnded_KO_winner={winnerName}");
+            roundTelemetryClosed = true;
+        }
 
         StartCoroutine(WaitAndCheck(playerNum, winnerName));
     }
@@ -155,11 +212,35 @@ public class GameManager : MonoBehaviour
             SoftResetRound(0);
             return;
         }
-    
+
         winner.gameObject.SetActive(true);
         DisableGamePlay();
         winner.text = "Tie?\nDEATH PREVAILS...";
         tie = true;
+
+        if (!roundTelemetryClosed)
+        {
+            // ✅ Update meta for tie right before writing JSON
+            TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
+            {
+                map = stageName,
+                mode = trainingMode ? "training" : "1v1",
+                roundNumber = roundCounter,
+                trainingMode = trainingMode,
+
+                p1Id = "P1",
+                p1Character = p1Manager ? p1Manager.GetCharacterName(1) : "",
+                p2Id = "P2",
+                p2Character = p2Manager ? p2Manager.GetCharacterName(2) : "",
+
+                winnerId = "",
+                winnerCharacter = ""
+            });
+
+            TelemetryManager.Instance?.EndSession("RoundEnded_Tie");
+            roundTelemetryClosed = true;
+        }
+
         if (playerNum == 1)
         {
             player1Wins--;
@@ -172,22 +253,45 @@ public class GameManager : MonoBehaviour
         ActivateIndicators();
         CheckForRandomCharacters();
         StartCoroutine(WaitAndrestart());
-
     }
 
     public void RoundEndFlawless(int playerNum, string winnerName)
     {
+
         if (trainingMode)
         {
             SoftResetRound(playerNum);
             return;
         }
-    
+
         winner.gameObject.SetActive(true);
         DisableGamePlay();
         winner.text = "FLAWLESS\n" + winnerName + " prevails!";
 
         ShortWins(playerNum, winnerName);
+
+        if (!roundTelemetryClosed)
+        {
+            // ✅ Update meta with winner/outcome right before writing JSON
+            TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
+            {
+                map = stageName,
+                mode = trainingMode ? "training" : "1v1",
+                roundNumber = roundCounter,
+                trainingMode = trainingMode,
+
+                p1Id = "P1",
+                p1Character = p1Manager ? p1Manager.GetCharacterName(1) : "",
+                p2Id = "P2",
+                p2Character = p2Manager ? p2Manager.GetCharacterName(1) : "",
+
+                winnerId = (playerNum == 1) ? "P1" : "P2",
+                winnerCharacter = winnerName
+            });
+
+            TelemetryManager.Instance?.EndSession($"RoundEnded_Flawless_winner={winnerName}");
+            roundTelemetryClosed = true;
+        }
 
         StartCoroutine(WaitAndCheck(playerNum, winnerName));
     }
@@ -196,15 +300,17 @@ public class GameManager : MonoBehaviour
     {
         if (playerNum == 1)
         {
-            player2Wins++;
-        }
-        else
-        {
             player1Wins++;
         }
+        else if (playerNum == 2)
+        {
+            {
+                player2Wins++;
+            }
 
-        ActivateIndicators();
+            ActivateIndicators();
 
+        }
     }
 
     public void CheckForEnd(int playerNum, string winnerName)
