@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     public GameObject p2R1, p2R2, p2R3;
     static int p1Rounds = 0, p2Rounds = 0;
     bool tie = false;
-    static string c1Name,c2Name;
+    static string c1Name, c2Name;
     static bool p1Random = false;
     static bool p2Random = false;
     bool gameEnd = false;
@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] portalPairs;
     bool chanChan;
     public int maxHealth = -1;
-    
+
     //training
     public bool trainingMode = false;           // tick this for training scene
     public FighterAgent agentP1, agentP2;       // drag the two FighterAgent components
@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
 
         // Profile telemetry
         var p1Profile = ProfileManager.I?.GetTelemetryIdentity(1) ?? ("NONE", "None");
-        var p2Profile = ProfileManager.I?.GetTelemetryIdentity(1) ?? ("NONE", "None");
+        var p2Profile = ProfileManager.I?.GetTelemetryIdentity(2) ?? ("NONE", "None");
 
         TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
         {
@@ -89,9 +89,9 @@ public class GameManager : MonoBehaviour
             p2ProfileId = p2Profile.id,
             p2ProfileName = p2Profile.name
         });
-    
 
-    string json = PlayerPrefs.GetString("SelectedRuleset", null);
+
+        string json = PlayerPrefs.GetString("SelectedRuleset", null);
 
         if (!string.IsNullOrEmpty(json))
         {
@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
 
         if (trainingMode)
         {
-            portalNumber=0;
+            portalNumber = 0;
             Time.timeScale = tScale;
         }
 
@@ -180,6 +180,11 @@ public class GameManager : MonoBehaviour
 
         if (!roundTelemetryClosed)
         {
+            string p1Char = p1Manager ? p1Manager.GetCharacterName(1) : "";
+            string p2Char = p2Manager ? p2Manager.GetCharacterName(1) : "";
+            string winnerId = (playerNum == 1) ? "P1" : "P2";
+            string winnerCharacter = (playerNum == 1) ? p1Char : p2Char;
+
             // ✅ Update meta with winner/outcome right before writing JSON
             TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
             {
@@ -189,12 +194,12 @@ public class GameManager : MonoBehaviour
                 trainingMode = trainingMode,
 
                 p1Id = "P1",
-                p1Character = p1Manager ? p1Manager.GetCharacterName(1) : "",
+                p1Character = p1Char,
                 p2Id = "P2",
-                p2Character = p2Manager ? p2Manager.GetCharacterName(1) : "",
+                p2Character = p2Char,
 
-                winnerId = (playerNum == 1) ? "P1" : "P2",
-                winnerCharacter = winnerName
+                winnerId = winnerId,
+                winnerCharacter = winnerCharacter
             });
 
             TelemetryManager.Instance?.EndSession($"RoundEnded_KO_winner={winnerName}");
@@ -272,6 +277,11 @@ public class GameManager : MonoBehaviour
 
         if (!roundTelemetryClosed)
         {
+            string p1Char = p1Manager ? p1Manager.GetCharacterName(1) : "";
+            string p2Char = p2Manager ? p2Manager.GetCharacterName(1) : "";
+            string winnerId = (playerNum == 1) ? "P1" : "P2";
+            string winnerCharacter = (playerNum == 1) ? p1Char : p2Char;
+
             // ✅ Update meta with winner/outcome right before writing JSON
             TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
             {
@@ -281,12 +291,12 @@ public class GameManager : MonoBehaviour
                 trainingMode = trainingMode,
 
                 p1Id = "P1",
-                p1Character = p1Manager ? p1Manager.GetCharacterName(1) : "",
+                p1Character = p1Char,
                 p2Id = "P2",
-                p2Character = p2Manager ? p2Manager.GetCharacterName(1) : "",
+                p2Character = p2Char,
 
-                winnerId = (playerNum == 1) ? "P1" : "P2",
-                winnerCharacter = winnerName
+                winnerId = winnerId,
+                winnerCharacter = winnerCharacter
             });
 
             TelemetryManager.Instance?.EndSession($"RoundEnded_Flawless_winner={winnerName}");
@@ -438,21 +448,21 @@ public class GameManager : MonoBehaviour
 
     public void CheckForRandomCharacters()
     {
-        if(PlayerPrefs.GetString("Player1Choice")=="Random"  && roundCounter>1)
+        if (PlayerPrefs.GetString("Player1Choice") == "Random" && roundCounter > 1)
         {
             c1Name = p1Manager.GetCharacterName(1);
-            PlayerPrefs.SetString("Player1Choice",c1Name);
+            PlayerPrefs.SetString("Player1Choice", c1Name);
             p1Random = true;
         }
 
-        if (PlayerPrefs.GetString("Player2Choice")=="Random" && roundCounter>1)
+        if (PlayerPrefs.GetString("Player2Choice") == "Random" && roundCounter > 1)
         {
             c2Name = p2Manager.GetCharacterName(1);
             PlayerPrefs.SetString("Player2Choice", c2Name);
             p2Random = true;
         }
 
-        if(p1Random && gameEnd)
+        if (p1Random && gameEnd)
         {
             PlayerPrefs.SetString("Player1Choice", "Random");
         }
@@ -497,7 +507,7 @@ public class GameManager : MonoBehaviour
         gameEnd = false;
 
         if (trainingMode)
-        {            
+        {
             // 0) ΤΕΛΕΙΩΣΕ ΤΑ EPISODES ΠΡΩΤΑ
             if (agentP1) agentP1.EndEpisode();
             if (agentP2) agentP2.EndEpisode();
