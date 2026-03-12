@@ -12,6 +12,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 using static Unity.Collections.AllocatorManager;
+using System.Text;
 
 public enum MoveType
 {
@@ -2267,6 +2268,219 @@ public abstract class Character : MonoBehaviour
         {
             Destroy(lup);
         }
+    }
+
+    public void DebugDumpState(string context = "CharacterStateDump")
+    {
+        StringBuilder sb = new StringBuilder(2048);
+
+        sb.AppendLine("========================================");
+        sb.AppendLine($"[DEBUG STATE DUMP] {context}");
+        sb.AppendLine($"Character: {gameObject.name}");
+        sb.AppendLine($"Type: {GetType().Name}");
+        sb.AppendLine($"PlayerId: {PlayerId}");
+        sb.AppendLine($"playerNum: {playerNum}");
+        sb.AppendLine($"characterID: {characterID}");
+        sb.AppendLine($"Time.time: {Time.time:F3}");
+        sb.AppendLine($"Time.frameCount: {Time.frameCount}");
+        sb.AppendLine("-------------- Transform / Physics --------------");
+        sb.AppendLine($"Position: {transform.position}");
+        sb.AppendLine($"LocalScale: {transform.localScale}");
+        sb.AppendLine($"Rotation: {transform.rotation.eulerAngles}");
+        sb.AppendLine($"SpawnPos: {_spawnPos}");
+
+        if (rb != null)
+        {
+            sb.AppendLine($"Rigidbody bodyType: {rb.bodyType}");
+            sb.AppendLine($"Rigidbody velocity: {rb.velocity}");
+            sb.AppendLine($"Rigidbody angularVelocity: {rb.angularVelocity}");
+            sb.AppendLine($"Rigidbody gravityScale: {rb.gravityScale}");
+            sb.AppendLine($"Rigidbody mass: {rb.mass}");
+            sb.AppendLine($"Rigidbody simulated: {rb.simulated}");
+            sb.AppendLine($"Rigidbody constraints: {rb.constraints}");
+        }
+        else
+        {
+            sb.AppendLine("Rigidbody: NULL");
+        }
+
+        sb.AppendLine("-------------- Core State Flags --------------");
+        sb.AppendLine($"isStatic: {isStatic}");
+        sb.AppendLine($"ignoreUpdate: {ignoreUpdate}");
+        sb.AppendLine($"ignoreMovement: {ignoreMovement}");
+        sb.AppendLine($"ignoreDamage: {ignoreDamage}");
+        sb.AppendLine($"ignoreSlow: {ignoreSlow}");
+        sb.AppendLine($"canRotate: {canRotate}");
+        sb.AppendLine($"knockable: {knockable}");
+        sb.AppendLine($"stunned: {stunned}");
+        sb.AppendLine($"knocked: {knocked}");
+        sb.AppendLine($"casting: {casting}");
+        sb.AppendLine($"usingAbility: {usingAbility}");
+        sb.AppendLine($"canCast: {canCast}");
+        sb.AppendLine($"onCooldown: {onCooldown}");
+        sb.AppendLine($"cdTimer: {cdTimer:F3}");
+        sb.AppendLine($"lastAbilityCD: {lastAbilityCD:F3}");
+        sb.AppendLine($"AbilityCooldown01: {AbilityCooldown01:F3}");
+
+        sb.AppendLine("-------------- Health / Combat --------------");
+        sb.AppendLine($"currHealth: {currHealth}");
+        sb.AppendLine($"maxHealth: {maxHealth}");
+        sb.AppendLine($"damageShield: {damageShield}");
+        sb.AppendLine($"isBlocking: {isBlocking}");
+        sb.AppendLine($"blockDisabled: {blockDisabled}");
+        sb.AppendLine($"quickDisable: {quickDisable}");
+        sb.AppendLine($"heavyDisable: {heavyDisable}");
+        sb.AppendLine($"specialDisable: {specialDisable}");
+        sb.AppendLine($"chargeDisable: {chargeDisable}");
+        sb.AppendLine($"jumpDisabled: {jumpDisabled}");
+        sb.AppendLine($"overrideDeath: {overrideDeath}");
+
+        sb.AppendLine("-------------- Movement / Grounding --------------");
+        sb.AppendLine($"isGrounded: {isGrounded}");
+        sb.AppendLine($"grounds: {grounds}");
+        sb.AppendLine($"isonpad: {isonpad}");
+        sb.AppendLine($"CanDropPlatform: {CanDropPlatform}");
+        sb.AppendLine($"moveSpeed: {moveSpeed:F3}");
+        sb.AppendLine($"OGMoveSpeed: {OGMoveSpeed:F3}");
+        sb.AppendLine($"heavySpeed: {heavySpeed:F3}");
+        sb.AppendLine($"jumpForce: {jumpForce:F3}");
+        sb.AppendLine($"attackRange: {attackRange:F3}");
+        sb.AppendLine($"ogRange: {ogRange:F3}");
+        sb.AppendLine($"jumpAxisHeld: {jumpAxisHeld}");
+        sb.AppendLine($"lastMoveDir: {lastMoveDir}");
+        sb.AppendLine($"nextMoveLogTime: {nextMoveLogTime:F3}");
+
+        sb.AppendLine("-------------- Charge State --------------");
+        sb.AppendLine($"charging: {charging}");
+        sb.AppendLine($"charged: {charged}");
+        sb.AppendLine($"chargeAttackActive: {chargeAttackActive}");
+        sb.AppendLine($"chargeReset: {chargeReset}");
+        sb.AppendLine($"chargeTime: {chargeTime:F3}");
+        sb.AppendLine($"chargeDmg: {chargeDmg}");
+        sb.AppendLine($"chargeCoroutine running?: {chargeCoroutine != null}");
+
+        sb.AppendLine("-------------- Parry / Counter State --------------");
+        sb.AppendLine($"canParry: {canParry}");
+        sb.AppendLine($"counterIsOn: {counterIsOn}");
+        sb.AppendLine($"counterDone: {counterDone}");
+        sb.AppendLine($"safety: {safety}");
+        sb.AppendLine($"ignoreCounterOff: {ignoreCounterOff}");
+        sb.AppendLine($"parryDamage: {parryDamage}");
+
+        sb.AppendLine("-------------- Knockback State --------------");
+        sb.AppendLine($"KBForce: {KBForce:F3}");
+        sb.AppendLine($"KBCounter: {KBCounter:F3}");
+        sb.AppendLine($"KBTotalTime: {KBTotalTime:F3}");
+        sb.AppendLine($"knockfromright: {knockfromright}");
+        sb.AppendLine($"knockbackXaxis: {knockbackXaxis}");
+
+        sb.AppendLine("-------------- Input / Control --------------");
+        sb.AppendLine($"playerString: {playerString}");
+        sb.AppendLine($"controller: {controller}");
+        sb.AppendLine($"controllerCount: {controllerCount}");
+        sb.AppendLine($"debugControllers: {debugControllers}");
+        sb.AppendLine($"input provider: {(input != null ? input.GetType().Name : "NULL")}");
+
+        sb.AppendLine("-------------- Teleport / Misc --------------");
+        sb.AppendLine($"justTeleported: {justTeleported}");
+        sb.AppendLine($"chanChan: {chanChan}");
+        sb.AppendLine($"originalGravityScale: {originalGravityScale:F3}");
+
+        sb.AppendLine("-------------- Attack Flags --------------");
+        sb.AppendLine($"isLightAttacking: {isLightAttacking}");
+        sb.AppendLine($"heavyAttacking: {heavyAttacking}");
+
+        sb.AppendLine("-------------- References --------------");
+        sb.AppendLine($"enemy: {(enemy != null ? enemy.gameObject.name : "NULL")}");
+        sb.AppendLine($"animator: {(animator != null ? "OK" : "NULL")}");
+        sb.AppendLine($"audioManager: {(audioManager != null ? "OK" : "NULL")}");
+        sb.AppendLine($"resources: {(resources != null ? "OK" : "NULL")}");
+        sb.AppendLine($"characterSetup: {(characterSetup != null ? "OK" : "NULL")}");
+        sb.AppendLine($"characterChoiceHandler: {(characterChoiceHandler != null ? "OK" : "NULL")}");
+        sb.AppendLine($"gameManager: {(gameManager != null ? "OK" : "NULL")}");
+        sb.AppendLine($"healthbar: {(healthbar != null ? "OK" : "NULL")}");
+        sb.AppendLine($"attackPoint: {(attackPoint != null ? attackPoint.position.ToString() : "NULL")}");
+        sb.AppendLine($"groundCheck: {(groundCheck != null ? groundCheck.position.ToString() : "NULL")}");
+
+        sb.AppendLine("-------------- Layers / Ground Check --------------");
+        sb.AppendLine($"enemyLayer: {enemyLayer.value}");
+        sb.AppendLine($"solidGroundLayers: {solidGroundLayers.value}");
+        sb.AppendLine($"platformLayers: {platformLayers.value}");
+        sb.AppendLine($"playerGroundLayers: {playerGroundLayers.value}");
+        sb.AppendLine($"groundCheckRadius: {groundCheckRadius:F3}");
+
+        if (groundCheck != null)
+        {
+            bool onSolidGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, solidGroundLayers);
+            bool onPlatform = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, platformLayers);
+            bool onPlayer = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, playerGroundLayers);
+            bool touchingAny = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, solidGroundLayers | platformLayers | enemyLayer);
+
+            sb.AppendLine($"Overlap onSolidGround: {onSolidGround}");
+            sb.AppendLine($"Overlap onPlatform: {onPlatform}");
+            sb.AppendLine($"Overlap onPlayer: {onPlayer}");
+            sb.AppendLine($"Overlap touchingAny: {touchingAny}");
+        }
+
+        sb.AppendLine("-------------- Animator State --------------");
+        if (animator != null)
+        {
+            AnimatorStateInfo st = animator.GetCurrentAnimatorStateInfo(0);
+            sb.AppendLine($"Animator enabled: {animator.enabled}");
+            sb.AppendLine($"Animator speed: {animator.speed}");
+            sb.AppendLine($"Animator updateMode: {animator.updateMode}");
+            sb.AppendLine($"Animator cullingMode: {animator.cullingMode}");
+            sb.AppendLine($"Animator state shortHash: {st.shortNameHash}");
+            sb.AppendLine($"Animator normalizedTime: {st.normalizedTime:F3}");
+            sb.AppendLine($"Animator IsInTransition: {animator.IsInTransition(0)}");
+
+            sb.AppendLine($"Anim Bool isDead: {SafeGetAnimatorBool("isDead")}");
+            sb.AppendLine($"Anim Bool Charging: {SafeGetAnimatorBool("Charging")}");
+            sb.AppendLine($"Anim Bool Casting: {SafeGetAnimatorBool("Casting")}");
+            sb.AppendLine($"Anim Bool IsRunning: {SafeGetAnimatorBool("IsRunning")}");
+            sb.AppendLine($"Anim Bool Crouch: {SafeGetAnimatorBool("Crouch")}");
+            sb.AppendLine($"Anim Bool IsGrounded: {SafeGetAnimatorBool("IsGrounded")}");
+            sb.AppendLine($"Anim Bool Jump: {SafeGetAnimatorBool("Jump")}");
+            sb.AppendLine($"Anim Bool IsHeavyAttacking: {SafeGetAnimatorBool("IsHeavyAttacking")}");
+            sb.AppendLine($"Anim Bool QuickPunch: {SafeGetAnimatorBool("QuickPunch")}");
+        }
+
+        sb.AppendLine("-------------- Colliders --------------");
+        Collider2D[] cols = GetComponents<Collider2D>();
+        sb.AppendLine($"Collider count: {cols.Length}");
+        for (int i = 0; i < cols.Length; i++)
+        {
+            Collider2D c = cols[i];
+            if (c == null)
+            {
+                sb.AppendLine($"Collider[{i}]: NULL");
+                continue;
+            }
+
+            sb.AppendLine(
+                $"Collider[{i}]: type={c.GetType().Name}, " +
+                $"enabled={c.enabled}, isTrigger={c.isTrigger}, boundsCenter={c.bounds.center}, boundsSize={c.bounds.size}"
+            );
+        }
+
+        sb.AppendLine("========================================");
+
+        Debug.Log(sb.ToString(), this);
+    }
+
+    private string SafeGetAnimatorBool(string paramName)
+    {
+        if (animator == null) return "Animator NULL";
+
+        foreach (var p in animator.parameters)
+        {
+            if (p.name == paramName && p.type == AnimatorControllerParameterType.Bool)
+            {
+                return animator.GetBool(paramName).ToString();
+            }
+        }
+
+        return "MISSING";
     }
 
     #endregion

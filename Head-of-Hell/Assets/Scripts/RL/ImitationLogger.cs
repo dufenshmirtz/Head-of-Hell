@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using UnityEngine;
@@ -23,7 +22,6 @@ public class ImitationLogger : MonoBehaviour
     [SerializeField] private int totalCharacterCount = 10;
 
     [Header("Output")]
-    [SerializeField] private string folderName = "ILLogs";
     [SerializeField] private string filePrefix = "imitation";
 
     [Header("Metadata")]
@@ -39,7 +37,11 @@ public class ImitationLogger : MonoBehaviour
     private int episodeIndex = 0;
     private int stepIndex = 0;
     private bool episodeActive = false;
-    private bool terminalLoggedThisEpisode = false;
+
+    // IMPORTANT:
+    // after a terminal frame is logged once, wait until a true reset happens
+    // before allowing a new episode to start
+    private bool waitingForResetAfterDone = false;
 
     private void Start()
     {
@@ -82,11 +84,26 @@ public class ImitationLogger : MonoBehaviour
         }
 
         if (gameManager == null)
-        {
             gameManager = self.GetComponent<CharacterSetup>()?.gameManager;
-        }
 
         bool done = IsTerminal();
+
+        // If we already logged a terminal frame, do not create fake new episodes
+        // until the game has really reset into a fresh playable state.
+        if (waitingForResetAfterDone)
+        {
+            bool resetComplete =
+                self.GetCurrentHealth() > 0 &&
+                opp.GetCurrentHealth() > 0 &&
+                IsGameplayActive();
+
+            if (!resetComplete)
+                return;
+
+            waitingForResetAfterDone = false;
+            StartNewEpisode();
+            done = IsTerminal(); // re-evaluate after reset
+        }
 
         if (logOnlyWhenGameplayActive && !done && !IsGameplayActive())
             return;
@@ -105,11 +122,7 @@ public class ImitationLogger : MonoBehaviour
 
         HumanActionEncoder.DiscreteActionFrame act = HumanActionEncoder.Encode(self);
 
-        string outcome = "none";
-        if (done)
-        {
-            outcome = GetOutcome();
-        }
+        string outcome = done ? GetOutcome() : "none";
 
         FrameRecord record = new FrameRecord
         {
@@ -133,13 +146,12 @@ public class ImitationLogger : MonoBehaviour
         };
 
         WriteRecord(record);
-
         stepIndex++;
 
-        if (done && !terminalLoggedThisEpisode)
+        if (done)
         {
-            terminalLoggedThisEpisode = true;
             episodeActive = false;
+            waitingForResetAfterDone = true;
         }
     }
 
@@ -214,7 +226,6 @@ public class ImitationLogger : MonoBehaviour
         episodeIndex++;
         stepIndex = 0;
         episodeActive = true;
-        terminalLoggedThisEpisode = false;
 
         if (prettyDebug)
             Debug.Log($"[ImitationLogger] New episode {episodeIndex}");
@@ -223,7 +234,6 @@ public class ImitationLogger : MonoBehaviour
     private void OpenLogFile()
     {
         string dir = GetLogsDirectory();
-
         Directory.CreateDirectory(dir);
 
         string safePlayer = string.IsNullOrWhiteSpace(controlledPlayerLabel)
@@ -231,10 +241,10 @@ public class ImitationLogger : MonoBehaviour
             : controlledPlayerLabel;
 
         string fileName = $"{filePrefix}_{safePlayer}_{DateTime.Now:yyyyMMdd_HHmmss}.jsonl";
-
         currentFilePath = Path.Combine(dir, fileName);
 
-        writer = new StreamWriter(currentFilePath, false, Encoding.UTF8);
+        // UTF-8 WITHOUT BOM
+        writer = new StreamWriter(currentFilePath, false, new UTF8Encoding(false));
         writer.AutoFlush = true;
 
         Debug.Log($"[ImitationLogger] Logging to: {currentFilePath}");
@@ -244,11 +254,11 @@ public class ImitationLogger : MonoBehaviour
     {
         string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         string modeFolder = "editor_logs";
-    #else
+#else
         string modeFolder = "game_logs";
-    #endif
+#endif
 
         string logsPath = Path.Combine(
             documentsPath,

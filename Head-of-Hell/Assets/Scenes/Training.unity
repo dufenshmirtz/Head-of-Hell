@@ -367,20 +367,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -1618,7 +1604,7 @@ PrefabInstance:
     - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: grabPoint
       value: 
-      objectReference: {fileID: 1232102659}
+      objectReference: {fileID: 1245010756}
     - target: {fileID: 8480700416817540739, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: bombParent
       value: 
@@ -1677,6 +1663,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: 12
       addedObject: {fileID: 687642920}
+    - targetCorrespondingSourceObject: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1245010756}
     - targetCorrespondingSourceObject: {fileID: 8850850641682188571, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: 2
       addedObject: {fileID: 1346476726}
@@ -4312,20 +4301,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   mirrorFireAttackPoint: {fileID: 689308824}
   fireAttackPoint: {fileID: 2133402719}
 --- !u!1 &174624792
@@ -4972,20 +4947,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &184793119
@@ -5039,6 +5000,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &184793120
 MonoBehaviour:
@@ -6242,14 +6204,14 @@ MonoBehaviour:
   rewardWin: 1
   rewardLoss: -1
   stepPenalty: -0.0005
-  buggedPenalty: -0.04
-  staticPenalty: -0.01
-  engageDist: 3.5
-  dirReward: 0.002
-  dirPenalty: -0.002
-  farIdlePenalty: -0.0005
-  inRangeBonus: 0.001
-  farDistancePenaltyScale: -0.0003
+  spacingBonus: 0.0003
+  usefulRangeMinX: 0.35
+  usefulRangeMaxX: 0.9
+  usefulRangeMaxY: 0.5
+  stackPenalty: -0.0015
+  stackBadX: 0.2
+  stackBadMinY: 0.3
+  stackBadMaxY: 1.2
   relXScale: 9
   relYScale: 5
   velScale: 10
@@ -6267,7 +6229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 64
+    VectorObservationSize: 67
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -7269,20 +7231,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1522488523}
   bombsParent: {fileID: 2100796710}
@@ -9314,20 +9262,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -9383,6 +9317,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &355700674
 MonoBehaviour:
@@ -10260,20 +10195,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -10331,6 +10252,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &371476603
 MonoBehaviour:
@@ -12077,20 +11999,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1670223497}
   bombsParent: {fileID: 2100796710}
@@ -12147,6 +12055,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &448782098
 MonoBehaviour:
@@ -13028,6 +12937,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 770792712}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &505575557
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 505575558}
+  m_Layer: 8
+  m_Name: feetSensor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &505575558
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 505575557}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.81, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1367423837}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &507262017
 GameObject:
   m_ObjectHideFlags: 0
@@ -13780,20 +13720,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &541449327
@@ -13847,6 +13773,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &541449328
 MonoBehaviour:
@@ -14763,20 +14690,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 343137453}
   bombsParent: {fileID: 2100796710}
@@ -14833,6 +14746,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &559944328
 MonoBehaviour:
@@ -17139,20 +17053,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -17210,6 +17110,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &627431771
 MonoBehaviour:
@@ -18873,6 +18774,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!1 &677938931
 GameObject:
@@ -19942,20 +19844,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 569739573}
   bulletSpeed: 35
@@ -20013,6 +19901,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &770792715
 MonoBehaviour:
@@ -23116,20 +23005,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1001 &882995806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23503,20 +23378,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -23572,6 +23433,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &892172696
 MonoBehaviour:
@@ -26907,20 +26769,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1 &1025716889
 GameObject:
   m_ObjectHideFlags: 0
@@ -29574,20 +29422,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1 &1169185177
 GameObject:
   m_ObjectHideFlags: 0
@@ -29832,20 +29666,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1 &1185634414
 GameObject:
   m_ObjectHideFlags: 0
@@ -30681,20 +30501,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -31512,20 +31318,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &1228552612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31577,6 +31369,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &1228552613
 MonoBehaviour:
@@ -31851,20 +31644,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -32072,6 +31851,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 559944322}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1245010755
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1245010756}
+  m_Layer: 8
+  m_Name: feetSensor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1245010756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245010755}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.81, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 221568191}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1247528378
 GameObject:
@@ -32344,20 +32154,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -33269,20 +33065,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   mirrorFireAttackPoint: {fileID: 1079567584}
   fireAttackPoint: {fileID: 1505197450}
 --- !u!114 &1300380414
@@ -33336,6 +33118,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &1300380415
 MonoBehaviour:
@@ -33837,20 +33620,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1100786215}
   bombsParent: {fileID: 2100796710}
@@ -35081,14 +34850,14 @@ MonoBehaviour:
   rewardWin: 1
   rewardLoss: -1
   stepPenalty: -0.0005
-  buggedPenalty: -0.04
-  staticPenalty: -0.01
-  engageDist: 3.5
-  dirReward: 0.002
-  dirPenalty: -0.002
-  farIdlePenalty: -0.0005
-  inRangeBonus: 0.001
-  farDistancePenaltyScale: -0.0003
+  spacingBonus: 0.0003
+  usefulRangeMinX: 0.35
+  usefulRangeMaxX: 0.9
+  usefulRangeMaxY: 0.5
+  stackPenalty: -0.0015
+  stackBadX: 0.2
+  stackBadMinY: 0.3
+  stackBadMaxY: 1.2
   relXScale: 9
   relYScale: 5
   velScale: 10
@@ -35106,7 +34875,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 64
+    VectorObservationSize: 67
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -37074,20 +36843,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &1478511390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37139,6 +36894,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &1478511391
 MonoBehaviour:
@@ -38478,20 +38234,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   mirrorFireAttackPoint: {fileID: 79255834}
   fireAttackPoint: {fileID: 1247528379}
 --- !u!114 &1531342472
@@ -38545,6 +38287,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &1531342473
 MonoBehaviour:
@@ -40301,20 +40044,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1881472743}
   bulletSpeed: 35
@@ -40810,20 +40539,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1943892085}
   bulletSpeed: 35
@@ -40881,6 +40596,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &1609535761
 MonoBehaviour:
@@ -42257,6 +41973,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2144866982}
     - target: {fileID: 5020299007731939445, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      propertyPath: groundCheck
+      value: 
+      objectReference: {fileID: 505575558}
+    - target: {fileID: 5020299007731939445, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: activeSprite
       value: 
       objectReference: {fileID: 21300000, guid: f5a0909d982b8bf48ba6b638394980ba, type: 3}
@@ -42358,6 +42078,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: 12
       addedObject: {fileID: 60361244}
+    - targetCorrespondingSourceObject: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 505575558}
     - targetCorrespondingSourceObject: {fileID: 4307065134795609038, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: 2
       addedObject: {fileID: 246258982}
@@ -43104,20 +42827,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 461525617}
   bulletSpeed: 35
@@ -44627,20 +44336,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &1753174034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44692,6 +44387,7 @@ MonoBehaviour:
   saveReplayButton: {fileID: 0}
   quickAttackIndicator: {fileID: 0}
   damageCounter: {fileID: 0}
+  groundCheck: {fileID: 0}
   playerNum: 0
 --- !u!114 &1753174035
 MonoBehaviour:
@@ -48099,20 +47795,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &1985498623
@@ -48979,20 +48661,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   mirrorFireAttackPoint: {fileID: 1584761535}
   fireAttackPoint: {fileID: 1839956112}
 --- !u!1 &2018083340
@@ -49600,20 +49268,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &2039720494
@@ -51767,7 +51421,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enable: 1
-  onlyWhenTrainingConnected: 0
+  onlyWhenTrainingConnected: 1
   gameManager: {fileID: 2144866982}
   p1Manager: {fileID: 221568179}
   p2Manager: {fileID: 1367423825}
@@ -51785,10 +51439,16 @@ MonoBehaviour:
   weirdStateSeconds: 10
   castingSeconds: 6
   chargingSeconds: 3
-  applyPenaltyOnSafetyReset: 1
-  penaltyValue: -0.05
   agentP1: {fileID: 221568215}
   agentP2: {fileID: 1367423861}
+  applyPenaltyOnSafetyReset: 1
+  penaltyOOB: -0.05
+  penaltyWeirdState: -0.05
+  penaltyCastingTimeout: -0.03
+  penaltyChargingTimeout: -0.03
+  penaltyStallBoth: -0.02
+  penaltyStallSingle: -0.03
+  penaltyEpisodeTimeout: -0.02
 --- !u!1 &2147385444
 GameObject:
   m_ObjectHideFlags: 0
@@ -52334,20 +51994,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.15
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  solidGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  platformLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  playerGroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

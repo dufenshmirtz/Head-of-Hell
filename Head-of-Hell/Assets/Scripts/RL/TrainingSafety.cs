@@ -11,9 +11,9 @@ public class TrainingSafety : MonoBehaviour
     public bool onlyWhenTrainingConnected = true;
 
     [Header("References")]
-    public GameManager gameManager;       // drag or leave null if on same GO
-    public CharacterManager p1Manager;    // drag
-    public CharacterManager p2Manager;    // drag
+    public GameManager gameManager;
+    public CharacterManager p1Manager;
+    public CharacterManager p2Manager;
 
     [Header("Time base")]
     [Tooltip("Use unscaled time so thresholds stay consistent even if you change Time.timeScale.")]
@@ -52,11 +52,21 @@ public class TrainingSafety : MonoBehaviour
     [Tooltip("If IsCharging stays true continuously for this long -> reset (prevents charge-hold exploits/stucks).")]
     public float chargingSeconds = 15f;
 
-    [Header("Optional penalties (apply before reset)")]
-    public bool applyPenaltyOnSafetyReset = false;
-    public float penaltyValue = -0.02f;
+    [Header("Agent References")]
     public FighterAgent agentP1;
     public FighterAgent agentP2;
+
+    [Header("Penalty Settings")]
+    public bool applyPenaltyOnSafetyReset = true;
+
+    [Header("Safety penalties")]
+    public float penaltyOOB = -0.05f;
+    public float penaltyWeirdState = -0.05f;
+    public float penaltyCastingTimeout = -0.03f;
+    public float penaltyChargingTimeout = -0.03f;
+    public float penaltyStallBoth = -0.02f;
+    public float penaltyStallSingle = -0.03f;
+    public float penaltyEpisodeTimeout = -0.02f;
 
     // Timers
     float episodeTimer;
@@ -79,11 +89,10 @@ public class TrainingSafety : MonoBehaviour
     Vector2 lastPos2;
     bool hasLastPos;
 
-    bool oob=false;
-
     void Awake()
     {
-        if (gameManager == null) gameManager = GetComponent<GameManager>();
+        if (gameManager == null)
+            gameManager = GetComponent<GameManager>();
     }
 
     void Start()
@@ -97,10 +106,12 @@ public class TrainingSafety : MonoBehaviour
 
         if (onlyWhenTrainingConnected)
         {
-            if (Academy.Instance == null || !Academy.Instance.IsCommunicatorOn) return;
+            if (Academy.Instance == null || !Academy.Instance.IsCommunicatorOn)
+                return;
         }
 
-        if (gameManager == null || !gameManager.trainingMode) return;
+        if (gameManager == null || !gameManager.trainingMode)
+            return;
 
         var c1 = p1Manager ? p1Manager.GetCurrentCharacter() : null;
         var c2 = p2Manager ? p2Manager.GetCurrentCharacter() : null;
@@ -110,66 +121,83 @@ public class TrainingSafety : MonoBehaviour
         if (dt <= 0f) return;
 
         episodeTimer += dt;
+
         // 1) OOB (manual bounds)
-        if (IsOutOfBounds(c1.transform.position) || IsOutOfBounds(c2.transform.position))
+        bool p1OOB = IsOutOfBounds(c1.transform.position);
+        bool p2OOB = IsOutOfBounds(c2.transform.position);
+
+        if (p1OOB || p2OOB)
             oobTimer += dt;
         else
             oobTimer = 0f;
 
         if (oobTimer >= oobSeconds)
         {
-            SafetyReset("OOB");
+            SafetyReset("OOB", p1OOB, p2OOB);
             return;
         }
 
-        // 2) Weird-state (physics / colliders / dead animator stuck)
+        // 2) Weird-state
         weirdTimerP1 = UpdateWeirdTimer(c1, weirdTimerP1, dt);
         weirdTimerP2 = UpdateWeirdTimer(c2, weirdTimerP2, dt);
 
-        if (weirdTimerP1 >= weirdStateSeconds || weirdTimerP2 >= weirdStateSeconds)
+        bool p1Weird = weirdTimerP1 >= weirdStateSeconds;
+        bool p2Weird = weirdTimerP2 >= weirdStateSeconds;
+
+        if (p1Weird || p2Weird)
         {
-            SafetyReset("WEIRD_STATE_TIMEOUT");
+            SafetyReset("WEIRD_STATE_TIMEOUT", p1Weird, p2Weird);
             return;
         }
 
-        // 3) Casting / Charging long holds (continuous)
-        castTimerP1 = UpdateContinuousTimer(c1, castTimerP1, dt, cond: IsCastingLong);
-        castTimerP2 = UpdateContinuousTimer(c2, castTimerP2, dt, cond: IsCastingLong);
+        // 3) Casting / Charging long holds
+        castTimerP1 = UpdateContinuousTimer(c1, castTimerP1, dt, IsCastingLong);
+        castTimerP2 = UpdateContinuousTimer(c2, castTimerP2, dt, IsCastingLong);
 
-        if (castTimerP1 >= castingSeconds || castTimerP2 >= castingSeconds)
+        bool p1CastTimeout = castTimerP1 >= castingSeconds;
+        bool p2CastTimeout = castTimerP2 >= castingSeconds;
+
+        if (p1CastTimeout || p2CastTimeout)
         {
-            SafetyReset("CASTING_TIMEOUT");
+            SafetyReset("CASTING_TIMEOUT", p1CastTimeout, p2CastTimeout);
             return;
         }
 
-        chargeTimerP1 = UpdateContinuousTimer(c1, chargeTimerP1, dt, cond: IsChargingLong);
-        chargeTimerP2 = UpdateContinuousTimer(c2, chargeTimerP2, dt, cond: IsChargingLong);
+        chargeTimerP1 = UpdateContinuousTimer(c1, chargeTimerP1, dt, IsChargingLong);
+        chargeTimerP2 = UpdateContinuousTimer(c2, chargeTimerP2, dt, IsChargingLong);
 
-        if (chargeTimerP1 >= chargingSeconds || chargeTimerP2 >= chargingSeconds)
+        bool p1ChargeTimeout = chargeTimerP1 >= chargingSeconds;
+        bool p2ChargeTimeout = chargeTimerP2 >= chargingSeconds;
+
+        if (p1ChargeTimeout || p2ChargeTimeout)
         {
-            SafetyReset("CHARGE_HOLD_TIMEOUT");
+            SafetyReset("CHARGE_HOLD_TIMEOUT", p1ChargeTimeout, p2ChargeTimeout);
             return;
         }
 
-        // 4) Stall / same-position (per fighter + both)
+        // 4) Stall / same-position
         UpdateStallTimers(c1, c2, dt);
 
-        if (stallTimerBoth >= stallSecondsBoth)
+        bool bothStalling = stallTimerBoth >= stallSecondsBoth;
+        bool p1SingleStall = stallTimerP1 >= stallSecondsSingle;
+        bool p2SingleStall = stallTimerP2 >= stallSecondsSingle;
+
+        if (bothStalling)
         {
-            SafetyReset("STALL_BOTH");
+            SafetyReset("STALL_BOTH", true, true);
             return;
         }
 
-        if (stallTimerP1 >= stallSecondsSingle || stallTimerP2 >= stallSecondsSingle)
+        if (p1SingleStall || p2SingleStall)
         {
-            SafetyReset("STALL_SINGLE");
+            SafetyReset("STALL_SINGLE", p1SingleStall, p2SingleStall);
             return;
         }
 
         // 5) Hard timeout
         if (episodeTimer >= episodeTimeoutSeconds)
         {
-            SafetyReset("TIMEOUT");
+            SafetyReset("TIMEOUT", true, true);
             return;
         }
 
@@ -181,15 +209,12 @@ public class TrainingSafety : MonoBehaviour
 
     bool IsOutOfBounds(Vector3 p)
     {
-        oob=p.x < minX  || p.x > maxX || p.y < minY || p.y > maxY;
-        return oob;
+        return p.x < minX || p.x > maxX || p.y < minY || p.y > maxY;
     }
 
     float UpdateWeirdTimer(Character c, float timer, float dt)
     {
         if (c == null) return 0f;
-
-        // If dead by HP, don't count weird; normal death/reset flow will handle it
         if (c.GetCurrentHealth() <= 0) return 0f;
 
         var rb = c.GetComponent<Rigidbody2D>();
@@ -197,36 +222,35 @@ public class TrainingSafety : MonoBehaviour
         bool anyColliderEnabled = cols != null && cols.Length > 0 && cols.Any(col => col != null && col.enabled);
 
         bool gravityZero = (rb != null && Mathf.Abs(rb.gravityScale) < 0.001f);
-        bool staticBody  = (rb != null && rb.bodyType == RigidbodyType2D.Static);
+        bool staticBody = (rb != null && rb.bodyType == RigidbodyType2D.Static);
         bool noColliders = !anyColliderEnabled;
 
         bool animDead = false;
         var anim = c.GetComponent<Animator>();
         if (anim != null)
         {
-            try { animDead = anim.GetBool("isDead"); } catch { animDead = false; }
+            try { animDead = anim.GetBool("isDead"); }
+            catch { animDead = false; }
         }
 
         bool weird = gravityZero || staticBody || noColliders || animDead;
-
         return weird ? (timer + dt) : 0f;
     }
 
-    // Generic "continuous condition" timer
     float UpdateContinuousTimer(Character c, float timer, float dt, System.Func<Character, bool> cond)
     {
         if (c == null) return 0f;
         if (c.GetCurrentHealth() <= 0) return 0f;
 
         bool on = false;
-        try { on = cond(c); } catch { on = false; }
+        try { on = cond(c); }
+        catch { on = false; }
 
         return on ? (timer + dt) : 0f;
     }
 
     bool IsCastingLong(Character c)
     {
-        // Uses your public property
         return c.IsCasting;
     }
 
@@ -255,7 +279,6 @@ public class TrainingSafety : MonoBehaviour
         bool p1Alive = c1.GetCurrentHealth() > 0;
         bool p2Alive = c2.GetCurrentHealth() > 0;
 
-        // Treat locked states as "still" too — if they last too long, reset will happen via casting/charging timers anyway.
         if (p1Still && p1Alive) stallTimerP1 += dt; else stallTimerP1 = 0f;
         if (p2Still && p2Alive) stallTimerP2 += dt; else stallTimerP2 = 0f;
 
@@ -263,14 +286,18 @@ public class TrainingSafety : MonoBehaviour
         else stallTimerBoth = 0f;
     }
 
-    void SafetyReset(string reason)
+    void SafetyReset(string reason, bool penalizeP1, bool penalizeP2)
     {
-        Debug.LogWarning($"[TRAINING SAFETY] Reset: {reason}");
+        Debug.LogWarning($"[TRAINING SAFETY] Reset: {reason} | P1:{penalizeP1} P2:{penalizeP2}");
+
+        DebugMetrics();
 
         if (applyPenaltyOnSafetyReset)
         {
-            if (agentP1) agentP1.AddReward(penaltyValue);
-            if (agentP2) agentP2.AddReward(penaltyValue);
+            float penalty = GetPenaltyForReason(reason);
+
+            if (penalizeP1 && agentP1) agentP1.AddReward(penalty);
+            if (penalizeP2 && agentP2) agentP2.AddReward(penalty);
         }
 
         ResetTimers();
@@ -279,6 +306,35 @@ public class TrainingSafety : MonoBehaviour
             gameManager.SoftResetRound(0);
 
         CacheLastPositions();
+    }
+
+    void DebugMetrics()
+    {
+        p1Manager.CharacterChoice(1).DebugDumpState();
+        p2Manager.CharacterChoice(1).DebugDumpState();
+    }
+
+    float GetPenaltyForReason(string reason)
+    {
+        switch (reason)
+        {
+            case "OOB":
+                return penaltyOOB;
+            case "WEIRD_STATE_TIMEOUT":
+                return penaltyWeirdState;
+            case "CASTING_TIMEOUT":
+                return penaltyCastingTimeout;
+            case "CHARGE_HOLD_TIMEOUT":
+                return penaltyChargingTimeout;
+            case "STALL_BOTH":
+                return penaltyStallBoth;
+            case "STALL_SINGLE":
+                return penaltyStallSingle;
+            case "TIMEOUT":
+                return penaltyEpisodeTimeout;
+            default:
+                return -0.02f;
+        }
     }
 
     void ResetTimers()
