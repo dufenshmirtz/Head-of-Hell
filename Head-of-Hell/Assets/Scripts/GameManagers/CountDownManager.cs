@@ -33,6 +33,7 @@ public class CountdownManager : MonoBehaviour
             else
             {
                 audioManager.PlayMusic();
+                gameManager.roundOn = true;
             }
         }         
     }
