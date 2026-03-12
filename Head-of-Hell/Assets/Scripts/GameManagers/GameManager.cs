@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour
 
     public float tScale = 1f;
 
+    public bool roundOn = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -115,6 +117,7 @@ public class GameManager : MonoBehaviour
 
         if (trainingMode)
         {
+            roundOn = true;
             portalNumber = 0;
             Time.timeScale = tScale;
         }
@@ -207,6 +210,8 @@ public class GameManager : MonoBehaviour
         }
 
         StartCoroutine(WaitAndCheck(playerNum, winnerName));
+
+        roundOn = false;
     }
 
     public void RoundEndTie(int playerNum)
@@ -258,6 +263,7 @@ public class GameManager : MonoBehaviour
         ActivateIndicators();
         CheckForRandomCharacters();
         StartCoroutine(WaitAndrestart());
+        roundOn = false;
     }
 
     public void RoundEndFlawless(int playerNum, string winnerName)
@@ -304,6 +310,7 @@ public class GameManager : MonoBehaviour
         }
 
         StartCoroutine(WaitAndCheck(playerNum, winnerName));
+        roundOn = false;
     }
 
     public void ShortWins(int playerNum, string winnerName)

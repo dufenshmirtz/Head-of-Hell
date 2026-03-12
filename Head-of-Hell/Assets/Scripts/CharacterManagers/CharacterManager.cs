@@ -258,12 +258,14 @@ public class CharacterManager : MonoBehaviour
     {
         character.stayStatic();
         character.ignoreUpdate = true;
+        mngr.roundOn=false;
     }
 
     public void Resume()
     {
         character.stayDynamic();
         character.ignoreUpdate = false;
+        mngr.roundOn=true;
     }
 
     public void ChangeCharacter(string givenName)

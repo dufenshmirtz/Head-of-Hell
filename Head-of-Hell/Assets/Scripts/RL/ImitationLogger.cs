@@ -192,6 +192,10 @@ public class ImitationLogger : MonoBehaviour
         if (self.ignoreUpdate || opp.ignoreUpdate)
             return false;
 
+        // NEW: only log when round is actually live
+        if (gameManager == null || !gameManager.roundOn)
+            return false;
+
         return true;
     }
 

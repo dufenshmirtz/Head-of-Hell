@@ -1,55 +1,55 @@
-{
-  "num_files": 84,
-  "num_frames": 109359,
-  "num_episodes": 12768,
-  "done_count": 12762,
+﻿{
+  "num_files": 150,
+  "num_frames": 262539,
+  "num_episodes": 12828,
+  "done_count": 12822,
   "obs_lengths": {
-    "64": 109359
+    "64": 262539
   },
   "act_lengths": {
-    "9": 109359
+    "9": 262539
   },
-  "clean_rows": 109359,
+  "clean_rows": 262539,
   "x_shape": [
-    109359,
+    262539,
     64
   ],
   "y_shape": [
-    109359,
+    262539,
     9
   ],
   "controlled_player_distribution": {
-    "P1": 54697,
-    "P2": 54662
+    "P1": 131306,
+    "P2": 131233
   },
   "self_character_distribution": {
-    "Vander": 4474,
-    "LazyBigus": 9521,
-    "Fin": 17584,
-    "Lupen": 12076,
-    "Steelager": 20540,
-    "Chiback": 15693,
-    "Visvia": 11607,
-    "Skipler": 5861,
-    "Rager": 2202,
-    "Lithra": 9801
+    "Vander": 21065,
+    "LazyBigus": 21724,
+    "Fin": 25341,
+    "Lupen": 26168,
+    "Steelager": 47360,
+    "Chiback": 31997,
+    "Visvia": 25805,
+    "Skipler": 26327,
+    "Rager": 13626,
+    "Lithra": 23126
   },
   "opp_character_distribution": {
-    "LazyBigus": 9524,
-    "Vander": 4467,
-    "Steelager": 20534,
-    "Skipler": 5856,
-    "Fin": 17578,
-    "Rager": 2199,
-    "Visvia": 11602,
-    "Lupen": 12078,
-    "Lithra": 9820,
-    "Chiback": 15701
+    "LazyBigus": 21730,
+    "Vander": 21058,
+    "Steelager": 47346,
+    "Skipler": 26317,
+    "Fin": 25328,
+    "Rager": 13615,
+    "Visvia": 25796,
+    "Lupen": 26171,
+    "Lithra": 23160,
+    "Chiback": 32018
   },
   "outcome_distribution": {
-    "none": 96597,
-    "loss": 6381,
-    "win": 6381
+    "none": 249717,
+    "loss": 6411,
+    "win": 6411
   },
   "top_actions": [
     {
@@ -64,7 +64,7 @@
         0,
         0
       ],
-      "count": 38180
+      "count": 99256
     },
     {
       "action": [
@@ -78,7 +78,7 @@
         0,
         0
       ],
-      "count": 37040
+      "count": 95898
     },
     {
       "action": [
@@ -92,7 +92,7 @@
         0,
         0
       ],
-      "count": 23919
+      "count": 37031
     },
     {
       "action": [
@@ -106,49 +106,7 @@
         1,
         0
       ],
-      "count": 2747
-    },
-    {
-      "action": [
-        2,
-        0,
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0
-      ],
-      "count": 2300
-    },
-    {
-      "action": [
-        0,
-        0,
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0
-      ],
-      "count": 1943
-    },
-    {
-      "action": [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        1,
-        0
-      ],
-      "count": 686
+      "count": 8344
     },
     {
       "action": [
@@ -157,12 +115,68 @@
         0,
         0,
         0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "count": 7336
+    },
+    {
+      "action": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "count": 6631
+    },
+    {
+      "action": [
+        0,
+        0,
+        0,
+        0,
+        0,
         0,
         0,
         1,
         0
       ],
-      "count": 389
+      "count": 1452
+    },
+    {
+      "action": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "count": 930
+    },
+    {
+      "action": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "count": 701
     },
     {
       "action": [
@@ -176,21 +190,7 @@
         0,
         0
       ],
-      "count": 291
-    },
-    {
-      "action": [
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0,
-        0,
-        0
-      ],
-      "count": 241
+      "count": 689
     },
     {
       "action": [
@@ -204,7 +204,7 @@
         0,
         0
       ],
-      "count": 205
+      "count": 517
     },
     {
       "action": [
@@ -218,35 +218,7 @@
         0,
         0
       ],
-      "count": 174
-    },
-    {
-      "action": [
-        2,
-        0,
-        1,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-      ],
-      "count": 141
-    },
-    {
-      "action": [
-        0,
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0,
-        0
-      ],
-      "count": 129
+      "count": 441
     },
     {
       "action": [
@@ -260,7 +232,49 @@
         0,
         0
       ],
-      "count": 125
+      "count": 358
+    },
+    {
+      "action": [
+        2,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "count": 358
+    },
+    {
+      "action": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "count": 350
+    },
+    {
+      "action": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "count": 301
     },
     {
       "action": [
@@ -274,21 +288,7 @@
         2,
         0
       ],
-      "count": 114
-    },
-    {
-      "action": [
-        1,
-        0,
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0
-      ],
-      "count": 95
+      "count": 255
     },
     {
       "action": [
@@ -302,7 +302,21 @@
         0,
         0
       ],
-      "count": 88
+      "count": 218
+    },
+    {
+      "action": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "count": 180
     },
     {
       "action": [
@@ -316,21 +330,7 @@
         0,
         1
       ],
-      "count": 82
-    },
-    {
-      "action": [
-        1,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0,
-        0,
-        0
-      ],
-      "count": 74
+      "count": 169
     }
   ]
 }
