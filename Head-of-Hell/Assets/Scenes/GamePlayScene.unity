@@ -6290,7 +6290,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 221568178}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b492f403ccb837e46bb46538b1575d22, type: 3}
   m_Name: 
@@ -6306,11 +6306,11 @@ MonoBehaviour:
   actionCooldownMin: 0.3
   actionCooldownMax: 0.65
   quickChance: 0.35
-  heavyChance: 0.65
+  heavyChance: 0.55
   specialChance: 0.08
   chargeChance: 0
   jumpChance: 0.06
-  blockChance: 0.05
+  blockChance: 0.01
   parryChance: 0
   sameLevelTolerance: 0.85
   jumpToTargetChance: 0.05
@@ -34658,7 +34658,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367423824}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b492f403ccb837e46bb46538b1575d22, type: 3}
   m_Name: 
@@ -34674,11 +34674,11 @@ MonoBehaviour:
   actionCooldownMin: 0.3
   actionCooldownMax: 0.65
   quickChance: 0.45
-  heavyChance: 0.25
+  heavyChance: 1.2
   specialChance: 0.08
   chargeChance: 0
   jumpChance: 0.06
-  blockChance: 0.1
+  blockChance: 0.01
   parryChance: 0
   sameLevelTolerance: 0.85
   jumpToTargetChance: 0.05
@@ -51071,7 +51071,7 @@ MonoBehaviour:
   - {fileID: 616644771}
   - {fileID: 808757111}
   maxHealth: 100
-  autoRunMatches: 0
+  autoRunMatches: 1
   autoNextMatchDelay: 2
   maxAutoMatches: 0
   trainingMode: 0
