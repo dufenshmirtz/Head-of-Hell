@@ -97,6 +97,7 @@ public class Lupen : Character
         ignoreDamage = true;
         knockable = false;
         damageShield = false;
+        casting=true;
         animator.SetTrigger("Spell");
     }
 
@@ -146,6 +147,7 @@ public class Lupen : Character
         wipDamage = wdmg;
         robberyCountter = rc;
         currHealth = currentHealth;
+        casting = false;
         RemoveLastAttachedScript();
         OnCooldown(cooldown);
     }
@@ -176,6 +178,7 @@ public class Lupen : Character
             Debug.LogWarning("No scripts to remove on this GameObject.");
         }
     }
+
     #endregion
 
     #region LightAttack

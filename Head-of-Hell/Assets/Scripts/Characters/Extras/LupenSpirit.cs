@@ -16,8 +16,9 @@ public class LupenSpirit : MonoBehaviour
     public int currentHealth;
     public helthbarscript healthbar;
     public int maxHealth;
-    bool swapped;
+    bool swapped=false;
     bool healthswap = true;
+    bool spammingCheck = true;
 
     // --- Injected input provider (same as the Character uses) ---
     private IInputProvider input;
@@ -65,13 +66,13 @@ public class LupenSpirit : MonoBehaviour
         // *** INPUT: use provider instead of Input. ***
         // Ability to trigger return while in stolen form:
         bool abilityPressed =
-            input.GetKeyDown(ability) ||
-            (controller && input.GetButtonDown("Spell" + playerString));
+            (input.GetKeyDown(ability) || (controller && input.GetButtonDown("Spell" + playerString))) && lupen.isActiveAndEnabled == false;
 
-        if (abilityPressed && lupen.isActiveAndEnabled == false && !enemy.AmICasting())
+        if (abilityPressed && lupen.isActiveAndEnabled == false && !enemy.AmICasting() && spammingCheck==true)
         {
+            spammingCheck = false;
             stolenCharacter.chargeDisable = true;
-            StartCoroutine(SetLupenInFormSpellAfterDelay(1f));
+            StartCoroutine(SetLupenInFormSpellAfterDelay(1.7f));
         }
     }
 
@@ -79,7 +80,6 @@ public class LupenSpirit : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         lupenInFormSpell = true;
-        Debug.Log("LupenInFormSpell is now true");
     }
 
     public void Action()
@@ -87,6 +87,7 @@ public class LupenSpirit : MonoBehaviour
         lupen.enabled = false;
         swapped = true;
         healthswap = false;
+        spammingCheck = true;
 
         // Ensure the *stolen form* receives the SAME input provider,
         // so the Agent/keyboard keeps controlling seamlessly.

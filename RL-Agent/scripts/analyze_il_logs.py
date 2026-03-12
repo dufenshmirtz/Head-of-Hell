@@ -60,7 +60,7 @@ def safe_mkdir(path: str):
 
 def load_jsonl_file(path: str):
     rows = []
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, "r", encoding="utf-8-sig") as f:
         for line_num, line in enumerate(f, start=1):
             line = line.strip()
             if not line:
@@ -389,7 +389,7 @@ def analyze_logs(log_dir: str, output_dir: str, save_dataset: bool = True):
     }
 
     summary_path = os.path.join(output_dir, "dataset_summary.json")
-    with open(summary_path, "w", encoding="utf-8") as f:
+    with open(summary_path, "w", encoding="utf-8-sig") as f:
         json.dump(summary, f, indent=2)
 
     print(f"[INFO] Saved summary to: {summary_path}")
