@@ -9181,16 +9181,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 296451374}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.969697, y: 0.969697, z: 0.969697}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1012883535}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 990, y: 556.875}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &296451376
@@ -25539,7 +25539,6 @@ GameObject:
   m_Component:
   - component: {fileID: 893962520}
   - component: {fileID: 893962521}
-  - component: {fileID: 893962522}
   m_Layer: 5
   m_Name: CharacterChoiceMenu
   m_TagString: Untagged
@@ -25606,25 +25605,6 @@ MonoBehaviour:
   sfx: {fileID: 344690514}
   characterChoiceMenu: {fileID: 1305964959}
   bothpicked: 0
---- !u!114 &893962522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 893962519}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca6692429983bec4580d9ea2a919b700, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  db:
-    profiles: []
-  selectedIndexP1: -1
-  selectedIndexP2: -1
-  guestProfile:
-    id: 
-    profileName: 
 --- !u!1 &896513977
 GameObject:
   m_ObjectHideFlags: 0
@@ -29211,7 +29191,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 296451375}
   - {fileID: 1844099634}
   - {fileID: 230913515}
   - {fileID: 2128717153}
@@ -60175,6 +60154,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1863939076}
   - {fileID: 112913356}
+  - {fileID: 296451375}
   - {fileID: 2104332388}
   - {fileID: 1294468906}
   - {fileID: 796104404}
