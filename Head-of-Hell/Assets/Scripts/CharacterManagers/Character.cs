@@ -97,7 +97,8 @@ public abstract class Character : MonoBehaviour
     protected bool canCast = true;
     protected bool knocked = false;
     protected bool canRotate = true;
-
+    protected bool isRolling = false;
+    public bool IsRolling => isRolling;
     private bool jumpAxisHeld;
 
     //knockback
@@ -1301,30 +1302,34 @@ public abstract class Character : MonoBehaviour
             print("suvkkkk");
             return;
         }
+
     }
 
     // cache distance once for this damage call
     float distance = GetDistanceToEnemy();
 
-    // Invulnerability / i-frames (e.g., roll)
-    if (ignoreDamage)
-    {
-        int hpBeforeInv = currHealth;
-        int hpAfterInv = currHealth;
+        // Invulnerability / i-frames (e.g., roll)
+        if (ignoreDamage && IsRolling)
+        {
+            int hpBeforeInv = currHealth;
+            int hpAfterInv = currHealth;
 
-        TelemetryManager.Instance?.LogDamageApplied(
-            incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
-            0,
-            hpBeforeInv,
-            hpAfterInv,
-            distance,
-            false,
-            true
-        );
-        return;
-    }
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId,
+                this.PlayerId,
+                incomingMoveType,
+                incomingSourceType,
+                0,
+                hpBeforeInv,
+                hpAfterInv,
+                distance,
+                false,
+                true
+            );
+            return;
+        }
 
-    if (dmg == chargeDmg)
+        if (dmg == chargeDmg)
     {
         StopCHarge();
     }
@@ -1378,29 +1383,29 @@ public abstract class Character : MonoBehaviour
     }
     else
     {
-        if (damageShield)
-        {
-            damageShield = false;
-            shield.gameObject.SetActive(false);
+            if (damageShield)
+            {
+                damageShield = false;
+                shield.gameObject.SetActive(false);
 
-            int hpBeforeShield = currHealth;
-            int hpAfterShield = currHealth;
+                int hpBeforeShield = currHealth;
+                int hpAfterShield = currHealth;
 
-            // Treat shield as negated / dodged
-            TelemetryManager.Instance?.LogDamageApplied(
-                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
-                0,
-                hpBeforeShield,
-                hpAfterShield,
-                distance,
-                false,
-                true
-            );
+                // Treat shield as blocked / absorbed
+                TelemetryManager.Instance?.LogDamageApplied(
+                    incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                    0,
+                    hpBeforeShield,
+                    hpAfterShield,
+                    distance,
+                    true,
+                    false
+                );
 
-            return;
-        }
+                return;
+            }
 
-        currHealth -= dmg;
+            currHealth -= dmg;
 
         animator.SetTrigger("tookDmg");
         healthbar.SetHealth(currHealth);
@@ -1526,13 +1531,16 @@ public abstract class Character : MonoBehaviour
         float distance = GetDistanceToEnemy();
 
         // Invulnerability / i-frames
-        if (ignoreDamage)
+        if (ignoreDamage && IsRolling)
         {
             int hpBeforeInv = currHealth;
             int hpAfterInv = currHealth;
 
             TelemetryManager.Instance?.LogDamageApplied(
-                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                incomingAttackerId,
+                this.PlayerId,
+                incomingMoveType,
+                incomingSourceType,
                 0,
                 hpBeforeInv,
                 hpAfterInv,
@@ -1563,19 +1571,19 @@ public abstract class Character : MonoBehaviour
                 int hpBeforeShield = currHealth;
                 int hpAfterShield = currHealth;
 
+                // Treat shield as blocked / absorbed
                 TelemetryManager.Instance?.LogDamageApplied(
                     incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
                     0,
                     hpBeforeShield,
                     hpAfterShield,
                     distance,
-                    false,
-                    true
+                    true,
+                    false
                 );
 
                 return;
             }
-
             currHealth -= dmg;
 
             healthbar.SetHealth(currHealth);

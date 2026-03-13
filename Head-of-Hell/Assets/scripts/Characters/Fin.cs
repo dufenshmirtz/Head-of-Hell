@@ -14,7 +14,7 @@ public class Fin : Character
     // bool safety = true;
     Transform escapePoint;
     GameObject freeBaby;
-
+    
     public override void Start()
     {
         base.Start();
@@ -111,6 +111,9 @@ public class Fin : Character
         IgnoreMovement(true);
         ignoreDamage = true;
         knockable = false;
+        isRolling = true;
+
+
 
         // Store the original gravity scale
         float ogGravityScale = rb.gravityScale;
@@ -172,6 +175,7 @@ public class Fin : Character
         IgnoreMovement(false);
         ignoreDamage = false;
         knockable = true;
+        isRolling = false;
 
         StartCoroutine(ResetRoll());
     }
