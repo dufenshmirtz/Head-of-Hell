@@ -66,6 +66,7 @@ public class Chiback : Character
         animator.SetTrigger("Spell");
         UsingAbility(cooldown);
         audioManager.PlaySFX(audioManager.sytheDash, audioManager.normalVol);
+        audioManager.PlaySFX(audioManager.yeehaw, 1.5f);
         ignoreDamage = true;
         StartCoroutine(ScytheJump());
     }
@@ -178,7 +179,7 @@ public class Chiback : Character
             QuickAttackIndicatorDisable();
             animator.SetTrigger("QuickAttack");
             fireReady = false;
-            audioManager.PlaySFX(audioManager.fireblast, 1f);
+            audioManager.PlaySFX(audioManager.sytheGround, 1f);
             StartCoroutine(ResetFire());
         }
     }
@@ -190,15 +191,16 @@ public class Chiback : Character
 
         if (hitEnemy != null || hitEnemy2!=null)
         {
-            audioManager.PlaySFX(audioManager.lightattack, 0.5f);
+            audioManager.PlaySFX(audioManager.skiplaHeavyHit, 1f);
             TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
             enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
             enemy.TakeDamage(5, true);
-            if(!enemy.counterIsOn){
-                enemy.BreakCharge();
-            }
             if(!onCooldown){
                 enemy.Knockback(15f, 0.8f, true);
+            }
+            else
+            {
+                enemy.Knockback(3f, 0.3f, true);
             }
             enemy.DisableBlock(true);
             enemy.DisableJump(true);

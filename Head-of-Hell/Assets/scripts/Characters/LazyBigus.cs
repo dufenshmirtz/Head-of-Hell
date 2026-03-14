@@ -73,7 +73,6 @@ public class LazyBigus : Character
         bScript.playa = this;
         animator.SetTrigger("Spell");
         audioManager.PlaySFX(audioManager.beam, audioManager.doubleVol);
-        enemy.BreakCharge();
         ignoreDamage = true;
     }
 
@@ -85,6 +84,7 @@ public class LazyBigus : Character
             audioManager.PlaySFX(audioManager.beamHit, 1.8f);
             StartCoroutine(Poison(beamPoisonDamage/5,1f,5));
             StartCoroutine(BeamDetectorReset());
+            enemy.BreakCharge();
         }
     }
 
@@ -269,10 +269,8 @@ public class LazyBigus : Character
 
     public void StackPoison()
     {
-        if (!enemy.isBlocking)
-        {
-            AddPoison();
-        }
+
+        AddPoison();
 
     }
     #endregion

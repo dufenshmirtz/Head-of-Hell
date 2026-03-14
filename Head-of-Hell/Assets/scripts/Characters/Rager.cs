@@ -34,6 +34,7 @@ public class Rager : Character
         {
 
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
+            audioManager.PlaySFX(audioManager.explosion, audioManager.lessVol);
             enemy.TakeDamage(heavyDamage, true);
 
             if (! enemy.isBlocking)
@@ -44,7 +45,7 @@ public class Rager : Character
         }
         else
         {
-            audioManager.PlaySFX(audioManager.swoosh, 1f);
+            audioManager.PlaySFX(audioManager.explosion, audioManager.lessVol);
         }
 
         ResetQuickPunch();
@@ -115,6 +116,8 @@ public class Rager : Character
 
     private IEnumerator DealComboDamageOverTime(float totalDuration, int totalHits)
     {
+        audioManager.PlaySFX(audioManager.chainsaw, 1f);
+
         float delayBetweenHits = totalDuration / totalHits; // Calculate delay between hits
 
         for (int i = 0; i < totalHits; i++)

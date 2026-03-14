@@ -92,7 +92,7 @@ public class FighterAgent : Agent
 
         if (opp == null && enemyManager != null)
         {
-            var e = enemyManager.CharacterChoice(2);
+            var e = enemyManager.CharacterChoice(1);
             if (e != null)
             {
                 BindEnemy(e);
