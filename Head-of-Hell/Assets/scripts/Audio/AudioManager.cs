@@ -105,6 +105,10 @@ public class AudioManager : MonoBehaviour
     public AudioClip transformation;
     public AudioClip whip;
     public AudioClip coinSound;
+    public AudioClip critical;
+    public AudioClip chainsaw;
+    public AudioClip yeehaw;
+    public AudioClip sytheGround;
 
 
 

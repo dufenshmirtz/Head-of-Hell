@@ -230,6 +230,8 @@ public abstract class Character : MonoBehaviour
     private LayerMask playerGroundLayers;
 
     protected Collider2D feetTrigger;
+
+    private Vector2 groundCheckSize = new Vector2(0.8f, 0.3f);
     
 
     public void SetIncomingDamageContext(string attackerId, MoveType moveType, SourceType sourceType)
@@ -482,6 +484,7 @@ public abstract class Character : MonoBehaviour
             rb.velocity = new Vector2(0, rb.velocity.y);
 
             animator.SetBool("cWalk", false);
+            isBlocking = false;
             animator.SetTrigger("tookDmg");
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Hurt"))
             {
@@ -505,22 +508,6 @@ public abstract class Character : MonoBehaviour
         {
             return;
         }
-
-        #if UNITY_EDITOR
-        if (debugControllers)
-        {
-            for (int i = 1; i <= 4; i++)
-            {
-                for (int button = 0; button <= 19; button++)
-                {
-                    if (Input.GetKeyDown("joystick " + i + " button " + button))
-                    {
-                        Debug.Log("Joystick " + i + " Button " + button + " is pressed");
-                    }
-                }
-            }
-        }
-        #endif
 
         float moveDirection = input.GetAxis("Horizontal" + playerString);
         int dir = (moveDirection > 0.1f) ? 1 : (moveDirection < -0.1f) ? -1 : 0;
@@ -795,6 +782,7 @@ public abstract class Character : MonoBehaviour
 
     public void stayStatic()
     {
+        StaticStateTracker.Record(this);
         isStatic = true;
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         rb.gravityScale=originalGravityScale; //safety
@@ -862,23 +850,22 @@ public abstract class Character : MonoBehaviour
 
     private void GroundedSafeguard()
     {
+        
         if (groundCheck == null) return;
 
-        bool touchingGround = Physics2D.OverlapCircle(
+        bool touchingGround = Physics2D.OverlapBox(
             groundCheck.position,
-            groundCheckRadius,
+            groundCheckSize,
+            0f,
             solidGroundLayers | platformLayers | enemyLayer
         );
 
-        // Αν ακουμπάς έδαφος αλλά δεν είσαι grounded → διόρθωσε
         if (touchingGround && !isGrounded)
         {
             isGrounded = true;
             animator.SetBool("IsGrounded", true);
             animator.SetBool("Jump", false);
         }
-
-        // Αν ΔΕΝ ακουμπάς έδαφος αλλά είσαι grounded → διόρθωσε
         else if (!touchingGround && isGrounded)
         {
             isGrounded = false;
@@ -1449,7 +1436,6 @@ public abstract class Character : MonoBehaviour
         {
             if (DetectCounter())
             {
-                print("suvkkkk");
                 return;
             }
         }
@@ -2274,7 +2260,7 @@ public abstract class Character : MonoBehaviour
     {
         StringBuilder sb = new StringBuilder(2048);
 
-        sb.AppendLine("========================================");
+        sb.AppendLine("===================[t]=====================");
         sb.AppendLine($"[DEBUG STATE DUMP] {context}");
         sb.AppendLine($"Character: {gameObject.name}");
         sb.AppendLine($"Type: {GetType().Name}");
@@ -2462,6 +2448,8 @@ public abstract class Character : MonoBehaviour
                 $"enabled={c.enabled}, isTrigger={c.isTrigger}, boundsCenter={c.bounds.center}, boundsSize={c.bounds.size}"
             );
         }
+
+        StaticStateTracker.PrintLastInfo(this, "Before reset");
 
         sb.AppendLine("========================================");
 

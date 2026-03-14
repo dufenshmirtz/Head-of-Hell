@@ -367,7 +367,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -1352,7 +1351,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 1870992303456698228, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1389,7 +1388,7 @@ PrefabInstance:
     - target: {fileID: 2553929291879454509, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
+      objectReference: {fileID: 9100000, guid: f71edc3b937f70a43934b1b47dee5d0a, type: 2}
     - target: {fileID: 2584085071129299450, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: P1Name
       value: 
@@ -4369,7 +4368,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   mirrorFireAttackPoint: {fileID: 689308824}
   fireAttackPoint: {fileID: 2133402719}
 --- !u!1 &174624792
@@ -5007,7 +5005,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &184793119
@@ -6265,14 +6262,14 @@ MonoBehaviour:
   rewardWin: 1
   rewardLoss: -1
   stepPenalty: -0.0005
-  buggedPenalty: -0.04
-  staticPenalty: -0.01
-  engageDist: 3.5
-  dirReward: 0.002
-  dirPenalty: -0.002
-  farIdlePenalty: -0.003
-  inRangeBonus: 0.001
-  farDistancePenaltyScale: -0.0003
+  spacingBonus: 0.0003
+  usefulRangeMinX: 0.35
+  usefulRangeMaxX: 0.9
+  usefulRangeMaxY: 0.5
+  stackPenalty: -0.0015
+  stackBadX: 0.2
+  stackBadMinY: 0.3
+  stackBadMaxY: 1.2
   relXScale: 9
   relYScale: 5
   velScale: 10
@@ -6352,10 +6349,16 @@ MonoBehaviour:
   weirdStateSeconds: 10
   castingSeconds: 10
   chargingSeconds: 10
-  applyPenaltyOnSafetyReset: 0
-  penaltyValue: -0.02
   agentP1: {fileID: 0}
   agentP2: {fileID: 0}
+  applyPenaltyOnSafetyReset: 0
+  penaltyOOB: -0.05
+  penaltyWeirdState: -0.05
+  penaltyCastingTimeout: -0.03
+  penaltyChargingTimeout: -0.03
+  penaltyStallBoth: -0.02
+  penaltyStallSingle: -0.03
+  penaltyEpisodeTimeout: -0.02
 --- !u!114 &221568230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6404,7 +6407,6 @@ MonoBehaviour:
   relYScale: 5
   velScale: 10
   totalCharacterCount: 10
-  folderName: ILLogs
   filePrefix: imitation
   controlledPlayerLabel: P1
 --- !u!1 &224284506
@@ -7352,7 +7354,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1522488523}
   bombsParent: {fileID: 2100796710}
@@ -9384,7 +9385,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -10318,7 +10318,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -12123,7 +12122,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1670223497}
   bombsParent: {fileID: 2100796710}
@@ -12866,7 +12864,7 @@ Transform:
   m_GameObject: {fileID: 485265851}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.81, z: 0}
+  m_LocalPosition: {x: -0.05, y: -0.81, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13889,7 +13887,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &541449327
@@ -14860,7 +14857,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 343137453}
   bombsParent: {fileID: 2100796710}
@@ -17224,7 +17220,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -20016,7 +20011,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 569739573}
   bulletSpeed: 35
@@ -21834,6 +21828,10 @@ MonoBehaviour:
   transformation: {fileID: 8300000, guid: 768454c41d9bfe843b74d1cdea0dda44, type: 3}
   whip: {fileID: 8300000, guid: 09efd9d06a4056242ad125c29d3a3160, type: 3}
   coinSound: {fileID: 8300000, guid: 36258e181ede36e4180a7f07bfd4cb51, type: 3}
+  critical: {fileID: 8300000, guid: caf3576eb76e6a34f964fe75f23af446, type: 3}
+  chainsaw: {fileID: 8300000, guid: f93f54b1f7f27e641b7d8102d51b9f3e, type: 3}
+  yeehaw: {fileID: 8300000, guid: 5c6fe35e381f70c4e92457f5558a7214, type: 3}
+  sytheGround: {fileID: 8300000, guid: 7607b2c1464dfff4ab0896db84699d27, type: 3}
   shotgunBlast: {fileID: 8300000, guid: fd71645531950a646b6a42f15d7a5568, type: 3}
   alarm: {fileID: 8300000, guid: 4fdd5e9de285249428c5a62e5d1f9087, type: 3}
   deathVolume: 3
@@ -23178,7 +23176,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
 --- !u!1001 &882995806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23552,7 +23549,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -26944,7 +26940,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
 --- !u!1 &1020480611
 GameObject:
   m_ObjectHideFlags: 0
@@ -29633,7 +29628,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
 --- !u!1 &1169185177
 GameObject:
   m_ObjectHideFlags: 0
@@ -29878,7 +29872,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
 --- !u!1 &1185634414
 GameObject:
   m_ObjectHideFlags: 0
@@ -30714,7 +30707,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -31532,7 +31524,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
 --- !u!114 &1228552612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31859,7 +31850,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -32339,7 +32329,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -33300,7 +33289,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   mirrorFireAttackPoint: {fileID: 1079567584}
   fireAttackPoint: {fileID: 1505197450}
 --- !u!114 &1300380414
@@ -33856,7 +33844,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1100786215}
   bombsParent: {fileID: 2100796710}
@@ -35087,14 +35074,14 @@ MonoBehaviour:
   rewardWin: 1
   rewardLoss: -1
   stepPenalty: -0.0005
-  buggedPenalty: -0.04
-  staticPenalty: -0.01
-  engageDist: 3.5
-  dirReward: 0.002
-  dirPenalty: -0.002
-  farIdlePenalty: -0.003
-  inRangeBonus: 0.001
-  farDistancePenaltyScale: -0.0003
+  spacingBonus: 0.0003
+  usefulRangeMinX: 0.35
+  usefulRangeMaxX: 0.9
+  usefulRangeMaxY: 0.5
+  stackPenalty: -0.0015
+  stackBadX: 0.2
+  stackBadMinY: 0.3
+  stackBadMaxY: 1.2
   relXScale: 9
   relYScale: 5
   velScale: 10
@@ -35174,10 +35161,16 @@ MonoBehaviour:
   weirdStateSeconds: 10
   castingSeconds: 10
   chargingSeconds: 10
-  applyPenaltyOnSafetyReset: 0
-  penaltyValue: -0.02
   agentP1: {fileID: 0}
   agentP2: {fileID: 0}
+  applyPenaltyOnSafetyReset: 0
+  penaltyOOB: -0.05
+  penaltyWeirdState: -0.05
+  penaltyCastingTimeout: -0.03
+  penaltyChargingTimeout: -0.03
+  penaltyStallBoth: -0.02
+  penaltyStallSingle: -0.03
+  penaltyEpisodeTimeout: -0.02
 --- !u!114 &1367423876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35226,7 +35219,6 @@ MonoBehaviour:
   relYScale: 5
   velScale: 10
   totalCharacterCount: 10
-  folderName: ILLogs
   filePrefix: imitation
   controlledPlayerLabel: P2
 --- !u!1 &1369490559
@@ -37140,7 +37132,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
 --- !u!114 &1478511390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38532,7 +38523,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   mirrorFireAttackPoint: {fileID: 79255834}
   fireAttackPoint: {fileID: 1247528379}
 --- !u!114 &1531342472
@@ -40343,7 +40333,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1881472743}
   bulletSpeed: 35
@@ -40839,7 +40828,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1943892085}
   bulletSpeed: 35
@@ -42131,7 +42119,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -43178,7 +43166,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 461525617}
   bulletSpeed: 35
@@ -44688,7 +44675,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
 --- !u!114 &1753174034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48148,7 +48134,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &1985498623
@@ -49015,7 +49000,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   mirrorFireAttackPoint: {fileID: 1584761535}
   fireAttackPoint: {fileID: 1839956112}
 --- !u!1 &2018083340
@@ -49623,7 +49607,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &2039720494
@@ -49873,7 +49856,7 @@ Transform:
   m_GameObject: {fileID: 2043871563}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.81, z: 0}
+  m_LocalPosition: {x: -0.05, y: -0.81, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -51794,6 +51777,7 @@ MonoBehaviour:
   p1Spawn: {fileID: 221568191}
   p2Spawn: {fileID: 1367423837}
   tScale: 1
+  roundOn: 0
 --- !u!1 &2147385444
 GameObject:
   m_ObjectHideFlags: 0
@@ -52339,7 +52323,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  groundCheckRadius: 0.15
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

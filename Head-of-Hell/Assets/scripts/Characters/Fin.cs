@@ -51,6 +51,7 @@ public class Fin : Character
         {
             TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Heavy);
             audioManager.PlaySFX(audioManager.swoosh, 1f);
+            print("[t]heavyhitinmiss");
         }
 
     }
@@ -97,8 +98,7 @@ public class Fin : Character
     override public void LightAttack() 
     {
         if (rollReady)
-        {
-            
+        {           
             QuickAttackIndicatorDisable();
             rollReady = false;
             StartCoroutine(Roll());

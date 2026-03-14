@@ -59,10 +59,11 @@ public class CharacterSetup : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        Vector2 groundCheckSize = new Vector2(0.8f, 0.3f);
         if (groundCheck == null) return;
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        Gizmos.DrawWireCube(groundCheck.position, groundCheckSize);
     }
 
 }
