@@ -28,7 +28,7 @@ public class SimpleBotController : MonoBehaviour
     [SerializeField] private float parryChance = 0.00f;    // άστο 0 για τώρα
 
     [Header("Level Awareness")]
-    [SerializeField] private float sameLevelTolerance = 0.85f;
+    [SerializeField] private float sameLevelTolerance = 1.5f;
     [SerializeField] private float jumpToTargetChance = 0.15f;
     [SerializeField] private float engageRange = 1.35f;
     [SerializeField] private float dropToTargetChance = 0.45f;

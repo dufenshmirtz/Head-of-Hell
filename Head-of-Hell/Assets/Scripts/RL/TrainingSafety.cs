@@ -27,7 +27,7 @@ public class TrainingSafety : MonoBehaviour
     public float oobSeconds = 1.0f;
 
     [Header("Hard episode timeout (seconds)")]
-    public float episodeTimeoutSeconds = 500f;
+    public float episodeTimeoutSeconds = 700f;
 
     [Header("Stall / Same-position")]
     [Tooltip("If BOTH fighters are basically in the same spot for this long -> reset.")]
@@ -47,10 +47,10 @@ public class TrainingSafety : MonoBehaviour
     public float weirdStateSeconds = 10f;
 
     [Tooltip("If IsCasting stays true continuously for this long -> reset.")]
-    public float castingSeconds = 10f;
+    public float castingSeconds = 15f;
 
     [Tooltip("If IsCharging stays true continuously for this long -> reset (prevents charge-hold exploits/stucks).")]
-    public float chargingSeconds = 15f;
+    public float chargingSeconds = 14f;
 
     [Header("Agent References")]
     public FighterAgent agentP1;
@@ -89,6 +89,10 @@ public class TrainingSafety : MonoBehaviour
     Vector2 lastPos2;
     bool hasLastPos;
 
+    [Header("Startup grace")]
+    public float startupGraceSeconds = 2f;
+    float startupTimer = 0f;
+
     void Awake()
     {
         if (gameManager == null)
@@ -97,11 +101,19 @@ public class TrainingSafety : MonoBehaviour
 
     void Start()
     {
+        ResetTimers();
         CacheLastPositions();
+    }
+
+    void OnEnable()
+    {
+        ResetTimers();
+        hasLastPos = false;
     }
 
     void Update()
     {
+
         if (!enable) return;
 
         if (onlyWhenTrainingConnected)
@@ -121,6 +133,18 @@ public class TrainingSafety : MonoBehaviour
         if (dt <= 0f) return;
 
         episodeTimer += dt;
+
+        startupTimer += dt;
+        if (startupTimer < startupGraceSeconds)
+        {
+            lastPos1 = c1.transform.position;
+            lastPos2 = c2.transform.position;
+            print( "@@weird "+weirdTimerP1+"   "+ weirdTimerP2);
+            print( "@@cast "+castTimerP1+"   "+ castTimerP2);
+            print( "@@charge "+chargeTimerP1+"   "+ chargeTimerP2);
+            hasLastPos = true;
+            return;
+        }
 
         // 1) OOB (manual bounds)
         bool p1OOB = IsOutOfBounds(c1.transform.position);
@@ -354,6 +378,8 @@ public class TrainingSafety : MonoBehaviour
 
         chargeTimerP1 = 0f;
         chargeTimerP2 = 0f;
+
+        startupTimer = 0f;
     }
 
     void CacheLastPositions()

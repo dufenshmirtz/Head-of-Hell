@@ -3,6 +3,14 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 
+public enum ReachType
+{
+    Melee,
+    Dash,
+    Ranged,
+    Global
+}
+
 [RequireComponent(typeof(CharacterManager))]
 public class FighterAgent : Agent
 {
@@ -33,7 +41,7 @@ public class FighterAgent : Agent
     [SerializeField] float spacingBonus = +0.0003f;
 
     [Tooltip("Useful horizontal spacing for common melee attacks.")]
-    [SerializeField] float usefulRangeMinX = 0.35f;
+    [SerializeField] float usefulRangeMinX = 0.4f;
 
     [Tooltip("Useful horizontal spacing for common melee attacks.")]
     [SerializeField] float usefulRangeMaxX = 0.90f;
@@ -77,6 +85,31 @@ public class FighterAgent : Agent
     [Tooltip("Small x movement range considered 'camping in place'.")]
     [SerializeField] float edgeSmallMoveThreshold = 0.35f;
 
+    [Header("Move Semantics")]
+    [SerializeField] private ReachType lightReachType = ReachType.Melee;
+    [SerializeField] private ReachType specialReachType = ReachType.Melee;
+
+    [Header("Range Logic")]
+    [SerializeField] float extremeFarThreshold = 8.5f;
+
+    [Tooltip("Tiny penalty for using heavy from absurdly far away.")]
+    [SerializeField] float extremeFarHeavyPenalty = -0.0007f;
+
+    [Tooltip("Tiny penalty for using charge from absurdly far away.")]
+    [SerializeField] float extremeFarChargePenalty = -0.0006f;
+
+    [Tooltip("Reward for reducing distance when clearly outside melee threat range.")]
+    [SerializeField] float approachBonus = +0.00025f;
+
+    [Tooltip("Extra margin beyond useful melee range before approach shaping starts.")]
+    [SerializeField] float approachStartMargin = 0.75f;
+
+    [Tooltip("Tiny penalty for using clearly melee light from absurdly far away.")]
+    [SerializeField] float farMeleeLightPenalty = -0.00035f;
+
+    [Tooltip("Tiny penalty for using clearly melee special from absurdly far away.")]
+    [SerializeField] float farMeleeSpecialPenalty = -0.00035f;
+
     // bookkeeping
     int lastSelfHP, lastOppHP;
     int lastMoveX = 0;
@@ -87,6 +120,8 @@ public class FighterAgent : Agent
     float edgeStayTimer = 0f;
     float edgeAnchorX = 0f;
     bool edgeAnchorInitialized = false;
+    float lastAbsDx = 0f;
+    bool profileLoaded= false;
 
     // optional
     FighterAgent oppAgent;
@@ -100,6 +135,9 @@ public class FighterAgent : Agent
     {
         if (self == null || opp == null)
             TryBindNow();
+
+        if (self != null && !profileLoaded)
+            RefreshCharacterProfile();
     }
 
     void TryBindNow()
@@ -165,12 +203,17 @@ public class FighterAgent : Agent
         self.SetInput(aiInput);
 
         lastSelfHP = self.GetCurrentHealth();
+
+        RefreshCharacterProfile();
     }
 
     private void BindEnemy(Character c)
     {
         opp = c;
         if (opp != null) lastOppHP = opp.GetCurrentHealth();
+
+        if (self != null && opp != null)
+            lastAbsDx = Mathf.Abs(opp.transform.position.x - self.transform.position.x);
 
         if (enemyManager != null)
             oppAgent = enemyManager.GetComponent<FighterAgent>();
@@ -434,6 +477,8 @@ public class FighterAgent : Agent
 
         BehaviorHygieneRewards(jump, drop, light, heavy, blockHold, special, chargeMode, parry);
 
+        TacticalRangeRewards(light, heavy, special, chargeMode);
+
         // terminal
         if (opp != null && oppHP <= 0)
         {
@@ -484,6 +529,11 @@ public class FighterAgent : Agent
         lastSelfHP = self.GetCurrentHealth();
         lastOppHP = opp.GetCurrentHealth();
         lastMoveX = 0;
+
+        if (self != null && opp != null)
+            lastAbsDx = Mathf.Abs(opp.transform.position.x - self.transform.position.x);
+        else
+            lastAbsDx = 0f;
         lastActionIntent = 0;
 
         consecutiveActionChanges = 0;
@@ -608,5 +658,73 @@ public class FighterAgent : Agent
         if (jump == 1 || drop == 1) return 1;
 
         return 0;
+    }
+
+    bool IsStrictMelee(ReachType reachType)
+    {
+        return reachType == ReachType.Melee;
+    }
+
+    void TacticalRangeRewards(int light, int heavy, int special, int chargeMode)
+    {
+        if (self == null || opp == null) return;
+
+        float absDx = Mathf.Abs(opp.transform.position.x - self.transform.position.x);
+        float absDy = Mathf.Abs(opp.transform.position.y - self.transform.position.y);
+
+        // --------------------------------
+        // A) Encourage closing distance
+        // only when clearly outside melee threat range
+        // --------------------------------
+        float approachStartDistance = usefulRangeMaxX + approachStartMargin;
+        bool farFromOpponent = absDx > approachStartDistance;
+
+        if (farFromOpponent && absDx < lastAbsDx)
+            AddReward(approachBonus);
+
+        // --------------------------------
+        // B) Heavy / Charge absurdly-far misuse
+        // --------------------------------
+        bool absurdlyFar = absDx >= extremeFarThreshold;
+
+        if (absurdlyFar)
+        {
+            if (heavy == 1)
+                AddReward(extremeFarHeavyPenalty);
+
+            if (chargeMode == 1)
+                AddReward(extremeFarChargePenalty);
+
+            // --------------------------------
+            // C) Optional: far melee-only light/special misuse
+            // only punish if the move category is strictly melee
+            // --------------------------------
+            if (light == 1 && IsStrictMelee(lightReachType))
+                AddReward(farMeleeLightPenalty);
+
+            if (special == 1 && IsStrictMelee(specialReachType))
+                AddReward(farMeleeSpecialPenalty);
+        }
+
+        lastAbsDx = absDx;
+    }
+
+    void RefreshCharacterProfile()
+    {
+        // safe defaults
+        lightReachType = ReachType.Melee;
+        specialReachType = ReachType.Melee;
+        profileLoaded = false;
+
+        if (self == null) return;
+        if (self.characterID < 0) return;
+        if (CharacterMLProfileDatabase.Instance == null) return;
+
+        var profile = CharacterMLProfileDatabase.Instance.GetProfileByID(self.characterID);
+        if (profile == null) return;
+
+        lightReachType = profile.lightReachType;
+        specialReachType = profile.specialReachType;
+        profileLoaded = true;
     }
 }

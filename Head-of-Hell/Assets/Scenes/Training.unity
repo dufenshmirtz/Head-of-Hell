@@ -6221,6 +6221,22 @@ MonoBehaviour:
   relYScale: 5
   velScale: 10
   totalCharacterCount: 10
+  mashPenalty: -0.0006
+  airJumpPenalty: -0.0008
+  edgeCampPenalty: -0.0007
+  mashChangeThreshold: 3
+  edgeZoneX: 8
+  edgeGraceTime: 1.75
+  edgeSmallMoveThreshold: 0.35
+  lightReachType: 0
+  specialReachType: 0
+  extremeFarThreshold: 8.5
+  extremeFarHeavyPenalty: -0.0007
+  extremeFarChargePenalty: -0.0006
+  approachBonus: 0.00025
+  approachStartMargin: 0.75
+  farMeleeLightPenalty: -0.00035
+  farMeleeSpecialPenalty: -0.00035
 --- !u!114 &221568216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6245,7 +6261,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 5022602860645237092, guid: 69b50906d5bda3449830c3932934cefd, type: 3}
   m_InferenceDevice: 0
-  m_BehaviorType: 2
+  m_BehaviorType: 0
   m_BehaviorName: Fighter
   TeamId: 0
   m_UseChildSensors: 1
@@ -6263,7 +6279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 3
+  DecisionPeriod: 4
   TakeActionsBetweenDecisions: 1
 --- !u!114 &221568230
 MonoBehaviour:
@@ -6375,6 +6391,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 224284506}
   m_CullTransparentMesh: 1
+--- !u!1 &235234941
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 235234943}
+  - component: {fileID: 235234942}
+  m_Layer: 0
+  m_Name: CharactersDB
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &235234942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235234941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c1c35af60b60b478f5d80ab947053e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profiles:
+  - characterID: 0
+    lightReachType: 1
+    specialReachType: 2
+  - characterID: 1
+    lightReachType: 0
+    specialReachType: 0
+  - characterID: 2
+    lightReachType: 0
+    specialReachType: 0
+  - characterID: 3
+    lightReachType: 1
+    specialReachType: 1
+  - characterID: 4
+    lightReachType: 1
+    specialReachType: 0
+  - characterID: 5
+    lightReachType: 3
+    specialReachType: 3
+  - characterID: 6
+    lightReachType: 1
+    specialReachType: 2
+  - characterID: 7
+    lightReachType: 0
+    specialReachType: 1
+  - characterID: 8
+    lightReachType: 2
+    specialReachType: 3
+  - characterID: 0
+    lightReachType: 0
+    specialReachType: 2
+--- !u!4 &235234943
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235234941}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.172008, y: 0.6243361, z: -0.060991153}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &236000598
 GameObject:
   m_ObjectHideFlags: 0
@@ -34858,6 +34949,22 @@ MonoBehaviour:
   relYScale: 5
   velScale: 10
   totalCharacterCount: 10
+  mashPenalty: -0.0006
+  airJumpPenalty: -0.0008
+  edgeCampPenalty: -0.0007
+  mashChangeThreshold: 3
+  edgeZoneX: 8
+  edgeGraceTime: 1.75
+  edgeSmallMoveThreshold: 0.35
+  lightReachType: 0
+  specialReachType: 0
+  extremeFarThreshold: 8.5
+  extremeFarHeavyPenalty: -0.0007
+  extremeFarChargePenalty: -0.0006
+  approachBonus: 0.00025
+  approachStartMargin: 0.75
+  farMeleeLightPenalty: -0.00035
+  farMeleeSpecialPenalty: -0.00035
 --- !u!114 &1367423862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34900,7 +35007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 3
+  DecisionPeriod: 4
   TakeActionsBetweenDecisions: 1
 --- !u!114 &1367423876
 MonoBehaviour:
@@ -34915,6 +35022,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSeconds: 10000
+--- !u!114 &1367423877 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5020299007731939445, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+  m_PrefabInstance: {fileID: 1656577412}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367423824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 299935f4373516b488b961c552d4f8af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1367423888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367423824}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b492f403ccb837e46bb46538b1575d22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 0}
+  setup: {fileID: 1367423877}
+  target: {fileID: 0}
+  preferredRange: 1.25
+  tooCloseRange: 0.55
+  randomRetreatChance: 0.02
+  thinkIntervalMin: 0.18
+  thinkIntervalMax: 0.28
+  actionCooldownMin: 0.35
+  actionCooldownMax: 0.8
+  quickChance: 0.62
+  heavyChance: 0.2
+  specialChance: 0.08
+  chargeChance: 0
+  jumpChance: 0.04
+  blockChance: 0.05
+  parryChance: 0
+  sameLevelTolerance: 0.85
+  jumpToTargetChance: 0.15
+  engageRange: 1.35
+  dropToTargetChance: 0.45
+  underTargetDeadzone: 0.6
+  sideStepWhenBelow: 1
+  forcedDropChance: 1
+  dropHoldDuration: 0.2
+  dropMinXAlign: 0.9
+  faceToFaceAttackBias: 0.8
+  idleInEngageChance: 0.08
+  stuckUnderTargetMoveTime: 0.18
+  stuckUnderTargetSpeed: 1
+  forcedDropIfStackedChance: 1
+  stackedDropDelay: 1.25
+  stackedXThreshold: 0.6
+  logDebug: 0
 --- !u!1 &1369490559
 GameObject:
   m_ObjectHideFlags: 0
@@ -42097,6 +42261,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1367423876}
+    - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1367423888}
   m_SourcePrefab: {fileID: 100100000, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
 --- !u!1 &1660255940
 GameObject:
@@ -51999,3 +52166,4 @@ SceneRoots:
   - {fileID: 2100796710}
   - {fileID: 832730748}
   - {fileID: 75958759}
+  - {fileID: 235234943}

@@ -4,7 +4,7 @@ using Unity.MLAgents;
 [DisallowMultipleComponent]
 public class EpisodeTimeout : MonoBehaviour
 {
-    public float maxSeconds = 20f;
+    public float maxSeconds = 800f;
     FighterAgent agent;
     GameManager gm;
     float t;
