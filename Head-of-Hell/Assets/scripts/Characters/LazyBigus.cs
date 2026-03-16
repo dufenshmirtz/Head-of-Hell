@@ -16,6 +16,10 @@ public class LazyBigus : Character
     private Coroutine poisonResetCoroutine;
     public BulletScript bulletScript;
     bool beamHit=false;
+    int beamDamage = 10;
+    int beamPoisonDamage = 10; 
+    int passiveDamage = 4;
+    float resetBullet=2f;
 
     public override void Start()
     {
@@ -76,10 +80,10 @@ public class LazyBigus : Character
     public void BeamHitEnemy()
     {
         if(!beamHit){
-            enemy.TakeDamage(10,true);
+            enemy.TakeDamage(beamDamage,true);
             enemy.Knockback(13f, 0.5f, true);
             audioManager.PlaySFX(audioManager.beamHit, 1.8f);
-            StartCoroutine(Poison(2,1f,5));
+            StartCoroutine(Poison(beamPoisonDamage/5,1f,5));
             StartCoroutine(BeamDetectorReset());
         }
     }
@@ -159,7 +163,7 @@ public class LazyBigus : Character
     IEnumerator ResetShooting()
     {
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(resetBullet);
         audioManager.PlaySFX(audioManager.reload, audioManager.normalVol);
         isShootin = false;
         QuickAttackIndicatorEnable();
@@ -208,7 +212,7 @@ public class LazyBigus : Character
     {
         if(poisonCounter == 3)
         {
-            StartCoroutine(Poison(1,1f,4));
+            StartCoroutine(Poison(passiveDamage/4,1f,4));
             poisonCounter = 0;
             return;
         }

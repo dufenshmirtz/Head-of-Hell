@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class CharacterResources : MonoBehaviour
 {
+    [Header("Character Specs")]
+    public CharacterSpecsBase[] allCharacterSpecs;
+
+    [Header("Resources")]
+
     public GameObject bomb;
     public Transform bombSpawner;
     public Transform trash;
@@ -43,6 +48,17 @@ public class CharacterResources : MonoBehaviour
     public Transform escapeRoute;
 
     public Transform grabPoint;
+
+    public CharacterSpecsBase GetSpecsByID(int id)
+    {
+        if (id < 0 || id >= allCharacterSpecs.Length)
+        {
+            Debug.LogError("Invalid character ID: " + id);
+            return null;
+        }
+
+        return allCharacterSpecs[id];
+    }
 
     private void OnDrawGizmosSelected()
     {

@@ -7,7 +7,7 @@ public class ProfilesDatabase
     public List<ProfileData> profiles = new List<ProfileData>();
 
     // 0..4 slots (5 profiles max όπως έχεις UI)
-    public const int MaxProfiles = 5;
+    public const int MaxProfiles = 20;
 
     public ProfileData GetAt(int index)
     {

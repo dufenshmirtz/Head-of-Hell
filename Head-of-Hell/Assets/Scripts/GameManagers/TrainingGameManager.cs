@@ -68,8 +68,8 @@ public class TrainingGameManager : MonoBehaviour
             if (c2) { c2.SetCurrentHealth(hp); }
         }
 
-        if (c1) c1.ResetForEpisode();
-        if (c2) c2.ResetForEpisode();
+        if (c1) c1.ResetForEpisode2();
+        if (c2) c2.ResetForEpisode2();
 
         EnableGamePlay();
     }

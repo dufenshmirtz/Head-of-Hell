@@ -94,7 +94,6 @@ public class Skipler : Character
 
     IEnumerator Dash()
     {
-        bool landed = false;
         skiplerDouble = resources.skiplerDouble;
         skiplerPoint = resources.skiplerPoint;
 
@@ -107,9 +106,6 @@ public class Skipler : Character
         ignoreMovement = true;
         ignoreDamage = true;
         dashing = true;
-
-        // Store the original gravity scale
-        float ogGravityScale = rb.gravityScale;
 
         // Disable gravity while dashing
         rb.gravityScale = 0f;
@@ -134,6 +130,7 @@ public class Skipler : Character
         }
         colliders[3].enabled = true;  // Keep specific colliders enabled
         colliders[4].enabled = true;
+        colliders[5].enabled = true;
 
         // Play dash sound effects
         audioManager.PlaySFX(audioManager.dash, 1);
@@ -161,7 +158,8 @@ public class Skipler : Character
         rb.velocity = currentVelocity;
 
         // Reset the gravity scale
-        rb.gravityScale = ogGravityScale;
+        rb.gravityScale = originalGravityScale;
+
 
         // Re-enable damage and colliders
         foreach (Collider2D collider in colliders)
@@ -213,6 +211,8 @@ public class Skipler : Character
     {
         if (lightReady)
         {
+            
+            lightReady = false;
             TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
             QuickAttackIndicatorDisable();
             StartCoroutine(Blink());
@@ -222,9 +222,6 @@ public class Skipler : Character
     IEnumerator Blink()
     {
         IgnoreMovement(true);
-
-        // Store the original gravity scale
-        float ogGravityScale = rb.gravityScale;
 
         // Disable gravity while dashing
         rb.gravityScale = 0f;
@@ -259,9 +256,8 @@ public class Skipler : Character
         rb.velocity = currentVelocity;
 
         // Reset the gravity scale
-        rb.gravityScale = ogGravityScale;
+        rb.gravityScale = originalGravityScale;
 
-        lightReady = false;
 
         IgnoreMovement(false);
 

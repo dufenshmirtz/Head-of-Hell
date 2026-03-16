@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     public GameObject p2R1, p2R2, p2R3;
     static int p1Rounds = 0, p2Rounds = 0;
     bool tie = false;
-    static string c1Name,c2Name;
+    static string c1Name, c2Name;
     static bool p1Random = false;
     static bool p2Random = false;
     bool gameEnd = false;
@@ -34,40 +34,12 @@ public class GameManager : MonoBehaviour
     bool chanChan;
     public int maxHealth = -1;
 
-    //AUTO MATCH RESTART FOR BOTS (DELETE LATER) 
-    [Header("Auto Match Runner")]
-    [SerializeField] private bool autoRunMatches = false;
-    [SerializeField] private float autoNextMatchDelay = 2f;
-    [SerializeField] private int maxAutoMatches = 0; // 0 = infinite
-    private bool restartQueued = false;
-    private static int autoMatchCounter = 0;
-    //HELPER METHOD FOR BOT MATHCES//
-    private void QueueNextAutoMatch()
-    {
-        if (!autoRunMatches || restartQueued)
-            return;
-
-        if (maxAutoMatches > 0 && autoMatchCounter >= maxAutoMatches)
-        {
-            Debug.Log($"[AutoMatchRunner] Reached max auto matches: {maxAutoMatches}");
-            return;
-        }
-
-        restartQueued = true;
-        autoMatchCounter++;
-        StartCoroutine(RestartMatchRoutine());
-    }
-    //-------------------------------------------//
-
-    private IEnumerator RestartMatchRoutine()
-    {
-        yield return new WaitForSeconds(autoNextMatchDelay);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
     //training
     public bool trainingMode = false;           // tick this for training scene
     public FighterAgent agentP1, agentP2;       // drag the two FighterAgent components
     public Transform p1Spawn, p2Spawn;          // empty transforms as spawn points
+
+    public float tScale = 1f;
 
 
     // Start is called before the first frame update
@@ -88,6 +60,8 @@ public class GameManager : MonoBehaviour
         {
             stages[2].SetActive(true);
         }
+
+
 
         TelemetryManager.Instance?.StartSession();
 
@@ -115,9 +89,9 @@ public class GameManager : MonoBehaviour
             p2ProfileId = p2Profile.id,
             p2ProfileName = p2Profile.name
         });
-    
 
-    string json = PlayerPrefs.GetString("SelectedRuleset", null);
+
+        string json = PlayerPrefs.GetString("SelectedRuleset", null);
 
         if (!string.IsNullOrEmpty(json))
         {
@@ -136,8 +110,13 @@ public class GameManager : MonoBehaviour
         if (chanChan)
         {
             //maxHealth = Random.Range(100, 201);
-            //portalNumber = Random.Range(0, 5);
-            print("..; " + portalNumber);
+            portalNumber = Random.Range(0, 5);
+        }
+
+        if (trainingMode)
+        {
+            portalNumber = 0;
+            Time.timeScale = tScale;
         }
 
         switch (portalNumber)
@@ -176,8 +155,12 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        QualitySettings.vSyncCount = 0;     // disable vsync
-        Application.targetFrameRate = 60;   // lock to 60 fps (or whatever you want)
+        QualitySettings.vSyncCount = 0;
+
+        if (trainingMode)
+            Application.targetFrameRate = -1;   // unlimited
+        else
+            Application.targetFrameRate = 60;
     }
 
     public void RoundEnd(int playerNum, string winnerName)
@@ -185,7 +168,6 @@ public class GameManager : MonoBehaviour
 
         if (trainingMode)//training
         {
-            ShortWins(playerNum, winnerName); // keep your stat logic if you want
             SoftResetRound(playerNum);
             return;
         }
@@ -198,6 +180,11 @@ public class GameManager : MonoBehaviour
 
         if (!roundTelemetryClosed)
         {
+            string p1Char = p1Manager ? p1Manager.GetCharacterName(1) : "";
+            string p2Char = p2Manager ? p2Manager.GetCharacterName(1) : "";
+            string winnerId = (playerNum == 1) ? "P1" : "P2";
+            string winnerCharacter = (playerNum == 1) ? p1Char : p2Char;
+
             // ✅ Update meta with winner/outcome right before writing JSON
             TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
             {
@@ -207,26 +194,19 @@ public class GameManager : MonoBehaviour
                 trainingMode = trainingMode,
 
                 p1Id = "P1",
-                p1Character = p1Manager ? p1Manager.GetCharacterName(1) : "",
+                p1Character = p1Char,
                 p2Id = "P2",
-                p2Character = p2Manager ? p2Manager.GetCharacterName(1) : "",
+                p2Character = p2Char,
 
-                winnerId = (playerNum == 1) ? "P1" : "P2",
-                winnerCharacter = winnerName
+                winnerId = winnerId,
+                winnerCharacter = winnerCharacter
             });
 
             TelemetryManager.Instance?.EndSession($"RoundEnded_KO_winner={winnerName}");
             roundTelemetryClosed = true;
         }
 
-        if (autoRunMatches)
-        {
-            QueueNextAutoMatch();
-        }
-        else
-        {
-            StartCoroutine(WaitAndCheck(playerNum, winnerName));
-        }
+        StartCoroutine(WaitAndCheck(playerNum, winnerName));
     }
 
     public void RoundEndTie(int playerNum)
@@ -285,7 +265,6 @@ public class GameManager : MonoBehaviour
 
         if (trainingMode)
         {
-            ShortWins(playerNum, winnerName);
             SoftResetRound(playerNum);
             return;
         }
@@ -298,6 +277,11 @@ public class GameManager : MonoBehaviour
 
         if (!roundTelemetryClosed)
         {
+            string p1Char = p1Manager ? p1Manager.GetCharacterName(1) : "";
+            string p2Char = p2Manager ? p2Manager.GetCharacterName(1) : "";
+            string winnerId = (playerNum == 1) ? "P1" : "P2";
+            string winnerCharacter = (playerNum == 1) ? p1Char : p2Char;
+
             // ✅ Update meta with winner/outcome right before writing JSON
             TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
             {
@@ -307,26 +291,19 @@ public class GameManager : MonoBehaviour
                 trainingMode = trainingMode,
 
                 p1Id = "P1",
-                p1Character = p1Manager ? p1Manager.GetCharacterName(1) : "",
+                p1Character = p1Char,
                 p2Id = "P2",
-                p2Character = p2Manager ? p2Manager.GetCharacterName(1) : "",
+                p2Character = p2Char,
 
-                winnerId = (playerNum == 1) ? "P1" : "P2",
-                winnerCharacter = winnerName
+                winnerId = winnerId,
+                winnerCharacter = winnerCharacter
             });
 
             TelemetryManager.Instance?.EndSession($"RoundEnded_Flawless_winner={winnerName}");
             roundTelemetryClosed = true;
         }
 
-        if (autoRunMatches)
-        {
-            QueueNextAutoMatch();
-        }
-        else
-        {
-            StartCoroutine(WaitAndCheck(playerNum, winnerName));
-        }
+        StartCoroutine(WaitAndCheck(playerNum, winnerName));
     }
 
     public void ShortWins(int playerNum, string winnerName)
@@ -471,22 +448,21 @@ public class GameManager : MonoBehaviour
 
     public void CheckForRandomCharacters()
     {
-        print(roundCounter+" rc");
-        if(PlayerPrefs.GetString("Player1Choice")=="Random"  && roundCounter>1)
+        if (PlayerPrefs.GetString("Player1Choice") == "Random" && roundCounter > 1)
         {
             c1Name = p1Manager.GetCharacterName(1);
-            PlayerPrefs.SetString("Player1Choice",c1Name);
+            PlayerPrefs.SetString("Player1Choice", c1Name);
             p1Random = true;
         }
 
-        if (PlayerPrefs.GetString("Player2Choice")=="Random" && roundCounter>1)
+        if (PlayerPrefs.GetString("Player2Choice") == "Random" && roundCounter > 1)
         {
             c2Name = p2Manager.GetCharacterName(1);
             PlayerPrefs.SetString("Player2Choice", c2Name);
             p2Random = true;
         }
 
-        if(p1Random && gameEnd)
+        if (p1Random && gameEnd)
         {
             PlayerPrefs.SetString("Player1Choice", "Random");
         }
@@ -514,35 +490,57 @@ public class GameManager : MonoBehaviour
     // Training
     public void SoftResetRound(int winnerPlayerNum = 0)
     {
-        // End episodes (if training)
-        if (trainingMode)
-        {
-            if (agentP1) agentP1.EndEpisode();
-            if (agentP2) agentP2.EndEpisode();
-        }
+        StartCoroutine(SoftResetRound_Co());
+    }
 
-        // Hide victory UI
+    private IEnumerator SoftResetRound_Co()
+    {
+        DisableGamePlay();
+        // Hide UI
         winner.gameObject.SetActive(false);
         finalWinner.gameObject.SetActive(false);
         playAgainButton.SetActive(false);
         mainMenuButton.SetActive(false);
         saveReplayButton.SetActive(false);
 
-        // Reset state/flags you track
         tie = false;
         gameEnd = false;
-        // Do NOT change roundCounter/player wins here for training;
-        // the trainer needs shorter, frequent episodes.
-        // (In human play your existing logic still runs.)
 
-        // Reset both characters
-        var c1 = p1Manager.CharacterChoice(1);
-        var c2 = p2Manager.CharacterChoice(2);
-        if (c1) c1.ResetForEpisode();
-        if (c2) c2.ResetForEpisode();
+        if (trainingMode)
+        {
+            // 0) ΤΕΛΕΙΩΣΕ ΤΑ EPISODES ΠΡΩΤΑ
+            if (agentP1) agentP1.EndEpisode();
+            if (agentP2) agentP2.EndEpisode();
 
-        // Re-enable gameplay
+            // 1) περίμενε 1 frame να "καθαρίσει" animator/coroutines/destroy
+            yield return null;
+
+            // 2) Reroll (και περίμενε να τελειώσει)
+            if (p1Manager) yield return StartCoroutine(p1Manager.RerollRandomCharacter_TrainingOnly_Co());
+            if (p2Manager) yield return StartCoroutine(p2Manager.RerollRandomCharacter_TrainingOnly_Co());
+
+            yield return null;
+
+            // 3) rebind enemies (πρόσεχε τα σωστά refs)
+            var p1 = p1Manager ? p1Manager.GetCurrentCharacter() : null;
+            var p2 = p2Manager ? p2Manager.GetCurrentCharacter() : null;
+            if (p1 && p2) p1.ChangeEnemy(p2);
+            if (p2 && p1) p2.ChangeEnemy(p1);
+        }
+
+        // 2) Πάρε τους current χαρακτήρες (ΤΩΡΑ είναι οι σωστοί)
+        var c1 = p1Manager ? p1Manager.GetCurrentCharacter() : null;
+        var c2 = p2Manager ? p2Manager.GetCurrentCharacter() : null;
+
+        Debug.Log("(*) SoftReset");
+
+        // 3) Reset χαρακτήρων
+        if (c1) c1.ResetForEpisode2();
+        if (c2) c2.ResetForEpisode2();
+
+        // 4) Re-enable gameplay
         EnableGamePlay();
-    }
 
+        // 5) ΤΕΛΟΣ, τώρα κλείσε το episode (ώστε OnEpisodeBegin να δει καθαρό state)
+    }
 }
