@@ -111,7 +111,7 @@ public class Fin : Character
         IgnoreMovement(true);
         ignoreDamage = true;
         knockable = false;
-        //isRolling = true;
+        isRolling = true;
 
 
 
@@ -175,7 +175,7 @@ public class Fin : Character
         IgnoreMovement(false);
         ignoreDamage = false;
         knockable = true;
-        //isRolling = false;
+        isRolling = false;
 
         StartCoroutine(ResetRoll());
     }
