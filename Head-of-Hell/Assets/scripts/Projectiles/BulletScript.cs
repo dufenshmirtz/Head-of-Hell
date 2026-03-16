@@ -1,20 +1,25 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Grpc.Core.ChannelOption;
 
 public class BulletScript : MonoBehaviour
 {
     private bool hasHit = false;
-    public LazyBigus initiator;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private bool fireLogged = false;
 
-    // Update is called once per frame
-    void Update()
+    public LazyBigus initiator;
+
+    public void Init(LazyBigus owner)
     {
+        initiator = owner;
+
+        if (fireLogged) return;
+        if (initiator == null) return;
+
+        fireLogged = true;
+
+        
         
     }
 
@@ -25,11 +30,22 @@ public class BulletScript : MonoBehaviour
             hasHit = true;
             Destroy(gameObject);
             Debug.Log("BDestroyed");
+
             Character character = other.GetComponent<Character>();
             if (character != null)
             {
-                TelemetryManager.Instance?.LogHitAttempt(initiator.PlayerId, character.PlayerId, MoveType.Projectile);
-                character.SetIncomingDamageContext(initiator.PlayerId, MoveType.Projectile, SourceType.Projectile);
+                TelemetryManager.Instance?.LogHitAttempt(
+                    initiator.PlayerId,
+                    character.PlayerId,
+                    MoveType.Projectile
+                );
+
+                character.SetIncomingDamageContext(
+                    initiator.PlayerId,
+                    MoveType.Projectile,
+                    SourceType.Projectile
+                );
+
                 character.TakeDamage(3, true);
                 initiator.StackPoison();
             }

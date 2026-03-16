@@ -64,7 +64,14 @@ public class TelemetryManager : MonoBehaviour
         // If already recording, end previous session cleanly
         if (isRecording)
         {
-            EndSession("StartSession called while recording (auto-ended previous session)");
+            if (CurrentSessionLooksInvalidOrEmpty())
+            {
+                DiscardCurrentSession("StartSession called while recording, discarded empty/invalid previous session");
+            }
+            else
+            {
+                EndSession("StartSession called while recording (auto-ended previous session)");
+            }
         }
 
         sessionStartTime = Time.time;
@@ -88,6 +95,38 @@ public class TelemetryManager : MonoBehaviour
             Debug.Log($"[Telemetry] Session START: {currentSession.matchId}");
     }
 
+    //HELPER FOR TELEMETRY TO THROW EMPTY MATCHES AND NOT SAVE THEM 
+    private bool CurrentSessionLooksInvalidOrEmpty()
+    {
+        if (currentSession == null)
+            return true;
+
+        float duration = Time.time - sessionStartTime;
+        int eventCount = currentSession.events != null ? currentSession.events.Count : 0;
+
+        bool emptyMeta =
+            currentSession.meta == null ||
+            (
+                string.IsNullOrWhiteSpace(currentSession.meta.map) &&
+                string.IsNullOrWhiteSpace(currentSession.meta.p1Id) &&
+                string.IsNullOrWhiteSpace(currentSession.meta.p2Id) &&
+                string.IsNullOrWhiteSpace(currentSession.meta.p1ProfileId) &&
+                string.IsNullOrWhiteSpace(currentSession.meta.p2ProfileId)
+            );
+
+        // πολύ μικρό session + άδεια meta + ελάχιστα/καθόλου events
+        return duration < 3f && emptyMeta && eventCount <= 1;
+    }
+
+    private void DiscardCurrentSession(string reason)
+    {
+        if (debugToConsole)
+            Debug.Log($"[Telemetry] Session DISCARD: {reason}");
+
+        currentSession = null;
+        isRecording = false;
+        sessionStartTime = 0f;
+    }
     /// <summary>
     /// Ends current session and writes a JSON file to disk.
     /// </summary>

@@ -71,6 +71,8 @@ public abstract class Character : MonoBehaviour
     public bool usingAbility;
     public int currHealth;
     public bool isGrounded;
+    protected bool isRolling = false;
+    public bool IsRolling => isRolling;
 
     //knockback
 
