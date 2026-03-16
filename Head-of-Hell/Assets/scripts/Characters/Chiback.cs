@@ -16,6 +16,8 @@ public class Chiback : Character
     bool roarPlayed = false;
     float resetDisable = 1f;
 
+    float spellTime = 0.45f;
+
     public Transform mirrorFireAttackPoint;
     public Transform fireAttackPoint;
 
@@ -69,6 +71,7 @@ public class Chiback : Character
         audioManager.PlaySFX(audioManager.yeehaw, 1.5f);
         ignoreDamage = true;
         StartCoroutine(ScytheJump());
+        StartCoroutine(SpellSafety(spellTime,cooldown));
     }
 
     private IEnumerator ScytheJump()

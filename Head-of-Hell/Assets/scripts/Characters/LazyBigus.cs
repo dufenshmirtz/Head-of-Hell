@@ -21,6 +21,8 @@ public class LazyBigus : Character
     int passiveDamage = 4;
     float resetBullet=2f;
 
+    float spellTime = 1f;
+
     public override void Start()
     {
         base.Start();
@@ -74,6 +76,7 @@ public class LazyBigus : Character
         animator.SetTrigger("Spell");
         audioManager.PlaySFX(audioManager.beam, audioManager.doubleVol);
         ignoreDamage = true;
+        StartCoroutine(SpellSafety(spellTime,cooldown));
     }
 
     public void BeamHitEnemy()

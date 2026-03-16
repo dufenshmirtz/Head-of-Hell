@@ -25,6 +25,8 @@ behaviors:
       window: 10
       play_against_latest_model_ratio: 0.5
       initial_elo: 1200
-    time_horizon: 64
+    time_horizon: 128
     summary_freq: 20000
+    keep_checkpoints: 5
+    checkpoint_interval: 500000
     max_steps: 30000000

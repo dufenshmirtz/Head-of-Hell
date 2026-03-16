@@ -21,6 +21,7 @@ public class Skipler : Character
     public Transform skiplerPoint;
     public GameObject skiplerDouble;
 
+
     #region configure
     public override void Start()
     {
@@ -88,8 +89,8 @@ public class Skipler : Character
     {
         TelemetryManager.Instance?.LogAction(PlayerId, "Special");
         UsingAbility(cooldown);
-        ignoreDamage = true;
         StartCoroutine(Dash());
+        StartCoroutine(SpellSafety(dashingTime,cooldown));
     }
 
     IEnumerator Dash()

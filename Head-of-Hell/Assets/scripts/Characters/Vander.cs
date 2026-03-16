@@ -18,6 +18,7 @@ public class Vander : Character
     // --- Flying passive ---
     bool isFlying = false;
     //float flyUpSpeed = 6f;        // how fast he ascends while holding jump
+    float spellTime = 0.17f;
 
     // How quickly we cancel falling (units: velocity per second)
     [SerializeField] float fallBrakePerSec = 20f;
@@ -76,9 +77,9 @@ public class Vander : Character
     {
         TelemetryManager.Instance?.LogAction(PlayerId, "Special");
         attackRange += 0.5f;
-        animator.SetTrigger("Spell");
         UsingAbility(cooldown);
-        ignoreDamage = true;
+        animator.SetTrigger("Spell");
+        StartCoroutine(SpellSafety(spellTime,cooldown));
     }
 
     public void DealStabDmg()

@@ -14,6 +14,7 @@ public class Fin : Character
     // bool safety = true;
     Transform escapePoint;
     GameObject freeBaby;
+    float spellTime= 0.12f;
 
     public override void Start()
     {
@@ -65,6 +66,7 @@ public class Fin : Character
         audioManager.PlaySFX(audioManager.kalhaflash, 2f);
         animator.SetTrigger("Spell");
         UsingAbility(cooldown);
+        StartCoroutine(SpellSafety(spellTime,cooldown));
     }
 
     public void FlashingPriest()

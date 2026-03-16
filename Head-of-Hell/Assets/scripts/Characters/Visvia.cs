@@ -28,6 +28,8 @@ public class Visvia : Character
     GameObject blast; // for testing
     Transform blastPoint;
 
+    float spellTime = 0.5f;
+
     public override void Start()
     {
         base.Start();
@@ -78,12 +80,12 @@ public class Visvia : Character
 
         // Telemetry: reset per-cast landing state (for Miss logging + avoid double HitAttempt)
         grabLandedThisCast = false;
-
-        animator.SetTrigger("Spell");
         blastCounter++;
         StartCoroutine(HeatCounter());
         UsingAbility(cooldown);
+        animator.SetTrigger("Spell");
         StartCoroutine(GrabEnd());
+        StartCoroutine(SpellSafety(spellTime,cooldown));
     }
 
     public void GrabDmg()
