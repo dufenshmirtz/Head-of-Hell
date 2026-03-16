@@ -877,7 +877,7 @@ public abstract class Character : MonoBehaviour
     {
         if(rb.bodyType == RigidbodyType2D.Static && !isStatic)
         {
-            rb.bodyType = RigidbodyType2D.Dynamic;
+            stayDynamic();
             Debug.Log("Static Error.");
         }
     }
@@ -888,15 +888,17 @@ public abstract class Character : MonoBehaviour
     {
         ignoreDamage = false;
         ignoreMovement = false;
-
-        EnemyAbilityEnable();
+        if(enemy != null)
+        {
+            EnemyAbilityEnable();
+        }      
         knockable = true;
         cdbarimage.sprite = ogSprite;
         animator.SetBool("isUsingAbility", false);
         animator.SetBool("Casting", false);
         casting = false;
 
-        // Start the cooldown timer
+        stayDynamic();
         cdTimer = cd;
         onCooldown = true;
         StartCoroutine(AbilityCooldown(cd));
@@ -957,6 +959,13 @@ public abstract class Character : MonoBehaviour
         UpdateCooldownSlider(cd);
 
         lastAbilityCD = cd; //ML
+    }
+
+    public IEnumerator SpellSafety(float time, float cd)
+    {
+        yield return new WaitForSeconds(time);
+
+        OnCooldown(cd);
     }
 
     public void Casting(bool castin)
@@ -1139,6 +1148,10 @@ public abstract class Character : MonoBehaviour
             charged = false;
             animator.SetBool("Casting", false);
             animator.ResetTrigger("ChargedHit");
+            if (chargeCoroutine != null)
+            {
+                StopCoroutine(chargeCoroutine);
+            }
         }
     }
     public void BreakCharge()
@@ -1284,38 +1297,23 @@ public abstract class Character : MonoBehaviour
             {
                 Countered();
                 return true;
-            }
-            return true;
+            };
         }
-
         return false;
-    }
-
-    public void CounterOff()
-    {
-        if (!ignoreCounterOff)
-        {
-            CounterVariablesOff();
-            safety = false;
-        }
-        else
-        {
-            ignoreCounterOff = false;
-        }
-
     }
 
     private IEnumerator CounterOffSafety()
     {
-        yield return new WaitForSeconds(0.22f);
-        if (!counterDone && safety)
+        yield return new WaitForSeconds(0.21f);
+        if (!counterDone)
         {
             CounterVariablesOff();
         }
     }
 
-    public void CounterSuccessOff()
+    private IEnumerator CounterSuccessOff()
     {
+        yield return new WaitForSeconds(0.5f);
         ClearParryState();
     }
 
@@ -1327,6 +1325,7 @@ public abstract class Character : MonoBehaviour
         stayStatic();
         ignoreCounterOff = true;
         counterDone = true;
+        StartCoroutine(CounterSuccessOff());
     }
 
     virtual public void DealCounterDmg()
@@ -1427,7 +1426,7 @@ public abstract class Character : MonoBehaviour
     // --- Telemetry helper ---
     protected float GetDistanceToEnemy()
     {
-        if (enemy == null) return -1f;
+        if (enemy == null || gameManager.trainingMode) return -1f;
         return Vector2.Distance(transform.position, enemy.transform.position);
     }
     virtual public void TakeDamage(int dmg, bool blockable, bool parryable = true)
@@ -2237,6 +2236,11 @@ public abstract class Character : MonoBehaviour
         onCooldown = false;
         ignoreUpdate = false;
         ignoreDamage = false;
+        counterDone = false;
+        counterIsOn = false;
+        canParry = true;
+        charging = false;
+        charged = false;
         ActivateColliders();
     }
 

@@ -55,12 +55,12 @@ public class CharacterAnimationEvents : MonoBehaviour
 
      public void CounterOffEvent()
     {
-        character.CounterOff();
+        //character.CounterOff();
     }
 
     public void CounterSuccessEvent()
     {
-        character.CounterSuccessOff();
+        //character.CounterSuccessOff();
     }
 
     public void CounterDamageEvent()

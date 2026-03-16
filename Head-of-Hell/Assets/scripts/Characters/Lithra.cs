@@ -18,6 +18,8 @@ public class Lithra : Character
     int airSpinDamage = 3;
     float airSpinCD = 3f;
 
+    float spellTime = 0.25f;
+
     public override void Start()
     {
         base.Start();
@@ -69,6 +71,7 @@ public class Lithra : Character
         UsingAbility(cooldown);
         ignoreDamage = true;
         audioManager.PlaySFX(audioManager.swoosh, audioManager.doubleVol);
+        StartCoroutine(SpellSafety(spellTime,cooldown));
     }
 
     public void DealBellDmg()

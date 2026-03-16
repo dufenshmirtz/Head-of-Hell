@@ -12,6 +12,8 @@ public class Rager : Character
     int lightDamage = 4;
     bool spellHit = false;
 
+    float spellTime = 2.02f;
+
 
     #region HeavyAttack
     override public void HeavyAttack()
@@ -59,6 +61,7 @@ public class Rager : Character
         TelemetryManager.Instance?.LogAction(PlayerId, "Special");
         animator.SetTrigger("Spell");
         UsingAbility(cooldown);
+        StartCoroutine(SpellSafety(spellTime,cooldown));
     }
 
     public void DealComboDmg()

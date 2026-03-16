@@ -60,9 +60,33 @@ public class FighterAgent : Agent
 
     [SerializeField] int totalCharacterCount = 10;
 
+    [Header("Behavior Hygiene")]
+    [SerializeField] float mashPenalty = -0.0006f;
+    [SerializeField] float airJumpPenalty = -0.0008f;
+    [SerializeField] float edgeCampPenalty = -0.0007f;
+
+    [Tooltip("How many consecutive action changes before we start punishing noisy mashing.")]
+    [SerializeField] int mashChangeThreshold = 3;
+
+    [Tooltip("World X beyond which we consider the fighter near the edge.")]
+    [SerializeField] float edgeZoneX = 8f;
+
+    [Tooltip("How long (seconds) the fighter can stay near the edge before mild penalty starts.")]
+    [SerializeField] float edgeGraceTime = 1.75f;
+
+    [Tooltip("Small x movement range considered 'camping in place'.")]
+    [SerializeField] float edgeSmallMoveThreshold = 0.35f;
+
     // bookkeeping
     int lastSelfHP, lastOppHP;
     int lastMoveX = 0;
+
+    int lastActionIntent = 0;
+    int consecutiveActionChanges = 0;
+
+    float edgeStayTimer = 0f;
+    float edgeAnchorX = 0f;
+    bool edgeAnchorInitialized = false;
 
     // optional
     FighterAgent oppAgent;
@@ -157,7 +181,7 @@ public class FighterAgent : Agent
         if (!self || !opp)
         {
             // keep count stable
-            for (int i = 0; i < 61; i++)
+            for (int i = 0; i < 67; i++)
                 sensor.AddObservation(0f);
             return;
         }
@@ -408,6 +432,8 @@ public class FighterAgent : Agent
 
         ShapingRewards();
 
+        BehaviorHygieneRewards(jump, drop, light, heavy, blockHold, special, chargeMode, parry);
+
         // terminal
         if (opp != null && oppHP <= 0)
         {
@@ -422,6 +448,7 @@ public class FighterAgent : Agent
             // EndEpisode();
             return;
         }
+
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -440,7 +467,12 @@ public class FighterAgent : Agent
         d[5] = Input.GetKey(blockK) ? 1 : 0;
         d[6] = Input.GetKey(abilityK) ? 1 : 0;
 
-        d[7] = Input.GetKey(chargeK) ? 1 : 0; // hold only
+        if (Input.GetKeyUp(chargeK))
+            d[7] = 2;   // release
+        else if (Input.GetKey(chargeK))
+            d[7] = 1;   // hold
+        else
+            d[7] = 0;   // none
         d[8] = Input.GetKey(parryK) ? 1 : 0;
     }
 
@@ -452,6 +484,13 @@ public class FighterAgent : Agent
         lastSelfHP = self.GetCurrentHealth();
         lastOppHP = opp.GetCurrentHealth();
         lastMoveX = 0;
+        lastActionIntent = 0;
+
+        consecutiveActionChanges = 0;
+
+        edgeStayTimer = 0f;
+        edgeAnchorX = 0f;
+        edgeAnchorInitialized = false;
 
         if (aiInput != null)
         {
@@ -484,5 +523,90 @@ public class FighterAgent : Agent
             enemyManager.OnCharacterReady -= BindEnemy;
             enemyManager.OnCharacterChanged -= BindEnemy;
         }
+    }
+
+    void BehaviorHygieneRewards(int jump, int drop, int light, int heavy, int blockHold, int special, int chargeMode, int parry)
+    {
+        if (self == null || opp == null) return;
+
+        // -------------------------
+        // A) Mild anti-mash shaping
+        // -------------------------
+        int currentIntent = GetActionIntent(jump, drop, light, heavy, blockHold, special, chargeMode, parry);
+
+        if (currentIntent != 0 && lastActionIntent != 0 && currentIntent != lastActionIntent)
+            consecutiveActionChanges++;
+        else if (currentIntent == 0 || currentIntent == lastActionIntent)
+            consecutiveActionChanges = 0;
+
+        if (consecutiveActionChanges >= mashChangeThreshold)
+            AddReward(mashPenalty);
+
+        lastActionIntent = currentIntent;
+
+        // --------------------------------
+        // B) Mild anti-useless-air-jump
+        // --------------------------------
+        if (jump == 1 && !self.IsGrounded)
+            AddReward(airJumpPenalty);
+
+        // --------------------------------
+        // C) Mild anti-edge-camp shaping
+        // --------------------------------
+        float x = self.transform.position.x;
+        bool nearEdge = Mathf.Abs(x) >= edgeZoneX;
+
+        if (nearEdge)
+        {
+            if (!edgeAnchorInitialized)
+            {
+                edgeAnchorInitialized = true;
+                edgeAnchorX = x;
+                edgeStayTimer = 0f;
+            }
+
+            float movedFromAnchor = Mathf.Abs(x - edgeAnchorX);
+
+            if (movedFromAnchor <= edgeSmallMoveThreshold)
+            {
+                edgeStayTimer += Time.fixedDeltaTime;
+
+                if (edgeStayTimer > edgeGraceTime)
+                    AddReward(edgeCampPenalty);
+            }
+            else
+            {
+                edgeAnchorX = x;
+                edgeStayTimer = 0f;
+            }
+        }
+        else
+        {
+            edgeAnchorInitialized = false;
+            edgeStayTimer = 0f;
+        }
+    }
+
+    int GetActionIntent(int jump, int drop, int light, int heavy, int blockHold, int special, int chargeMode, int parry)
+    {
+        // Priority-based intent bucket
+        // 0 = none
+        // 1 = jump/drop mobility action
+        // 2 = light
+        // 3 = heavy
+        // 4 = block
+        // 5 = special
+        // 6 = charge
+        // 7 = parry
+
+        if (parry == 1) return 7;
+        if (chargeMode != 0) return 6;
+        if (special == 1) return 5;
+        if (blockHold == 1) return 4;
+        if (heavy == 1) return 3;
+        if (light == 1) return 2;
+        if (jump == 1 || drop == 1) return 1;
+
+        return 0;
     }
 }

@@ -18,6 +18,8 @@ public class Steelager : Character
     public Transform firePoint;
     public Transform explosionPoint;
 
+    float spellTime = 0.59f;
+
     public override void Start()
     {
         base.Start();
@@ -73,6 +75,7 @@ public class Steelager : Character
         audioManager.PlaySFX(audioManager.bigExplosion, audioManager.doubleVol);
         UsingAbility(cooldown);
         stayStatic();
+        StartCoroutine(SpellSafety(spellTime,cooldown));
     }
 
     public void DealExplosionDamage()
