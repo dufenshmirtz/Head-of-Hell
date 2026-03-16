@@ -110,6 +110,13 @@ public class FighterAgent : Agent
     [Tooltip("Tiny penalty for using clearly melee special from absurdly far away.")]
     [SerializeField] float farMeleeSpecialPenalty = -0.00035f;
 
+    [Header("Directional Hygiene")]
+    [Tooltip("Tiny penalty for using a Dash-type move without horizontal direction input.")]
+    [SerializeField] float dashNoDirectionPenalty = -0.00045f;
+
+    [Tooltip("Tiny penalty for using special while not facing the opponent.")]
+    [SerializeField] float wrongFacingSpecialPenalty = -0.0005f;
+
     // bookkeeping
     int lastSelfHP, lastOppHP;
     int lastMoveX = 0;
@@ -479,6 +486,8 @@ public class FighterAgent : Agent
 
         TacticalRangeRewards(light, heavy, special, chargeMode);
 
+        DirectionalHygieneRewards(moveX, light, special);
+
         // terminal
         if (opp != null && oppHP <= 0)
         {
@@ -726,5 +735,47 @@ public class FighterAgent : Agent
         lightReachType = profile.lightReachType;
         specialReachType = profile.specialReachType;
         profileLoaded = true;
+    }
+
+    bool IsDashType(ReachType reachType)
+    {
+        return reachType == ReachType.Dash;
+    }
+
+    bool IsFacingOpponent()
+    {
+        if (self == null || opp == null) return true;
+
+        float relX = opp.transform.position.x - self.transform.position.x;
+        float oppDirSign = Mathf.Sign(relX);
+        float facingSign = Mathf.Sign(self.transform.localScale.x);
+
+        return facingSign == oppDirSign;
+    }
+
+    void DirectionalHygieneRewards(int moveX, int light, int special)
+    {
+        if (self == null || opp == null) return;
+
+        // --------------------------------
+        // A) Dash-type move with no X direction
+        // --------------------------------
+        if (moveX == 0)
+        {
+            if (light == 1 && IsDashType(lightReachType))
+                AddReward(dashNoDirectionPenalty);
+
+            if (special == 1 && IsDashType(specialReachType))
+                AddReward(dashNoDirectionPenalty);
+        }
+
+        // --------------------------------
+        // B) Special while facing away
+        // --------------------------------
+        bool facingOpponent = IsFacingOpponent();
+
+        // Penalize only if special is not Global
+        if (special == 1 && !facingOpponent && specialReachType != ReachType.Global)
+            AddReward(wrongFacingSpecialPenalty);
     }
 }
