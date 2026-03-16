@@ -8,7 +8,7 @@ public class ProfilesMenuUI : MonoBehaviour
     public class SlotUI
     {
         public Button slotButton;     // το κουμπί που πατάς για select/view
-        public TMP_Text slotText;     // το κείμενο "Empty" ή "Profile X"
+        public TMP_Text slotText;     // το κείμενο "Empty" ή profile name
         public Button editButton;     // το edit κουμπί
     }
 
@@ -17,8 +17,11 @@ public class ProfilesMenuUI : MonoBehaviour
 
     [Header("Panels")]
     public GameObject profilesMenuRoot;   // το panel της λίστας
-    public GameObject profileEditorRoot;  // το panel του editor (Page1)
+    public GameObject profileEditorRoot;  // το panel του editor
     public int playerNum = 1; // 1 = P1, 2 = P2
+
+    [Header("Analysis")]
+    public ProfileAnalysisPanelUI profileAnalysisPanelUI;
 
     private void OnEnable()
     {
@@ -27,7 +30,7 @@ public class ProfilesMenuUI : MonoBehaviour
 
     private System.Collections.IEnumerator InitNextFrame()
     {
-        yield return null; // περιμένει 1 frame
+        yield return null;
 
         if (ProfileManager.I == null) yield break;
 
@@ -52,21 +55,40 @@ public class ProfilesMenuUI : MonoBehaviour
         {
             int index = i;
 
-            // καθάρισμα παλιών listeners (για να μη διπλομπαίνουν)
             slots[index].slotButton.onClick.RemoveAllListeners();
             slots[index].editButton.onClick.RemoveAllListeners();
 
-            // Select/View
+            // Slot click -> open analysis screen if profile exists
             slots[index].slotButton.onClick.AddListener(() =>
             {
-                ProfileManager.I.SelectProfile(playerNum,index);
+                string profileName = slots[index].slotText != null
+                    ? slots[index].slotText.text
+                    : "Empty";
+
+                if (string.IsNullOrWhiteSpace(profileName) || profileName == "Empty")
+                {
+                    Debug.Log($"Slot {index} is empty. Analysis not opened.");
+                    return;
+                }
+
+                ProfileManager.I.SelectProfile(playerNum, index);
                 Refresh();
+
+                if (profileAnalysisPanelUI != null)
+                {
+                    profileAnalysisPanelUI.OpenForProfileName(profileName);
+                }
+                else
+                {
+                    Debug.LogWarning("ProfilesMenuUI: profileAnalysisPanelUI is not assigned.");
+                }
             });
 
-            // Edit -> θα ανοίξει editor στο Βήμα 3
+            // Edit button -> keep current behavior
             slots[index].editButton.onClick.AddListener(() =>
             {
                 ProfileEditContext.EditingIndex = index;
+                OpenEditor(index);
             });
         }
     }
@@ -74,14 +96,8 @@ public class ProfilesMenuUI : MonoBehaviour
     private void OpenEditor(int index)
     {
         ProfileEditContext.EditingIndex = index;
-        // Για τώρα: απλά αλλάζουμε panel
-        // στο Βήμα 3 θα περάσουμε το index στον Editor UI.
-        profilesMenuRoot.SetActive(false);
-        profileEditorRoot.SetActive(true);
 
-        // προσωρινά: αποθήκευσε ποιο slot κάνεις edit μέσω selectedIndex
-        // (εύκολο hack μέχρι να φτιάξουμε σωστό Editor script)
-        // Αν είναι empty, το SelectProfile δεν θα κάνει τίποτα, οπότε:
-        // Θα κρατήσουμε "selectedIndex" αλλιώς. Θα το λύσουμε στο Βήμα 3.
+        if (profilesMenuRoot != null) profilesMenuRoot.SetActive(false);
+        if (profileEditorRoot != null) profileEditorRoot.SetActive(true);
     }
 }
