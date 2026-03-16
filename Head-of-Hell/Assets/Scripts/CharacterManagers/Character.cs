@@ -49,18 +49,50 @@ public abstract class Character : MonoBehaviour
     protected AudioManager audioManager;
     protected Rigidbody2D rb;
     protected CharacterResources resources;
-    protected bool usingAbility;
+    
+
     //Charge
     protected bool charged = false;
     protected bool charging = false;
     private Coroutine chargeCoroutine;
     float chargeTime = 0.5f;
     protected int chargeDmg = 34;
-    public bool isBlocking = false;
-    protected bool ignoreDamage = false;
-    protected int heavyDamage = 14;
 
-    public int characterID;
+    //Flags
+    public bool isBlocking = false;
+    public bool ignoreDamage = false;
+  
+    public bool isStatic = false;
+    public bool casting = false;
+    public bool canCast = true;
+    public bool knocked = false;
+    public bool canRotate = true;
+    public bool usingAbility;
+    public int currHealth;
+    public bool isGrounded;
+
+    //knockback
+
+    protected float KBForce;
+    protected float KBCounter;
+    protected float KBTotalTime;
+    protected bool knockfromright;
+    protected bool knockbackXaxis;
+    public bool knockable = true;
+
+    //parry
+    public bool canParry = true;
+    protected bool safety = true;
+    protected bool ignoreCounterOff = false;
+    protected int parryDamage = 16;
+    public bool counterIsOn = false;
+    protected bool counterDone = false;
+
+    //cd
+    public bool onCooldown = false;
+    public float cdTimer = 0f;
+
+    public bool ignoreUpdate = false;
 
     //ps------------------------------------------
     protected TextMeshProUGUI P1Name, winner;
@@ -70,50 +102,31 @@ public abstract class Character : MonoBehaviour
     protected GameObject mainMenuButton;
     protected GameObject saveReplayButton;
     protected Slider cooldownSlider;
-
     protected TextMeshProUGUI damageCounter;
-
-    bool damageCounterReseted = true;
+    //bool damageCounterReseted = true;
+    protected helthbarscript healthbar;
 
     //basic stats
+    public int characterID;
     public float moveSpeed = 4f; // Initialize moveSpeed
     protected float heavySpeed;
     protected float OGMoveSpeed;
     protected float jumpForce = 10f;
     public int maxHealth = 100;
-    protected int currHealth;
-    protected bool isGrounded;
-
+    protected int heavyDamage = 14;
     protected int playerNum;
+    protected float attackRange = 0.5f;
+    protected float ogRange = 0.5f;
 
-    protected helthbarscript healthbar;
-
+    //Stages
     string stageName;
     protected GameObject[] stages;
 
-    //additional
-    protected bool isStatic = false;
-    protected bool casting = false;
-    protected bool canCast = true;
-    protected bool knocked = false;
-    protected bool canRotate = true;
-    protected bool isRolling = false;
-    public bool IsRolling => isRolling;
     private bool jumpAxisHeld;
-
-    //knockback
-
-    protected float KBForce;
-    protected float KBCounter;
-    protected float KBTotalTime;
-    protected bool knockfromright;
-    protected bool knockbackXaxis;
-    protected bool knockable = true;
 
     protected Transform attackPoint;
 
-    protected float attackRange = 0.5f;
-    protected float ogRange = 0.5f;
+
 
     protected LayerMask enemyLayer;
 
@@ -125,12 +138,6 @@ public abstract class Character : MonoBehaviour
     //bar images
     protected Image cdbarimage;
     protected Sprite activeSprite, ogSprite;
-
-    //cd
-    protected bool onCooldown = false;
-    protected float cdTimer = 0f;
-
-    public bool ignoreUpdate = false;
 
     //Indicators
     protected GameObject blockDisabledIndicator;
@@ -161,7 +168,7 @@ public abstract class Character : MonoBehaviour
     protected CharacterManager characterChoiceHandler;
     protected GameManager gameManager;
 
-    bool preserveJump = false;
+    //bool preserveJump = false;
 
     protected bool damageShield = false;
 
@@ -180,19 +187,11 @@ public abstract class Character : MonoBehaviour
     public bool chargeDisable = false;
     bool ignoreStats = false;
 
-    //parry
-    protected bool canParry = true;
-    protected bool safety = true;
-    protected bool ignoreCounterOff = false;
-    protected int parryDamage = 16;
-    public bool counterIsOn = false;
-    protected bool counterDone = false;
-
 
     public bool overrideDeath = false;
 
     //handling variables
-    int grounds = 0;
+    public int grounds = 0;
     int isonpad = 0;
 
     int controllerCount = 0;
@@ -210,7 +209,28 @@ public abstract class Character : MonoBehaviour
 
     public Transform spawn;
 
-    protected float originalGravityScale;
+    protected float originalGravityScale=1.8f;
+
+    private bool debugControllers = false;
+
+    // --- Episode spawn ---
+    private Vector3 _spawnPos;
+    public void SetSpawnPosition(Vector3 pos) => _spawnPos = pos;
+
+    //helpers
+    public bool isLightAttacking=false;
+    public bool heavyAttacking=false;
+
+    //new grounded logic experiement
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckRadius = 0.15f;
+    [SerializeField] private LayerMask groundLayers;
+    [SerializeField] private LayerMask solidGroundLayers;
+    [SerializeField] private LayerMask platformLayers;
+    [SerializeField] private LayerMask playerGroundLayers;
+
+    protected Collider2D feetTrigger;
+    
 
     public void SetIncomingDamageContext(string attackerId, MoveType moveType, SourceType sourceType)
     {
@@ -291,11 +311,13 @@ public abstract class Character : MonoBehaviour
 
         cooldownSlider.maxValue = 1f;
 
-        spawn = this.transform;
+        _spawnPos = transform.position;
 
         originalGravityScale = rb.gravityScale;
 
-        print(spawn.position);
+        Collider2D[] colliders = GetComponents<Collider2D>();
+
+        feetTrigger = colliders[0];
 
         //Disable Indicators
         shield.gameObject.SetActive(false);
@@ -354,7 +376,6 @@ public abstract class Character : MonoBehaviour
         P2Name = characterChoiceHandler.GetCharacterName(2);
         enemy = characterChoiceHandler.CharacterChoice(2);
 
-        print("check"+enemy + " - " + P2Name);
 
         if (playerNum == 1)
         {
@@ -363,7 +384,6 @@ public abstract class Character : MonoBehaviour
             {
                 controller = true;
             }
-            print("i'm P1: my enemy is: "+enemy + " - " + enemyLayer);
         }
         else if (playerNum == 2)
         {
@@ -373,10 +393,15 @@ public abstract class Character : MonoBehaviour
                 controller = true;
             }
 
-            print("i'm P2: my enemy is: "+enemy + " - " + enemyLayer);
         }
 
         animator = GetComponent<Animator>();
+
+        if (gameManager != null && gameManager.trainingMode)
+        {
+            animator.updateMode = AnimatorUpdateMode.AnimatePhysics; // δένει με FixedUpdate
+            animator.cullingMode = AnimatorCullingMode.AlwaysAnimate; // ΔΕΝ σταματάει όταν δεν φαίνεται
+        }
     }
 
     // inside Character (fields)
@@ -405,6 +430,7 @@ public abstract class Character : MonoBehaviour
 
     public virtual void Update()
     {
+        //UpdateGroundedState(); in the future
         //self knockback mechanic
         if (knockable)
         {
@@ -474,17 +500,21 @@ public abstract class Character : MonoBehaviour
             return;
         }
 
-        for (int i = 1; i <= 4; i++)
+        #if UNITY_EDITOR
+        if (debugControllers)
         {
-            // Check if any button on joystick i was pressed
-            for (int button = 0; button <= 19; button++) // Joystick buttons range from 0 to 19
+            for (int i = 1; i <= 4; i++)
             {
-                if (Input.GetKeyDown("joystick " + i + " button " + button))
+                for (int button = 0; button <= 19; button++)
                 {
-                    Debug.Log("Joystick " + i + " Button " + button + " is pressed");
+                    if (Input.GetKeyDown("joystick " + i + " button " + button))
+                    {
+                        Debug.Log("Joystick " + i + " Button " + button + " is pressed");
+                    }
                 }
             }
         }
+        #endif
 
         float moveDirection = input.GetAxis("Horizontal" + playerString);
         int dir = (moveDirection > 0.1f) ? 1 : (moveDirection < -0.1f) ? -1 : 0;
@@ -506,7 +536,6 @@ public abstract class Character : MonoBehaviour
             else
             {
                 animator.SetBool("IsRunning", false);
-                animator.SetBool("IsJumping", false);
                 animator.SetTrigger("Jump");
             }
 
@@ -551,7 +580,7 @@ public abstract class Character : MonoBehaviour
         {
             if (!heavyDisable && !casting)
             {
-                print("#heavy");
+                heavyAttacking=true;
                 HeavyAttack();
             }
         }
@@ -561,7 +590,6 @@ public abstract class Character : MonoBehaviour
         {
             if (!blockDisable && !casting)
             {
-                print("#block");
                 Block();
             }
         }
@@ -578,25 +606,18 @@ public abstract class Character : MonoBehaviour
         {
             if (isGrounded && !chargeDisable && !casting)
             {
-                print("#charge");
                 ChargeAttack();
             }
 
         }
 
         //Get down from pad
-        // Get down from platform
-        float verticalInput = input.GetAxis("Vertical" + playerString);
-        bool wantsDrop = input.GetKeyDown(down) || verticalInput < -0.5f;
-
-        if (wantsDrop && CanDropPlatform)
+        if (input.GetKeyDown(down) || (controller && input.GetAxis("Vertical" + playerString) < -0.5f))
         {
             Collider2D[] colliders = GetComponents<Collider2D>();
-
-            TelemetryManager.Instance?.LogAction(PlayerId, "DropPlatform");
-
-            if (colliders.Length > 3 && colliders[3] != null)
-                colliders[3].enabled = false;
+            if (CanDropPlatform)
+                TelemetryManager.Instance?.LogAction(PlayerId, "DropPlatform");
+            colliders[3].enabled = false;
         }
 
         //LightAttack
@@ -604,9 +625,10 @@ public abstract class Character : MonoBehaviour
         {
             if (!quickDisable && !casting)
             {
-                print("#light");
+                isLightAttacking=true;
                 moveSpeed = OGMoveSpeed;
                 LightAttack();
+                StartCoroutine(ResetLightAttackIndicator());
             }
         }
 
@@ -632,6 +654,12 @@ public abstract class Character : MonoBehaviour
         animator.SetBool("IsGrounded", isGrounded);
         animator.SetFloat("VerticalSpeed", rb.velocity.y);
 
+    }
+
+    IEnumerator ResetLightAttackIndicator()
+    {
+        yield return null;
+        isLightAttacking=false;
     }
 
     private void LogMoveIfChanged(int dir)
@@ -665,7 +693,6 @@ public abstract class Character : MonoBehaviour
         maxHealth = gameManager.maxHealth;
         currHealth = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
-        print("@@@ max health= " + maxHealth);
     }
 
 
@@ -696,7 +723,6 @@ public abstract class Character : MonoBehaviour
         {
             isGrounded = true;
             animator.SetBool("Jump", false);
-            animator.SetBool("PlayerGrounded", true);
             grounds++;
         }
     }
@@ -708,8 +734,9 @@ public abstract class Character : MonoBehaviour
         {
             grounds--;
 
-            if (grounds == 0)
+            if (grounds <= 0)
             {
+                grounds=0;
                 isGrounded = false;
             }
         }
@@ -731,10 +758,10 @@ public abstract class Character : MonoBehaviour
         if (other.CompareTag("Player"))  //--here
         {
             grounds--;
-            animator.SetBool("PlayerGrounded", false);
 
-            if (grounds == 0)
+            if (grounds <= 0)
             {
+                grounds=0;
                 isGrounded = false;
             }
         }
@@ -743,15 +770,12 @@ public abstract class Character : MonoBehaviour
     {
         Collider2D[] colliders = GetComponents<Collider2D>();
 
-        foreach (Collider2D collider in colliders)
-        {
-            if (collider != colliders[3])
-            {
-                collider.enabled = true;
-            }
-        }
-
-        colliders[4].enabled = false;
+        colliders[0].enabled = true; //feetTrigger
+        colliders[1].enabled = true; //head
+        colliders[2].enabled = true; //body
+        colliders[3].enabled = false; //exclude enemylayer featTrigger
+        colliders[4].enabled = false; //bodytrigger
+        colliders[5].enabled = false; //Border-only Collider
     }
 
     public void DeactivateColliders()
@@ -767,6 +791,7 @@ public abstract class Character : MonoBehaviour
     {
         isStatic = true;
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale=originalGravityScale; //safety
         if (rb != null)
         {
             rb.bodyType = RigidbodyType2D.Static;
@@ -789,6 +814,44 @@ public abstract class Character : MonoBehaviour
     {
         Collider2D[] colliders = GetComponents<Collider2D>();
         return colliders;
+    }
+
+    private void UpdateGroundedState()
+    {
+        if (groundCheck == null) return;
+
+        bool onSolidGround = Physics2D.OverlapCircle(
+            groundCheck.position,
+            groundCheckRadius,
+            solidGroundLayers
+        );
+
+        bool onPlatform = Physics2D.OverlapCircle(
+            groundCheck.position,
+            groundCheckRadius,
+            platformLayers
+        );
+
+        bool onPlayer = Physics2D.OverlapCircle(
+            groundCheck.position,
+            groundCheckRadius,
+            playerGroundLayers
+        );
+
+        isGrounded = onSolidGround || onPlatform || onPlayer;
+
+        animator.SetBool("IsGrounded", isGrounded);
+
+        if (isGrounded)
+        {
+            animator.SetBool("Jump", false);
+        }
+
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        if (colliders.Length > 3)
+        {
+            colliders[3].enabled = onPlatform;
+        }
     }
     #endregion
 
@@ -813,17 +876,17 @@ public abstract class Character : MonoBehaviour
 
     public IEnumerator AbilityCooldown(float duration)
     {
+    // cdTimer already set in OnCooldown()
+    while (cdTimer > 0f)
+    {
+        cdTimer -= Time.deltaTime;
+        UpdateCooldownSlider(duration);
+        yield return null; // next frame
+    }
 
-        while (cdTimer > 0)
-        {
-            yield return new WaitForSeconds(1f);
-            cdTimer -= 1f;
-            UpdateCooldownSlider(duration); // Update the cooldown slider every second
-        }
-
-        // Reset the cooldown flag
-        onCooldown = false;
-        cdTimer = 0f;
+    onCooldown = false;
+    cdTimer = 0f;
+    UpdateCooldownSlider(duration);
     }
 
     void UpdateCooldownSlider(float duration)
@@ -834,6 +897,7 @@ public abstract class Character : MonoBehaviour
 
     public void EnemyAbilityBlock()
     {
+        if (enemy == null) return;
         enemy.AbilityDisabled();
     }
 
@@ -905,7 +969,6 @@ public abstract class Character : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         // Reset the knocked variable
-        print("l");
         knocked = false;
     }
 
@@ -1091,6 +1154,23 @@ public abstract class Character : MonoBehaviour
         isBlocking = blck;
     }
 
+    protected void ClearChargeState()
+    {
+        charging = false;
+        charged = false;
+        chargeAttackActive = false;
+        chargeReset = false;
+
+        ignoreMovement = false;
+        knockable = true;
+
+        animator.SetBool("Charging", false);
+        animator.SetBool("Casting", false);
+        animator.ResetTrigger("ChargedHit");
+
+        stayDynamic();
+    }
+
     #endregion
 
     #region General
@@ -1125,7 +1205,7 @@ public abstract class Character : MonoBehaviour
             moveSpeed = heavySpeed;
             StartCoroutine(WaitAndSetSpeed());
         }
-        animator.SetBool("isHeavyAttacking", true);
+        animator.SetBool("IsHeavyAttacking", true);
     }
 
     public void HeavyAttackEnd()
@@ -1134,7 +1214,8 @@ public abstract class Character : MonoBehaviour
         {
             moveSpeed = OGMoveSpeed;
         }
-        animator.SetBool("isHeavyAttacking", false);
+        animator.SetBool("IsHeavyAttacking", false);
+        heavyAttacking=false;
     }
 
     private IEnumerator WaitAndSetSpeed()
@@ -1142,6 +1223,7 @@ public abstract class Character : MonoBehaviour
 
         yield return new WaitForSeconds(0.49f);  // Waits for 0.49 seconds
         moveSpeed = OGMoveSpeed;
+        heavyAttacking=false;
 
     }
 
@@ -1206,7 +1288,7 @@ public abstract class Character : MonoBehaviour
 
     public void CounterSuccessOff()
     {
-        CounterVariablesOff();
+        ClearParryState();
     }
 
     public void Countered()
@@ -1217,7 +1299,6 @@ public abstract class Character : MonoBehaviour
         stayStatic();
         ignoreCounterOff = true;
         counterDone = true;
-        print("kaka");
     }
 
     virtual public void DealCounterDmg()
@@ -1241,6 +1322,34 @@ public abstract class Character : MonoBehaviour
         counterDone = false;
         counterIsOn = false;
         knockable = true;
+        safety = true;
+        ignoreCounterOff = false;
+        stayDynamic();
+    }
+
+    protected void ClearParryState()
+    {
+        counterDone = false;
+        counterIsOn = false;
+        knockable = true;
+        safety = true;
+        ignoreCounterOff = false;
+        enemy.stayDynamic();
+        stayDynamic();
+    }
+
+    protected void ClearTemporaryCombatState()
+    {
+        ignoreMovement = false;
+        ignoreDamage = false;
+        knockable = true;
+        casting = false;
+        isBlocking = false;
+
+        animator.SetBool("Casting", false);
+        animator.SetBool("Crouch", false);
+        animator.SetBool("IsRunning", false);
+
         stayDynamic();
     }
 
@@ -1295,30 +1404,26 @@ public abstract class Character : MonoBehaviour
     }
     virtual public void TakeDamage(int dmg, bool blockable, bool parryable = true)
     {
-    if (parryable)
-    {
-        if (DetectCounter())
+        if (parryable)
         {
-            print("suvkkkk");
-            return;
+            if (DetectCounter())
+            {
+                print("suvkkkk");
+                return;
+            }
         }
 
-    }
-
-    // cache distance once for this damage call
-    float distance = GetDistanceToEnemy();
+        // cache distance once for this damage call
+        float distance = GetDistanceToEnemy();
 
         // Invulnerability / i-frames (e.g., roll)
-        if (ignoreDamage && IsRolling)
+        if (ignoreDamage)
         {
             int hpBeforeInv = currHealth;
             int hpAfterInv = currHealth;
 
             TelemetryManager.Instance?.LogDamageApplied(
-                incomingAttackerId,
-                this.PlayerId,
-                incomingMoveType,
-                incomingSourceType,
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
                 0,
                 hpBeforeInv,
                 hpAfterInv,
@@ -1330,59 +1435,59 @@ public abstract class Character : MonoBehaviour
         }
 
         if (dmg == chargeDmg)
-    {
-        StopCHarge();
-    }
-
-    if (chargeAttackActive)
-    {
-        if (chargeReset)
         {
-            print("kolok1");
-            stayDynamic();
-            ignoreMovement = false;
-            chargeReset = false;
+            StopCHarge();
+        }
+
+        if (chargeAttackActive)
+        {
+            if (chargeReset)
+            {
+                print("kolok1");
+                stayDynamic();
+                ignoreMovement = false;
+                chargeReset = false;
+            }
+            else
+            {
+                print("kolok2");
+                TakeDamageNoAnimation(dmg, blockable);
+                return;
+            }
+        }
+
+        ResetQuickPunch();
+
+        int hpBefore = currHealth;
+
+        if (isBlocking && blockable)
+        {
+            if (blockSound != null)
+            {
+                audioManager.PlaySFX(blockSound, audioManager.normalVol);
+            }
+
+            if (dmg == heavyDamage) // heavy attack: half-ish damage (your rule)
+            {
+                currHealth -= 5;
+                Debug.Log("Took 5 damage.");
+                healthbar.SetHealth(currHealth);
+                StartCoroutine(TriggerDamageCounter(5));
+            }
+
+            if (dmg == chargeDmg)
+            {
+                currHealth -= dmg;
+                Debug.Log("Took " + dmg + " damage.");
+                healthbar.SetHealth(currHealth);
+                moveSpeed = OGMoveSpeed;
+                StartCoroutine(TriggerDamageCounter(dmg));
+            }
+
+            // NOTE: light attack blocked takes 0 dmg in your code (no HP change)
         }
         else
         {
-            print("kolok2");
-            TakeDamageNoAnimation(dmg, blockable);
-            return;
-        }
-    }
-
-    ResetQuickPunch();
-
-    int hpBefore = currHealth;
-
-    if (isBlocking && blockable)
-    {
-        if (blockSound != null)
-        {
-            audioManager.PlaySFX(blockSound, audioManager.normalVol);
-        }
-
-        if (dmg == heavyDamage) // heavy attack: half-ish damage (your rule)
-        {
-            currHealth -= 5;
-            Debug.Log("Took 5 damage.");
-            healthbar.SetHealth(currHealth);
-            StartCoroutine(TriggerDamageCounter(5));
-        }
-
-        if (dmg == chargeDmg)
-        {
-            currHealth -= dmg;
-            Debug.Log("Took " + dmg + " damage.");
-            healthbar.SetHealth(currHealth);
-            moveSpeed = OGMoveSpeed;
-            StartCoroutine(TriggerDamageCounter(dmg));
-        }
-
-        // NOTE: light attack blocked takes 0 dmg in your code (no HP change)
-    }
-    else
-    {
             if (damageShield)
             {
                 damageShield = false;
@@ -1391,15 +1496,15 @@ public abstract class Character : MonoBehaviour
                 int hpBeforeShield = currHealth;
                 int hpAfterShield = currHealth;
 
-                // Treat shield as blocked / absorbed
+                // Treat shield as negated / dodged
                 TelemetryManager.Instance?.LogDamageApplied(
                     incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
                     0,
                     hpBeforeShield,
                     hpAfterShield,
                     distance,
-                    true,
-                    false
+                    false,
+                    true
                 );
 
                 return;
@@ -1407,48 +1512,48 @@ public abstract class Character : MonoBehaviour
 
             currHealth -= dmg;
 
-        animator.SetTrigger("tookDmg");
-        healthbar.SetHealth(currHealth);
-        StartCoroutine(TriggerDamageCounter(dmg));
+            animator.SetTrigger("tookDmg");
+            healthbar.SetHealth(currHealth);
+            StartCoroutine(TriggerDamageCounter(dmg));
 
-        Debug.Log("Took " + dmg + " damage.");
-    }
+            Debug.Log("Took " + dmg + " damage.");
+        }
 
-    int hpAfter = currHealth;
-    int actualDamage = hpBefore - hpAfter;
+        int hpAfter = currHealth;
+        int actualDamage = hpBefore - hpAfter;
 
-    // Log outcome (always meaningful: damage, or blocked 0)
-    if (actualDamage > 0)
-    {
-        TelemetryManager.Instance?.LogDamageApplied(
-            incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
-            actualDamage,
-            hpBefore,
-            hpAfter,
-            distance,
-            (isBlocking && blockable),
-            false
-        );
-    }
-    else if (isBlocking && blockable)
-    {
-        // blocked 0 damage (important for defense metrics)
-        TelemetryManager.Instance?.LogDamageApplied(
-            incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
-            0,
-            hpBefore,
-            hpAfter,
-            distance,
-            true,
-            false
-        );
-    }
+        // Log outcome (always meaningful: damage, or blocked 0)
+        if (actualDamage > 0)
+        {
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                actualDamage,
+                hpBefore,
+                hpAfter,
+                distance,
+                (isBlocking && blockable),
+                false
+            );
+        }
+        else if (isBlocking && blockable)
+        {
+            // blocked 0 damage (important for defense metrics)
+            TelemetryManager.Instance?.LogDamageApplied(
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
+                0,
+                hpBefore,
+                hpAfter,
+                distance,
+                true,
+                false
+            );
+        }
 
-    if (currHealth <= 0)
-    {
-        Die();
+        if (currHealth <= 0)
+        {
+            Die();
+        }
     }
-}
 
     public void Die()
     {
@@ -1470,6 +1575,7 @@ public abstract class Character : MonoBehaviour
         }
 
         ignoreDamage = true;
+        knockable = false;
 
         ActivateHealthBars(); //In case they are hidden
 
@@ -1478,12 +1584,11 @@ public abstract class Character : MonoBehaviour
 
         audioManager.StopMusic();
         audioManager.PlaySFX(audioManager.dearth, audioManager.doubleVol);
-        print("+++"+enemy.currHealth+" mx: "+maxHealth);
+
         if (enemy.currHealth == maxHealth)
         {
-            print("+++");
             gameManager.RoundEndFlawless(winnerNum, P2Name);
-            KeepStats(P2Name, P1Name.text);
+            KeepStats(P2Name,enemy.GetCharID(), P1Name.text,characterID);
         }
         else if (enemy.currHealth <= 0)
         {
@@ -1491,8 +1596,8 @@ public abstract class Character : MonoBehaviour
         }
         else
         {
+            KeepStats(P2Name,enemy.GetCharID(), P1Name.text,characterID);
             gameManager.RoundEnd(winnerNum, P2Name);
-            KeepStats(P2Name, P1Name.text);
         }
 
     }
@@ -1531,16 +1636,13 @@ public abstract class Character : MonoBehaviour
         float distance = GetDistanceToEnemy();
 
         // Invulnerability / i-frames
-        if (ignoreDamage && IsRolling)
+        if (ignoreDamage)
         {
             int hpBeforeInv = currHealth;
             int hpAfterInv = currHealth;
 
             TelemetryManager.Instance?.LogDamageApplied(
-                incomingAttackerId,
-                this.PlayerId,
-                incomingMoveType,
-                incomingSourceType,
+                incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
                 0,
                 hpBeforeInv,
                 hpAfterInv,
@@ -1571,19 +1673,19 @@ public abstract class Character : MonoBehaviour
                 int hpBeforeShield = currHealth;
                 int hpAfterShield = currHealth;
 
-                // Treat shield as blocked / absorbed
                 TelemetryManager.Instance?.LogDamageApplied(
                     incomingAttackerId, this.PlayerId, incomingMoveType, incomingSourceType,
                     0,
                     hpBeforeShield,
                     hpAfterShield,
                     distance,
-                    true,
-                    false
+                    false,
+                    true
                 );
 
                 return;
             }
+
             currHealth -= dmg;
 
             healthbar.SetHealth(currHealth);
@@ -1740,7 +1842,7 @@ public abstract class Character : MonoBehaviour
 
     public void StopPunching()
     {
-        animator.SetBool("isHeavyAttacking", false);
+        animator.SetBool("IsHeavyAttacking", false);
     }
 
     private void Awake()
@@ -1769,8 +1871,10 @@ public abstract class Character : MonoBehaviour
     //Rager
     public void ResetQuickPunch()
     {
-        animator.ResetTrigger("punch2");
-        animator.SetBool("QuickPunch", false);
+        if(this is Rager)
+        {
+            animator.SetBool("QuickPunch", false);
+        }       
     }
 
     public void Grabbed()
@@ -1875,8 +1979,13 @@ public abstract class Character : MonoBehaviour
 
     }
 
-    public void KeepStats(string winner, string loser)
+    public void KeepStats(string winner,int winnerID, string loser,int loserID)
     {
+        if (gameManager.trainingMode)
+        {
+            return;
+        }
+        
         if (winner == loser || ignoreStats)
         {
             return;
@@ -1890,6 +1999,59 @@ public abstract class Character : MonoBehaviour
         {
             Debug.Log("Error.StatsManager not loaded properly.");
         }
+
+        KeepData(winnerID,loserID,playerNum);
+    }
+
+    public void KeepData(int winnerID, int loserID, int setupNum)
+    {
+        if (MatchDataLogger.Instance == null)
+        {
+            Debug.LogError("MatchDataLogger not found.");
+            return;
+        }
+
+        int charA, charB;
+        int aWins;
+
+        if (setupNum == 2)
+        {
+            charA = winnerID;
+            charB = loserID;
+            aWins = 1;
+        }
+        else
+        {
+            charA = loserID;
+            charB = winnerID;
+            aWins = 0;
+        }
+
+        CharacterSpecsBase specsA = resources.GetSpecsByID(charA);
+        CharacterSpecsBase specsB = resources.GetSpecsByID(charB);
+
+        if (specsA == null || specsB == null)
+        {
+            Debug.LogError("Could not load specs.");
+            return;
+        }
+
+        MatchDataLogger.Instance.LogMatchRow(
+            charA,
+            charB,
+            specsA.damage,
+            specsA.cooldown,
+            specsA.utility,
+            specsB.damage,
+            specsB.cooldown,
+            specsB.utility,
+            aWins
+        );
+    }
+
+    public int GetCharID()
+    {
+        return characterID;
     }
 
     #endregion
@@ -1913,6 +2075,9 @@ public abstract class Character : MonoBehaviour
     public bool SpecialDisabled => specialDisable;
     public bool ChargeDisabled => chargeDisable;
     public bool JumpDisabled => jumpDisabled;
+    public bool Parrying => counterIsOn;
+    public bool HeavyAttacking => heavyAttacking;
+    public bool LightAttacking => isLightAttacking;
 
     // Optional: normalized ability cooldown (0=ready, 1=just used).
     // Store last used cooldown length so we can normalize.
@@ -1933,7 +2098,7 @@ public abstract class Character : MonoBehaviour
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         rb.velocity = Vector2.zero;
         rb.angularVelocity = 0f;
-        transform.position = spawn ? spawn.position : transform.position;
+        transform.position = _spawnPos;
         rb.gravityScale = originalGravityScale;
 
         // Core flags
@@ -1944,6 +2109,8 @@ public abstract class Character : MonoBehaviour
         knocked = false;
         knockable = true;
         justTeleported = false;
+        heavyAttacking = false;
+        isLightAttacking = false;
 
         // Charges / counters
         charging = false;
@@ -1962,6 +2129,8 @@ public abstract class Character : MonoBehaviour
         damageShield = false;
 
         // Cooldowns / UI bits
+        // Stop any running coroutines that control timing (prevents “ghost timers”)
+        StopAllCoroutines();
         onCooldown = false;
         cdTimer = 0f;
         cooldownSlider?.SetValueWithoutNotify(0f);
@@ -1994,7 +2163,70 @@ public abstract class Character : MonoBehaviour
 
         ActivateColliders();
         stayDynamic();
-        print("[wdreset]");
+    }
+
+    public virtual void ResetForEpisode2()
+    {
+        StopAllCoroutines();
+
+        // Position & physics
+        if (rb == null) rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = 1.8f;
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+
+        if (playerNum == 1)
+        {
+            transform.position=new Vector3(-7.3f,-2.50f,0f);
+        }
+        else
+        {
+            transform.position=new Vector3(7.4f,-2.50f,0f);
+        }
+        
+        // Animator sanity
+        if (animator == null) animator = GetComponent<Animator>();
+        animator.Rebind();
+        animator.Update(0f);
+        animator.SetBool("isDead", false);
+        animator.ResetTrigger("tookDmg");
+        animator.ResetTrigger("ChargedHit");
+        animator.SetBool("Charging", false);
+        animator.SetBool("Casting", false);
+        animator.SetBool("IsRunning", false);
+        animator.SetBool("Crouch", false);
+        //animator.SetBool("Jump", false);
+        //animator.SetBool("isGrounded", true);
+
+        // Core flags
+        ignoreUpdate = false;
+        isBlocking = false;
+        casting = false;
+        stunned = false;
+        knocked = false;
+        knockable = true;
+        justTeleported = false;
+        isonpad=0;
+        onCooldown = false;
+        ignoreUpdate = false;
+        ignoreDamage = false;
+        ActivateColliders();
+    }
+
+    public void ClearDynamicScripts()
+    {
+        // Remove LupenSpirit if it exists
+        LupenSpirit spirit = GetComponent<LupenSpirit>();
+        if (spirit != null)
+        {
+            Destroy(spirit);
+        }
+        // Remove Lupen if it exists
+        Lupen lup = GetComponent<Lupen>();
+        if (lup != null)
+        {
+            Destroy(lup);
+        }
     }
 
     #endregion

@@ -10,7 +10,7 @@ public class PlayAgainButton : MonoBehaviour
         //training
         if (manager.trainingMode)
         {
-            manager.SoftResetRound();
+            manager.SoftResetRound(0);
             return;
         }
         // Reload the current scene
