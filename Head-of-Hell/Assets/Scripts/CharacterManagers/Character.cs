@@ -110,7 +110,7 @@ public abstract class Character : MonoBehaviour
     protected helthbarscript healthbar;
 
     //basic stats
-    public int characterID;
+    public int characterID = -1;
     public float moveSpeed = 4f; // Initialize moveSpeed
     protected float heavySpeed;
     protected float OGMoveSpeed;
@@ -2035,7 +2035,7 @@ public abstract class Character : MonoBehaviour
     {
         if (MatchDataLogger.Instance == null)
         {
-            Debug.LogError("MatchDataLogger not found.");
+            Debug.LogWarning("MatchDataLogger not found.");
             return;
         }
 

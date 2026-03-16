@@ -29,7 +29,6 @@ public class BulletScript : MonoBehaviour
         {
             hasHit = true;
             Destroy(gameObject);
-            Debug.Log("BDestroyed");
 
             Character character = other.GetComponent<Character>();
             if (character != null)
