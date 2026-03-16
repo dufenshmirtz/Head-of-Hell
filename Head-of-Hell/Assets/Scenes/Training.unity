@@ -6237,6 +6237,8 @@ MonoBehaviour:
   approachStartMargin: 0.75
   farMeleeLightPenalty: -0.00035
   farMeleeSpecialPenalty: -0.00035
+  dashNoDirectionPenalty: -0.00045
+  wrongFacingSpecialPenalty: -0.0005
 --- !u!114 &221568216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6279,7 +6281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 4
+  DecisionPeriod: 8
   TakeActionsBetweenDecisions: 1
 --- !u!114 &221568230
 MonoBehaviour:
@@ -6422,7 +6424,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   profiles:
   - characterID: 0
-    lightReachType: 1
+    lightReachType: 2
     specialReachType: 2
   - characterID: 1
     lightReachType: 0
@@ -34965,6 +34967,8 @@ MonoBehaviour:
   approachStartMargin: 0.75
   farMeleeLightPenalty: -0.00035
   farMeleeSpecialPenalty: -0.00035
+  dashNoDirectionPenalty: -0.00045
+  wrongFacingSpecialPenalty: -0.0005
 --- !u!114 &1367423862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35057,10 +35061,10 @@ MonoBehaviour:
   actionCooldownMax: 0.8
   quickChance: 0.62
   heavyChance: 0.2
-  specialChance: 0.08
+  specialChance: 0.5
   chargeChance: 0
-  jumpChance: 0.04
-  blockChance: 0.05
+  jumpChance: 0.1
+  blockChance: 0.01
   parryChance: 0
   sameLevelTolerance: 0.85
   jumpToTargetChance: 0.15
@@ -51605,6 +51609,7 @@ MonoBehaviour:
   penaltyStallBoth: -0.02
   penaltyStallSingle: -0.03
   penaltyEpisodeTimeout: -0.02
+  startupGraceSeconds: 2
 --- !u!1 &2147385444
 GameObject:
   m_ObjectHideFlags: 0
