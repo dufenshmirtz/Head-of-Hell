@@ -111,6 +111,7 @@ public class LazyBigus : Character
             yield return new WaitForSeconds(interval);
 
             // Deal damage to the enemy
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.PoisonTick, SourceType.Dot);
             enemy.TakeDamageNoAnimation(damageAmount,false,false);
         }
         enemy.ActivatePoison(false);
@@ -145,12 +146,14 @@ public class LazyBigus : Character
         bulletParent = resources.bulletParent;
 
         audioManager.PlaySFX(audioManager.volchSpit, audioManager.doubleVol);
+        TelemetryManager.Instance?.LogAction(PlayerId,"Projectile");
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.velocity = new Vector2(transform.localScale.x * bulletSpeed, 0); // Shoots in the direction the character is facing
 
-        bulletScript=bullet.GetComponent<BulletScript>();
-        bulletScript.initiator = this;
+        bulletScript = bullet.GetComponent<BulletScript>();
+        bulletScript.Init(this);
 
         Destroy(bullet, 2f);
     }

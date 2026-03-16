@@ -1,0 +1,63 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-03-16T07:45:00.584702+00:00",
+  "profiles": [
+    {
+      "profile_id": "7b2d5b56-fb33-42ca-bb1c-ca8c3f246947",
+      "profile_name": "Saleaz",
+      "style_label": "Aggressive-Risky",
+      "matches_count": 50,
+      "win_rate": 0.4,
+      "hit_rate": 0.5008,
+      "miss_rate": 0.4792,
+      "avg_damage_dealt": 74.14,
+      "avg_damage_taken": 94.6,
+      "aggression_raw": 0.2267,
+      "defense_raw": 0.0978,
+      "mobility_raw": 0.5057,
+      "risk_raw": 0.4757,
+      "aggression": 0.851,
+      "defense": 0.2888,
+      "mobility": 0.0,
+      "risk": 1.0
+    },
+    {
+      "profile_id": "NONE",
+      "profile_name": "UNKNOWN",
+      "style_label": "Balanced",
+      "matches_count": 11,
+      "win_rate": 0.0667,
+      "hit_rate": 0.3106,
+      "miss_rate": 0.4228,
+      "avg_damage_dealt": 12.2667,
+      "avg_damage_taken": 8.5333,
+      "aggression_raw": 0.0765,
+      "defense_raw": 0.2,
+      "mobility_raw": 0.7835,
+      "risk_raw": 0.2404,
+      "aggression": 0.0,
+      "defense": 1.0,
+      "mobility": 1.0,
+      "risk": 0.0
+    },
+    {
+      "profile_id": "7a3deb71-1a5e-4b42-a2d4-2fe4129134a1",
+      "profile_name": "koutaliaris",
+      "style_label": "Aggressive",
+      "matches_count": 50,
+      "win_rate": 0.56,
+      "hit_rate": 0.6399,
+      "miss_rate": 0.3601,
+      "avg_damage_dealt": 93.3,
+      "avg_damage_taken": 79.26,
+      "aggression_raw": 0.253,
+      "defense_raw": 0.0563,
+      "mobility_raw": 0.616,
+      "risk_raw": 0.4353,
+      "aggression": 1.0,
+      "defense": 0.0,
+      "mobility": 0.397,
+      "risk": 0.8283
+    }
+  ]
+}

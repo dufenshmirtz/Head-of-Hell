@@ -16,6 +16,7 @@ public class Fin : Character
     GameObject freeBaby;
     float spellTime= 0.12f;
 
+    
     public override void Start()
     {
         base.Start();
@@ -113,6 +114,9 @@ public class Fin : Character
         IgnoreMovement(true);
         ignoreDamage = true;
         knockable = false;
+        isRolling = true;
+
+
 
         // Store the original gravity scale
         float ogGravityScale = rb.gravityScale;
@@ -174,6 +178,7 @@ public class Fin : Character
         IgnoreMovement(false);
         ignoreDamage = false;
         knockable = true;
+        isRolling = false;
 
         StartCoroutine(ResetRoll());
     }
