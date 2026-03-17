@@ -21,6 +21,9 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
     public TMP_Text missRateText;
     public TMP_Text avgDamageDealtText;
     public TMP_Text avgDamageTakenText;
+    public TMP_Text eloText;
+    private string currentProfileName;
+    private string currentProfileId;
 
     [Header("Chart")]
     public CombatSignatureChart combatChart;
@@ -78,13 +81,70 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         if (profilesMenuRoot != null) profilesMenuRoot.SetActive(true);
     }
 
+    public void RefreshAnalysis()
+    {
+        if (loader == null)
+        {
+            Debug.LogError("RefreshAnalysis: loader is NULL");
+            return;
+        }
+
+        string profileIdToRestore = currentProfileId;
+        string profileNameToRestore = currentProfileName;
+
+        loader.Load();
+
+        if (loader.Data == null || loader.Data.profiles == null || loader.Data.profiles.Count == 0)
+        {
+            Debug.LogWarning("RefreshAnalysis: no profiles found after reload");
+            return;
+        }
+
+        ProfileAnalysisEntry foundProfile = null;
+
+        if (!string.IsNullOrWhiteSpace(profileIdToRestore))
+        {
+            foundProfile = loader.Data.profiles
+                .FirstOrDefault(p => p.profile_id == profileIdToRestore);
+        }
+
+        if (foundProfile == null && !string.IsNullOrWhiteSpace(profileNameToRestore))
+        {
+            foundProfile = loader.Data.profiles
+                .FirstOrDefault(p => p.profile_name == profileNameToRestore);
+        }
+
+        if (foundProfile != null)
+        {
+            ShowProfile(foundProfile);
+        }
+        else
+        {
+            Debug.LogWarning($"RefreshAnalysis: could not restore profile id='{profileIdToRestore}' name='{profileNameToRestore}', showing first");
+            ShowProfile(loader.Data.profiles[0]);
+        }
+    }
     private void ShowProfile(ProfileAnalysisEntry p)
     {
-       
-   
+        currentProfileId = p.profile_id;
+        currentProfileName = p.profile_name;
+        Debug.Log("ShowProfile -> " + p.profile_name);
+        Debug.Log("Style = " + p.style_label);
+        Debug.Log("Elo = " + p.elo_rating);
+        Debug.Log("WinRate = " + p.win_rate);
+        Debug.Log("HitRate = " + p.hit_rate);
+        Debug.Log("MissRate = " + p.miss_rate);
+        Debug.Log("AvgDamageDealt = " + p.avg_damage_dealt);
+        Debug.Log("AvgDamageTaken = " + p.avg_damage_taken);
+        Debug.Log("AggressionRaw = " + p.aggression_raw);
+        Debug.Log("MobilityRaw = " + p.mobility_raw);
+        Debug.Log("DefenseRaw = " + p.defense_raw);
+        Debug.Log("RiskRaw = " + p.risk_raw);
+        
         if (profileNameText != null) profileNameText.text = p.profile_name;
         if (styleLabelText != null) styleLabelText.text = p.style_label;
-
+        if (eloText != null)
+            eloText.text = Mathf.RoundToInt(p.elo_rating).ToString();
         if (matchesText != null) matchesText.text = $"Matches: {p.matches_count}";
         if (winRateText != null) winRateText.text = $"Win Rate: {p.win_rate:P0}";
         if (hitRateText != null) hitRateText.text = $"Hit Rate: {p.hit_rate:P0}";
