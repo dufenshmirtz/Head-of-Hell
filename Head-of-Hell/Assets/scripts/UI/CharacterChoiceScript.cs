@@ -1,32 +1,31 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-// using UnityEngine.SceneManagement; // Δεν χρησιμοποιείται εδώ, μπορείς να το αφαιρέσεις
 
 public class CharacterChoiceScript : MonoBehaviour
 {
     private Button lastHighlightedButton = null;
 
-    public Button[] buttons;  // Assign your buttons in the Inspector
-    public Button startButton; // Assign your Start button in the Inspector
+    public Button[] buttons;
+    public Button startButton;
     public MainMenuMusic sfx;
-    public CharacterChoiceMenu characterChoiceMenu;  // Reference to the CharacterChoiceMenu script
+    public CharacterChoiceMenu characterChoiceMenu;
+
     private bool notSelected = true;
     public bool bothpicked = false;
+
+    private Button p1PickedButton = null;
+    private Button p2PickedButton = null;
 
     void Start()
     {
         notSelected = true;
 
-        // Automatically assign OnSelect / OnDeselect event for each button
         foreach (Button btn in buttons)
         {
-            // Hide all borders at start
-            Transform border = btn.transform.Find("Border");
-            if (border != null)
-            {
-                border.gameObject.SetActive(false);
-            }
+            HideHoverBorder(btn);
+            HideP1Border(btn);
+            HideP2Border(btn);
 
             EventTrigger trigger = btn.gameObject.GetComponent<EventTrigger>();
             if (trigger == null)
@@ -34,52 +33,52 @@ public class CharacterChoiceScript : MonoBehaviour
                 trigger = btn.gameObject.AddComponent<EventTrigger>();
             }
 
-            // SELECT event
+            trigger.triggers.Clear();
+
             EventTrigger.Entry selectEntry = new EventTrigger.Entry();
             selectEntry.eventID = EventTriggerType.Select;
             selectEntry.callback.AddListener((eventData) => { OnButtonHighlighted(btn); });
             trigger.triggers.Add(selectEntry);
 
-            // DESELECT event
             EventTrigger.Entry deselectEntry = new EventTrigger.Entry();
             deselectEntry.eventID = EventTriggerType.Deselect;
             deselectEntry.callback.AddListener((eventData) => { OnButtonUnhighlighted(btn); });
             trigger.triggers.Add(deselectEntry);
+
+            EventTrigger.Entry enterEntry = new EventTrigger.Entry();
+            enterEntry.eventID = EventTriggerType.PointerEnter;
+            enterEntry.callback.AddListener((eventData) => { OnButtonPointerEnter(btn); });
+            trigger.triggers.Add(enterEntry);
+
+            EventTrigger.Entry exitEntry = new EventTrigger.Entry();
+            exitEntry.eventID = EventTriggerType.PointerExit;
+            exitEntry.callback.AddListener((eventData) => { OnButtonPointerExit(btn); });
+            trigger.triggers.Add(exitEntry);
         }
     }
 
     void Update()
     {
         if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow) ||
-            Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow)) && notSelected)
+             Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow)) && notSelected)
         {
             AutoSelectButton();
         }
 
-        if (bothpicked)
-        {
-            Debug.Log("Both players have picked");
-        }
-
-        // Check if both players have picked and Enter is pressed
         if (bothpicked && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
         {
-            Debug.Log("Enter Key pressed, trying to start game");
             TriggerStartButton();
         }
     }
 
     void AutoSelectButton()
     {
-        // Ensure the first button is selected by default
         if (buttons.Length > 0)
         {
             sfx.ButtonSound();
             EventSystem.current.SetSelectedGameObject(buttons[0].gameObject);
             buttons[0].Select();
             notSelected = false;
-
-            // Update character name display
             characterChoiceMenu.HoveringIn(buttons[0].name);
         }
     }
@@ -90,31 +89,39 @@ public class CharacterChoiceScript : MonoBehaviour
         {
             sfx.ButtonSound();
             characterChoiceMenu.HoveringIn(button.name);
-
-            // Show border on the currently highlighted button
-            Transform border = button.transform.Find("Border");
-            if (border != null)
-            {
-                border.gameObject.SetActive(true);
-            }
-
+            ShowHoverBorder(button);
             lastHighlightedButton = button;
         }
     }
 
     public void OnButtonUnhighlighted(Button button)
     {
-        // Hide border when button is no longer selected
-        Transform border = button.transform.Find("Border");
-        if (border != null)
-        {
-            border.gameObject.SetActive(false);
-        }
+        HideHoverBorder(button);
 
         if (lastHighlightedButton == button)
         {
             lastHighlightedButton = null;
         }
+    }
+
+    public void OnButtonPointerEnter(Button button)
+    {
+        if (!bothpicked)
+        {
+            ShowHoverBorder(button);
+            characterChoiceMenu.HoveringIn(button.name);
+        }
+    }
+
+    public void OnButtonPointerExit(Button button)
+    {
+        if (EventSystem.current != null &&
+            EventSystem.current.currentSelectedGameObject == button.gameObject)
+        {
+            return;
+        }
+
+        HideHoverBorder(button);
     }
 
     public void BothPicked(bool didThey)
@@ -126,7 +133,97 @@ public class CharacterChoiceScript : MonoBehaviour
     {
         if (startButton != null)
         {
-            startButton.onClick.Invoke(); // Simulates a button click
+            startButton.onClick.Invoke();
         }
+    }
+
+    // =========================
+    // LOCKED PICKS
+    // =========================
+
+    public void SetPlayer1Picked(Button button)
+    {
+        if (p1PickedButton != null)
+        {
+            HideP1Border(p1PickedButton);
+        }
+
+        p1PickedButton = button;
+
+        if (p1PickedButton != null)
+        {
+            ShowP1Border(p1PickedButton);
+        }
+    }
+
+    public void SetPlayer2Picked(Button button)
+    {
+        if (p2PickedButton != null)
+        {
+            HideP2Border(p2PickedButton);
+        }
+
+        p2PickedButton = button;
+
+        if (p2PickedButton != null)
+        {
+            ShowP2Border(p2PickedButton);
+        }
+    }
+
+    // =========================
+    // BORDER HELPERS
+    // =========================
+    public void ClearPlayer1Picked()
+    {
+        if (p1PickedButton != null)
+        {
+            HideP1Border(p1PickedButton);
+            p1PickedButton = null;
+        }
+    }
+
+    public void ClearPlayer2Picked()
+    {
+        if (p2PickedButton != null)
+        {
+            HideP2Border(p2PickedButton);
+            p2PickedButton = null;
+        }
+    }
+    void ShowHoverBorder(Button button)
+    {
+        Transform t = button.transform.Find("HoverBorder");
+        if (t != null) t.gameObject.SetActive(true);
+    }
+
+    void HideHoverBorder(Button button)
+    {
+        Transform t = button.transform.Find("HoverBorder");
+        if (t != null) t.gameObject.SetActive(false);
+    }
+
+    void ShowP1Border(Button button)
+    {
+        Transform t = button.transform.Find("P1Border");
+        if (t != null) t.gameObject.SetActive(true);
+    }
+
+    void HideP1Border(Button button)
+    {
+        Transform t = button.transform.Find("P1Border");
+        if (t != null) t.gameObject.SetActive(false);
+    }
+
+    void ShowP2Border(Button button)
+    {
+        Transform t = button.transform.Find("P2Border");
+        if (t != null) t.gameObject.SetActive(true);
+    }
+
+    void HideP2Border(Button button)
+    {
+        Transform t = button.transform.Find("P2Border");
+        if (t != null) t.gameObject.SetActive(false);
     }
 }
