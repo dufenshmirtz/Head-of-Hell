@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     public float tScale = 1f;
 
     public bool roundOn = false;
+    public TrainingOpponentDirector opponentDirector;
 
 
     // Start is called before the first frame update

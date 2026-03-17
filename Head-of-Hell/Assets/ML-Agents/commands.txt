@@ -1,3 +1,5 @@
 conda activate mlagents38
 
 mlagents-learn "ML-Agents\config\hoh_selfplay.yaml" --run-id=hoh_run5
+
+mlagents-learn config.yaml --run-id=MyRun --resume
