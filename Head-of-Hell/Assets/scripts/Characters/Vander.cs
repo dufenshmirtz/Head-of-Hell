@@ -286,7 +286,7 @@ public class Vander : Character
             // Engage flight at the *moment of falling* and zero vertical speed.
             isFlying = true;
             rb.gravityScale = 0f;
-            animator.SetBool("IsFlying", true); // optional
+            //animator.SetBool("IsFlying", true); // optional
             vy = 0f; // start from rest for that floaty feel
         }
 

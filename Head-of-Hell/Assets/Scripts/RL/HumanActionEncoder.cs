@@ -35,8 +35,6 @@ public static class HumanActionEncoder
         }
     }
 
-    private static readonly int[] EmptyArray = new int[9] { 1, 0, 0, 0, 0, 0, 0, 0, 0 };
-
     public static DiscreteActionFrame Encode(Character self)
     {
         DiscreteActionFrame a = Default();
@@ -44,26 +42,25 @@ public static class HumanActionEncoder
         if (self == null)
             return a;
 
-        // --- movement keys from character setup ---
-        KeyCode leftKey   = self.left;
-        KeyCode rightKey  = self.right;
-        KeyCode upKey     = self.up;
-        KeyCode downKey   = self.down;
-        KeyCode lightKey  = self.lightAttack;
-        KeyCode heavyKey  = self.heavyAttack;
-        KeyCode blockKey  = self.block;
-        KeyCode abilityKey= self.ability;
-        KeyCode chargeKey = self.charge;
-        KeyCode parryKey  = self.parry;
+        KeyCode leftKey    = self.left;
+        KeyCode rightKey   = self.right;
+        KeyCode upKey      = self.up;
+        KeyCode downKey    = self.down;
+        KeyCode lightKey   = self.lightAttack;
+        KeyCode heavyKey   = self.heavyAttack;
+        KeyCode blockKey   = self.block;
+        KeyCode abilityKey = self.ability;
+        KeyCode chargeKey  = self.charge;
+        KeyCode parryKey   = self.parry;
 
         string playerString = self.playerString;
 
-        // --------------------------------------------------
+        bool controllerEnabled = IsControllerEnabled(self);
+        int joystickNum = GetJoystickNumber(self);
+
+        // -----------------------------
         // MOVE branch: 0=left, 1=idle, 2=right
-        // Match the game's intent as closely as possible.
-        // Character.Update uses input.GetAxis("Horizontal"+playerString),
-        // but for human input we also check keyboard keys directly.
-        // --------------------------------------------------
+        // -----------------------------
         bool leftHeld = Input.GetKey(leftKey);
         bool rightHeld = Input.GetKey(rightKey);
 
@@ -82,69 +79,101 @@ public static class HumanActionEncoder
         else
             a.move = 1;
 
-        // --------------------------------------------------
-        // JUMP branch: edge-like action
-        // Character uses:
-        // input.GetKeyDown(up) || (axisUp && !jumpAxisHeld)
-        // We cannot access jumpAxisHeld here, so for now:
-        // - keyboard: GetKeyDown(up)
-        // - controller axis up: detect when vertical axis > 0.5
-        //   using previous axis state stored per player
-        // --------------------------------------------------
-        bool keyJumpDown = Input.GetKeyDown(upKey);
-
+        // -----------------------------
+        // Vertical axis
+        // -----------------------------
         float axisV = 0f;
         if (!string.IsNullOrEmpty(playerString))
             axisV = Input.GetAxis("Vertical" + playerString);
 
         bool axisUpNow = axisV > 0.5f;
+        bool axisDownNow = axisV < -0.5f;
+
+        // -----------------------------
+        // JUMP
+        // Character uses:
+        // input.GetKeyDown(up) || (axisUp && !jumpAxisHeld)
+        // -----------------------------
+        bool keyJumpDown = Input.GetKeyDown(upKey);
         bool axisUpPressed = AxisMemory.GetUpPressed(playerString, axisUpNow);
 
         a.jump = (keyJumpDown || axisUpPressed) ? 1 : 0;
 
-        // --------------------------------------------------
-        // DROP branch
+        // -----------------------------
+        // DROP
         // Character uses:
         // input.GetKeyDown(down) || (controller && axis < -0.5f)
-        // For logging:
-        // - keyboard edge on down key
-        // - controller-style edge on vertical axis down
-        // --------------------------------------------------
+        // We log edge on axis down to avoid spam every frame.
+        // -----------------------------
         bool keyDropDown = Input.GetKeyDown(downKey);
-        bool axisDownNow = axisV < -0.5f;
         bool axisDownPressed = AxisMemory.GetDownPressed(playerString, axisDownNow);
 
-        a.drop = (keyDropDown || axisDownPressed) ? 1 : 0;
+        a.drop = (keyDropDown || (controllerEnabled && axisDownPressed)) ? 1 : 0;
 
-        // --------------------------------------------------
-        // LIGHT / HEAVY / SPECIAL / PARRY
-        // edge actions
-        // --------------------------------------------------
-        a.light   = Input.GetKeyDown(lightKey)   ? 1 : 0;
-        a.heavy   = Input.GetKeyDown(heavyKey)   ? 1 : 0;
-        a.special = Input.GetKeyDown(abilityKey) ? 1 : 0;
-        a.parry   = Input.GetKeyDown(parryKey)   ? 1 : 0;
+        // -----------------------------
+        // LIGHT
+        // Character:
+        // keyboard -> key
+        // controller -> joystick button 0
+        // -----------------------------
+        bool lightPressed =
+            Input.GetKeyDown(lightKey) ||
+            (controllerEnabled && Input.GetKeyDown(GetJoystickButtonString(joystickNum, 0)));
 
-        // --------------------------------------------------
-        // BLOCK
-        // hold action
-        // --------------------------------------------------
-        a.block = Input.GetKey(blockKey) ? 1 : 0;
+        a.light = lightPressed ? 1 : 0;
 
-        // --------------------------------------------------
+        // -----------------------------
+        // HEAVY
+        // controller -> joystick button 2
+        // -----------------------------
+        bool heavyPressed =
+            Input.GetKeyDown(heavyKey) ||
+            (controllerEnabled && Input.GetKeyDown(GetJoystickButtonString(joystickNum, 2)));
+
+        a.heavy = heavyPressed ? 1 : 0;
+
+        // -----------------------------
+        // SPECIAL
+        // controller -> joystick button 3
+        // -----------------------------
+        bool specialPressed =
+            Input.GetKeyDown(abilityKey) ||
+            (controllerEnabled && Input.GetKeyDown(GetJoystickButtonString(joystickNum, 3)));
+
+        a.special = specialPressed ? 1 : 0;
+
+        // -----------------------------
+        // PARRY
+        // controller -> joystick button 4
+        // -----------------------------
+        bool parryPressed =
+            Input.GetKeyDown(parryKey) ||
+            (controllerEnabled && Input.GetKeyDown(GetJoystickButtonString(joystickNum, 4)));
+
+        a.parry = parryPressed ? 1 : 0;
+
+        // -----------------------------
+        // BLOCK (hold)
+        // controller -> joystick button 5
+        // -----------------------------
+        bool blockHeld =
+            Input.GetKey(blockKey) ||
+            (controllerEnabled && Input.GetKey(GetJoystickButtonString(joystickNum, 5)));
+
+        a.block = blockHeld ? 1 : 0;
+
+        // -----------------------------
         // CHARGE
-        // branch: 0=none, 1=hold, 2=release
-        //
-        // Character uses:
-        // - GetKeyDown(charge) to start
-        // - GetKeyUp(charge) to release
-        //
-        // For imitation / RL compatibility, it is better to log:
-        // - hold while held
-        // - release on the release frame
-        // --------------------------------------------------
-        bool chargeHeld = Input.GetKey(chargeKey);
-        bool chargeReleased = Input.GetKeyUp(chargeKey);
+        // controller -> joystick button 1
+        // 0=none, 1=hold, 2=release
+        // -----------------------------
+        bool chargeHeld =
+            Input.GetKey(chargeKey) ||
+            (controllerEnabled && Input.GetKey(GetJoystickButtonString(joystickNum, 1)));
+
+        bool chargeReleased =
+            Input.GetKeyUp(chargeKey) ||
+            (controllerEnabled && Input.GetKeyUp(GetJoystickButtonString(joystickNum, 1)));
 
         if (chargeReleased)
             a.charge = 2;
@@ -170,6 +199,43 @@ public static class HumanActionEncoder
             charge = 0,
             parry = 0
         };
+    }
+
+    private static bool IsControllerEnabled(Character self)
+    {
+        if (self == null)
+            return false;
+
+        string[] names = Input.GetJoystickNames();
+        int connectedCount = 0;
+
+        foreach (string n in names)
+        {
+            if (!string.IsNullOrEmpty(n))
+                connectedCount++;
+        }
+
+        if (self.PlayerId == "P1")
+            return connectedCount >= 2;
+
+        if (self.PlayerId == "P2")
+            return connectedCount >= 1;
+
+        return false;
+    }
+
+    private static int GetJoystickNumber(Character self)
+    {
+        if (self == null)
+            return 1;
+
+        // Match Character.ControllerNum(playerNum)
+        return self.PlayerId == "P1" ? 2 : 1;
+    }
+
+    private static string GetJoystickButtonString(int joystickNum, int buttonNum)
+    {
+        return "joystick " + joystickNum + " button " + buttonNum;
     }
 
     // Keeps minimal per-player axis edge memory for up/down detection.

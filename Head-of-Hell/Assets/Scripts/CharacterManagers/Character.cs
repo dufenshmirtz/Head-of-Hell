@@ -234,6 +234,10 @@ public abstract class Character : MonoBehaviour
     protected Collider2D feetTrigger;
 
     private Vector2 groundCheckSize = new Vector2(0.8f, 0.3f);
+
+    private static int spawnIndexP1 = -1;
+    private static int spawnIndexP2 = -1;
+
     
 
     public void SetIncomingDamageContext(string attackerId, MoveType moveType, SourceType sourceType)
@@ -2119,79 +2123,31 @@ public abstract class Character : MonoBehaviour
             return Mathf.Clamp01(cdTimer / lastAbilityCD);
         }
     }
-
-    public virtual void ResetForEpisode()
+    private static readonly Vector3[] spawnPoints =
     {
-        // Position & physics
-        if (rb == null) rb = GetComponent<Rigidbody2D>();
-        rb.velocity = Vector2.zero;
-        rb.angularVelocity = 0f;
-        transform.position = _spawnPos;
-        rb.gravityScale = originalGravityScale;
+        new Vector3(-7.3f, -2.50f, 0f),   // existing P1
+        new Vector3(7.4f, -2.50f, 0f),    // existing P2
 
-        // Core flags
-        ignoreUpdate = false;
-        isBlocking = false;
-        casting = false;
-        stunned = false;
-        knocked = false;
-        knockable = true;
-        justTeleported = false;
-        heavyAttacking = false;
-        isLightAttacking = false;
+        new Vector3(-2.33f, 1.78f, 0f),
+        new Vector3(0.89f, -2.44f, 0f),
+        new Vector3(6.84f, 3.51f, 0f),
+        new Vector3(3.43f, 0.52f, 0f),
+        new Vector3(0.02f, 3.93f, 0f)
+    };
 
-        // Charges / counters
-        charging = false;
-        charged = false;
-        chargeAttackActive = false;
-        counterIsOn = false;
-        counterDone = false;
-        canParry = true;
+    private static void ChooseSpawnPoints()
+    {
+        int count = spawnPoints.Length;
 
-        // Movement & stats
-        moveSpeed = OGMoveSpeed;
-        currHealth = maxHealth;
-        healthbar?.SetHealth(currHealth);
-        jumpDisabled = false;
-        blockDisabled = false;
-        damageShield = false;
+        spawnIndexP1 = UnityEngine.Random.Range(0, count);
 
-        // Cooldowns / UI bits
-        // Stop any running coroutines that control timing (prevents “ghost timers”)
-        StopAllCoroutines();
-        onCooldown = false;
-        cdTimer = 0f;
-        cooldownSlider?.SetValueWithoutNotify(0f);
-        cdbarimage.sprite = ogSprite;
-
-        // Indicators off
-        shield?.SetActive(false);
-        poison?.SetActive(false);
-        Stack1Poison?.SetActive(false);
-        Stack2Poison?.SetActive(false);
-        Stack3Poison?.SetActive(false);
-        stun?.SetActive(false);
-        blockDisabledIndicator?.SetActive(false);
-        quickAttackIndicator?.SetActive(false);
-
-        // Animator sanity
-        if (animator == null) animator = GetComponent<Animator>();
-        animator.Rebind();
-        animator.Update(0f);
-        animator.SetBool("isDead", false);
-        animator.ResetTrigger("tookDmg");
-        animator.ResetTrigger("ChargedHit");
-        animator.SetBool("Charging", false);
-        animator.SetBool("Casting", false);
-        animator.SetBool("IsRunning", false);
-        animator.SetBool("Crouch", false);
-
-        // Re-enable gameplay
-        stayDynamic();
-
-        ActivateColliders();
-        stayDynamic();
+        do
+        {
+            spawnIndexP2 = UnityEngine.Random.Range(0, count);
+        }
+        while (spawnIndexP2 == spawnIndexP1);
     }
+
 
     public virtual void ResetForEpisode2()
     {
@@ -2205,11 +2161,13 @@ public abstract class Character : MonoBehaviour
 
         if (playerNum == 1)
         {
-            transform.position=new Vector3(-7.3f,-2.50f,0f);
+            ChooseSpawnPoints(); // choose once
+
+            transform.position = spawnPoints[spawnIndexP1];
         }
         else
         {
-            transform.position=new Vector3(7.4f,-2.50f,0f);
+            transform.position = spawnPoints[spawnIndexP2];
         }
         
         // Animator sanity
