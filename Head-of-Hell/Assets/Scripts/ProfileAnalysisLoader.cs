@@ -10,14 +10,14 @@ public class ProfileAnalysisLoader : MonoBehaviour
         Load();
     }
 
-    void Load()
+    public void Load()
     {
         string path = Path.Combine(
             Application.streamingAssetsPath,
             "ProfileAnalysis",
             "profile_analysis.json"
         );
-
+       
         if (!File.Exists(path))
         {
             Debug.LogError("Profile analysis JSON not found: " + path);
