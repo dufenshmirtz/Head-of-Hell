@@ -174,7 +174,7 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         if (profileNameText != null) profileNameText.text = p.profile_name;
         if (styleLabelText != null) styleLabelText.text = p.style_label;
         if (eloText != null)
-            eloText.text = Mathf.RoundToInt(p.elo_rating).ToString();
+            eloText.text = $"Elo: {Mathf.RoundToInt(p.elo_rating)}";
         if (matchesText != null) matchesText.text = $"Matches: {p.matches_count}";
         if (winRateText != null) winRateText.text = $"Win Rate: {p.win_rate:P0}";
         if (hitRateText != null) hitRateText.text = $"Hit Rate: {p.hit_rate:P0}";
