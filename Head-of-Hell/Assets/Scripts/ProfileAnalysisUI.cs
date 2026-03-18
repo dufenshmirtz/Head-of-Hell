@@ -80,7 +80,29 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         if (profileAnalysisRoot != null) profileAnalysisRoot.SetActive(false);
         if (profilesMenuRoot != null) profilesMenuRoot.SetActive(true);
     }
+    // CLEAR EMPTY PROFILES 
+    public void ClearProfileView()
+    {
+        currentProfileName = null;
+        currentProfileId = null;
 
+        if (profileNameText != null) profileNameText.text = "";
+        if (styleLabelText != null) styleLabelText.text = "";
+        if (eloText != null) eloText.text = "";
+        if (matchesText != null) matchesText.text = "";
+        if (winRateText != null) winRateText.text = "";
+        if (hitRateText != null) hitRateText.text = "";
+        if (missRateText != null) missRateText.text = "";
+        if (avgDamageDealtText != null) avgDamageDealtText.text = "";
+        if (avgDamageTakenText != null) avgDamageTakenText.text = "";
+
+        if (combatChart != null)
+        {
+            combatChart.SetValues(0f, 0f, 0f, 0f);
+        }
+
+        Debug.Log("ProfileAnalysisPanelUI: cleared profile view.");
+    }
     public void RefreshAnalysis()
     {
         if (loader == null)
@@ -128,8 +150,8 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"RefreshAnalysis: could not restore profile id='{profileIdToRestore}' name='{profileNameToRestore}', showing first");
-            ShowProfile(loader.Data.profiles[0]);
+            Debug.LogWarning($"RefreshAnalysis: could not restore profile id='{profileIdToRestore}' name='{profileNameToRestore}', clearing view");
+            ClearProfileView();
         }
     }
     private void ShowProfile(ProfileAnalysisEntry p)
