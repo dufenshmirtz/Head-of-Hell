@@ -1,0 +1,28 @@
+public static class GameSessionProfileState
+{
+    public static string ActiveP1ProfileId;
+    public static string ActiveP1ProfileName;
+    public static string ActiveP2ProfileId;
+    public static string ActiveP2ProfileName;
+
+    public static string PendingP1ProfileId;
+    public static string PendingP1ProfileName;
+    public static string PendingP2ProfileId;
+    public static string PendingP2ProfileName;
+
+    public static void BeginMatchFromPending()
+    {
+        ActiveP1ProfileId = PendingP1ProfileId;
+        ActiveP1ProfileName = PendingP1ProfileName;
+        ActiveP2ProfileId = PendingP2ProfileId;
+        ActiveP2ProfileName = PendingP2ProfileName;
+    }
+
+    public static void CopyActiveToPending()
+    {
+        PendingP1ProfileId = ActiveP1ProfileId;
+        PendingP1ProfileName = ActiveP1ProfileName;
+        PendingP2ProfileId = ActiveP2ProfileId;
+        PendingP2ProfileName = ActiveP2ProfileName;
+    }
+}

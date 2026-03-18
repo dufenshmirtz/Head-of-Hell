@@ -58,7 +58,10 @@ public class ProfileCarouselSelector : MonoBehaviour
         RefreshUI();
         OnIndexChanged?.Invoke(currentIndex);
     }
-
+    public int GetCurrentIndex()
+    {
+        return currentIndex;
+    }
     private void RefreshUI()
     {
         if (label != null && options.Count > 0)
