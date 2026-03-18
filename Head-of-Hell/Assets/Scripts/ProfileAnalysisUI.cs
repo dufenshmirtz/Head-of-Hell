@@ -68,7 +68,7 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
             Debug.LogWarning($"ProfileAnalysisPanelUI: profile '{profileName}' not found in JSON.");
             return;
         }
-
+        Debug.Log($"OpenForProfileName -> requested '{profileName}', found id='{profile.profile_id}'");
         ShowProfile(profile);
 
         if (profilesMenuRoot != null) profilesMenuRoot.SetActive(false);
@@ -92,6 +92,8 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         string profileIdToRestore = currentProfileId;
         string profileNameToRestore = currentProfileName;
 
+        Debug.Log($"RefreshAnalysis START -> currentProfileId='{profileIdToRestore}', currentProfileName='{profileNameToRestore}'");
+
         loader.Load();
 
         if (loader.Data == null || loader.Data.profiles == null || loader.Data.profiles.Count == 0)
@@ -106,12 +108,18 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         {
             foundProfile = loader.Data.profiles
                 .FirstOrDefault(p => p.profile_id == profileIdToRestore);
+
+            if (foundProfile != null)
+                Debug.Log($"RefreshAnalysis: restored by ID -> {foundProfile.profile_name}");
         }
 
         if (foundProfile == null && !string.IsNullOrWhiteSpace(profileNameToRestore))
         {
             foundProfile = loader.Data.profiles
                 .FirstOrDefault(p => p.profile_name == profileNameToRestore);
+
+            if (foundProfile != null)
+                Debug.Log($"RefreshAnalysis: restored by NAME -> {foundProfile.profile_name}");
         }
 
         if (foundProfile != null)
