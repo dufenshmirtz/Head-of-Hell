@@ -67,7 +67,13 @@ public class ProfilesMenuUI : MonoBehaviour
 
                 if (string.IsNullOrWhiteSpace(profileName) || profileName == "Empty")
                 {
-                    Debug.Log($"Slot {index} is empty. Analysis not opened.");
+                    Debug.Log($"Slot {index} is empty. Clearing analysis view.");
+
+                    if (profileAnalysisPanelUI != null)
+                    {
+                        profileAnalysisPanelUI.ClearProfileView();
+                    }
+
                     return;
                 }
 
@@ -100,4 +106,6 @@ public class ProfilesMenuUI : MonoBehaviour
         if (profilesMenuRoot != null) profilesMenuRoot.SetActive(false);
         if (profileEditorRoot != null) profileEditorRoot.SetActive(true);
     }
+
+
 }
