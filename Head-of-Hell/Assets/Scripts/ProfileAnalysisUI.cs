@@ -101,26 +101,26 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
             combatChart.SetValues(0f, 0f, 0f, 0f);
         }
 
-        Debug.Log("ProfileAnalysisPanelUI: cleared profile view.");
+        //Debug.Log("ProfileAnalysisPanelUI: cleared profile view.");
     }
     public void RefreshAnalysis()
     {
         if (loader == null)
         {
-            Debug.LogError("RefreshAnalysis: loader is NULL");
+            //Debug.LogError("RefreshAnalysis: loader is NULL");
             return;
         }
 
         string profileIdToRestore = currentProfileId;
         string profileNameToRestore = currentProfileName;
 
-        Debug.Log($"RefreshAnalysis START -> currentProfileId='{profileIdToRestore}', currentProfileName='{profileNameToRestore}'");
+        //Debug.Log($"RefreshAnalysis START -> currentProfileId='{profileIdToRestore}', currentProfileName='{profileNameToRestore}'");
 
         loader.Load();
 
         if (loader.Data == null || loader.Data.profiles == null || loader.Data.profiles.Count == 0)
         {
-            Debug.LogWarning("RefreshAnalysis: no profiles found after reload");
+            //Debug.LogWarning("RefreshAnalysis: no profiles found after reload");
             return;
         }
 
@@ -132,7 +132,9 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
                 .FirstOrDefault(p => p.profile_id == profileIdToRestore);
 
             if (foundProfile != null)
-                Debug.Log($"RefreshAnalysis: restored by ID -> {foundProfile.profile_name}");
+            {
+                // Debug.Log($"RefreshAnalysis: restored by ID -> {foundProfile.profile_name}");
+            }
         }
 
         if (foundProfile == null && !string.IsNullOrWhiteSpace(profileNameToRestore))
@@ -141,7 +143,9 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
                 .FirstOrDefault(p => p.profile_name == profileNameToRestore);
 
             if (foundProfile != null)
-                Debug.Log($"RefreshAnalysis: restored by NAME -> {foundProfile.profile_name}");
+            {
+                //Debug.Log($"RefreshAnalysis: restored by NAME -> {foundProfile.profile_name}");
+            }
         }
 
         if (foundProfile != null)
@@ -150,7 +154,7 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"RefreshAnalysis: could not restore profile id='{profileIdToRestore}' name='{profileNameToRestore}', clearing view");
+            //Debug.LogWarning($"RefreshAnalysis: could not restore profile id='{profileIdToRestore}' name='{profileNameToRestore}', clearing view");
             ClearProfileView();
         }
     }
@@ -158,18 +162,7 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
     {
         currentProfileId = p.profile_id;
         currentProfileName = p.profile_name;
-        Debug.Log("ShowProfile -> " + p.profile_name);
-        Debug.Log("Style = " + p.style_label);
-        Debug.Log("Elo = " + p.elo_rating);
-        Debug.Log("WinRate = " + p.win_rate);
-        Debug.Log("HitRate = " + p.hit_rate);
-        Debug.Log("MissRate = " + p.miss_rate);
-        Debug.Log("AvgDamageDealt = " + p.avg_damage_dealt);
-        Debug.Log("AvgDamageTaken = " + p.avg_damage_taken);
-        Debug.Log("AggressionRaw = " + p.aggression_raw);
-        Debug.Log("MobilityRaw = " + p.mobility_raw);
-        Debug.Log("DefenseRaw = " + p.defense_raw);
-        Debug.Log("RiskRaw = " + p.risk_raw);
+      
         
         if (profileNameText != null) profileNameText.text = p.profile_name;
         if (styleLabelText != null) styleLabelText.text = p.style_label;
