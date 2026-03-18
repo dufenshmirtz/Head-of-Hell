@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
     public GameObject saveReplayButton;
+    public GameObject victoryScreenNavigation;
     public AudioManager audioManager;
     public GameObject p1R1, p1R2, p1R3;
     public GameObject p2R1, p2R2, p2R3;
@@ -357,6 +358,8 @@ public class GameManager : MonoBehaviour
             audioManager.PlaySFX(audioManager.dramaticDrums, audioManager.doubleVol);
 
             gameEnd = true;
+            if (victoryScreenNavigation != null)
+                victoryScreenNavigation.SetActive(true);
 
             playAgainButton.SetActive(true);
             mainMenuButton.SetActive(true);
@@ -504,6 +507,8 @@ public class GameManager : MonoBehaviour
     {
         DisableGamePlay();
         // Hide UI
+        if (victoryScreenNavigation != null)
+            victoryScreenNavigation.SetActive(false);
         winner.gameObject.SetActive(false);
         finalWinner.gameObject.SetActive(false);
         playAgainButton.SetActive(false);
