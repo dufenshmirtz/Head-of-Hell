@@ -256,6 +256,8 @@ public class Skipler : Character
         // Reset the velocity after the dash
         rb.velocity = currentVelocity;
 
+        moveSpeed = OGMoveSpeed;
+
         // Reset the gravity scale
         rb.gravityScale = originalGravityScale;
 

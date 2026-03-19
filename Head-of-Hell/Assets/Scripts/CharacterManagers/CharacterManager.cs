@@ -263,9 +263,10 @@ public class CharacterManager : MonoBehaviour
 
     public void Resume()
     {
-        character.stayDynamic();
-        character.ignoreUpdate = false;
         mngr.roundOn=true;
+        //if(!character) return;
+        character.stayDynamic();
+        character.ignoreUpdate = false;    
     }
 
     public void ChangeCharacter(string givenName)
@@ -471,6 +472,10 @@ public class CharacterManager : MonoBehaviour
         var enemy = enemyHandler.GetCurrentCharacter();
 
         me.SetEnemy(enemy);
-        enemy.SetEnemy(me);
+        if (enemy != null)
+        {
+           enemy.SetEnemy(me); 
+        }
+        
     }
 }

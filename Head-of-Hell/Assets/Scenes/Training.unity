@@ -367,7 +367,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -1388,7 +1387,7 @@ PrefabInstance:
     - target: {fileID: 2553929291879454509, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: f1876437b15d78f4dbf917bee5810972, type: 2}
+      objectReference: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
     - target: {fileID: 2584085071129299450, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: P1Name
       value: 
@@ -1699,6 +1698,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: -1
       addedObject: {fileID: 221568230}
+    - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 221568242}
   m_SourcePrefab: {fileID: 100100000, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
 --- !u!1 &57808467
 GameObject:
@@ -6296,6 +6298,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSeconds: 10000
+--- !u!114 &221568242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221568178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d8ccaca227e24409c2cd846ab1f178, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugRewardBreakdown: 1
+  debugProfileLogging: 1
+  debugLogEveryNEpisodes: 1
 --- !u!1 &224284506
 GameObject:
   m_ObjectHideFlags: 0
@@ -9347,7 +9364,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -23467,7 +23483,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -30590,7 +30605,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -35044,7 +35058,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367423824}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b492f403ccb837e46bb46538b1575d22, type: 3}
   m_Name: 
@@ -35052,7 +35066,7 @@ MonoBehaviour:
   character: {fileID: 0}
   setup: {fileID: 1367423877}
   target: {fileID: 0}
-  skill: 1
+  skill: 0
   randomizePersonality: 1
   preferredRange: 1.25
   tooCloseRange: 0.55
@@ -35089,6 +35103,21 @@ MonoBehaviour:
   relYScale: 5
   velScale: 10
   totalCharacterCount: 10
+--- !u!114 &1367423910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367423824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d8ccaca227e24409c2cd846ab1f178, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugRewardBreakdown: 0
+  debugProfileLogging: 0
+  debugLogEveryNEpisodes: 10
 --- !u!1 &1369490559
 GameObject:
   m_ObjectHideFlags: 0
@@ -41972,7 +42001,7 @@ PrefabInstance:
     - target: {fileID: 3775815256451319138, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 8349b7f4e453b9e4b966cd6122db6b70, type: 2}
+      objectReference: {fileID: 9100000, guid: ff2a0ad7d4a68bf44abee2e510ff6c82, type: 2}
     - target: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_LocalScale.x
       value: -1
@@ -42277,6 +42306,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1367423899}
+    - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1367423910}
   m_SourcePrefab: {fileID: 100100000, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
 --- !u!1 &1660255940
 GameObject:
@@ -43588,12 +43620,15 @@ MonoBehaviour:
   decisionP2: {fileID: 1367423863}
   botP2: {fileID: 1367423888}
   oldOpponentModel: {fileID: 5022602860645237092, guid: 69b50906d5bda3449830c3932934cefd, type: 3}
+  phase2StartEpisode: 3000
+  phase3StartEpisode: 5000
+  phase4StartEpisode: 7000
   scriptedWeight: 0.5
   inferenceWeight: 0.25
   mirrorWeight: 0.25
   minScriptedSkill: 0.35
-  maxScriptedSkill: 0.85
-  curriculumEpisodes: 5000
+  maxScriptedSkill: 1
+  curriculumEpisodes: 1000
   currentMode: 0
   episodeIndex: 0
   currentScriptedSkill: 0.35

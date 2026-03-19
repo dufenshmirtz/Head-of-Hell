@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     public AudioManager audioManager;
     public GameObject p1R1, p1R2, p1R3;
     public GameObject p2R1, p2R2, p2R3;
-    static int p1Rounds = 0, p2Rounds = 0;
+    //static int p1Rounds = 0, p2Rounds = 0;
     bool tie = false;
     static string c1Name, c2Name;
     static bool p1Random = false;
@@ -517,23 +517,37 @@ public class GameManager : MonoBehaviour
         if (trainingMode)
         {
             // 0) ΤΕΛΕΙΩΣΕ ΤΑ EPISODES ΠΡΩΤΑ
-            if (agentP1) agentP1.EndEpisode();
-            if (agentP2) agentP2.EndEpisode();
+            if (agentP1 != null && agentP1.enabled)
+                agentP1.DebugEndEpisode("SOFT_RESET");
+                agentP1.EndEpisode();
+
+            if (agentP2 != null && agentP2.enabled)
+                agentP2.DebugEndEpisode("SOFT_RESET");
+                agentP2.EndEpisode();
 
             // 1) περίμενε 1 frame να "καθαρίσει" animator/coroutines/destroy
             yield return null;
 
-            // 2) Reroll (και περίμενε να τελειώσει)
+            // 2) Επίλεξε opponent mode για το επόμενο episode
+            if (opponentDirector != null)
+                opponentDirector.PrepareNextEpisode();
+
+            yield return null;
+
+            // 3) Reroll (και περίμενε να τελειώσει)
             if (p1Manager) yield return StartCoroutine(p1Manager.RerollRandomCharacter_TrainingOnly_Co());
             if (p2Manager) yield return StartCoroutine(p2Manager.RerollRandomCharacter_TrainingOnly_Co());
 
             yield return null;
 
-            // 3) rebind enemies (πρόσεχε τα σωστά refs)
+            // 4) rebind enemies
             var p1 = p1Manager ? p1Manager.GetCurrentCharacter() : null;
             var p2 = p2Manager ? p2Manager.GetCurrentCharacter() : null;
             if (p1 && p2) p1.ChangeEnemy(p2);
             if (p2 && p1) p2.ChangeEnemy(p1);
+
+            if (opponentDirector != null)
+                opponentDirector.RebindAfterCharacterSwap();
         }
 
         // 2) Πάρε τους current χαρακτήρες (ΤΩΡΑ είναι οι σωστοί)
@@ -545,6 +559,7 @@ public class GameManager : MonoBehaviour
         // 3) Reset χαρακτήρων
         if (c1) c1.ResetForEpisode2();
         if (c2) c2.ResetForEpisode2();
+
 
         // 4) Re-enable gameplay
         EnableGamePlay();

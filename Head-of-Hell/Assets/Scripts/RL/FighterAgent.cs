@@ -36,7 +36,6 @@ public class FighterAgent : Agent
     [SerializeField] float rewardLoss = -1.0f;
     [SerializeField] float stepPenalty = -0.0001f;
 
-
     [Header("Minimal Spacing Shaping")]
     [SerializeField] float spacingBonus = +0.0003f;
 
@@ -50,16 +49,16 @@ public class FighterAgent : Agent
     [SerializeField] float usefulRangeMaxY = 0.50f;
 
     [Tooltip("Penalty when agents end up in degenerate stacked states.")]
-    [SerializeField] float stackPenalty = -0.0015f;
+    [SerializeField] float stackPenalty = -0.00015f;
 
     [Tooltip("Very small horizontal gap -> likely overlap/stack exploit.")]
-    [SerializeField] float stackBadX = 0.20f;
+    [SerializeField] float stackBadX = 0.2f;
 
     [Tooltip("Minimum vertical offset for bad head-stack detection.")]
-    [SerializeField] float stackBadMinY = 0.30f;
+    [SerializeField] float stackBadMinY = 0.8f;
 
     [Tooltip("Maximum vertical offset for bad head-stack detection.")]
-    [SerializeField] float stackBadMaxY = 1.20f;
+    [SerializeField] float stackBadMaxY = 1.2f;
 
     [Header("Observation scales")]
     [SerializeField] float relXScale = 9f;
@@ -112,10 +111,12 @@ public class FighterAgent : Agent
 
     [Header("Directional Hygiene")]
     [Tooltip("Tiny penalty for using a Dash-type move without horizontal direction input.")]
-    [SerializeField] float dashNoDirectionPenalty = -0.00045f;
+    [SerializeField] float dashNoDirectionPenalty = -0.00005f;
 
     [Tooltip("Tiny penalty for using special while not facing the opponent.")]
     [SerializeField] float wrongFacingSpecialPenalty = -0.0005f;
+
+    private FighterAgentRewardDebugger rewardDebugger;
 
     // bookkeeping
     int lastSelfHP, lastOppHP;
@@ -128,7 +129,11 @@ public class FighterAgent : Agent
     float edgeAnchorX = 0f;
     bool edgeAnchorInitialized = false;
     float lastAbsDx = 0f;
-    bool profileLoaded= false;
+    bool profileLoaded = false;
+
+    int lastLightAction = 0;
+    int lastSpecialAction = 0;
+    int lastJumpAction = 0;
 
     // optional
     FighterAgent oppAgent;
@@ -141,10 +146,14 @@ public class FighterAgent : Agent
     void Update()
     {
         if (self == null || opp == null)
+        {
             TryBindNow();
+        }
 
         if (self != null && !profileLoaded)
+        {
             RefreshCharacterProfile();
+        }
     }
 
     void TryBindNow()
@@ -172,7 +181,10 @@ public class FighterAgent : Agent
 
     public override void Initialize()
     {
-        if (!selfManager) selfManager = GetComponent<CharacterManager>();
+        if (!selfManager)
+        {
+            selfManager = GetComponent<CharacterManager>();
+        }
 
         aiInput = new AIInputProvider(playerSuffix);
 
@@ -184,12 +196,17 @@ public class FighterAgent : Agent
             enemyManager.OnCharacterReady += BindEnemy;
             enemyManager.OnCharacterChanged += BindEnemy;
         }
+
+        rewardDebugger = GetComponent<FighterAgentRewardDebugger>();
     }
 
     private void BindSelf(Character c)
     {
         self = c;
-        if (self == null) return;
+        if (self == null)
+        {
+            return;
+        }
 
         var setup = self.GetComponent<CharacterSetup>();
 
@@ -204,7 +221,11 @@ public class FighterAgent : Agent
         chargeK = setup.charge;
         parryK = setup.parry;
 
-        if (aiInput == null) aiInput = new AIInputProvider(playerSuffix);
+        if (aiInput == null)
+        {
+            aiInput = new AIInputProvider(playerSuffix);
+        }
+
         aiInput.SetKeys(leftK, rightK, upK, downK, lightK, heavyK, blockK, abilityK, chargeK, parryK);
 
         self.SetInput(aiInput);
@@ -217,22 +238,31 @@ public class FighterAgent : Agent
     private void BindEnemy(Character c)
     {
         opp = c;
-        if (opp != null) lastOppHP = opp.GetCurrentHealth();
+
+        if (opp != null)
+        {
+            lastOppHP = opp.GetCurrentHealth();
+        }
 
         if (self != null && opp != null)
+        {
             lastAbsDx = Mathf.Abs(opp.transform.position.x - self.transform.position.x);
+        }
 
         if (enemyManager != null)
+        {
             oppAgent = enemyManager.GetComponent<FighterAgent>();
+        }
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         if (!self || !opp)
         {
-            // keep count stable
             for (int i = 0; i < 67; i++)
+            {
                 sensor.AddObservation(0f);
+            }
             return;
         }
 
@@ -252,29 +282,23 @@ public class FighterAgent : Agent
         float oppDirSign = Mathf.Sign(rel.x);
         float facingCorrectly = (facingSign == oppDirSign) ? 1f : 0f;
 
-        // relative position
         sensor.AddObservation(nx);
         sensor.AddObservation(ny);
 
-        // absolute spacing helpers
         sensor.AddObservation(absDxNorm);
         sensor.AddObservation(absDyNorm);
 
-        // velocities
         sensor.AddObservation(Mathf.Clamp(vel.x / velScale, -1f, 1f));
         sensor.AddObservation(Mathf.Clamp(vel.y / velScale, -1f, 1f));
         sensor.AddObservation(Mathf.Clamp(ovel.x / velScale, -1f, 1f));
         sensor.AddObservation(Mathf.Clamp(ovel.y / velScale, -1f, 1f));
 
-        // health
         sensor.AddObservation(self.GetCurrentHealth() / 100f);
         sensor.AddObservation(opp.GetCurrentHealth() / 100f);
 
-        // one-hot character ids
         sensor.AddOneHotObservation(self.characterID, totalCharacterCount);
         sensor.AddOneHotObservation(opp.characterID, totalCharacterCount);
 
-        // self state
         sensor.AddObservation(self.IsGrounded);
         sensor.AddObservation(self.IsBlocking);
         sensor.AddObservation(self.IsCasting);
@@ -290,7 +314,6 @@ public class FighterAgent : Agent
         sensor.AddObservation(self.HeavyAttacking);
         sensor.AddObservation(self.Parrying);
 
-        // self disabled flags
         sensor.AddObservation(self.QuickDisabled);
         sensor.AddObservation(self.HeavyDisabled);
         sensor.AddObservation(self.BlockDisabled);
@@ -298,7 +321,6 @@ public class FighterAgent : Agent
         sensor.AddObservation(self.ChargeDisabled);
         sensor.AddObservation(self.JumpDisabled);
 
-        // opponent state
         sensor.AddObservation(opp.IsGrounded);
         sensor.AddObservation(opp.IsBlocking);
         sensor.AddObservation(opp.IsCasting);
@@ -314,7 +336,6 @@ public class FighterAgent : Agent
         sensor.AddObservation(opp.HeavyAttacking);
         sensor.AddObservation(opp.Parrying);
 
-        // facing hints
         sensor.AddObservation(oppDirSign);
         sensor.AddObservation(facingSign);
         sensor.AddObservation(facingCorrectly);
@@ -322,118 +343,132 @@ public class FighterAgent : Agent
 
     void ShapingRewards()
     {
-        if (self == null || opp == null) return;
+        if (self == null || opp == null)
+        {
+            return;
+        }
+
+        if (GameManager.instance == null || !GameManager.instance.roundOn)
+        {
+            return;
+        }
 
         float absDx = Mathf.Abs(opp.transform.position.x - self.transform.position.x);
         float absDy = Mathf.Abs(opp.transform.position.y - self.transform.position.y);
 
-        // tiny reward for useful melee spacing
         bool inUsefulRange =
             absDx >= usefulRangeMinX &&
             absDx <= usefulRangeMaxX &&
             absDy <= usefulRangeMaxY;
 
         if (inUsefulRange)
+        {
             AddReward(spacingBonus);
+            rewardDebugger?.LogSpacing(spacingBonus);
+        }
 
-        // punish standing on top of opponent / head-stacking exploit
         bool badStack =
             absDx < stackBadX &&
             absDy > stackBadMinY &&
             absDy < stackBadMaxY;
 
         if (badStack)
+        {
             AddReward(stackPenalty);
+            rewardDebugger?.LogStackPenalty(stackPenalty);
+        }
     }
 
     public override void WriteDiscreteActionMask(IDiscreteActionMask actionMask)
     {
-        if (self == null) return;
-
-        // Branch layout:
-        // 0: Move (3)      left / idle / right
-        // 1: Jump (2)
-        // 2: Drop (2)
-        // 3: Light (2)
-        // 4: Heavy (2)
-        // 5: Block (2)
-        // 6: Special (2)
-        // 7: Charge (3)    none / hold / release
-        // 8: Parry (2)
+        if (self == null)
+        {
+            return;
+        }
 
         bool locked = self.IsStunned || self.IsCasting;
 
-        // CHARGE lock logic
         if (self.IsCharging)
         {
-            actionMask.SetActionEnabled(1, 1, false); // jump
-            actionMask.SetActionEnabled(2, 1, false); // drop
-            actionMask.SetActionEnabled(3, 1, false); // light
-            actionMask.SetActionEnabled(4, 1, false); // heavy
-            actionMask.SetActionEnabled(5, 1, false); // block
-            actionMask.SetActionEnabled(6, 1, false); // special
-            actionMask.SetActionEnabled(8, 1, false); // parry
+            actionMask.SetActionEnabled(1, 1, false);
+            actionMask.SetActionEnabled(2, 1, false);
+            actionMask.SetActionEnabled(3, 1, false);
+            actionMask.SetActionEnabled(4, 1, false);
+            actionMask.SetActionEnabled(5, 1, false);
+            actionMask.SetActionEnabled(6, 1, false);
+            actionMask.SetActionEnabled(8, 1, false);
 
-            // move -> only idle
-            actionMask.SetActionEnabled(0, 0, false); // left
-            actionMask.SetActionEnabled(0, 2, false); // right
+            actionMask.SetActionEnabled(0, 0, false);
+            actionMask.SetActionEnabled(0, 2, false);
 
             if (self.IsCharged)
             {
-                // only release
-                actionMask.SetActionEnabled(7, 0, false); // none
-                actionMask.SetActionEnabled(7, 1, false); // hold
+                actionMask.SetActionEnabled(7, 0, false);
+                actionMask.SetActionEnabled(7, 1, false);
             }
             else
             {
-                // allow hold or release, disable none
                 actionMask.SetActionEnabled(7, 0, false);
             }
 
             return;
         }
 
-        // jump
         bool canJumpNow = self.IsGrounded;
         if (!canJumpNow || locked || self.JumpDisabled)
+        {
             actionMask.SetActionEnabled(1, 1, false);
+        }
 
-        // drop
         if (!self.IsGrounded || locked)
+        {
             actionMask.SetActionEnabled(2, 1, false);
+        }
 
-        // light
         if (locked || self.QuickDisabled)
+        {
             actionMask.SetActionEnabled(3, 1, false);
+        }
 
-        // heavy
         if (locked || self.HeavyDisabled)
+        {
             actionMask.SetActionEnabled(4, 1, false);
+        }
 
-        // block
         if (locked || self.BlockDisabled)
+        {
             actionMask.SetActionEnabled(5, 1, false);
+        }
 
-        // special
         if (locked || self.OnAbilityCD || !self.CanCast || self.SpecialDisabled)
+        {
             actionMask.SetActionEnabled(6, 1, false);
+        }
 
-        // charge
         bool canChargeNow = !locked && !self.ChargeDisabled;
         if (!canChargeNow)
         {
-            actionMask.SetActionEnabled(7, 1, false); // hold
-            actionMask.SetActionEnabled(7, 2, false); // release
+            actionMask.SetActionEnabled(7, 1, false);
+            actionMask.SetActionEnabled(7, 2, false);
         }
 
-        // parry
         if (locked || !self.CanParry)
+        {
             actionMask.SetActionEnabled(8, 1, false);
+        }
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        if (!self) return;
+        if (!self)
+        {
+            return;
+        }
+
+        if (GameManager.instance == null || !GameManager.instance.roundOn)
+        {
+            return;
+        }
 
         int moveBranch = actions.DiscreteActions[0];
         int jump = actions.DiscreteActions[1];
@@ -464,45 +499,45 @@ public class FighterAgent : Agent
 
         aiInput.Apply(cmd);
 
-        // time pressure
         AddReward(stepPenalty);
+        rewardDebugger?.LogStepPenalty(stepPenalty);
 
-        // damage deltas
         int selfHP = self.GetCurrentHealth();
         int oppHP = (opp != null) ? opp.GetCurrentHealth() : lastOppHP;
 
         int dealt = Mathf.Max(0, lastOppHP - oppHP);
         int taken = Mathf.Max(0, lastSelfHP - selfHP);
 
-        AddReward(dealt * rewardDamageDealt);
-        AddReward(taken * rewardDamageTaken);
+        float dealtReward = dealt * rewardDamageDealt;
+        float takenReward = taken * rewardDamageTaken;
+
+        AddReward(dealtReward);
+        AddReward(takenReward);
+
+        rewardDebugger?.LogDamageDealt(dealtReward);
+        rewardDebugger?.LogDamageTaken(takenReward);
 
         lastSelfHP = selfHP;
         lastOppHP = oppHP;
 
         ShapingRewards();
-
         BehaviorHygieneRewards(jump, drop, light, heavy, blockHold, special, chargeMode, parry);
-
         TacticalRangeRewards(light, heavy, special, chargeMode);
-
         DirectionalHygieneRewards(moveX, light, special);
 
-        // terminal
         if (opp != null && oppHP <= 0)
         {
             AddReward(rewardWin);
-            // EndEpisode();
+            rewardDebugger?.LogWinReward(rewardWin);
             return;
         }
 
         if (selfHP <= 0)
         {
             AddReward(rewardLoss);
-            // EndEpisode();
+            rewardDebugger?.LogLossReward(rewardLoss);
             return;
         }
-
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -510,8 +545,14 @@ public class FighterAgent : Agent
         var d = actionsOut.DiscreteActions;
 
         d[0] = 1;
-        if (Input.GetKey(leftK)) d[0] = 0;
-        if (Input.GetKey(rightK)) d[0] = 2;
+        if (Input.GetKey(leftK))
+        {
+            d[0] = 0;
+        }
+        if (Input.GetKey(rightK))
+        {
+            d[0] = 2;
+        }
 
         d[1] = Input.GetKey(upK) ? 1 : 0;
         d[2] = Input.GetKey(downK) ? 1 : 0;
@@ -522,29 +563,52 @@ public class FighterAgent : Agent
         d[6] = Input.GetKey(abilityK) ? 1 : 0;
 
         if (Input.GetKeyUp(chargeK))
-            d[7] = 2;   // release
+        {
+            d[7] = 2;
+        }
         else if (Input.GetKey(chargeK))
-            d[7] = 1;   // hold
+        {
+            d[7] = 1;
+        }
         else
-            d[7] = 0;   // none
+        {
+            d[7] = 0;
+        }
+
         d[8] = Input.GetKey(parryK) ? 1 : 0;
     }
 
     public override void OnEpisodeBegin()
     {
         TryBindNow();
-        if (self == null || opp == null) return;
+
+        if (self == null || opp == null)
+        {
+            return;
+        }
+
+        rewardDebugger?.BeginEpisode(
+            playerSuffix,
+            CurrentCharacterIdOrNull(),
+            lightReachType,
+            specialReachType,
+            profileLoaded
+        );
 
         lastSelfHP = self.GetCurrentHealth();
         lastOppHP = opp.GetCurrentHealth();
         lastMoveX = 0;
 
         if (self != null && opp != null)
+        {
             lastAbsDx = Mathf.Abs(opp.transform.position.x - self.transform.position.x);
+        }
         else
+        {
             lastAbsDx = 0f;
-        lastActionIntent = 0;
+        }
 
+        lastActionIntent = 0;
         consecutiveActionChanges = 0;
 
         edgeStayTimer = 0f;
@@ -567,6 +631,10 @@ public class FighterAgent : Agent
                 parry = false
             });
         }
+
+        lastLightAction = 0;
+        lastSpecialAction = 0;
+        lastJumpAction = 0;
     }
 
     private void OnDestroy()
@@ -586,32 +654,42 @@ public class FighterAgent : Agent
 
     void BehaviorHygieneRewards(int jump, int drop, int light, int heavy, int blockHold, int special, int chargeMode, int parry)
     {
-        if (self == null || opp == null) return;
+        if (self == null || opp == null)
+        {
+            return;
+        }
 
-        // -------------------------
-        // A) Mild anti-mash shaping
-        // -------------------------
+        if (GameManager.instance == null || !GameManager.instance.roundOn)
+        {
+            return;
+        }
+
         int currentIntent = GetActionIntent(jump, drop, light, heavy, blockHold, special, chargeMode, parry);
 
         if (currentIntent != 0 && lastActionIntent != 0 && currentIntent != lastActionIntent)
+        {
             consecutiveActionChanges++;
+        }
         else if (currentIntent == 0 || currentIntent == lastActionIntent)
+        {
             consecutiveActionChanges = 0;
+        }
 
         if (consecutiveActionChanges >= mashChangeThreshold)
+        {
             AddReward(mashPenalty);
+            rewardDebugger?.LogMashPenalty(mashPenalty);
+        }
 
         lastActionIntent = currentIntent;
 
-        // --------------------------------
-        // B) Mild anti-useless-air-jump
-        // --------------------------------
-        if (jump == 1 && !self.IsGrounded)
+        bool jumpPressedNow = (jump == 1 && lastJumpAction == 0);
+        if (jumpPressedNow && !self.IsGrounded)
+        {
             AddReward(airJumpPenalty);
+            rewardDebugger?.LogAirJumpPenalty(airJumpPenalty);
+        }
 
-        // --------------------------------
-        // C) Mild anti-edge-camp shaping
-        // --------------------------------
         float x = self.transform.position.x;
         bool nearEdge = Mathf.Abs(x) >= edgeZoneX;
 
@@ -631,7 +709,10 @@ public class FighterAgent : Agent
                 edgeStayTimer += Time.fixedDeltaTime;
 
                 if (edgeStayTimer > edgeGraceTime)
+                {
                     AddReward(edgeCampPenalty);
+                    rewardDebugger?.LogEdgeCampPenalty(edgeCampPenalty);
+                }
             }
             else
             {
@@ -644,27 +725,46 @@ public class FighterAgent : Agent
             edgeAnchorInitialized = false;
             edgeStayTimer = 0f;
         }
+
+        lastJumpAction = jump;
     }
 
     int GetActionIntent(int jump, int drop, int light, int heavy, int blockHold, int special, int chargeMode, int parry)
     {
-        // Priority-based intent bucket
-        // 0 = none
-        // 1 = jump/drop mobility action
-        // 2 = light
-        // 3 = heavy
-        // 4 = block
-        // 5 = special
-        // 6 = charge
-        // 7 = parry
+        if (parry == 1)
+        {
+            return 7;
+        }
 
-        if (parry == 1) return 7;
-        if (chargeMode != 0) return 6;
-        if (special == 1) return 5;
-        if (blockHold == 1) return 4;
-        if (heavy == 1) return 3;
-        if (light == 1) return 2;
-        if (jump == 1 || drop == 1) return 1;
+        if (chargeMode != 0)
+        {
+            return 6;
+        }
+
+        if (special == 1)
+        {
+            return 5;
+        }
+
+        if (blockHold == 1)
+        {
+            return 4;
+        }
+
+        if (heavy == 1)
+        {
+            return 3;
+        }
+
+        if (light == 1)
+        {
+            return 2;
+        }
+
+        if (jump == 1 || drop == 1)
+        {
+            return 1;
+        }
 
         return 0;
     }
@@ -676,43 +776,57 @@ public class FighterAgent : Agent
 
     void TacticalRangeRewards(int light, int heavy, int special, int chargeMode)
     {
-        if (self == null || opp == null) return;
+        if (self == null || opp == null)
+        {
+            return;
+        }
+
+        if (GameManager.instance == null || !GameManager.instance.roundOn)
+        {
+            return;
+        }
 
         float absDx = Mathf.Abs(opp.transform.position.x - self.transform.position.x);
         float absDy = Mathf.Abs(opp.transform.position.y - self.transform.position.y);
 
-        // --------------------------------
-        // A) Encourage closing distance
-        // only when clearly outside melee threat range
-        // --------------------------------
         float approachStartDistance = usefulRangeMaxX + approachStartMargin;
         bool farFromOpponent = absDx > approachStartDistance;
 
         if (farFromOpponent && absDx < lastAbsDx)
+        {
             AddReward(approachBonus);
+            rewardDebugger?.LogApproachReward(approachBonus);
+        }
 
-        // --------------------------------
-        // B) Heavy / Charge absurdly-far misuse
-        // --------------------------------
         bool absurdlyFar = absDx >= extremeFarThreshold;
 
         if (absurdlyFar)
         {
             if (heavy == 1)
+            {
                 AddReward(extremeFarHeavyPenalty);
+                rewardDebugger?.LogExtremeFarHeavyPenalty(extremeFarHeavyPenalty);
+            }
 
             if (chargeMode == 1)
+            {
                 AddReward(extremeFarChargePenalty);
+                rewardDebugger?.LogExtremeFarChargePenalty(extremeFarChargePenalty);
+            }
 
-            // --------------------------------
-            // C) Optional: far melee-only light/special misuse
-            // only punish if the move category is strictly melee
-            // --------------------------------
             if (light == 1 && IsStrictMelee(lightReachType))
+            {
+                Debug.Log($"[FarMeleeLight TRIGGER] CharID={self.characterID} LightReach={lightReachType} absDx={absDx}");
                 AddReward(farMeleeLightPenalty);
+                rewardDebugger?.LogFarMeleeLightPenalty(farMeleeLightPenalty);
+            }
 
             if (special == 1 && IsStrictMelee(specialReachType))
+            {
+                Debug.Log($"[FarMeleeSpecial TRIGGER] CharID={self.characterID} SpecialReach={specialReachType} absDx={absDx}");
                 AddReward(farMeleeSpecialPenalty);
+                rewardDebugger?.LogFarMeleeSpecialPenalty(farMeleeSpecialPenalty);
+            }
         }
 
         lastAbsDx = absDx;
@@ -720,17 +834,30 @@ public class FighterAgent : Agent
 
     void RefreshCharacterProfile()
     {
-        // safe defaults
         lightReachType = ReachType.Melee;
         specialReachType = ReachType.Melee;
         profileLoaded = false;
 
-        if (self == null) return;
-        if (self.characterID < 0) return;
-        if (CharacterMLProfileDatabase.Instance == null) return;
+        if (self == null)
+        {
+            return;
+        }
+
+        if (self.characterID < 0)
+        {
+            return;
+        }
+
+        if (CharacterMLProfileDatabase.Instance == null)
+        {
+            return;
+        }
 
         var profile = CharacterMLProfileDatabase.Instance.GetProfileByID(self.characterID);
-        if (profile == null) return;
+        if (profile == null)
+        {
+            return;
+        }
 
         lightReachType = profile.lightReachType;
         specialReachType = profile.specialReachType;
@@ -744,7 +871,10 @@ public class FighterAgent : Agent
 
     bool IsFacingOpponent()
     {
-        if (self == null || opp == null) return true;
+        if (self == null || opp == null)
+        {
+            return true;
+        }
 
         float relX = opp.transform.position.x - self.transform.position.x;
         float oppDirSign = Mathf.Sign(relX);
@@ -755,27 +885,88 @@ public class FighterAgent : Agent
 
     void DirectionalHygieneRewards(int moveX, int light, int special)
     {
-        if (self == null || opp == null) return;
-
-        // --------------------------------
-        // A) Dash-type move with no X direction
-        // --------------------------------
-        if (moveX == 0)
+        if (self == null || opp == null)
         {
-            if (light == 1 && IsDashType(lightReachType))
-                AddReward(dashNoDirectionPenalty);
-
-            if (special == 1 && IsDashType(specialReachType))
-                AddReward(dashNoDirectionPenalty);
+            return;
         }
 
-        // --------------------------------
-        // B) Special while facing away
-        // --------------------------------
+        if (GameManager.instance == null || !GameManager.instance.roundOn)
+        {
+            return;
+        }
+
+        bool lightPressedNow = (light == 1 && lastLightAction == 0);
+        bool specialPressedNow = (special == 1 && lastSpecialAction == 0);
+
+        if (moveX == 0)
+        {
+            if (lightPressedNow && IsDashType(lightReachType))
+            {
+                AddReward(dashNoDirectionPenalty);
+                rewardDebugger?.LogDashNoDirectionPenalty(dashNoDirectionPenalty);
+            }
+
+            if (specialPressedNow && IsDashType(specialReachType))
+            {
+                AddReward(dashNoDirectionPenalty);
+                rewardDebugger?.LogDashNoDirectionPenalty(dashNoDirectionPenalty);
+            }
+        }
+
         bool facingOpponent = IsFacingOpponent();
 
-        // Penalize only if special is not Global
-        if (special == 1 && !facingOpponent && specialReachType != ReachType.Global)
+        if (specialPressedNow && !facingOpponent && specialReachType != ReachType.Global)
+        {
             AddReward(wrongFacingSpecialPenalty);
+            rewardDebugger?.LogWrongFacingSpecialPenalty(wrongFacingSpecialPenalty);
+        }
+
+        lastLightAction = light;
+        lastSpecialAction = special;
+    }
+
+    public void ClearInput()
+    {
+        if (aiInput != null)
+        {
+            aiInput.Apply(new AIInputProvider.Command
+            {
+                moveX = 0,
+                jump = false,
+                drop = false,
+                light = false,
+                heavy = false,
+                blockHold = false,
+                special = false,
+                chargeHold = false,
+                chargeRelease = false,
+                parry = false
+            });
+        }
+    }
+
+    public void ForceRebind()
+    {
+        self = null;
+        opp = null;
+        profileLoaded = false;
+        TryBindNow();
+    }
+
+    int? CurrentCharacterIdOrNull()
+    {
+        return self != null ? self.characterID : (int?)null;
+    }
+
+    public void DebugEndEpisode(string reason)
+    {
+        rewardDebugger?.EndEpisode(
+            playerSuffix,
+            reason,
+            CurrentCharacterIdOrNull(),
+            lightReachType,
+            specialReachType,
+            profileLoaded
+        );
     }
 }
