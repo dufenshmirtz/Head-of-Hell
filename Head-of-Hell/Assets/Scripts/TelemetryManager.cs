@@ -13,7 +13,7 @@ public class TelemetryManager : MonoBehaviour
 
     [Header("Telemetry Settings")]
     [SerializeField] private bool enableTelemetry = true;
-    [SerializeField] private bool debugToConsole = false;        // Keep old Debug.Log behavior if you want
+    [SerializeField] private bool debugToConsole = false;
     [SerializeField] private bool prettyPrintJson = true;
     [SerializeField] private bool autoStartOnFirstEvent = true;
 
@@ -26,8 +26,8 @@ public class TelemetryManager : MonoBehaviour
     private float sessionStartTime;
     private string pendingEndReason = null;
 
-    // Folder & filename
-    private string telemetryFolderPath;
+    // Root telemetry folder
+    private string telemetryRootFolderPath;
 
     private void Awake()
     {
@@ -37,17 +37,20 @@ public class TelemetryManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        telemetryFolderPath = Path.Combine(
+        telemetryRootFolderPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "My Games",
             "Head of Hell",
             "Telemetry"
         );
 
-        Directory.CreateDirectory(telemetryFolderPath);
+        Directory.CreateDirectory(telemetryRootFolderPath);
+        Directory.CreateDirectory(Path.Combine(telemetryRootFolderPath, "Editor"));
+        Directory.CreateDirectory(Path.Combine(telemetryRootFolderPath, "Build"));
     }
 
     // ---------------------------
@@ -76,6 +79,12 @@ public class TelemetryManager : MonoBehaviour
 
         sessionStartTime = Time.time;
 
+        TelemetryMatchMeta finalMeta = meta ?? new TelemetryMatchMeta();
+
+        // Runtime environment is always auto-filled here
+        finalMeta.runtimeEnvironment = Application.isEditor ? "Editor" : "Build";
+        finalMeta.isEditorSession = Application.isEditor;
+
         currentSession = new TelemetrySession
         {
             schemaVersion = "1.0",
@@ -85,17 +94,17 @@ public class TelemetryManager : MonoBehaviour
             unityVersion = Application.unityVersion,
             appVersion = Application.version,
             platform = Application.platform.ToString(),
-            meta = meta ?? new TelemetryMatchMeta(),
+            meta = finalMeta,
             events = new List<TelemetryEvent>(capacity: 2048)
         };
 
         isRecording = true;
 
         if (debugToConsole)
-            Debug.Log($"[Telemetry] Session START: {currentSession.matchId}");
+            Debug.Log($"[Telemetry] Session START: {currentSession.matchId} | env={currentSession.meta.runtimeEnvironment}");
     }
 
-    //HELPER FOR TELEMETRY TO THROW EMPTY MATCHES AND NOT SAVE THEM 
+    // HELPER FOR TELEMETRY TO THROW EMPTY MATCHES AND NOT SAVE THEM
     private bool CurrentSessionLooksInvalidOrEmpty()
     {
         if (currentSession == null)
@@ -127,6 +136,7 @@ public class TelemetryManager : MonoBehaviour
         isRecording = false;
         sessionStartTime = 0f;
     }
+
     /// <summary>
     /// Ends current session and writes a JSON file to disk.
     /// </summary>
@@ -185,12 +195,16 @@ public class TelemetryManager : MonoBehaviour
         if (meta.winnerId != null) currentSession.meta.winnerId = meta.winnerId;
         if (meta.winnerCharacter != null) currentSession.meta.winnerCharacter = meta.winnerCharacter;
 
-        // --- Profile identity merge ---
+        // Profile identity merge
         if (!string.IsNullOrEmpty(meta.p1ProfileId)) currentSession.meta.p1ProfileId = meta.p1ProfileId;
         if (!string.IsNullOrEmpty(meta.p1ProfileName)) currentSession.meta.p1ProfileName = meta.p1ProfileName;
 
         if (!string.IsNullOrEmpty(meta.p2ProfileId)) currentSession.meta.p2ProfileId = meta.p2ProfileId;
         if (!string.IsNullOrEmpty(meta.p2ProfileName)) currentSession.meta.p2ProfileName = meta.p2ProfileName;
+
+        // Keep runtime environment auto-consistent
+        currentSession.meta.runtimeEnvironment = Application.isEditor ? "Editor" : "Build";
+        currentSession.meta.isEditorSession = Application.isEditor;
     }
 
     /// <summary>
@@ -200,6 +214,8 @@ public class TelemetryManager : MonoBehaviour
     {
         if (!enableTelemetry) return;
         EnsureSessionStarted();
+        if (currentSession == null) return;
+
         currentSession.meta.p1Id = p1Id;
         currentSession.meta.p1Character = p1Character;
         currentSession.meta.p2Id = p2Id;
@@ -257,17 +273,17 @@ public class TelemetryManager : MonoBehaviour
     }
 
     public void LogDamageApplied(
-    string attackerId,
-    string defenderId,
-    MoveType moveType,
-    SourceType sourceType,
-    int finalDamage,
-    int hpBefore,
-    int hpAfter,
-    float distance,
-    bool wasBlocked,
-    bool wasDodged
-)
+        string attackerId,
+        string defenderId,
+        MoveType moveType,
+        SourceType sourceType,
+        int finalDamage,
+        int hpBefore,
+        int hpAfter,
+        float distance,
+        bool wasBlocked,
+        bool wasDodged
+    )
     {
         if (!enableTelemetry) return;
         EnsureSessionStarted();
@@ -314,12 +330,18 @@ public class TelemetryManager : MonoBehaviour
     {
         try
         {
-            Directory.CreateDirectory(telemetryFolderPath);
+            string runtimeFolder =
+                session.meta != null && !string.IsNullOrWhiteSpace(session.meta.runtimeEnvironment)
+                    ? session.meta.runtimeEnvironment
+                    : (Application.isEditor ? "Editor" : "Build");
+
+            string finalFolder = Path.Combine(telemetryRootFolderPath, runtimeFolder);
+            Directory.CreateDirectory(finalFolder);
 
             // Safe filename
             string safeStart = session.startedAtLocal.Replace(":", "-").Replace(" ", "_");
             string fileName = $"match_{safeStart}_{session.matchId}.json";
-            string fullPath = Path.Combine(telemetryFolderPath, fileName);
+            string fullPath = Path.Combine(finalFolder, fileName);
 
             string json = JsonUtility.ToJson(session, prettyPrintJson);
             File.WriteAllText(fullPath, json);
@@ -371,7 +393,7 @@ public class TelemetryMatchMeta
     public string map = "";
     public string mode = "1v1";
 
-    // NEW: round-level metadata (since you save JSON per round)
+    // Round-level metadata
     public int roundNumber = 0;
 
     // Players
@@ -381,19 +403,23 @@ public class TelemetryMatchMeta
     public string p2Id = "";
     public string p2Character = "";
 
-    // NEW: outcome
-    public string winnerId = "";          // "P1" / "P2" (or empty for tie)
-    public string winnerCharacter = "";   // character name (or empty for tie)
+    // Outcome
+    public string winnerId = "";          // "P1" / "P2" / empty for tie
+    public string winnerCharacter = "";   // character name / empty for tie
 
-    // NEW: training flag
+    // Existing training flag
     public bool trainingMode = false;
 
-    // NEW: profile identity
+    // Profile identity
     public string p1ProfileId = "";
     public string p1ProfileName = "";
 
     public string p2ProfileId = "";
     public string p2ProfileName = "";
+
+    // NEW: runtime separation
+    public string runtimeEnvironment = "";   // "Editor" / "Build"
+    public bool isEditorSession = false;
 }
 
 [Serializable]
@@ -445,9 +471,10 @@ public class TelemetryEvent
     public bool wasBlocked;      // DamageApplied only
     public bool wasDodged;       // DamageApplied only
 
-    public float distance;          // -1 if unknown
-    public int hpDefenderBefore;    // -1 if unknown
-    public int hpDefenderAfter;     // -1 if unknown
+    public float distance;       // -1 if unknown
+    public int hpDefenderBefore; // -1 if unknown
+    public int hpDefenderAfter;  // -1 if unknown
+
     public static TelemetryEvent CreateBase(EventType type, float sessionStartTime)
     {
         return new TelemetryEvent

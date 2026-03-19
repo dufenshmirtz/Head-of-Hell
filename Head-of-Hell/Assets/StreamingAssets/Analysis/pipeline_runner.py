@@ -1,4 +1,4 @@
-import argparse
+﻿import argparse
 import os
 import subprocess
 import sys
@@ -16,18 +16,49 @@ def file_exists(path):
     return os.path.isfile(path)
 
 
+def get_default_output_root():
+    documents_dir = os.path.join(os.path.expanduser("~"), "Documents")
+    return os.path.join(documents_dir, "My Games", "Head of Hell", "PipelineOutputs")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Run the telemetry analysis pipeline for the fighting game project."
     )
 
+    output_root = get_default_output_root()
+
     parser.add_argument("--python", default=sys.executable, help="Python executable to use")
-    parser.add_argument("--telemetry-dir", default="Telemetry", help="Telemetry folder path")
-    parser.add_argument("--out-dir", default="out", help="Extractor output folder")
-    parser.add_argument("--elo-out-dir", default="out_elo", help="Elo output folder")
-    parser.add_argument("--style-out-dir", default="style_out", help="Clustering output folder")
-    parser.add_argument("--style-maps-dir", default="style_maps", help="Round style map output folder")
-    parser.add_argument("--player-style-maps-dir", default="player_style_maps", help="Player style map output folder")
+    parser.add_argument(
+        "--telemetry-dir",
+        default=os.path.join("Telemetry", "Build"),
+        help="Telemetry folder path"
+    )
+    parser.add_argument(
+        "--out-dir",
+        default=os.path.join(output_root, "out"),
+        help="Extractor output folder"
+    )
+    parser.add_argument(
+        "--elo-out-dir",
+        default=os.path.join(output_root, "out_elo"),
+        help="Elo output folder"
+    )
+    parser.add_argument(
+        "--style-out-dir",
+        default=os.path.join(output_root, "style_out"),
+        help="Clustering output folder"
+    )
+    parser.add_argument(
+        "--style-maps-dir",
+        default=os.path.join(output_root, "style_maps"),
+        help="Round style map output folder"
+    )
+    parser.add_argument(
+        "--player-style-maps-dir",
+        default=os.path.join(output_root, "player_style_maps"),
+        help="Player style map output folder"
+    )
 
     parser.add_argument("--with-check", action="store_true", help="Also run telemetry_check.py first")
     parser.add_argument("--with-player-style-prof", action="store_true", help="Also run player_style_prof.py at the end")
@@ -36,6 +67,9 @@ def main():
 
     py = args.python
     steps = []
+
+    print(f"\nUsing telemetry folder: {args.telemetry_dir}")
+    print(f"Using output root: {output_root}")
 
     if args.with_check and file_exists("telemetry_check.py"):
         steps.append((
@@ -91,18 +125,21 @@ def main():
         ))
     else:
         print("\n[WARN] round_style_map.py not found -> skipping round style maps")
-    
+
     if file_exists("export_profile_analysis.py"):
-         steps.append((
+        steps.append((
             [
                 py, "export_profile_analysis.py",
                 "--input", os.path.join(args.out_dir, "dataset_profile_level.csv"),
                 "--output-dir", os.path.join(args.out_dir, "profile_analysis"),
-               "--unity-output", os.path.join("out", "profile_analysis", "profile_analysis.json"),
+
+                # Κρατάμε αυτό όπως είναι προς το παρόν για να μη ρισκάρουμε το refresh flow
+                "--unity-output", os.path.join("out", "profile_analysis", "profile_analysis.json"),
             ],
             "export_profile_analysis.py"
-         ))
-
+        ))
+    else:
+        raise FileNotFoundError("Missing export_profile_analysis.py")
 
     if file_exists("player_style_map.py"):
         steps.append((
