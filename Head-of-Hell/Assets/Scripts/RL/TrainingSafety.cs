@@ -125,6 +125,9 @@ public class TrainingSafety : MonoBehaviour
         if (gameManager == null || !gameManager.trainingMode)
             return;
 
+        if (!gameManager.roundOn)
+            return;
+            
         var c1 = p1Manager ? p1Manager.GetCurrentCharacter() : null;
         var c2 = p2Manager ? p2Manager.GetCurrentCharacter() : null;
         if (c1 == null || c2 == null) return;
@@ -139,9 +142,6 @@ public class TrainingSafety : MonoBehaviour
         {
             lastPos1 = c1.transform.position;
             lastPos2 = c2.transform.position;
-            print( "@@weird "+weirdTimerP1+"   "+ weirdTimerP2);
-            print( "@@cast "+castTimerP1+"   "+ castTimerP2);
-            print( "@@charge "+chargeTimerP1+"   "+ chargeTimerP2);
             hasLastPos = true;
             return;
         }

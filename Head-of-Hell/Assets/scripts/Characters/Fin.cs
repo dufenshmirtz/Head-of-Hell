@@ -53,7 +53,6 @@ public class Fin : Character
         {
             TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Heavy);
             audioManager.PlaySFX(audioManager.swoosh, 1f);
-            print("[t]heavyhitinmiss");
         }
 
     }
@@ -160,6 +159,7 @@ public class Fin : Character
 
         // Reset the velocity after the roll
         rb.velocity = currentVelocity;
+        moveSpeed = OGMoveSpeed;
 
         // Re-enable colliders after rolling
         foreach (Collider2D collider in colliders)
@@ -179,6 +179,7 @@ public class Fin : Character
         ignoreDamage = false;
         knockable = true;
         isRolling = false;
+        isBlocking = false;
 
         StartCoroutine(ResetRoll());
     }

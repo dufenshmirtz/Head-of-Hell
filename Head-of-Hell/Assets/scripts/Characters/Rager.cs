@@ -12,7 +12,7 @@ public class Rager : Character
     int lightDamage = 4;
     bool spellHit = false;
 
-    float spellTime = 2.02f;
+    float spellTime = 2.5f;
 
 
     #region HeavyAttack

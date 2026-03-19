@@ -57,6 +57,25 @@ public class SimpleBotController : MonoBehaviour
         RandomizePersonality();
     }
 
+    private void OnEnable()
+    {
+        thinkTimer = 0f;
+        actionTimer = 0f;
+        blockHoldTimer = 0f;
+
+        forcedVerticalTimer = 0f;
+        forcedVerticalValue = 0f;
+        isDroppingThroughPlatform = false;
+
+        initialized = false;
+    }
+
+    private void OnDisable()
+    {
+        if (botInput != null)
+            botInput.ClearFrameState();
+    }
+
     private void Update()
     {
         if (!initialized)
@@ -302,5 +321,25 @@ public class SimpleBotController : MonoBehaviour
     public void SetTarget(Character newTarget)
     {
         target = newTarget;
+    }
+
+    public void SetSkill(float newSkill)
+    {
+        skill = Mathf.Clamp01(newSkill);
+    }
+
+    public void Rebind(Character self, Character enemy)
+    {
+        character = self;
+        target = enemy;
+        setup = GetComponent<CharacterSetup>();
+
+        if (botInput == null)
+            botInput = new BotInputProvider();
+
+        if (character != null)
+            character.SetInput(botInput);
+
+        initialized = (character != null && setup != null && target != null);
     }
 }

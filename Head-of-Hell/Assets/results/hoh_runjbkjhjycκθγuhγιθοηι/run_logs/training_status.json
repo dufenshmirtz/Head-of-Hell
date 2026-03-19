@@ -1,0 +1,30 @@
+{
+    "Fighter": {
+        "elo": 1199.5014391117093,
+        "checkpoints": [
+            {
+                "steps": 1309,
+                "file_path": "results\\hoh_runjbkjhjyc\u03ba\u03b8\u03b3uh\u03b3\u03b9\u03b8\u03bf\u03b7\u03b9\\Fighter\\Fighter-1309.onnx",
+                "reward": -2.851575158536434,
+                "creation_time": 1773850652.7679007,
+                "auxillary_file_paths": [
+                    "results\\hoh_runjbkjhjyc\u03ba\u03b8\u03b3uh\u03b3\u03b9\u03b8\u03bf\u03b7\u03b9\\Fighter\\Fighter-1309.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1309,
+            "file_path": "results\\hoh_runjbkjhjyc\u03ba\u03b8\u03b3uh\u03b3\u03b9\u03b8\u03bf\u03b7\u03b9\\Fighter.onnx",
+            "reward": -2.851575158536434,
+            "creation_time": 1773850652.7679007,
+            "auxillary_file_paths": [
+                "results\\hoh_runjbkjhjyc\u03ba\u03b8\u03b3uh\u03b3\u03b9\u03b8\u03bf\u03b7\u03b9\\Fighter\\Fighter-1309.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.28.0",
+        "torch_version": "2.4.1+cpu"
+    }
+}

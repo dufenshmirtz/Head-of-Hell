@@ -21,7 +21,7 @@ public class Vander : Character
     float spellTime = 0.17f;
 
     // How quickly we cancel falling (units: velocity per second)
-    [SerializeField] float fallBrakePerSec = 20f;
+    //[SerializeField] float fallBrakePerSec = 20f;
 
     // How quickly we ramp upward (units: velocity per second)
     [SerializeField] float ascendAccelPerSec = 18f;

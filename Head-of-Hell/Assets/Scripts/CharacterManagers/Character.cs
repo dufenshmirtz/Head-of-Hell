@@ -971,7 +971,24 @@ public abstract class Character : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
 
-        OnCooldown(cd);
+        if (!onCooldown)
+        {
+            OnCooldown(cd);
+        }     
+    }
+
+    public IEnumerator ChargeSafety(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        chargeReset = true;
+        knockable = true;
+        charging = false;
+        animator.SetBool("Casting", false);
+        animator.SetBool("Charging", false);
+        
+        stayDynamic();
+        ignoreMovement = false;    
     }
 
     public void Casting(bool castin)
@@ -1120,6 +1137,7 @@ public abstract class Character : MonoBehaviour
                     charged = false;
                     animator.SetBool("Casting", true);
                     animator.ResetTrigger("tookDmg");
+                    ChargeSafety(0.5f);
                 }
                 return true;
             }
@@ -1475,14 +1493,12 @@ public abstract class Character : MonoBehaviour
         {
             if (chargeReset)
             {
-                print("kolok1");
                 stayDynamic();
                 ignoreMovement = false;
                 chargeReset = false;
             }
             else
             {
-                print("kolok2");
                 TakeDamageNoAnimation(dmg, blockable);
                 return;
             }
@@ -1502,7 +1518,7 @@ public abstract class Character : MonoBehaviour
             if (dmg == heavyDamage) // heavy attack: half-ish damage (your rule)
             {
                 currHealth -= 5;
-                Debug.Log("Took 5 damage.");
+                //Debug.Log("Took 5 damage.");
                 healthbar.SetHealth(currHealth);
                 StartCoroutine(TriggerDamageCounter(5));
             }
@@ -1510,7 +1526,7 @@ public abstract class Character : MonoBehaviour
             if (dmg == chargeDmg)
             {
                 currHealth -= dmg;
-                Debug.Log("Took " + dmg + " damage.");
+                //Debug.Log("Took " + dmg + " damage.");
                 healthbar.SetHealth(currHealth);
                 moveSpeed = OGMoveSpeed;
                 StartCoroutine(TriggerDamageCounter(dmg));
@@ -1548,7 +1564,7 @@ public abstract class Character : MonoBehaviour
             healthbar.SetHealth(currHealth);
             StartCoroutine(TriggerDamageCounter(dmg));
 
-            Debug.Log("Took " + dmg + " damage.");
+            //Debug.Log("Took " + dmg + " damage.");
         }
 
         int hpAfter = currHealth;
@@ -1722,7 +1738,6 @@ public abstract class Character : MonoBehaviour
 
             healthbar.SetHealth(currHealth);
             StartCoroutine(TriggerDamageCounter(dmg));
-            Debug.Log("Took " + dmg + " damage.");
         }
 
         int hpAfter = currHealth;
