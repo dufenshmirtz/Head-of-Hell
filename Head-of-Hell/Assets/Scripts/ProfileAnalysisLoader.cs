@@ -10,17 +10,24 @@ public class ProfileAnalysisLoader : MonoBehaviour
         Load();
     }
 
-    void Load()
+    public void Load()
     {
-        string path = Path.Combine(
+        string persistentPath = Path.Combine(
+            Application.persistentDataPath,
+            "ProfileAnalysis",
+            "profile_analysis.json"
+        );
+
+        string streamingPath = Path.Combine(
             Application.streamingAssetsPath,
             "ProfileAnalysis",
             "profile_analysis.json"
         );
 
+        string path = File.Exists(persistentPath) ? persistentPath : streamingPath;
+
         if (!File.Exists(path))
         {
-            Debug.LogError("Profile analysis JSON not found: " + path);
             return;
         }
 
@@ -30,15 +37,7 @@ public class ProfileAnalysisLoader : MonoBehaviour
 
         if (Data == null || Data.profiles == null)
         {
-            Debug.LogError("Failed to parse profile_analysis.json");
             return;
-        }
-
-        Debug.Log($"Loaded {Data.profiles.Count} profiles");
-
-        foreach (var p in Data.profiles)
-        {
-            Debug.Log($"Profile: {p.profile_name} | Style: {p.style_label}");
         }
     }
 }

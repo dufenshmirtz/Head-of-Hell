@@ -56,6 +56,7 @@ public class CharacterChoiceMenu : MonoBehaviour
         {
             Transform childP1 = button.transform.Find("P1");
             if (childP1 != null) childP1.gameObject.SetActive(true);
+            cscript.SetPlayer1Picked(button);
             currentPlayer = 2;
             p1b = button;
 
@@ -69,6 +70,7 @@ public class CharacterChoiceMenu : MonoBehaviour
         {
             Transform childP2 = button.transform.Find("P2");
             if (childP2 != null) childP2.gameObject.SetActive(true);
+            cscript.SetPlayer2Picked(button);
             button.Select();
             p2characterNameText.text = button.name;
 
@@ -105,6 +107,7 @@ public class CharacterChoiceMenu : MonoBehaviour
             }
             p2characterNameText.text = "";
             PlayerPrefs.DeleteKey("Player2Choice");
+            cscript.ClearPlayer2Picked();
 
             // Reset game state for Player 2
             picked = false;
@@ -121,6 +124,7 @@ public class CharacterChoiceMenu : MonoBehaviour
             if (childP1 != null) childP1.gameObject.SetActive(false);
             p1characterNameText.text = "";
             PlayerPrefs.DeleteKey("Player1Choice");
+            cscript.ClearPlayer1Picked();
             p1b.interactable = true;
             p1b = null;
 
@@ -170,6 +174,8 @@ public class CharacterChoiceMenu : MonoBehaviour
         picked = false;
 
         cscript.BothPicked(false);
+        cscript.ClearPlayer1Picked();
+        cscript.ClearPlayer2Picked();
 
         p1characterNameText.text = "";
         p2characterNameText.text = "";
