@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     public float tScale = 1f;
 
     public bool roundOn = false;
+    public bool trainingRoundOn = false;
     public TrainingOpponentDirector opponentDirector;
 
 
@@ -211,7 +212,6 @@ public class GameManager : MonoBehaviour
         }
 
         StartCoroutine(WaitAndCheck(playerNum, winnerName));
-
         roundOn = false;
     }
 
@@ -498,7 +498,12 @@ public class GameManager : MonoBehaviour
     // Training
     public void SoftResetRound(int winnerPlayerNum = 0)
     {
-        StartCoroutine(SoftResetRound_Co());
+        if (trainingRoundOn)
+        {
+            trainingRoundOn = false;
+            StartCoroutine(SoftResetRound_Co());
+        }
+        
     }
 
     private IEnumerator SoftResetRound_Co()
@@ -518,13 +523,19 @@ public class GameManager : MonoBehaviour
         {
             // 0) ΤΕΛΕΙΩΣΕ ΤΑ EPISODES ΠΡΩΤΑ
             if (agentP1 != null && agentP1.enabled)
+            {
+                agentP1.ApplyTerminalReward();
                 agentP1.DebugEndEpisode("SOFT_RESET");
                 agentP1.EndEpisode();
+            }
 
             if (agentP2 != null && agentP2.enabled)
+            {
+                agentP2.ApplyTerminalReward();
                 agentP2.DebugEndEpisode("SOFT_RESET");
                 agentP2.EndEpisode();
-
+            }
+                
             // 1) περίμενε 1 frame να "καθαρίσει" animator/coroutines/destroy
             yield return null;
 
@@ -548,6 +559,8 @@ public class GameManager : MonoBehaviour
 
             if (opponentDirector != null)
                 opponentDirector.RebindAfterCharacterSwap();
+
+            yield return null;
         }
 
         // 2) Πάρε τους current χαρακτήρες (ΤΩΡΑ είναι οι σωστοί)

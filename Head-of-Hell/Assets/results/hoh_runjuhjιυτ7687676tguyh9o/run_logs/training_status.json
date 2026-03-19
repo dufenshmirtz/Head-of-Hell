@@ -1,0 +1,30 @@
+{
+    "Fighter": {
+        "elo": 1200.9999917277635,
+        "checkpoints": [
+            {
+                "steps": 553,
+                "file_path": "results\\hoh_runjuhj\u03b9\u03c5\u03c47687676tguyh9o\\Fighter\\Fighter-553.onnx",
+                "reward": 1.3730875821784139,
+                "creation_time": 1773925569.160651,
+                "auxillary_file_paths": [
+                    "results\\hoh_runjuhj\u03b9\u03c5\u03c47687676tguyh9o\\Fighter\\Fighter-553.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 553,
+            "file_path": "results\\hoh_runjuhj\u03b9\u03c5\u03c47687676tguyh9o\\Fighter.onnx",
+            "reward": 1.3730875821784139,
+            "creation_time": 1773925569.160651,
+            "auxillary_file_paths": [
+                "results\\hoh_runjuhj\u03b9\u03c5\u03c47687676tguyh9o\\Fighter\\Fighter-553.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.28.0",
+        "torch_version": "2.4.1+cpu"
+    }
+}

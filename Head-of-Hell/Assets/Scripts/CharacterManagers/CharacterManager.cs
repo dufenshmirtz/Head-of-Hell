@@ -190,7 +190,10 @@ public class CharacterManager : MonoBehaviour
 
     void Start()
     {
-
+        if (mngr.trainingMode)
+        {
+            Resume();
+        } 
     }
 
     void Update()
@@ -266,7 +269,12 @@ public class CharacterManager : MonoBehaviour
         mngr.roundOn=true;
         //if(!character) return;
         character.stayDynamic();
-        character.ignoreUpdate = false;    
+        character.ignoreUpdate = false;
+
+        if (playerNum == 2)
+        {
+            mngr.trainingRoundOn = true;
+        }    
     }
 
     public void ChangeCharacter(string givenName)
@@ -445,6 +453,10 @@ public class CharacterManager : MonoBehaviour
     public IEnumerator RerollRandomCharacter_TrainingOnly_Co()
     {
         if (!training) yield break;
+
+        if (animator == null) animator = GetComponent<Animator>();
+        animator.Rebind();
+        animator.Update(0f);
 
         // 1) διάλεξε νέο
         string name = PickRandomCharacter();

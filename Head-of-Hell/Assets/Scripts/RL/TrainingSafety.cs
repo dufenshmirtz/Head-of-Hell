@@ -97,6 +97,8 @@ public class TrainingSafety : MonoBehaviour
     {
         if (gameManager == null)
             gameManager = GetComponent<GameManager>();
+
+        ResetTimers();
     }
 
     void Start()
@@ -125,7 +127,7 @@ public class TrainingSafety : MonoBehaviour
         if (gameManager == null || !gameManager.trainingMode)
             return;
 
-        if (!gameManager.roundOn)
+        if (!gameManager.trainingRoundOn)
             return;
             
         var c1 = p1Manager ? p1Manager.GetCurrentCharacter() : null;
