@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     string stageName;
     public TextMeshProUGUI winner;
     public TextMeshProUGUI finalWinner;
+    public TextMeshProUGUI p1ProfileNameText;
+    public TextMeshProUGUI p2ProfileNameText;
     string p1, p2;
     static int roundNumber;
     static int roundCounter = 1;
@@ -86,7 +88,11 @@ public class GameManager : MonoBehaviour
         // Profile telemetry
         var p1Profile = ProfileManager.I?.GetTelemetryIdentity(1) ?? ("NONE", "None");
         var p2Profile = ProfileManager.I?.GetTelemetryIdentity(2) ?? ("NONE", "None");
+        if (p1ProfileNameText != null)
+            p1ProfileNameText.text = p1Profile.name;
 
+        if (p2ProfileNameText != null)
+            p2ProfileNameText.text = p2Profile.name;
         TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
         {
             p1ProfileId = p1Profile.id,
