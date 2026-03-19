@@ -348,7 +348,7 @@ public class FighterAgent : Agent
             return;
         }
 
-        if (GameManager.instance == null || !GameManager.instance.roundOn)
+        if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
         {
             return;
         }
@@ -465,7 +465,7 @@ public class FighterAgent : Agent
             return;
         }
 
-        if (GameManager.instance == null || !GameManager.instance.roundOn)
+        if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
         {
             return;
         }
@@ -525,19 +525,6 @@ public class FighterAgent : Agent
         TacticalRangeRewards(light, heavy, special, chargeMode);
         DirectionalHygieneRewards(moveX, light, special);
 
-        if (opp != null && oppHP <= 0)
-        {
-            AddReward(rewardWin);
-            rewardDebugger?.LogWinReward(rewardWin);
-            return;
-        }
-
-        if (selfHP <= 0)
-        {
-            AddReward(rewardLoss);
-            rewardDebugger?.LogLossReward(rewardLoss);
-            return;
-        }
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -659,7 +646,7 @@ public class FighterAgent : Agent
             return;
         }
 
-        if (GameManager.instance == null || !GameManager.instance.roundOn)
+        if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
         {
             return;
         }
@@ -781,7 +768,7 @@ public class FighterAgent : Agent
             return;
         }
 
-        if (GameManager.instance == null || !GameManager.instance.roundOn)
+        if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
         {
             return;
         }
@@ -804,26 +791,28 @@ public class FighterAgent : Agent
         {
             if (heavy == 1)
             {
+                //Debug.Log($"[HeavyFar TRIGGER] CharID={self.characterID}  absDx={absDx}");
                 AddReward(extremeFarHeavyPenalty);
                 rewardDebugger?.LogExtremeFarHeavyPenalty(extremeFarHeavyPenalty);
             }
 
             if (chargeMode == 1)
             {
+                //Debug.Log($"[ChargeFar TRIGGER] CharID={self.characterID}  absDx={absDx}");
                 AddReward(extremeFarChargePenalty);
                 rewardDebugger?.LogExtremeFarChargePenalty(extremeFarChargePenalty);
             }
 
             if (light == 1 && IsStrictMelee(lightReachType))
             {
-                Debug.Log($"[FarMeleeLight TRIGGER] CharID={self.characterID} LightReach={lightReachType} absDx={absDx}");
+                //Debug.Log($"[FarMeleeLight TRIGGER] CharID={self.characterID} LightReach={lightReachType} absDx={absDx}");
                 AddReward(farMeleeLightPenalty);
                 rewardDebugger?.LogFarMeleeLightPenalty(farMeleeLightPenalty);
             }
 
             if (special == 1 && IsStrictMelee(specialReachType))
             {
-                Debug.Log($"[FarMeleeSpecial TRIGGER] CharID={self.characterID} SpecialReach={specialReachType} absDx={absDx}");
+                //Debug.Log($"[FarMeleeSpecial TRIGGER] CharID={self.characterID} SpecialReach={specialReachType} absDx={absDx}");
                 AddReward(farMeleeSpecialPenalty);
                 rewardDebugger?.LogFarMeleeSpecialPenalty(farMeleeSpecialPenalty);
             }
@@ -890,7 +879,7 @@ public class FighterAgent : Agent
             return;
         }
 
-        if (GameManager.instance == null || !GameManager.instance.roundOn)
+        if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
         {
             return;
         }
@@ -968,5 +957,35 @@ public class FighterAgent : Agent
             specialReachType,
             profileLoaded
         );
+    }
+
+    public void ApplyTerminalReward()
+    {
+        if (self == null) return;
+
+        int selfHP = self.GetCurrentHealth();
+        int oppHP = (opp != null) ? opp.GetCurrentHealth() : lastOppHP;
+
+        lastSelfHP = selfHP;
+        lastOppHP = oppHP;
+
+        if (selfHP <= 0 && oppHP <= 0)
+        {
+            return; // tie, ή βάλε ειδικό handling
+        }
+
+        if (oppHP <= 0)
+        {
+            AddReward(rewardWin);
+            rewardDebugger?.LogWinReward(rewardWin);
+            return;
+        }
+
+        if (selfHP <= 0)
+        {
+            AddReward(rewardLoss);
+            rewardDebugger?.LogLossReward(rewardLoss);
+            return;
+        }
     }
 }

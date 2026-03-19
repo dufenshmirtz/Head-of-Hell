@@ -4415,7 +4415,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 181110691}
-  - component: {fileID: 181110694}
   - component: {fileID: 181110693}
   - component: {fileID: 181110692}
   m_Layer: 8
@@ -4578,14 +4577,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!222 &181110694
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 181110690}
-  m_CullTransparentMesh: 1
 --- !u!1 &184576785
 GameObject:
   m_ObjectHideFlags: 0
@@ -6283,8 +6274,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 8
-  TakeActionsBetweenDecisions: 1
+  DecisionPeriod: 20
+  TakeActionsBetweenDecisions: 0
 --- !u!114 &221568230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27253,7 +27244,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1052106695}
-  - component: {fileID: 1052106698}
   - component: {fileID: 1052106697}
   - component: {fileID: 1052106696}
   - component: {fileID: 1052106699}
@@ -27417,14 +27407,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!222 &1052106698
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1052106694}
-  m_CullTransparentMesh: 1
 --- !u!114 &1052106699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35025,7 +35007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 4
+  DecisionPeriod: 1
   TakeActionsBetweenDecisions: 1
 --- !u!114 &1367423876
 MonoBehaviour:
@@ -35115,9 +35097,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d8ccaca227e24409c2cd846ab1f178, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugRewardBreakdown: 0
-  debugProfileLogging: 0
-  debugLogEveryNEpisodes: 10
+  debugRewardBreakdown: 1
+  debugProfileLogging: 1
+  debugLogEveryNEpisodes: 1
 --- !u!1 &1369490559
 GameObject:
   m_ObjectHideFlags: 0
@@ -51674,6 +51656,7 @@ MonoBehaviour:
   p2Spawn: {fileID: 1367423837}
   tScale: 1
   roundOn: 0
+  trainingRoundOn: 0
   opponentDirector: {fileID: 1705601556}
 --- !u!114 &2144866983
 MonoBehaviour:
@@ -51698,14 +51681,14 @@ MonoBehaviour:
   minY: -3
   maxY: 6
   oobSeconds: 1
-  episodeTimeoutSeconds: 500
+  episodeTimeoutSeconds: 700
   stallSecondsBoth: 10
   stallSecondsSingle: 20
   velEps: 0.05
   posEps: 0.02
   weirdStateSeconds: 10
-  castingSeconds: 6
-  chargingSeconds: 3
+  castingSeconds: 15
+  chargingSeconds: 14
   agentP1: {fileID: 221568215}
   agentP2: {fileID: 1367423861}
   applyPenaltyOnSafetyReset: 1

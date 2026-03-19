@@ -46,6 +46,7 @@ public class TrainingOpponentDirector : MonoBehaviour
     {
         episodeIndex = 0;
         ValidateReferences();
+        PrepareNextEpisode();
     }
     public OpponentMode SelectNextMode()
     {
