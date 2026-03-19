@@ -21,6 +21,9 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
     public TMP_Text missRateText;
     public TMP_Text avgDamageDealtText;
     public TMP_Text avgDamageTakenText;
+    public TMP_Text eloText;
+    private string currentProfileName;
+    private string currentProfileId;
 
     [Header("Chart")]
     public CombatSignatureChart combatChart;
@@ -65,7 +68,7 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
             Debug.LogWarning($"ProfileAnalysisPanelUI: profile '{profileName}' not found in JSON.");
             return;
         }
-
+        Debug.Log($"OpenForProfileName -> requested '{profileName}', found id='{profile.profile_id}'");
         ShowProfile(profile);
 
         if (profilesMenuRoot != null) profilesMenuRoot.SetActive(false);
@@ -77,14 +80,94 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         if (profileAnalysisRoot != null) profileAnalysisRoot.SetActive(false);
         if (profilesMenuRoot != null) profilesMenuRoot.SetActive(true);
     }
+    // CLEAR EMPTY PROFILES 
+    public void ClearProfileView()
+    {
+        currentProfileName = null;
+        currentProfileId = null;
 
+        if (profileNameText != null) profileNameText.text = "";
+        if (styleLabelText != null) styleLabelText.text = "";
+        if (eloText != null) eloText.text = "";
+        if (matchesText != null) matchesText.text = "";
+        if (winRateText != null) winRateText.text = "";
+        if (hitRateText != null) hitRateText.text = "";
+        if (missRateText != null) missRateText.text = "";
+        if (avgDamageDealtText != null) avgDamageDealtText.text = "";
+        if (avgDamageTakenText != null) avgDamageTakenText.text = "";
+
+        if (combatChart != null)
+        {
+            combatChart.SetValues(0f, 0f, 0f, 0f);
+        }
+
+        //Debug.Log("ProfileAnalysisPanelUI: cleared profile view.");
+    }
+    public void RefreshAnalysis()
+    {
+        if (loader == null)
+        {
+            //Debug.LogError("RefreshAnalysis: loader is NULL");
+            return;
+        }
+
+        string profileIdToRestore = currentProfileId;
+        string profileNameToRestore = currentProfileName;
+
+        //Debug.Log($"RefreshAnalysis START -> currentProfileId='{profileIdToRestore}', currentProfileName='{profileNameToRestore}'");
+
+        loader.Load();
+
+        if (loader.Data == null || loader.Data.profiles == null || loader.Data.profiles.Count == 0)
+        {
+            //Debug.LogWarning("RefreshAnalysis: no profiles found after reload");
+            return;
+        }
+
+        ProfileAnalysisEntry foundProfile = null;
+
+        if (!string.IsNullOrWhiteSpace(profileIdToRestore))
+        {
+            foundProfile = loader.Data.profiles
+                .FirstOrDefault(p => p.profile_id == profileIdToRestore);
+
+            if (foundProfile != null)
+            {
+                // Debug.Log($"RefreshAnalysis: restored by ID -> {foundProfile.profile_name}");
+            }
+        }
+
+        if (foundProfile == null && !string.IsNullOrWhiteSpace(profileNameToRestore))
+        {
+            foundProfile = loader.Data.profiles
+                .FirstOrDefault(p => p.profile_name == profileNameToRestore);
+
+            if (foundProfile != null)
+            {
+                //Debug.Log($"RefreshAnalysis: restored by NAME -> {foundProfile.profile_name}");
+            }
+        }
+
+        if (foundProfile != null)
+        {
+            ShowProfile(foundProfile);
+        }
+        else
+        {
+            //Debug.LogWarning($"RefreshAnalysis: could not restore profile id='{profileIdToRestore}' name='{profileNameToRestore}', clearing view");
+            ClearProfileView();
+        }
+    }
     private void ShowProfile(ProfileAnalysisEntry p)
     {
-       
-   
+        currentProfileId = p.profile_id;
+        currentProfileName = p.profile_name;
+      
+        
         if (profileNameText != null) profileNameText.text = p.profile_name;
         if (styleLabelText != null) styleLabelText.text = p.style_label;
-
+        if (eloText != null)
+            eloText.text = $"Elo: {Mathf.RoundToInt(p.elo_rating)}";
         if (matchesText != null) matchesText.text = $"Matches: {p.matches_count}";
         if (winRateText != null) winRateText.text = $"Win Rate: {p.win_rate:P0}";
         if (hitRateText != null) hitRateText.text = $"Hit Rate: {p.hit_rate:P0}";
@@ -93,20 +176,11 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         if (avgDamageTakenText != null) avgDamageTakenText.text = $"Avg Damage Taken: {p.avg_damage_taken:F1}";
         if (combatChart != null)
         {
-            float maxVal = Mathf.Max(
-                p.aggression_raw,
-                p.mobility_raw,
-                p.defense_raw,
-                p.risk_raw
-            );
-
-            if (maxVal <= 0f) maxVal = 1f;
-
             combatChart.SetValues(
-                p.aggression_raw / maxVal,
-                p.mobility_raw / maxVal,
-                p.defense_raw / maxVal,
-                p.risk_raw / maxVal
+                p.aggression,
+                p.defense,
+                p.mobility,
+                p.risk
             );
         }
     }

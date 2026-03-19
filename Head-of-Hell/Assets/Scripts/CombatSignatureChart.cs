@@ -4,10 +4,10 @@ using UnityEngine.UI;
 public class CombatSignatureChart : Graphic
 {
     [Header("Values")]
-    [Range(0f, 1f)] public float defense = 0.5f; // top
-    [Range(0f, 1f)] public float aggression = 0.5f;   // right
-    [Range(0f, 1f)] public float risk = 0.5f;    // bottom
-    [Range(0f, 1f)] public float mobility = 0.5f;       // left
+    [Range(0f, 1f)] public float defense = 0.5f;    // top
+    [Range(0f, 1f)] public float aggression = 0.5f; // right
+    [Range(0f, 1f)] public float risk = 0.5f;       // bottom
+    [Range(0f, 1f)] public float mobility = 0.5f;   // left
 
     [Header("Layout")]
     [SerializeField] private float chartRadius = 100f;
@@ -20,11 +20,11 @@ public class CombatSignatureChart : Graphic
     [SerializeField] private Color fillColor = new Color(1f, 0.35f, 0.55f, 0.22f);
     [SerializeField] private Color outlineColor = new Color(1f, 0.45f, 0.65f, 0.95f);
 
-    public void SetValues(float agg, float mob, float def, float rsk)
+    public void SetValues(float agg, float def, float mob, float rsk)
     {
         aggression = Mathf.Clamp01(agg);
-        mobility = Mathf.Clamp01(mob);
         defense = Mathf.Clamp01(def);
+        mobility = Mathf.Clamp01(mob);
         risk = Mathf.Clamp01(rsk);
         SetVerticesDirty();
     }
