@@ -881,6 +881,10 @@ public abstract class Character : MonoBehaviour
 
     public void StaticSafeguard()
     {
+        if (animator.GetBool("IsRunning") && isStatic)
+        {
+            stayDynamic();
+        }
         if(rb.bodyType == RigidbodyType2D.Static && !isStatic)
         {
             stayDynamic();
@@ -967,7 +971,7 @@ public abstract class Character : MonoBehaviour
         lastAbilityCD = cd; //ML
     }
 
-    public IEnumerator SpellSafety(float time, float cd)
+    public virtual IEnumerator SpellSafety(float time, float cd)
     {
         yield return new WaitForSeconds(time);
 
@@ -1298,6 +1302,7 @@ public abstract class Character : MonoBehaviour
         safety = true;
         canParry = false;
         knockable = false;
+        ignoreUpdate = true;
         stayStatic();
         StartCoroutine(ResetParry());
         StartCoroutine(CounterOffSafety());
@@ -1328,7 +1333,7 @@ public abstract class Character : MonoBehaviour
 
     private IEnumerator CounterOffSafety()
     {
-        yield return new WaitForSeconds(0.21f);
+        yield return new WaitForSeconds(0.22f);
         if (!counterDone)
         {
             CounterVariablesOff();
@@ -1337,7 +1342,7 @@ public abstract class Character : MonoBehaviour
 
     private IEnumerator CounterSuccessOff()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.7f);
         ClearParryState();
     }
 
@@ -1349,6 +1354,7 @@ public abstract class Character : MonoBehaviour
         stayStatic();
         ignoreCounterOff = true;
         counterDone = true;
+        ignoreUpdate = true;
         StartCoroutine(CounterSuccessOff());
     }
 
@@ -1375,16 +1381,19 @@ public abstract class Character : MonoBehaviour
         knockable = true;
         safety = true;
         ignoreCounterOff = false;
+        ignoreUpdate = false;
         stayDynamic();
     }
 
     protected void ClearParryState()
     {
+        print("k&");
         counterDone = false;
         counterIsOn = false;
         knockable = true;
         safety = true;
         ignoreCounterOff = false;
+        ignoreUpdate = false;
         enemy.stayDynamic();
         stayDynamic();
     }
