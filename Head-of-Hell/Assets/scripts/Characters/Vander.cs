@@ -113,6 +113,17 @@ public class Vander : Character
         OnCooldown(cooldown);
         ignoreDamage = false;
     }
+
+    override public IEnumerator SpellSafety(float time, float cd)
+    {
+        yield return new WaitForSeconds(time);
+
+        if (!onCooldown)
+        {
+            OnCooldown(cd);
+        }
+        attackRange = ogRange;
+    }
     #endregion
 
     #region LightAttack

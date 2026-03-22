@@ -367,7 +367,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -6278,6 +6277,17 @@ MonoBehaviour:
   edgeZoneX: 8
   edgeGraceTime: 1.75
   edgeSmallMoveThreshold: 0.35
+  lightReachType: 0
+  specialReachType: 0
+  extremeFarThreshold: 8.5
+  extremeFarHeavyPenalty: -0.0007
+  extremeFarChargePenalty: -0.0006
+  approachBonus: 0.00025
+  approachStartMargin: 0.75
+  farMeleeLightPenalty: -0.00035
+  farMeleeSpecialPenalty: -0.00035
+  dashNoDirectionPenalty: -0.00005
+  wrongFacingSpecialPenalty: -0.0005
 --- !u!114 &221568216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6363,6 +6373,7 @@ MonoBehaviour:
   penaltyStallBoth: -0.02
   penaltyStallSingle: -0.03
   penaltyEpisodeTimeout: -0.02
+  startupGraceSeconds: 2
 --- !u!114 &221568230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9376,7 +9387,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -23540,7 +23550,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -30698,7 +30707,6 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
-  fallBrakePerSec: 20
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -35084,6 +35092,17 @@ MonoBehaviour:
   edgeZoneX: 8
   edgeGraceTime: 1.75
   edgeSmallMoveThreshold: 0.35
+  lightReachType: 0
+  specialReachType: 0
+  extremeFarThreshold: 8.5
+  extremeFarHeavyPenalty: -0.0007
+  extremeFarChargePenalty: -0.0006
+  approachBonus: 0.00025
+  approachStartMargin: 0.75
+  farMeleeLightPenalty: -0.00035
+  farMeleeSpecialPenalty: -0.00035
+  dashNoDirectionPenalty: -0.00005
+  wrongFacingSpecialPenalty: -0.0005
 --- !u!114 &1367423862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35169,6 +35188,7 @@ MonoBehaviour:
   penaltyStallBoth: -0.02
   penaltyStallSingle: -0.03
   penaltyEpisodeTimeout: -0.02
+  startupGraceSeconds: 2
 --- !u!114 &1367423876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39827,6 +39847,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayAgainButton: {fileID: 675885517}
+  ChangeProfilesButton: {fileID: 675885517}
   BackToMenuButton: {fileID: 1593568639}
   SaveReplayButton: {fileID: 86648144}
 --- !u!1 &1603303755
@@ -51760,6 +51781,8 @@ MonoBehaviour:
   p2Spawn: {fileID: 1367423837}
   tScale: 1
   roundOn: 0
+  trainingRoundOn: 0
+  opponentDirector: {fileID: 0}
 --- !u!1 &2147385444
 GameObject:
   m_ObjectHideFlags: 0

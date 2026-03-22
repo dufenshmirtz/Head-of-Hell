@@ -5,46 +5,49 @@ using UnityEngine.UI;
 public class VictoryScreenNavigation : MonoBehaviour
 {
     public Button PlayAgainButton;
+    public Button ChangeProfilesButton;
     public Button BackToMenuButton;
     public Button SaveReplayButton;
+
     private bool isVictoryScreenActive = false;
 
-    // Initialize the script as disabled (via Inspector checkbox)
-    void Start()
-    {
-        // No need for 'enabled = false' here if you uncheck the script in Inspector
-    }
-
-    // Called when the script is enabled (manually or via code)
     void OnEnable()
     {
         isVictoryScreenActive = true;
         SetupButtonNavigation();
     }
 
-    // Called when the script is disabled
     void OnDisable()
     {
         isVictoryScreenActive = false;
     }
 
-    // Set up button navigation (called in OnEnable)
     private void SetupButtonNavigation()
     {
-        // Set default selected button
         EventSystem.current.SetSelectedGameObject(PlayAgainButton.gameObject);
 
-        // Configure explicit navigation
         Navigation navPlayAgain = PlayAgainButton.navigation;
         navPlayAgain.mode = Navigation.Mode.Explicit;
-        navPlayAgain.selectOnRight = BackToMenuButton;
-        navPlayAgain.selectOnDown = BackToMenuButton;
+        navPlayAgain.selectOnRight = SaveReplayButton;
+        navPlayAgain.selectOnDown = ChangeProfilesButton;
         PlayAgainButton.navigation = navPlayAgain;
+
+        Navigation navSaveReplay = SaveReplayButton.navigation;
+        navSaveReplay.mode = Navigation.Mode.Explicit;
+        navSaveReplay.selectOnLeft = PlayAgainButton;
+        navSaveReplay.selectOnDown = BackToMenuButton;
+        SaveReplayButton.navigation = navSaveReplay;
+
+        Navigation navChangeProfiles = ChangeProfilesButton.navigation;
+        navChangeProfiles.mode = Navigation.Mode.Explicit;
+        navChangeProfiles.selectOnUp = PlayAgainButton;
+        navChangeProfiles.selectOnRight = BackToMenuButton;
+        ChangeProfilesButton.navigation = navChangeProfiles;
 
         Navigation navBackToMenu = BackToMenuButton.navigation;
         navBackToMenu.mode = Navigation.Mode.Explicit;
-        navBackToMenu.selectOnLeft = PlayAgainButton;
-        navBackToMenu.selectOnUp = PlayAgainButton;
+        navBackToMenu.selectOnUp = SaveReplayButton;
+        navBackToMenu.selectOnLeft = ChangeProfilesButton;
         BackToMenuButton.navigation = navBackToMenu;
     }
 
