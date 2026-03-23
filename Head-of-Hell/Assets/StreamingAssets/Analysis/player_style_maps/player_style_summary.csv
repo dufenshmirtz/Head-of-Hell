@@ -1,6 +1,5 @@
 profile_name,Aggression,Defense,Mobility,Risk,Aggression_norm,Defense_norm,Mobility_norm,Risk_norm,style_label
-BOT_1,0.4254,0.1234,0.4212,0.2038,0.5061,0.5681,0.4962,0.4805,Balanced
-BOT_2,0.1581,0.0065,0.7625,0.4116,0.0,0.0,1.0,1.0,Balanced
-NIGATRON,0.6549,0.2122,0.085,0.0116,0.9407,1.0,0.0,0.0,Balanced
-Saleaz,0.6863,0.167,0.0939,0.0636,1.0,0.7803,0.0131,0.13,Aggressive-Balanced
-koutaliaris,0.6194,0.158,0.1444,0.1022,0.8735,0.7361,0.0877,0.2264,Aggressive-Balanced
+Saleaz,0.177,0.2848,0.5057,0.1952,0.0,1.0,0.5448,0.3045,Defensive
+ass,0.4231,0.0227,0.4604,0.3131,0.7941,0.0,0.358,1.0,Aggressive-Risky
+ceas,0.4869,0.1377,0.3736,0.1436,1.0,0.4387,0.0,0.0,Aggressive
+koutaliaris,0.2033,0.246,0.616,0.1507,0.0847,0.8519,1.0,0.0422,Mobile

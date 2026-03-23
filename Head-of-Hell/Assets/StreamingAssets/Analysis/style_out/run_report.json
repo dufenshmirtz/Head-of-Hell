@@ -1,6 +1,6 @@
 {
-  "n_rounds": 30,
-  "n_players": 5,
+  "n_rounds": 103,
+  "n_players": 3,
   "chosen_k": 5,
   "features": [
     "attack_rate",
