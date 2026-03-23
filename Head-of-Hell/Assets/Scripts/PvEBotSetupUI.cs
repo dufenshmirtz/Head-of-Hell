@@ -18,15 +18,26 @@ public class PvEBotSetupUI : MonoBehaviour
     public Button mediumButton;
     public Button hardButton;
 
+    [Header("Navigation Buttons")]
+    public Button proceedButton;
+    public Button backButton;
+
     [Header("Labels")]
     public TMP_Text selectedBotText;
     public TMP_Text selectedDifficultyText;
+    public TMP_Text instructionText;
+
+    private bool botSelected;
+    private bool difficultySelected;
 
     private void Start()
     {
-        // default μόνο αν δεν μπήκαμε ήδη σαν PvE
         if (!PvESelectionState.IsPvE)
             PvESelectionState.IsPvE = true;
+
+        // Δεν θεωρούμε preselected τα defaults.
+        botSelected = false;
+        difficultySelected = false;
 
         RefreshUI();
     }
@@ -34,35 +45,62 @@ public class PvEBotSetupUI : MonoBehaviour
     public void SelectMLAgent()
     {
         PvESelectionState.SelectedBotType = PvEBotType.MLAgent;
+        botSelected = true;
+
+        // κάθε αλλαγή bot type απαιτεί νέο confirm difficulty
+        difficultySelected = false;
+
         RefreshUI();
     }
 
     public void SelectScriptedBot()
     {
         PvESelectionState.SelectedBotType = PvEBotType.ScriptedBot;
+        botSelected = true;
+
+        difficultySelected = false;
+
         RefreshUI();
     }
 
     public void SelectEasy()
     {
+        if (!botSelected) return;
+
         PvESelectionState.SelectedDifficulty = PvEDifficulty.Easy;
+        difficultySelected = true;
+
         RefreshUI();
     }
 
     public void SelectMedium()
     {
+        if (!botSelected) return;
+
         PvESelectionState.SelectedDifficulty = PvEDifficulty.Medium;
+        difficultySelected = true;
+
         RefreshUI();
     }
 
     public void SelectHard()
     {
+        if (!botSelected) return;
+
         PvESelectionState.SelectedDifficulty = PvEDifficulty.Hard;
+        difficultySelected = true;
+
         RefreshUI();
     }
 
     public void ContinueToGameSetup()
     {
+        if (!botSelected || !difficultySelected)
+        {
+            Debug.LogWarning("Select bot type first, then difficulty.");
+            return;
+        }
+
         SceneManager.LoadScene(nextSceneName);
     }
 
@@ -74,18 +112,47 @@ public class PvEBotSetupUI : MonoBehaviour
 
     private void RefreshUI()
     {
+        // Labels
         if (selectedBotText != null)
-            selectedBotText.text = "Bot: " + GetBotTypeLabel(PvESelectionState.SelectedBotType);
+        {
+            selectedBotText.text = botSelected
+                ? "Bot: " + GetBotTypeLabel(PvESelectionState.SelectedBotType)
+                : "Bot: Not Selected";
+        }
 
         if (selectedDifficultyText != null)
-            selectedDifficultyText.text = "Difficulty: " + GetDifficultyLabel(PvESelectionState.SelectedDifficulty);
+        {
+            selectedDifficultyText.text = difficultySelected
+                ? "Difficulty: " + GetDifficultyLabel(PvESelectionState.SelectedDifficulty)
+                : "Difficulty: Not Selected";
+        }
 
-        SetButtonVisual(mlAgentButton, PvESelectionState.SelectedBotType == PvEBotType.MLAgent);
-        SetButtonVisual(scriptedBotButton, PvESelectionState.SelectedBotType == PvEBotType.ScriptedBot);
+        if (instructionText != null)
+        {
+            if (!botSelected)
+                instructionText.text = "Select bot type";
+            else if (!difficultySelected)
+                instructionText.text = "Select difficulty";
+            else
+                instructionText.text = "Ready";
+        }
 
-        SetButtonVisual(easyButton, PvESelectionState.SelectedDifficulty == PvEDifficulty.Easy);
-        SetButtonVisual(mediumButton, PvESelectionState.SelectedDifficulty == PvEDifficulty.Medium);
-        SetButtonVisual(hardButton, PvESelectionState.SelectedDifficulty == PvEDifficulty.Hard);
+        // Bot selection visuals
+        SetButtonVisual(mlAgentButton, botSelected && PvESelectionState.SelectedBotType == PvEBotType.MLAgent);
+        SetButtonVisual(scriptedBotButton, botSelected && PvESelectionState.SelectedBotType == PvEBotType.ScriptedBot);
+
+        // Difficulty buttons enabled only after bot type
+        if (easyButton != null) easyButton.interactable = botSelected;
+        if (mediumButton != null) mediumButton.interactable = botSelected;
+        if (hardButton != null) hardButton.interactable = botSelected;
+
+        SetButtonVisual(easyButton, difficultySelected && PvESelectionState.SelectedDifficulty == PvEDifficulty.Easy);
+        SetButtonVisual(mediumButton, difficultySelected && PvESelectionState.SelectedDifficulty == PvEDifficulty.Medium);
+        SetButtonVisual(hardButton, difficultySelected && PvESelectionState.SelectedDifficulty == PvEDifficulty.Hard);
+
+        // Proceed only when both chosen
+        if (proceedButton != null)
+            proceedButton.interactable = botSelected && difficultySelected;
     }
 
     private string GetBotTypeLabel(PvEBotType type)
@@ -115,6 +182,7 @@ public class PvEBotSetupUI : MonoBehaviour
 
         ColorBlock colors = button.colors;
         colors.normalColor = selected ? new Color(0.75f, 0.75f, 0.75f, 1f) : Color.white;
+        colors.selectedColor = colors.normalColor;
         button.colors = colors;
     }
 }
