@@ -605,6 +605,7 @@ public abstract class Character : MonoBehaviour
         {
             if (isGrounded && !chargeDisable && !casting)
             {
+                Unblock();
                 ChargeAttack();
             }
 
@@ -1333,7 +1334,7 @@ public abstract class Character : MonoBehaviour
 
     private IEnumerator CounterOffSafety()
     {
-        yield return new WaitForSeconds(0.22f);
+        yield return new WaitForSeconds(0.25f);
         if (!counterDone)
         {
             CounterVariablesOff();

@@ -8,13 +8,13 @@ public class Fin : Character
     float rollPower = 8f;
     float rollTime = 0.39f;
     bool rollReady = true;
-    int passiveDamage = 8;
+    int passiveDamage = 6;
     float flashStunDuration = 1.2f;
     float resetRoll = 2f;
     // bool safety = true;
     Transform escapePoint;
     GameObject freeBaby;
-    float spellTime= 0.12f;
+    float spellTime= 0.2f;
 
     
     public override void Start()

@@ -16,7 +16,7 @@ public class Chiback : Character
     bool roarPlayed = false;
     float resetDisable = 1f;
 
-    float spellTime = 0.45f;
+    float spellTime = 0.75f;
 
     public Transform mirrorFireAttackPoint;
     public Transform fireAttackPoint;

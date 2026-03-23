@@ -1697,9 +1697,6 @@ PrefabInstance:
       addedObject: {fileID: 221568217}
     - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 221568230}
-    - targetCorrespondingSourceObject: {fileID: 7297720914251486795, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 221568242}
   m_SourcePrefab: {fileID: 100100000, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
 --- !u!1 &57808467
@@ -6232,6 +6229,11 @@ MonoBehaviour:
   farMeleeSpecialPenalty: -0.00035
   dashNoDirectionPenalty: -0.00045
   wrongFacingSpecialPenalty: -0.0005
+  freeConsecutiveCharges: 2
+  repeatedChargePenaltyBase: -0.00015
+  repeatedChargePenaltyStep: -0.0001
+  repeatedChargePenaltyCap: -0.0006
+  chargeChainDecaySeconds: 0.9
 --- !u!114 &221568216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6276,19 +6278,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DecisionPeriod: 4
   TakeActionsBetweenDecisions: 0
---- !u!114 &221568230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 221568178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e86e7fcfbd97b674fa2f437d38a3b4cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxSeconds: 600
 --- !u!114 &221568242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34918,7 +34907,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367423824}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd19557386e32f14d9047b5a9971820e, type: 3}
   m_Name: 
@@ -34965,6 +34954,11 @@ MonoBehaviour:
   farMeleeSpecialPenalty: -0.00035
   dashNoDirectionPenalty: -0.00045
   wrongFacingSpecialPenalty: -0.0005
+  freeConsecutiveCharges: 2
+  repeatedChargePenaltyBase: -0.00015
+  repeatedChargePenaltyStep: -0.0001
+  repeatedChargePenaltyCap: -0.0006
+  chargeChainDecaySeconds: 0.9
 --- !u!114 &1367423862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34989,7 +34983,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 5022602860645237092, guid: b34254f8ab1c8b844bd7b5c9a8c7f417, type: 3}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 2
   m_BehaviorName: Fighter
   TeamId: 1
   m_UseChildSensors: 1
@@ -35009,19 +35003,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DecisionPeriod: 6
   TakeActionsBetweenDecisions: 0
---- !u!114 &1367423876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1367423824}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e86e7fcfbd97b674fa2f437d38a3b4cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxSeconds: 600
 --- !u!114 &1367423877 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5020299007731939445, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
@@ -42291,9 +42272,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1367423863}
-    - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1367423876}
     - targetCorrespondingSourceObject: {fileID: 3377343274039566659, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1367423888}
@@ -51643,11 +51621,14 @@ MonoBehaviour:
   - {fileID: 343070151}
   winner: {fileID: 368958338}
   finalWinner: {fileID: 378751617}
+  p1ProfileNameText: {fileID: 0}
+  p2ProfileNameText: {fileID: 0}
   p1Manager: {fileID: 221568179}
   p2Manager: {fileID: 1367423825}
   playAgainButton: {fileID: 675885515}
   mainMenuButton: {fileID: 1593568637}
   saveReplayButton: {fileID: 86648141}
+  victoryScreenNavigation: {fileID: 0}
   audioManager: {fileID: 832730747}
   p1R1: {fileID: 1042687707}
   p1R2: {fileID: 1577754682}
@@ -51661,12 +51642,12 @@ MonoBehaviour:
   - {fileID: 616644771}
   - {fileID: 808757111}
   maxHealth: 100
-  trainingMode: 1
+  trainingMode: 0
   agentP1: {fileID: 221568215}
   agentP2: {fileID: 1367423861}
   p1Spawn: {fileID: 221568191}
   p2Spawn: {fileID: 1367423837}
-  tScale: 5
+  tScale: 1
   roundOn: 0
   trainingRoundOn: 0
   opponentDirector: {fileID: 1705601556}

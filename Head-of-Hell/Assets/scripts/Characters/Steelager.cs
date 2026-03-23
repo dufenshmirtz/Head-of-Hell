@@ -18,7 +18,7 @@ public class Steelager : Character
     public Transform firePoint;
     public Transform explosionPoint;
 
-    float spellTime = 0.59f;
+    float spellTime = 0.94f;
 
     public override void Start()
     {

@@ -18,7 +18,7 @@ public class Lithra : Character
     int airSpinDamage = 3;
     float airSpinCD = 3f;
 
-    float spellTime = 0.25f;
+    float spellTime = 0.42f;
 
     public override void Start()
     {

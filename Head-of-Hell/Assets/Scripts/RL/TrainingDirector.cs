@@ -125,7 +125,7 @@ public class TrainingOpponentDirector : MonoBehaviour
             behaviorP2.Model = null;
         }
 
-        Debug.Log("[TrainingOpponentDirector] Applied ScriptedBot mode on P2.");
+        //Debug.Log("[TrainingOpponentDirector] Applied ScriptedBot mode on P2.");
     }
 
     public void ApplyCurrentMode()

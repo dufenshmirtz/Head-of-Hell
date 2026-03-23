@@ -116,6 +116,14 @@ public class FighterAgent : Agent
     [Tooltip("Tiny penalty for using special while not facing the opponent.")]
     [SerializeField] float wrongFacingSpecialPenalty = -0.0005f;
 
+    //anti-charge-exploit
+    [SerializeField] int freeConsecutiveCharges = 2;
+    [SerializeField] float repeatedChargePenaltyBase = -0.00015f;
+    [SerializeField] float repeatedChargePenaltyStep = -0.00010f;
+    [SerializeField] float repeatedChargePenaltyCap = -0.00060f;
+
+    [SerializeField] float chargeChainDecaySeconds = 0.9f;
+
     private FighterAgentRewardDebugger rewardDebugger;
 
     // bookkeeping
@@ -134,6 +142,11 @@ public class FighterAgent : Agent
     int lastLightAction = 0;
     int lastSpecialAction = 0;
     int lastJumpAction = 0;
+
+    int lastChargeMode = 0;
+    int consecutiveChargeStarts = 0;
+
+    float timeSinceLastChargeStart = 999f;
 
     // optional
     FighterAgent oppAgent;
@@ -164,7 +177,7 @@ public class FighterAgent : Agent
             if (c != null)
             {
                 BindSelf(c);
-                Debug.Log($"[Agent {playerSuffix}] Bound SELF: {c.name}");
+                //Debug.Log($"[Agent {playerSuffix}] Bound SELF: {c.name}");
             }
         }
 
@@ -174,7 +187,7 @@ public class FighterAgent : Agent
             if (e != null)
             {
                 BindEnemy(e);
-                Debug.Log($"[Agent {playerSuffix}] Bound OPP: {e.name}");
+                //Debug.Log($"[Agent {playerSuffix}] Bound OPP: {e.name}");
             }
         }
     }
@@ -497,6 +510,8 @@ public class FighterAgent : Agent
             parry = (parry == 1)
         };
 
+        int currentIntent = GetActionIntent(jump, drop, light, heavy, blockHold, special, chargeMode, parry);
+
         aiInput.Apply(cmd);
 
         AddReward(stepPenalty);
@@ -524,6 +539,8 @@ public class FighterAgent : Agent
         BehaviorHygieneRewards(jump, drop, light, heavy, blockHold, special, chargeMode, parry);
         TacticalRangeRewards(light, heavy, special, chargeMode);
         DirectionalHygieneRewards(moveX, light, special);
+
+        ChargeSpamPenalty(chargeMode);
 
     }
 
@@ -622,6 +639,10 @@ public class FighterAgent : Agent
         lastLightAction = 0;
         lastSpecialAction = 0;
         lastJumpAction = 0;
+
+        lastChargeMode = 0;
+        consecutiveChargeStarts = 0;
+        timeSinceLastChargeStart = 999f;
     }
 
     private void OnDestroy()
@@ -987,5 +1008,56 @@ public class FighterAgent : Agent
             rewardDebugger?.LogLossReward(rewardLoss);
             return;
         }
+    }
+
+    void ChargeSpamPenalty(int chargeMode)
+    {
+        if (self == null || opp == null)
+            return;
+
+        if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
+            return;
+
+        float dt = Time.deltaTime;
+        if (dt <= 0f)
+            dt = 0.016f;
+
+        timeSinceLastChargeStart += dt;
+
+        // Αν πέρασε αρκετός χρόνος χωρίς νέο charge start, το streak σπάει
+        if (timeSinceLastChargeStart > chargeChainDecaySeconds)
+        {
+            consecutiveChargeStarts = 0;
+        }
+
+        bool chargeStartedNow = (chargeMode == 1 && lastChargeMode != 1);
+
+        if (chargeStartedNow)
+        {
+            // Αν το νέο charge ήρθε αρκετά αργά, ξεκινάει νέο chain
+            if (timeSinceLastChargeStart > chargeChainDecaySeconds)
+            {
+                consecutiveChargeStarts = 0;
+            }
+
+            consecutiveChargeStarts++;
+            timeSinceLastChargeStart = 0f;
+
+            if (consecutiveChargeStarts > freeConsecutiveCharges)
+            {
+                int extraCharges = consecutiveChargeStarts - freeConsecutiveCharges - 1;
+
+                float penalty =
+                    repeatedChargePenaltyBase +
+                    extraCharges * repeatedChargePenaltyStep;
+
+                // επειδή τα penalties είναι αρνητικά, αυτό βάζει κάτω όριο
+                penalty = Mathf.Max(penalty, repeatedChargePenaltyCap);
+
+                AddReward(penalty);
+            }
+        }
+
+        lastChargeMode = chargeMode;
     }
 }
