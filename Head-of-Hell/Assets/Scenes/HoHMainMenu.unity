@@ -2962,7 +2962,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 268.11, y: -486.19}
+  m_AnchoredPosition: {x: 255.30005, y: -474}
   m_SizeDelta: {x: 564.6094, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &100951153
@@ -6002,7 +6002,7 @@ GameObject:
   - component: {fileID: 170226041}
   - component: {fileID: 170226040}
   m_Layer: 0
-  m_Name: ProfileAnalyisSystem
+  m_Name: ProfileAnalysisSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13538,7 +13538,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -260, y: -486.19}
+  m_AnchoredPosition: {x: -284, y: -474}
   m_SizeDelta: {x: 566.4168, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &425733276
