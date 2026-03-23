@@ -30,8 +30,8 @@ public class FighterAgent : Agent
     KeyCode upK, downK, leftK, rightK, lightK, heavyK, blockK, abilityK, chargeK, parryK;
 
     [Header("Main Rewards")]
-    [SerializeField] float rewardDamageDealt = +0.02f;
-    [SerializeField] float rewardDamageTaken = -0.02f;
+    [SerializeField] float rewardDamageDealt = +0.01f;
+    [SerializeField] float rewardDamageTaken = -0.01f;
     [SerializeField] float rewardWin = +1.0f;
     [SerializeField] float rewardLoss = -1.0f;
     [SerializeField] float stepPenalty = -0.0001f;
