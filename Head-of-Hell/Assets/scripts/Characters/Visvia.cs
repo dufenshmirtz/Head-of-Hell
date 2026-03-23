@@ -28,7 +28,7 @@ public class Visvia : Character
     GameObject blast; // for testing
     Transform blastPoint;
 
-    float spellTime = 0.5f;
+    float spellTime = 0.84f;
 
     public override void Start()
     {

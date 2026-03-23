@@ -18,7 +18,7 @@ public class Vander : Character
     // --- Flying passive ---
     bool isFlying = false;
     //float flyUpSpeed = 6f;        // how fast he ascends while holding jump
-    float spellTime = 0.17f;
+    float spellTime = 0.29f;
 
     // How quickly we cancel falling (units: velocity per second)
     //[SerializeField] float fallBrakePerSec = 20f;
