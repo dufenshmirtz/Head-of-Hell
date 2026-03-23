@@ -385,8 +385,8 @@ def extract_round_features(doc: Dict[str, Any], filename: str) -> List[Dict[str,
 
     # Build rows per player
     rows: List[Dict[str, Any]] = []
-    MIN_ACTIONS = 5
-    MIN_DURATION = 2
+    MIN_ACTIONS = 25
+    MIN_DURATION = 8
     INVALID_PROFILES = {"GUEST", "UNKNOWN", "", "NONE", None}
 
     # HARD FILTER: αν και οι 2 παίκτες είναι invalid → αγνόησε όλο το match
@@ -575,7 +575,7 @@ def main():
     if bad_files:
         print(f"[INFO] Bad files skipped: {bad_files}")
 
-    MIN_MATCHES_PER_PROFILE = 1
+    MIN_MATCHES_PER_PROFILE = 2
     profile_match_counts = df_round.groupby("profile_id").size().reset_index(name="match_count")
 
     print("\n--- profile_match_counts ---")

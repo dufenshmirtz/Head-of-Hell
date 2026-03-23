@@ -1,11 +1,11 @@
 {
   "version": "1.0",
-  "generated_at": "2026-03-19T13:28:37.358778+00:00",
+  "generated_at": "2026-03-23T14:14:40.783945+00:00",
   "profiles": [
     {
       "profile_id": "7b2d5b56-fb33-42ca-bb1c-ca8c3f246947",
       "profile_name": "Saleaz",
-      "style_label": "Defensive",
+      "style_label": "Coward",
       "matches_count": 50,
       "elo_rating": 1491.03,
       "win_rate": 0.4,
@@ -25,7 +25,7 @@
     {
       "profile_id": "a227ee27-cce6-458c-8465-49ed718d5bd9",
       "profile_name": "ass",
-      "style_label": "Aggressive-Risky",
+      "style_label": "Insecure",
       "matches_count": 1,
       "elo_rating": 1500.0,
       "win_rate": 0.5,
@@ -45,7 +45,7 @@
     {
       "profile_id": "a227ee27-cce6-458c-8465-49ed718d5bd9",
       "profile_name": "ceas",
-      "style_label": "Aggressive",
+      "style_label": "Rageaholic",
       "matches_count": 1,
       "elo_rating": 1500.0,
       "win_rate": 0.0,
@@ -65,7 +65,7 @@
     {
       "profile_id": "7a3deb71-1a5e-4b42-a2d4-2fe4129134a1",
       "profile_name": "koutaliaris",
-      "style_label": "Mobile",
+      "style_label": "Ballbuster",
       "matches_count": 50,
       "elo_rating": 1510.45,
       "win_rate": 0.56,
