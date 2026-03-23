@@ -34,10 +34,10 @@ def validate_required_columns(df: pd.DataFrame, required: list[str]) -> None:
 
 
 def classify_style(row: pd.Series) -> str:
-    a = float(row["Aggression_norm"])
-    d = float(row["Defense_norm"])
-    m = float(row["Mobility_norm"])
-    r = float(row["Risk_norm"])
+    a = row["Aggression_norm"]
+    d = row["Defense_norm"]
+    m = row["Mobility_norm"]
+    r = row["Risk_norm"]
 
     scores = {
         "Aggressive": a,
@@ -46,25 +46,44 @@ def classify_style(row: pd.Series) -> str:
         "Risky": r,
     }
 
-    top_label = max(scores, key=scores.get)
-    top_value = scores[top_label]
+    # sort axes
+    sorted_axes = sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
-    ordered = sorted(scores.values(), reverse=True)
-    gap = ordered[0] - ordered[1] if len(ordered) > 1 else ordered[0]
+    top_label, top_value = sorted_axes[0]
+    second_label, second_value = sorted_axes[1]
 
-    if top_value < 0.55 or gap < 0.08:
-        return "Balanced"
+    # BALANCED
+    if top_value < 0.55 or (top_value - second_value) < 0.08:
+        return "Wildcard"
 
-    if top_label == "Aggressive" and d > 0.60:
-        return "Aggressive-Balanced"
-    if top_label == "Defensive" and a > 0.60:
-        return "Defensive-Balanced"
-    if top_label == "Mobile" and r > 0.60:
-        return "Mobile-Risky"
-    if top_label == "Risky" and a > 0.60:
-        return "Aggressive-Risky"
+    # COMBO styles
+    if top_label == "Aggressive" and second_label == "Defensive" and second_value > 0.60:
+        return "Braindead"
 
-    return top_label
+    if top_label == "Aggressive" and second_label == "Risky" and second_value > 0.60:
+        return "Degenerate"
+
+    if top_label == "Aggressive" and second_label == "Mobile" and second_value > 0.60:
+        return "Molesting"
+
+    if top_label == "Defensive" and second_label == "Mobile" and second_value > 0.60:
+        return "Pussy"
+
+    if top_label == "Defensive" and second_label == "Risky" and second_value > 0.60:
+        return "Traffic Cone"
+
+    if top_label == "Mobile" and second_label == "Risky" and second_value > 0.60:
+        return "Junkie"
+
+    # SOLO styles
+    solo_map = {
+        "Aggressive": "Rageaholic",
+        "Defensive": "Coward",
+        "Mobile": "Ballbuster",
+        "Risky": "Insecure",
+    }
+
+    return solo_map.get(top_label, top_label)
 
 
 # --------------------------------------------------
