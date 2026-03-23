@@ -238,6 +238,8 @@ public abstract class Character : MonoBehaviour
     private static int spawnIndexP1 = -1;
     private static int spawnIndexP2 = -1;
 
+    Coroutine flashRedCoroutine;
+
     
 
     public void SetIncomingDamageContext(string attackerId, MoveType moveType, SourceType sourceType)
@@ -1509,6 +1511,7 @@ public abstract class Character : MonoBehaviour
             }
             else
             {
+                CheckForCrit();
                 TakeDamageNoAnimation(dmg, blockable);
                 return;
             }
@@ -1569,7 +1572,7 @@ public abstract class Character : MonoBehaviour
             }
 
             currHealth -= dmg;
-
+            CheckForCrit();
             animator.SetTrigger("tookDmg");
             healthbar.SetHealth(currHealth);
             StartCoroutine(TriggerDamageCounter(dmg));
@@ -1984,6 +1987,56 @@ public abstract class Character : MonoBehaviour
             healthbar.SetHealth(currHealth);
         }
 
+    }
+
+    void CheckForCrit()
+    {
+        if (CriticalChance() && !gameManager.trainingMode)
+        {
+            FlashRed();
+            TakeDamageNoAnimation(10,false);
+            audioManager.PlaySFX(audioManager.critical, 1.7f);
+        }
+    }
+    bool CriticalChance()
+    {
+        return UnityEngine.Random.value < 0.21f;
+    }
+
+    public void FlashRed()
+    {
+        if (flashRedCoroutine != null)
+        {
+            StopCoroutine(flashRedCoroutine);
+        }
+
+        flashRedCoroutine = StartCoroutine(FlashRedCoroutine(0.3f));
+    }
+
+    private IEnumerator FlashRedCoroutine(float duration)
+    {
+        SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>(true);
+
+        if (renderers == null || renderers.Length == 0)
+            yield break;
+
+        Color[] originalColors = new Color[renderers.Length];
+
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            originalColors[i] = renderers[i].color;
+            renderers[i].color = Color.red;
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            if (renderers[i] != null)
+                renderers[i].color = originalColors[i];
+        }
+
+        flashRedCoroutine = null;
     }
 
     public void ChangeEnemy(Character newEnemy)

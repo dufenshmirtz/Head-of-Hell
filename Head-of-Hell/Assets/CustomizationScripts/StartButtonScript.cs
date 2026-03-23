@@ -8,7 +8,7 @@ public class StartButtonScript : MonoBehaviour
 
     void Update()
     {
-        print(setting.text);
+        //print(setting.text);
         // Check for Enter key press (both Return and Keypad Enter)
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
