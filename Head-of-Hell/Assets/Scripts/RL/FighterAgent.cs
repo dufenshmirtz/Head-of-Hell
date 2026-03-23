@@ -95,7 +95,7 @@ public class FighterAgent : Agent
     [SerializeField] float extremeFarHeavyPenalty = -0.0007f;
 
     [Tooltip("Tiny penalty for using charge from absurdly far away.")]
-    [SerializeField] float extremeFarChargePenalty = -0.0006f;
+    [SerializeField] float extremeFarChargePenalty = -0.0008f;
 
     [Tooltip("Reward for reducing distance when clearly outside melee threat range.")]
     [SerializeField] float approachBonus = +0.00025f;

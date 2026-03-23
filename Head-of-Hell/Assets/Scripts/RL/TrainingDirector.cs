@@ -87,6 +87,10 @@ public class TrainingOpponentDirector : MonoBehaviour
 
     public void PrepareNextEpisode()
     {
+        if(!gameManager.trainingMode)
+        {
+            return;
+        }
         episodeIndex++;
 
         UpdateProgressiveWeights();

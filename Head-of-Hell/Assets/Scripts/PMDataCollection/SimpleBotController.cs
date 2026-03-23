@@ -36,6 +36,19 @@ public class SimpleBotController : MonoBehaviour
     [Header("Platform Drop")]
     [SerializeField] private float dropHoldDuration = 0.20f;
 
+    [Header("Anti-Charge Reaction")]
+    [SerializeField] private bool antiChargeEnabled = true;
+    [SerializeField] private float antiChargeRange = 2.0f;
+    [SerializeField] private float antiChargeHeightTolerance = 1.6f;
+    [SerializeField] private float antiChargeReactionCooldown = 0.45f;
+    [SerializeField] private float antiChargeBaseChance = 0.35f;
+    [SerializeField] private float antiChargeSkillBonus = 0.50f;
+    [SerializeField] private float antiChargeParryWeight = 0.42f;
+    [SerializeField] private float antiChargeJumpWeight = 0.26f;
+    [SerializeField] private float antiChargeRetreatWeight = 0.22f;
+    [SerializeField] private float antiChargeBlockWeight = 0.10f;
+    [SerializeField] private float retreatDuration = 0.22f;
+
     private BotInputProvider botInput;
     private float thinkTimer;
     private float actionTimer;
@@ -44,6 +57,11 @@ public class SimpleBotController : MonoBehaviour
     private float forcedVerticalTimer;
     private float forcedVerticalValue;
     private bool isDroppingThroughPlatform;
+
+    private float antiChargeReactionTimer;
+
+    private float forcedHorizontalTimer;
+    private float forcedHorizontalValue;
 
     private bool initialized;
 
@@ -66,6 +84,10 @@ public class SimpleBotController : MonoBehaviour
         forcedVerticalTimer = 0f;
         forcedVerticalValue = 0f;
         isDroppingThroughPlatform = false;
+
+        antiChargeReactionTimer = 0f;
+        forcedHorizontalTimer = 0f;
+        forcedHorizontalValue = 0f;
 
         initialized = false;
     }
@@ -92,11 +114,20 @@ public class SimpleBotController : MonoBehaviour
         thinkTimer -= Time.deltaTime;
         actionTimer -= Time.deltaTime;
         blockHoldTimer -= Time.deltaTime;
+        antiChargeReactionTimer -= Time.deltaTime;
 
         UpdateForcedVertical();
+        UpdateForcedHorizontal();
 
         if (blockHoldTimer <= 0f)
             botInput.SetKey(setup.block, false);
+
+        // πρώτα reactions, μετά movement/normal decisions
+        if (TryReactToCharge())
+        {
+            HandleMovement();
+            return;
+        }
 
         HandleMovement();
 
@@ -161,8 +192,13 @@ public class SimpleBotController : MonoBehaviour
 
         float move = 0f;
 
+        // forced retreat / burst movement
+        if (forcedHorizontalTimer > 0f)
+        {
+            move = forcedHorizontalValue;
+        }
         // ⭐ Anti-top-camp
-        if (targetBelow && dx < 0.6f && !isDroppingThroughPlatform)
+        else if (targetBelow && dx < 0.6f && !isDroppingThroughPlatform)
         {
             float dropChance = Mathf.Lerp(0.4f, 0.75f, skill);
 
@@ -183,14 +219,12 @@ public class SimpleBotController : MonoBehaviour
                 move = -Mathf.Sign(dxSigned);
         }
 
-        // --- HORIZONTAL ---
         string suffix = GetAxisSuffix();
 
         botInput.SetAxis("Horizontal" + suffix, move);
         botInput.SetAxis("Horizontal" + setup.playerNum, move);
         botInput.SetAxis("Horizontal", move);
 
-        // --- VERTICAL (important for drop) ---
         float vertical = forcedVerticalTimer > 0f ? forcedVerticalValue : 0f;
 
         botInput.SetAxis("Vertical" + suffix, vertical);
@@ -264,6 +298,133 @@ public class SimpleBotController : MonoBehaviour
     }
 
     // =========================================================
+    // ANTI-CHARGE
+    // =========================================================
+
+    private bool TryReactToCharge()
+    {
+        if (!antiChargeEnabled) return false;
+        if (antiChargeReactionTimer > 0f) return false;
+        if (actionTimer > 0f) return false;
+        if (character == null || target == null) return false;
+
+        // αν εμείς είμαστε ήδη locked σε bad state, μην προσπαθήσουμε
+        if (character.IsCasting || character.IsStunned || character.IsKnocked)
+            return false;
+
+        float dxSigned = target.transform.position.x - transform.position.x;
+        float dySigned = target.transform.position.y - transform.position.y;
+
+        float dx = Mathf.Abs(dxSigned);
+        float dy = Mathf.Abs(dySigned);
+
+        bool sameLevel = dy <= antiChargeHeightTolerance;
+        bool closeEnough = dx <= antiChargeRange;
+        bool opponentCharging = target.IsCharging;
+
+        if (!opponentCharging || !closeEnough || !sameLevel)
+            return false;
+
+        float reactChance = antiChargeBaseChance + antiChargeSkillBonus * skill;
+
+        // αν ο αντίπαλος έχει ήδη fully charged attack, αύξησε λίγο την αντίδραση
+        if (target.IsCharged)
+            reactChance += 0.15f;
+
+        reactChance = Mathf.Clamp01(reactChance);
+
+        if (Random.value > reactChance)
+            return false;
+
+        antiChargeReactionTimer = antiChargeReactionCooldown;
+
+        float totalWeight =
+            antiChargeParryWeight +
+            antiChargeJumpWeight +
+            antiChargeRetreatWeight +
+            antiChargeBlockWeight;
+
+        float roll = Random.value * totalWeight;
+
+        // 1) PARRY
+        if (roll < antiChargeParryWeight)
+        {
+            if (character.CanParry && !character.IsCasting)
+            {
+                PressOneFrame(setup.parry);
+                actionTimer = 0.22f;
+                return true;
+            }
+        }
+        else
+        {
+            roll -= antiChargeParryWeight;
+        }
+
+        // 2) JUMP
+        if (roll < antiChargeJumpWeight)
+        {
+            if (character.IsGrounded && !character.JumpDisabled && !character.IsCasting)
+            {
+                PressOneFrame(setup.up);
+
+                // μικρό retreat στον αέρα
+                ForceRetreatFromTarget(dxSigned, retreatDuration * 0.75f);
+
+                actionTimer = 0.25f;
+                return true;
+            }
+        }
+        else
+        {
+            roll -= antiChargeJumpWeight;
+        }
+
+        // 3) RETREAT
+        if (roll < antiChargeRetreatWeight)
+        {
+            ForceRetreatFromTarget(dxSigned, retreatDuration);
+            actionTimer = 0.18f;
+            return true;
+        }
+        else
+        {
+            roll -= antiChargeRetreatWeight;
+        }
+
+        // 4) BLOCK fallback
+        botInput.SetKey(setup.block, true);
+        blockHoldTimer = Random.Range(0.18f, 0.32f);
+        actionTimer = 0.22f;
+        return true;
+    }
+
+    private void ForceRetreatFromTarget(float dxSigned, float duration)
+    {
+        // αν ο αντίπαλος είναι δεξιά, φύγε αριστερά, και το αντίστροφο
+        forcedHorizontalValue = -Mathf.Sign(dxSigned);
+
+        // αν για κάποιο λόγο είναι ακριβώς πάνω μας
+        if (Mathf.Abs(forcedHorizontalValue) < 0.01f)
+            forcedHorizontalValue = Random.value < 0.5f ? -1f : 1f;
+
+        forcedHorizontalTimer = duration;
+    }
+
+    private void UpdateForcedHorizontal()
+    {
+        if (forcedHorizontalTimer > 0f)
+        {
+            forcedHorizontalTimer -= Time.deltaTime;
+            if (forcedHorizontalTimer <= 0f)
+            {
+                forcedHorizontalTimer = 0f;
+                forcedHorizontalValue = 0f;
+            }
+        }
+    }
+
+    // =========================================================
     // PLATFORM DROP
     // =========================================================
 
@@ -271,10 +432,8 @@ public class SimpleBotController : MonoBehaviour
     {
         isDroppingThroughPlatform = true;
 
-        // ⭐ SEND DOWN KEY PRESS (edge trigger)
         PressOneFrame(setup.down);
 
-        // Κράτα και vertical για σιγουριά
         forcedVerticalValue = -1f;
         forcedVerticalTimer = dropHoldDuration;
     }
