@@ -57,7 +57,7 @@ public abstract class Character : MonoBehaviour
     protected bool charging = false;
     private Coroutine chargeCoroutine;
     float chargeTime = 0.5f;
-    protected int chargeDmg = 34;
+    protected int chargeDmg = 31;
 
     //Flags
     public bool isBlocking = false;
@@ -239,6 +239,8 @@ public abstract class Character : MonoBehaviour
     private static int spawnIndexP2 = -1;
 
     Coroutine flashRedCoroutine;
+
+    Coroutine cdCoroutine;
 
     
 
@@ -799,6 +801,10 @@ public abstract class Character : MonoBehaviour
         {
             rb.bodyType = RigidbodyType2D.Static;
         }
+        if(animator != null)
+        {
+            animator.SetBool("IsRunning",false);
+        }  
     }
 
     public void stayDynamic()
@@ -886,7 +892,7 @@ public abstract class Character : MonoBehaviour
     {
         if (animator.GetBool("IsRunning") && isStatic)
         {
-            stayDynamic();
+            Debug.Log("[weirdStatic bug]");
         }
         if(rb.bodyType == RigidbodyType2D.Static && !isStatic)
         {
@@ -914,22 +920,26 @@ public abstract class Character : MonoBehaviour
         stayDynamic();
         cdTimer = cd;
         onCooldown = true;
-        StartCoroutine(AbilityCooldown(cd));
+        cdCoroutine = StartCoroutine(AbilityCooldown(cd));
     }
 
     public IEnumerator AbilityCooldown(float duration)
     {
-    // cdTimer already set in OnCooldown()
-    while (cdTimer > 0f)
-    {
-        cdTimer -= Time.deltaTime;
-        UpdateCooldownSlider(duration);
-        yield return null; // next frame
-    }
+        if(cdCoroutine == null)
+        {
+            // cdTimer already set in OnCooldown()
+            while (cdTimer > 0f)
+            {
+                cdTimer -= Time.deltaTime;
+                UpdateCooldownSlider(duration);
+                yield return null; // next frame
+            }
 
-    onCooldown = false;
-    cdTimer = 0f;
-    UpdateCooldownSlider(duration);
+            onCooldown = false;
+            cdTimer = 0f;
+            cdCoroutine = null;
+            UpdateCooldownSlider(duration);
+        }  
     }
 
     void UpdateCooldownSlider(float duration)
@@ -1465,7 +1475,7 @@ public abstract class Character : MonoBehaviour
         if (enemy == null || gameManager.trainingMode) return -1f;
         return Vector2.Distance(transform.position, enemy.transform.position);
     }
-    virtual public void TakeDamage(int dmg, bool blockable, bool parryable = true)
+    virtual public void TakeDamage(int dmg, bool blockable, bool parryable = true, bool canCrit = true)
     {
         if (parryable)
         {
@@ -1511,7 +1521,7 @@ public abstract class Character : MonoBehaviour
             }
             else
             {
-                CheckForCrit();
+                CheckForCrit(canAlterSpeed);
                 TakeDamageNoAnimation(dmg, blockable);
                 return;
             }
@@ -1572,7 +1582,7 @@ public abstract class Character : MonoBehaviour
             }
 
             currHealth -= dmg;
-            CheckForCrit();
+            CheckForCrit(canCrit);
             animator.SetTrigger("tookDmg");
             healthbar.SetHealth(currHealth);
             StartCoroutine(TriggerDamageCounter(dmg));
@@ -1989,18 +1999,18 @@ public abstract class Character : MonoBehaviour
 
     }
 
-    void CheckForCrit()
+    void CheckForCrit(bool canCrit = true)
     {
-        if (CriticalChance() && !gameManager.trainingMode)
+        if (CriticalChance() && !gameManager.trainingMode && canCrit)
         {
             FlashRed();
             TakeDamageNoAnimation(10,false);
-            audioManager.PlaySFX(audioManager.critical, 1.7f);
+            audioManager.PlaySFX(audioManager.critical, 2f);
         }
     }
     bool CriticalChance()
     {
-        return UnityEngine.Random.value < 0.21f;
+        return UnityEngine.Random.value < 0.18f;
     }
 
     public void FlashRed()

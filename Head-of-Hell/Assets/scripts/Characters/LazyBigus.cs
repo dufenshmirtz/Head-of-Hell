@@ -9,7 +9,7 @@ public class LazyBigus : Character
     Transform bulletParent; 
     public float bulletSpeed = 35f; // Speed of the bullet
     bool isShootin = false;
-    float cooldown = 20f;
+    public float cooldown = 20f;
     int poisonCounter = 0;
     public GameObject beam;
     public BeamScript bScript;

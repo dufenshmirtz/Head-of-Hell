@@ -246,7 +246,7 @@ public class Chiback : Character
     #endregion
 
     #region Passive
-    override public void TakeDamage(int dmg, bool blockable, bool parryable=true)
+    override public void TakeDamage(int dmg, bool blockable, bool parryable=true, bool canCrit = true)
     {
         if (timesHit < enragingNum && !isBlocking)
         {

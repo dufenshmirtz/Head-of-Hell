@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Skipler : Character
 {
-    protected float cooldown = 8f;
+    public float cooldown = 8f;
     //Spell
     protected float dashingPower = 40f;
     protected float dashingTime = 0.1f;
