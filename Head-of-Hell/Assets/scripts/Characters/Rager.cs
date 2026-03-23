@@ -4,7 +4,7 @@ using UnityEngine;
 public class Rager : Character
 {
     //Spell
-    float cooldown = 20f;
+    public float cooldown = 20f;
     int hit1Damage = 2, hit2Damage = 7; //25 actual dmg these variables are ass
     int spellDamage2 = 10;
     int spellDamage1 = 15;
@@ -129,7 +129,7 @@ public class Rager : Character
             {
                 // Telemetry: context before each tick (no extra HitAttempt spam)
                 enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
-                enemy.TakeDamage(1, false);
+                enemy.TakeDamage(1, false, false, false);
             }
             yield return new WaitForSeconds(delayBetweenHits); // Wait before the next hit
         }

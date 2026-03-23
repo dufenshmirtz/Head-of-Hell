@@ -5,7 +5,7 @@ public class Vander : Character
 {
 
     int stabDamage = 10, stabHeal = 5;
-    float cooldown = 12f;
+    public float cooldown = 12f;
     //katana
     int katanaDmg = 3;
     int smallLifesteal = 3;
