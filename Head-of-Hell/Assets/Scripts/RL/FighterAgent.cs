@@ -111,13 +111,13 @@ public class FighterAgent : Agent
 
     [Header("Directional Hygiene")]
     [Tooltip("Tiny penalty for using a Dash-type move without horizontal direction input.")]
-    [SerializeField] float dashNoDirectionPenalty = -0.00005f;
+    [SerializeField] float dashNoDirectionPenalty = -0.0005f;
 
     [Tooltip("Tiny penalty for using special while not facing the opponent.")]
     [SerializeField] float wrongFacingSpecialPenalty = -0.0005f;
 
     //anti-charge-exploit
-    [SerializeField] int freeConsecutiveCharges = 2;
+    [SerializeField] int freeConsecutiveCharges = 3;
     [SerializeField] float repeatedChargePenaltyBase = -0.00015f;
     [SerializeField] float repeatedChargePenaltyStep = -0.00010f;
     [SerializeField] float repeatedChargePenaltyCap = -0.00060f;
@@ -1047,14 +1047,15 @@ public class FighterAgent : Agent
             {
                 int extraCharges = consecutiveChargeStarts - freeConsecutiveCharges - 1;
 
-                float penalty =
-                    repeatedChargePenaltyBase +
-                    extraCharges * repeatedChargePenaltyStep;
+                float penalty = repeatedChargePenaltyBase + extraCharges * repeatedChargePenaltyStep;
 
                 // επειδή τα penalties είναι αρνητικά, αυτό βάζει κάτω όριο
                 penalty = Mathf.Max(penalty, repeatedChargePenaltyCap);
 
                 AddReward(penalty);
+
+                rewardDebugger?.LogLossChargeSpam(penalty);
+
             }
         }
 

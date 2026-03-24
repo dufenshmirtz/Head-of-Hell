@@ -33,9 +33,9 @@ public class TrainingOpponentDirector : MonoBehaviour
     [Range(0f, 1f)] public float mirrorWeight = 0.10f;
 
     [Header("Scripted Curriculum")]
-    [Range(0f, 1f)] public float minScriptedSkill = 0.35f;
-    [Range(0f, 1f)] public float maxScriptedSkill = 0.85f;
-    public int curriculumEpisodes = 5000;
+    [Range(0f, 1f)] public float minScriptedSkill = 0.5f;
+    [Range(0f, 1f)] public float maxScriptedSkill = 0.99f;
+    public int curriculumEpisodes = 1000;
 
     [Header("Debug")]
     public OpponentMode currentMode;
@@ -216,7 +216,6 @@ public class TrainingOpponentDirector : MonoBehaviour
             behaviorP2.Model = null;
         }
 
-        Debug.Log("[TrainingOpponentDirector] Applied MirrorSelfPlay mode on P2.");
     }
 
     private void ApplyInferenceMode()
@@ -239,7 +238,6 @@ public class TrainingOpponentDirector : MonoBehaviour
             behaviorP2.BehaviorType = BehaviorType.InferenceOnly;
         }
 
-        Debug.Log("[TrainingOpponentDirector] Applied InferenceModel mode on P2.");
     }
 
     private void UpdateProgressiveWeights()

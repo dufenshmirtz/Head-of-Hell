@@ -43609,9 +43609,9 @@ MonoBehaviour:
   decisionP2: {fileID: 1367423863}
   botP2: {fileID: 1367423888}
   oldOpponentModel: {fileID: 5022602860645237092, guid: 079bb765e2b6d77468c35fa892a2bad6, type: 3}
-  phase2StartEpisode: 200
-  phase3StartEpisode: 600
-  phase4StartEpisode: 1000
+  phase2StartEpisode: 500
+  phase3StartEpisode: 1000
+  phase4StartEpisode: 2000
   scriptedWeight: 0.5
   inferenceWeight: 0.25
   mirrorWeight: 0.25
@@ -43620,7 +43620,7 @@ MonoBehaviour:
   curriculumEpisodes: 1201
   currentMode: 0
   episodeIndex: 0
-  currentScriptedSkill: 0.35
+  currentScriptedSkill: 0.5
 --- !u!4 &1705601557
 Transform:
   m_ObjectHideFlags: 0
