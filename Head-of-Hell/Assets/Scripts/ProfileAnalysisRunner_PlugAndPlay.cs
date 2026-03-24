@@ -1,35 +1,42 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using UnityEngine;
 
 public class ProfileAnalysisRunner_PlugAndPlay : MonoBehaviour
 {
-    [Header("Python")]
-    public string pythonExe = "python";
-
-    [Header("Pipeline")]
-    public string pipelineScript = "pipeline_runner.py";
+    [Header("Pipeline EXE")]
+    public string exeName = "runtime_profile_pipeline.exe";
 
     [Header("UI")]
     public ProfileAnalysisPanelUI panelUI;
+
+    [Header("Safety")]
+    public int processTimeoutMs = 120000; // 120 sec
 
     public void RunPipelineAndRefresh()
     {
         try
         {
-            string workingDir = Path.Combine(Application.streamingAssetsPath, "Analysis");
-            string scriptPath = Path.Combine(workingDir, pipelineScript);
+            string exePath = Path.Combine(
+                Application.streamingAssetsPath,
+                "Analysis",
+                "Bin",
+                exeName
+            );
 
-            if (!File.Exists(scriptPath))
-                throw new FileNotFoundException("Pipeline script not found: " + scriptPath);
+            if (!File.Exists(exePath))
+                throw new FileNotFoundException("Pipeline EXE not found: " + exePath);
 
-            string telemetryDir = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            string documentsRoot = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 "My Games",
-                "Head of Hell",
-                "Telemetry"
-             );
+                "Head of Hell"
+            );
+
+            string telemetryDir = Path.Combine(documentsRoot, "Telemetry", "Build");
+            string runtimeOutDir = Path.Combine(documentsRoot, "PipelineOutputs", "runtime", "out");
+            string runtimeEloOutDir = Path.Combine(documentsRoot, "PipelineOutputs", "runtime", "out_elo");
 
             string unityJsonPath = Path.Combine(
                 Application.persistentDataPath,
@@ -41,88 +48,74 @@ public class ProfileAnalysisRunner_PlugAndPlay : MonoBehaviour
             if (!string.IsNullOrWhiteSpace(unityJsonDir))
                 Directory.CreateDirectory(unityJsonDir);
 
+            Directory.CreateDirectory(telemetryDir);
+            Directory.CreateDirectory(runtimeOutDir);
+            Directory.CreateDirectory(runtimeEloOutDir);
+
+            string[] telemetryFiles = Directory.GetFiles(telemetryDir, "*.json", SearchOption.TopDirectoryOnly);
+            if (telemetryFiles.Length == 0)
+                throw new Exception("No telemetry JSON files found in Build folder: " + telemetryDir);
+
             ProcessStartInfo psi = new ProcessStartInfo
             {
-                FileName = pythonExe,
+                FileName = exePath,
                 Arguments =
-                     $"\"{scriptPath}\" " +
-                     $"--telemetry-dir \"{telemetryDir}\"",
-                WorkingDirectory = workingDir,
+                    $"--telemetry-dir \"{telemetryDir}\" " +
+                    $"--out-dir \"{runtimeOutDir}\" " +
+                    $"--elo-out-dir \"{runtimeEloOutDir}\" " +
+                    $"--unity-output \"{unityJsonPath}\"",
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
+
+            string stdout;
+            string stderr;
 
             using (Process process = new Process())
             {
                 process.StartInfo = psi;
                 process.Start();
 
-                string stdout = process.StandardOutput.ReadToEnd();
-                string stderr = process.StandardError.ReadToEnd();
+                stdout = process.StandardOutput.ReadToEnd();
+                stderr = process.StandardError.ReadToEnd();
 
-                process.WaitForExit();
+                if (!process.WaitForExit(processTimeoutMs))
+                {
+                    try { process.Kill(); } catch { }
+                    throw new Exception("Pipeline EXE timed out.");
+                }
 
-                UnityEngine.Debug.Log($"[pipeline_runner] STDOUT:\n{stdout}");
+                UnityEngine.Debug.Log($"[profile_pipeline.exe] STDOUT:\n{stdout}");
 
                 if (!string.IsNullOrWhiteSpace(stderr))
-                    UnityEngine.Debug.LogWarning($"[pipeline_runner] STDERR:\n{stderr}");
+                    UnityEngine.Debug.LogWarning($"[profile_pipeline.exe] STDERR:\n{stderr}");
 
                 if (process.ExitCode != 0)
-                    throw new Exception("Pipeline failed with exit code " + process.ExitCode);
-            }
-
-            // Run export_profile_analysis.py separately so Unity controls the final output path
-            string exportScriptPath = Path.Combine(workingDir, "export_profile_analysis.py");
-            if (!File.Exists(exportScriptPath))
-                throw new FileNotFoundException("Export script not found: " + exportScriptPath);
-            UnityEngine.Debug.Log("EXPORT unityJsonPath = " + unityJsonPath);
-            UnityEngine.Debug.Log("EXPORT script = " + exportScriptPath);
-            ProcessStartInfo exportPsi = new ProcessStartInfo
-            {
-                FileName = pythonExe,
-                Arguments =
-                    $"\"{exportScriptPath}\" " +
-                    $"--input \"{Path.Combine(workingDir, "out", "dataset_profile_level.csv")}\" " +
-                    $"--elo-input \"{Path.Combine(workingDir, "out_elo", "elo_overall.csv")}\" " +
-                    $"--output-dir \"{Path.Combine(workingDir, "out", "profile_analysis")}\" " +
-                    $"--unity-output \"{unityJsonPath}\"",
-                WorkingDirectory = workingDir,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
-
-            using (Process exportProcess = new Process())
-            {
-                exportProcess.StartInfo = exportPsi;
-                UnityEngine.Debug.Log("EXPORT args FULL = " + exportPsi.Arguments);
-                exportProcess.Start();
-
-                string stdout = exportProcess.StandardOutput.ReadToEnd();
-                string stderr = exportProcess.StandardError.ReadToEnd();
-
-                exportProcess.WaitForExit();
-                UnityEngine.Debug.Log("UNITY JSON EXISTS AFTER EXPORT = " + File.Exists(unityJsonPath));
-                UnityEngine.Debug.Log("UNITY JSON PATH = " + unityJsonPath);
-
-                if (File.Exists(unityJsonPath))
                 {
-                    UnityEngine.Debug.Log("UNITY JSON LAST WRITE = " + File.GetLastWriteTime(unityJsonPath));
+                    throw new Exception(
+                        "Pipeline EXE failed with exit code " + process.ExitCode +
+                        "\nSTDERR:\n" + stderr
+                    );
                 }
-                UnityEngine.Debug.Log($"[export_profile_analysis] STDOUT:\n{stdout}");
-
-                if (!string.IsNullOrWhiteSpace(stderr))
-                    UnityEngine.Debug.LogWarning($"[export_profile_analysis] STDERR:\n{stderr}");
-
-                if (exportProcess.ExitCode != 0)
-                    throw new Exception("export_profile_analysis failed with exit code " + exportProcess.ExitCode);
             }
+
+            if (!File.Exists(unityJsonPath))
+                throw new FileNotFoundException("profile_analysis.json was not generated: " + unityJsonPath);
+
+            UnityEngine.Debug.Log("PIPELINE SUCCESS -> JSON READY");
+            UnityEngine.Debug.Log("RUNTIME JSON PATH = " + unityJsonPath);
+            UnityEngine.Debug.Log("RUNTIME JSON LAST WRITE = " + File.GetLastWriteTime(unityJsonPath));
 
             if (panelUI != null)
+            {
                 panelUI.RefreshAnalysis();
+            }
+            else
+            {
+                UnityEngine.Debug.LogWarning("Pipeline finished but panelUI is not assigned.");
+            }
         }
         catch (Exception ex)
         {
