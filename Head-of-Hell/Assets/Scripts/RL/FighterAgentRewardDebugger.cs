@@ -28,6 +28,7 @@ public class FighterAgentRewardDebugger : MonoBehaviour
     private float epWrongFacingSpecialPenaltyTotal;
     private float epWinRewardTotal;
     private float epLossRewardTotal;
+    private float epChargeSpamTotal;
 
     public void BeginEpisode(string playerSuffix, int? characterId, ReachType lightReach, ReachType specialReach, bool profileLoaded)
     {
@@ -61,6 +62,7 @@ public class FighterAgentRewardDebugger : MonoBehaviour
     public void LogWrongFacingSpecialPenalty(float value) => epWrongFacingSpecialPenaltyTotal += value;
     public void LogWinReward(float value) => epWinRewardTotal += value;
     public void LogLossReward(float value) => epLossRewardTotal += value;
+    public void LogLossChargeSpam(float value) => epChargeSpamTotal += value;
 
     public void EndEpisode(
         string playerSuffix,
@@ -91,7 +93,8 @@ public class FighterAgentRewardDebugger : MonoBehaviour
             epDashNoDirectionPenaltyTotal +
             epWrongFacingSpecialPenaltyTotal +
             epWinRewardTotal +
-            epLossRewardTotal;
+            epLossRewardTotal +
+            epChargeSpamTotal;
 
         Debug.Log(
             $"[Agent {playerSuffix}] Episode {localEpisodeCounter} END={endReason} | " +
@@ -114,7 +117,8 @@ public class FighterAgentRewardDebugger : MonoBehaviour
             $"  FarMeleeLight={epFarMeleeLightPenaltyTotal:F4}\n" +
             $"  FarMeleeSpecial={epFarMeleeSpecialPenaltyTotal:F4}\n" +
             $"  DashNoDirection={epDashNoDirectionPenaltyTotal:F4}\n" +
-            $"  WrongFacingSpecial={epWrongFacingSpecialPenaltyTotal:F4}"
+            $"  WrongFacingSpecial={epWrongFacingSpecialPenaltyTotal:F4}\n" +
+            $"  ChargeSpam={epChargeSpamTotal:F4}"
         );
     }
 
@@ -137,5 +141,6 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         epWrongFacingSpecialPenaltyTotal = 0f;
         epWinRewardTotal = 0f;
         epLossRewardTotal = 0f;
+        epChargeSpamTotal = 0f;
     }
 }
