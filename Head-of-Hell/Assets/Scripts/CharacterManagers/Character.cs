@@ -998,7 +998,7 @@ public abstract class Character : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
 
-        chargeReset = true;
+        chargeReset = false;
         knockable = true;
         charging = false;
         animator.SetBool("Casting", false);
@@ -1152,9 +1152,10 @@ public abstract class Character : MonoBehaviour
                     //stayDynamic();
                     animator.SetTrigger("ChargedHit");
                     charged = false;
+                    charging = false;
                     animator.SetBool("Casting", true);
                     animator.ResetTrigger("tookDmg");
-                    ChargeSafety(0.5f);
+                    ChargeSafety(0.83f);
                 }
                 return true;
             }
@@ -2005,12 +2006,12 @@ public abstract class Character : MonoBehaviour
         {
             FlashRed();
             TakeDamageNoAnimation(10,false);
-            audioManager.PlaySFX(audioManager.critical, 2f);
+            audioManager.PlaySFX(audioManager.critical, 2.6f);
         }
     }
-    bool CriticalChance()
+    virtual protected bool CriticalChance()
     {
-        return UnityEngine.Random.value < 0.18f;
+        return UnityEngine.Random.value < 0.1f;
     }
 
     public void FlashRed()

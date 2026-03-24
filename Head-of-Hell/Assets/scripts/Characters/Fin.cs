@@ -9,7 +9,7 @@ public class Fin : Character
     float rollTime = 0.39f;
     bool rollReady = true;
     int passiveDamage = 6;
-    float flashStunDuration = 1.2f;
+    float flashStunDuration = 0.5f;
     float resetRoll = 2f;
     // bool safety = true;
     Transform escapePoint;
@@ -64,8 +64,8 @@ public class Fin : Character
         TelemetryManager.Instance?.LogAction(PlayerId, "Special");
         attackRange += 0.5f;
         audioManager.PlaySFX(audioManager.kalhaflash, 2f);
-        animator.SetTrigger("Spell");
         UsingAbility(cooldown);
+        animator.SetTrigger("Spell");
         StartCoroutine(SpellSafety(spellTime,cooldown));
     }
 

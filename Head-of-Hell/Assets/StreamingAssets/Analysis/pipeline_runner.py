@@ -27,11 +27,11 @@ def main():
     )
 
     output_root = get_default_output_root()
-
+    documents_dir = os.path.join(os.path.expanduser("~"), "Documents")
     parser.add_argument("--python", default=sys.executable, help="Python executable to use")
     parser.add_argument(
         "--telemetry-dir",
-        default=os.path.join("Telemetry", "Build"),
+        default=os.path.join(documents_dir, "My Games", "Head of Hell", "Telemetry", "Build"),
         help="Telemetry folder path"
     )
     parser.add_argument(

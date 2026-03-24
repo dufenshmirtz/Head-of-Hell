@@ -180,7 +180,7 @@ public class TelemetryManager : MonoBehaviour
         // Merge (όχι replace)
         if (!string.IsNullOrEmpty(meta.map)) currentSession.meta.map = meta.map;
         if (!string.IsNullOrEmpty(meta.mode)) currentSession.meta.mode = meta.mode;
-        if (meta.roundNumber != 0) currentSession.meta.roundNumber = meta.roundNumber;
+        if (meta.roundNumber_ != 0) currentSession.meta.roundNumber_ = meta.roundNumber_;
 
         // bool -> πάντα assign
         currentSession.meta.trainingMode = meta.trainingMode;
@@ -394,7 +394,7 @@ public class TelemetryMatchMeta
     public string mode = "1v1";
 
     // Round-level metadata
-    public int roundNumber = 0;
+    public int roundNumber_ = 0;
 
     // Players
     public string p1Id = "";
