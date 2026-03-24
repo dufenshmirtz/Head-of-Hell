@@ -36,7 +36,7 @@ public class LazyBigus : Character
     {
         animator.SetTrigger("HeavyAttack");
         audioManager.PlaySFX(audioManager.volchBite, 1.5f);
-        audioManager.PlaySFX(audioManager.volchBiteExtra, 2f);
+        audioManager.PlaySFX(audioManager.volchBiteExtra, 1.5f);
     }
 
     override public void DealHeavyDamage()
@@ -256,7 +256,7 @@ public class LazyBigus : Character
 
     private IEnumerator ResetPoisonAfterDelay()
     {
-        yield return new WaitForSeconds(8f); // Wait for 5 seconds
+        yield return new WaitForSeconds(10f); // Wait for 5 seconds
         ResetPoisonStacks();
         poisonCounter = 0; // Reset the poison counter
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Steelager : Character
 {
     public float cooldown = 16f;
-    int damage = 18;
+    int damage = 16;
     //float speedSaver = 4f;
     float resetBombs = 2f;
     //bombin

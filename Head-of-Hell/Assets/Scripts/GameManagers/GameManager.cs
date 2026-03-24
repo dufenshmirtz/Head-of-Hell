@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI p1ProfileNameText;
     public TextMeshProUGUI p2ProfileNameText;
     string p1, p2;
-    static int roundNumber;
+    static int roundNumber = 1;
     static int roundCounter = 1;
     public CharacterManager p1Manager, p2Manager;
     public GameObject playAgainButton;
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
         {
             map = stageName,
             mode = trainingMode ? "training" : "1v1",
-            roundNumber = roundCounter,
+            roundNumber_ = roundCounter,
             trainingMode = trainingMode
         });
 
@@ -151,6 +151,8 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
+        print("rn: "+roundNumber);
+
         ActivateIndicators();
     }
 
@@ -202,7 +204,7 @@ public class GameManager : MonoBehaviour
             {
                 map = stageName,
                 mode = trainingMode ? "training" : "1v1",
-                roundNumber = roundCounter,
+                roundNumber_ = roundCounter,
                 trainingMode = trainingMode,
 
                 p1Id = "P1",
@@ -243,7 +245,7 @@ public class GameManager : MonoBehaviour
             {
                 map = stageName,
                 mode = trainingMode ? "training" : "1v1",
-                roundNumber = roundCounter,
+                roundNumber_ = roundCounter,
                 trainingMode = trainingMode,
 
                 p1Id = "P1",
@@ -301,7 +303,7 @@ public class GameManager : MonoBehaviour
             {
                 map = stageName,
                 mode = trainingMode ? "training" : "1v1",
-                roundNumber = roundCounter,
+                roundNumber_ = roundCounter,
                 trainingMode = trainingMode,
 
                 p1Id = "P1",

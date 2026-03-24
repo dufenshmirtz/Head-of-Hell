@@ -68,7 +68,7 @@ public class Chiback : Character
         animator.SetTrigger("Spell");
         UsingAbility(cooldown);
         audioManager.PlaySFX(audioManager.sytheDash, audioManager.normalVol);
-        audioManager.PlaySFX(audioManager.yeehaw, 1.5f);
+        audioManager.PlaySFX(audioManager.yeehaw, 3.5f);
         ignoreDamage = true;
         StartCoroutine(ScytheJump());
         StartCoroutine(SpellSafety(spellTime,cooldown));

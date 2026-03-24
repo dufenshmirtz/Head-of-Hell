@@ -59,8 +59,8 @@ public class Rager : Character
     override public void Spell()
     {
         TelemetryManager.Instance?.LogAction(PlayerId, "Special");
-        animator.SetTrigger("Spell");
         UsingAbility(cooldown);
+        animator.SetTrigger("Spell");
         StartCoroutine(SpellSafety(spellTime,cooldown));
     }
 

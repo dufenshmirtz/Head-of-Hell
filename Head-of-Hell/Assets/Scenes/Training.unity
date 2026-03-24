@@ -367,6 +367,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 12
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -4942,6 +4943,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 8
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &184793119
@@ -7313,6 +7315,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 16
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1522488523}
   bombsParent: {fileID: 2100796710}
@@ -9344,6 +9347,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 12
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -12080,6 +12084,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 16
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1670223497}
   bombsParent: {fileID: 2100796710}
@@ -13801,6 +13806,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 8
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &541449327
@@ -14771,6 +14777,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 16
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 343137453}
   bombsParent: {fileID: 2100796710}
@@ -19928,6 +19935,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 569739573}
   bulletSpeed: 35
+  cooldown: 20
   beam: {fileID: 1746473117}
   bScript: {fileID: 0}
   bulletScript: {fileID: 0}
@@ -23090,6 +23098,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 20
 --- !u!1001 &882995806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23463,6 +23472,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 12
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -29741,6 +29751,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 20
 --- !u!1 &1185634414
 GameObject:
   m_ObjectHideFlags: 0
@@ -30576,6 +30587,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 12
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -31392,6 +31404,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 20
 --- !u!114 &1228552612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33694,6 +33707,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 16
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1100786215}
   bombsParent: {fileID: 2100796710}
@@ -35001,7 +35015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 6
+  DecisionPeriod: 4
   TakeActionsBetweenDecisions: 0
 --- !u!114 &1367423877 stripped
 MonoBehaviour:
@@ -40208,6 +40222,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1881472743}
   bulletSpeed: 35
+  cooldown: 20
   beam: {fileID: 2099202209}
   bScript: {fileID: 0}
   bulletScript: {fileID: 0}
@@ -40703,6 +40718,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1943892085}
   bulletSpeed: 35
+  cooldown: 20
   beam: {fileID: 1608458667}
   bScript: {fileID: 0}
   bulletScript: {fileID: 0}
@@ -41976,7 +41992,7 @@ PrefabInstance:
     - target: {fileID: 3775815256451319138, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: ff2a0ad7d4a68bf44abee2e510ff6c82, type: 2}
+      objectReference: {fileID: 9100000, guid: bd34ee43096dbcc438b20dbac8fff3b0, type: 2}
     - target: {fileID: 3816331700810592278, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_LocalScale.x
       value: -1
@@ -43002,6 +43018,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 461525617}
   bulletSpeed: 35
+  cooldown: 20
   beam: {fileID: 1288735581}
   bScript: {fileID: 0}
   bulletScript: {fileID: 0}
@@ -44573,6 +44590,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 20
 --- !u!114 &1753174034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48032,6 +48050,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 8
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &1985498623
@@ -49505,6 +49524,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 8
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &2039720494
@@ -51642,7 +51662,7 @@ MonoBehaviour:
   - {fileID: 616644771}
   - {fileID: 808757111}
   maxHealth: 100
-  trainingMode: 0
+  trainingMode: 1
   agentP1: {fileID: 221568215}
   agentP2: {fileID: 1367423861}
   p1Spawn: {fileID: 221568191}
