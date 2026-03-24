@@ -367,6 +367,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 12
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -2416,8 +2417,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: MUSIC
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e9458bf883ff28645ab1caab8fc5c18d, type: 2}
-  m_sharedMaterial: {fileID: -363330885600032091, guid: e9458bf883ff28645ab1caab8fc5c18d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
+  m_sharedMaterial: {fileID: -363330885600032091, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5522,6 +5523,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 8
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &184793119
@@ -7827,6 +7829,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 16
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1522488523}
   bombsParent: {fileID: 2100796710}
@@ -9858,6 +9861,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 12
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -12715,6 +12719,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 16
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1670223497}
   bombsParent: {fileID: 2100796710}
@@ -14337,8 +14342,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: SFX
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e9458bf883ff28645ab1caab8fc5c18d, type: 2}
-  m_sharedMaterial: {fileID: -363330885600032091, guid: e9458bf883ff28645ab1caab8fc5c18d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
+  m_sharedMaterial: {fileID: -363330885600032091, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -14480,6 +14485,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 8
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!114 &541449327
@@ -15450,6 +15456,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 16
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 343137453}
   bombsParent: {fileID: 2100796710}
@@ -16553,8 +16560,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Sound
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e9458bf883ff28645ab1caab8fc5c18d, type: 2}
-  m_sharedMaterial: {fileID: -363330885600032091, guid: e9458bf883ff28645ab1caab8fc5c18d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
+  m_sharedMaterial: {fileID: -363330885600032091, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -18189,8 +18196,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Main Menu
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e9458bf883ff28645ab1caab8fc5c18d, type: 2}
-  m_sharedMaterial: {fileID: -363330885600032091, guid: e9458bf883ff28645ab1caab8fc5c18d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
+  m_sharedMaterial: {fileID: -363330885600032091, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -20541,7 +20548,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -86.63696, y: 16.087524}
+  m_AnchoredPosition: {x: -105.04, y: 390.5}
   m_SizeDelta: {x: 173.27399, y: 32.175003}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &743971580
@@ -20566,14 +20573,14 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5c3a60641cbb1c64080f0f3fbec20fe2, type: 2}
-  m_sharedMaterial: {fileID: 6632567173632891341, guid: 5c3a60641cbb1c64080f0f3fbec20fe2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
+  m_sharedMaterial: {fileID: -363330885600032091, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4286474483
   m_fontColor: {r: 0.9529412, g: 0.40784314, b: 0.49411765, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -20591,15 +20598,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 15
+  m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 4
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -20741,6 +20748,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 569739573}
   bulletSpeed: 35
+  cooldown: 20
   beam: {fileID: 1746473117}
   bScript: {fileID: 0}
   bulletScript: {fileID: 0}
@@ -23960,6 +23968,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 20
 --- !u!1001 &882995806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24333,6 +24342,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 12
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -30923,6 +30933,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 20
 --- !u!1 &1185634414
 GameObject:
   m_ObjectHideFlags: 0
@@ -31758,6 +31769,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 12
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
   fallStartEpsilon: 0.02
@@ -32574,6 +32586,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 20
 --- !u!114 &1228552612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35065,6 +35078,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 16
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1100786215}
   bombsParent: {fileID: 2100796710}
@@ -36585,7 +36599,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
+    rgba: 4284777522
   m_fontColor: {r: 0.19607845, g: 0.5176471, b: 0.3921569, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -41924,6 +41938,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1881472743}
   bulletSpeed: 35
+  cooldown: 20
   beam: {fileID: 2099202209}
   bScript: {fileID: 0}
   bulletScript: {fileID: 0}
@@ -42419,6 +42434,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1943892085}
   bulletSpeed: 35
+  cooldown: 20
   beam: {fileID: 1608458667}
   bScript: {fileID: 0}
   bulletScript: {fileID: 0}
@@ -42708,8 +42724,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Resume
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e9458bf883ff28645ab1caab8fc5c18d, type: 2}
-  m_sharedMaterial: {fileID: -363330885600032091, guid: e9458bf883ff28645ab1caab8fc5c18d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
+  m_sharedMaterial: {fileID: -363330885600032091, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -42772,7 +42788,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1612885767
@@ -44882,6 +44898,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 461525617}
   bulletSpeed: 35
+  cooldown: 20
   beam: {fileID: 1288735581}
   bScript: {fileID: 0}
   bulletScript: {fileID: 0}
@@ -46524,6 +46541,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 20
 --- !u!114 &1753174034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48641,7 +48659,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 81.6178, y: 16.087349}
+  m_AnchoredPosition: {x: 103.16, y: 390.5}
   m_SizeDelta: {x: 163.2356, y: 32.174698}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1894171373
@@ -48666,14 +48684,14 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5c3a60641cbb1c64080f0f3fbec20fe2, type: 2}
-  m_sharedMaterial: {fileID: 6632567173632891341, guid: 5c3a60641cbb1c64080f0f3fbec20fe2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
+  m_sharedMaterial: {fileID: -363330885600032091, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4286474483
   m_fontColor: {r: 0.9529412, g: 0.40784314, b: 0.49411765, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -48691,15 +48709,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 15
+  m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -48934,8 +48952,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Restart
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e9458bf883ff28645ab1caab8fc5c18d, type: 2}
-  m_sharedMaterial: {fileID: -363330885600032091, guid: e9458bf883ff28645ab1caab8fc5c18d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
+  m_sharedMaterial: {fileID: -363330885600032091, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -48998,7 +49016,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1896334421
@@ -49758,8 +49776,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Back
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e9458bf883ff28645ab1caab8fc5c18d, type: 2}
-  m_sharedMaterial: {fileID: -363330885600032091, guid: e9458bf883ff28645ab1caab8fc5c18d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
+  m_sharedMaterial: {fileID: -363330885600032091, guid: dcc587305d4225d44b9cb952e207b3c2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -50117,6 +50135,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 8
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &1985498623
@@ -51778,6 +51797,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  cooldown: 8
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
 --- !u!1 &2039720494
