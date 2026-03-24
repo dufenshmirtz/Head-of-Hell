@@ -607,7 +607,7 @@ public abstract class Character : MonoBehaviour
         //ChargeAttack
         if (input.GetKeyDown(charge) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 1")))
         {
-            if (isGrounded && !chargeDisable && !casting)
+            if (isGrounded && !chargeDisable && !casting && !charging)
             {
                 Unblock();
                 ChargeAttack();
@@ -814,6 +814,10 @@ public abstract class Character : MonoBehaviour
         if (rb != null)
         {
             rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+        else
+        {
+            Debug.Log("NO BODY!");
         }
         chargeReset = false;
         chargeAttackActive = false;
@@ -1155,7 +1159,7 @@ public abstract class Character : MonoBehaviour
                     charging = false;
                     animator.SetBool("Casting", true);
                     animator.ResetTrigger("tookDmg");
-                    ChargeSafety(0.83f);
+                    StartCoroutine(ChargeSafety(0.83f));
                 }
                 return true;
             }
@@ -1181,13 +1185,13 @@ public abstract class Character : MonoBehaviour
     {
         if (!casting)
         {
-            stayDynamic();
             chargeAttackActive = false;
             ignoreMovement = false;
             animator.SetBool("Charging", false);
             charging = false;
             knockable = true;
             charged = false;
+            stayDynamic();
             animator.SetBool("Casting", false);
             animator.ResetTrigger("ChargedHit");
             if (chargeCoroutine != null)

@@ -196,8 +196,9 @@ public class Vander : Character
 
     #region Passive
 
-    public override void DealChargeDmg()
+    override public void DealChargeDmg()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "ChargeRelease");
         Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
@@ -207,6 +208,8 @@ public class Vander : Character
             {
                 enemy.BreakCharge();
             }
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Charge);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Charge, SourceType.Melee);
             enemy.TakeDamage(chargeDmg, false);
             Lifesteal(chargeLifesteal);
             enemy.Knockback(13f, 0.4f, false);
@@ -224,6 +227,7 @@ public class Vander : Character
             }
             else
             {
+                TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Charge);
                 audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
             }
 
