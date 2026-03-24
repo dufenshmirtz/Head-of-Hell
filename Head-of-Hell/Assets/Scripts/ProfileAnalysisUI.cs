@@ -176,11 +176,23 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         if (avgDamageTakenText != null) avgDamageTakenText.text = $"Avg Damage Taken: {p.avg_damage_taken:F1}";
         if (combatChart != null)
         {
+            float maxVal = Mathf.Max(
+                p.aggression_raw,
+                p.defense_raw,
+                p.mobility_raw / 2f,
+                p.risk_raw
+            );
+
+            if (maxVal <= 0f)
+                maxVal = 1f;
+
+            float scale = maxVal * 1.2f; // <-- soft cap
+
             combatChart.SetValues(
-                p.aggression,
-                p.defense,
-                p.mobility,
-                p.risk
+                p.aggression_raw / scale,
+                p.defense_raw / scale,
+                (p.mobility_raw / 2f) / scale,
+                p.risk_raw / scale
             );
         }
     }

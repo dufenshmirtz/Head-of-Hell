@@ -1349,6 +1349,8 @@ public abstract class Character : MonoBehaviour
 
     public void Countered()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "Parry");
+
         animator.SetTrigger("counterHit");
         audioManager.PlaySFX(audioManager.counterSucces, 1.5f);
         enemy.stayStatic();
