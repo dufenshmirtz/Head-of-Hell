@@ -181,8 +181,9 @@ public class LazyBigus : Character
         animator.SetTrigger("Charge");
     }
 
-    override public void DealChargeDmg()
+    public override void DealChargeDmg()
     {
+        TelemetryManager.Instance?.LogAction(PlayerId, "ChargeRelease");
         Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
 
         if (hitEnemy != null)
@@ -192,14 +193,29 @@ public class LazyBigus : Character
             {
                 enemy.BreakCharge();
             }
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Charge);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Charge, SourceType.Melee);
             enemy.TakeDamage(chargeDmg, false);
             enemy.Knockback(13f, 0.4f, false);
-            audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
             ToxicTouch();
+            audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
+            if (chargeHitSound != null)
+            {
+                audioManager.PlaySFX(chargeHitSound, 1.5f);
+            }
         }
         else
         {
-            audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
+            if (chargeHitSound != null)
+            {
+                audioManager.PlaySFX(chargeHitSound, 1.5f);
+            }
+            else
+            {
+                TelemetryManager.Instance?.LogMiss(PlayerId, MoveType.Charge);
+                audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
+            }
+
         }
         chargeReset = true;
         knockable = true;

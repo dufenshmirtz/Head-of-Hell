@@ -270,7 +270,7 @@ public class Lupen : Character
                     charged = false;
                     animator.SetBool("Casting", true);
                     animator.ResetTrigger("tookDmg");
-                    ChargeSafety(0.5f);
+                    StartCoroutine(ChargeSafety(0.83f));
                 }
                 return true;
             }
