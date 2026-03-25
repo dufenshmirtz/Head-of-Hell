@@ -10,6 +10,28 @@ import pandas as pd
 # --------------------------------------------------
 # Helpers
 # --------------------------------------------------
+
+ELO_LABELS = [
+    (0, 1200, "Human Trash"),
+    (1200, 1400, "ScriptedBot"),
+    (1400, 1600, "Irrelevant"),
+    (1600, 999999, "Virgin"),
+]
+
+
+def get_elo_label(elo: float) -> str:
+    try:
+        elo = float(elo)
+    except Exception:
+        return "Unranked"
+
+    for low, high, label in ELO_LABELS:
+        if low <= elo < high:
+            return label
+
+    return "Unranked"
+
+
 def ensure_dir(path: str) -> None:
     os.makedirs(path, exist_ok=True)
 
@@ -289,6 +311,7 @@ def to_json_payload(df: pd.DataFrame) -> dict:
             "profile_id": str(row["profile_id"]),
             "profile_name": str(row["profile_name"]),
             "style_label": str(row["style_label"]),
+            "elo_label": get_elo_label(row["elo_rating"]),
             "matches_count": int(row["matches_count"]),
             "elo_rating": round(float(row["elo_rating"]), 2),
             "win_rate": round(float(row["win_rate"]), 4),
