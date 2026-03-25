@@ -168,7 +168,7 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         if (styleLabelText != null)
         {
             if (!string.IsNullOrWhiteSpace(p.elo_label))
-                styleLabelText.text = $"{p.style_label} - {p.elo_label} Elo";
+                styleLabelText.text = $"{p.style_label} {p.elo_label}";
             else
                 styleLabelText.text = p.style_label;
         }
