@@ -15,6 +15,7 @@ public class ProfileAnalysisEntry
     public string profile_id;
     public string profile_name;
     public float elo_rating;
+    public string elo_label;
 
     public string style_label;
 
