@@ -102,20 +102,32 @@ public class GameManager : MonoBehaviour
         });
 
 
-        string json = PlayerPrefs.GetString("SelectedRuleset", null);
+        int selectedSlot = RulesetSelectionState.SelectedSlot;
+        Debug.Log("Gameplay SelectedSlot = " + selectedSlot);
 
-        if (!string.IsNullOrEmpty(json))
+        if (selectedSlot > 0)
         {
-            // Convert the JSON string back to a CustomRuleset object
-            CustomRuleset loadedRuleset = JsonUtility.FromJson<CustomRuleset>(json);
+            CustomRuleset loadedRuleset = RulesetManager.Instance.LoadCustomRuleset(selectedSlot);
 
-            roundNumber = loadedRuleset.rounds;
-            portalNumber = loadedRuleset.portals;
-            chanChan = loadedRuleset.chanChan;
+            if (loadedRuleset != null)
+            {
+                Debug.Log("Loaded custom ruleset: " + loadedRuleset.slotName);
+
+                roundNumber = loadedRuleset.rounds;
+                portalNumber = loadedRuleset.portals;
+                chanChan = loadedRuleset.chanChan;
+                maxHealth = loadedRuleset.health;
+
+                ApplyRulesetToCurrentCharacters(loadedRuleset);
+            }
+            else
+            {
+                Debug.LogWarning("No custom ruleset found for selected slot: " + selectedSlot);
+            }
         }
         else
         {
-            Debug.LogWarning("No ruleset found in PlayerPrefs.");
+            Debug.Log("Default ruleset selected.");
         }
 
         if (chanChan)
@@ -174,6 +186,24 @@ public class GameManager : MonoBehaviour
         else
             Application.targetFrameRate = 60;
     }
+
+    private void ApplyRulesetToCurrentCharacters(CustomRuleset ruleset)
+    {
+        if (p1Manager != null)
+        {
+            Character p1 = p1Manager.GetCurrentCharacter();
+            if (p1 != null)
+                p1.ApplyCustomRuleset(ruleset);
+        }
+
+        if (p2Manager != null)
+        {
+            Character p2 = p2Manager.GetCurrentCharacter();
+            if (p2 != null)
+                p2.ApplyCustomRuleset(ruleset);
+        }
+    }
+
 
     public void RoundEnd(int playerNum, string winnerName)
     {

@@ -1142,6 +1142,32 @@ public abstract class Character : MonoBehaviour
         animator.SetBool("Charging", false);
     }
 
+    public void ApplyCustomRuleset(CustomRuleset ruleset)
+    {
+        if (ruleset == null) return;
+
+        maxHealth = ruleset.health;
+        currHealth = ruleset.health;
+
+        moveSpeed = ruleset.playerSpeed;
+        OGMoveSpeed = ruleset.playerSpeed;
+
+        quickDisable = ruleset.quickDisabled;
+        heavyDisable = ruleset.heavyDisabled;
+        blockDisable = ruleset.blockDisabled;
+        specialDisable = ruleset.specialDisabled;
+        chargeDisable = ruleset.chargeDisabled;
+
+        chanChan = ruleset.chanChan;
+
+       
+
+        Debug.Log(
+            $"Applied custom ruleset to {PlayerId} | " +
+            $"HP={currHealth}/{maxHealth}, Speed={moveSpeed}, " +
+            $"Q={quickDisable}, H={heavyDisable}, B={blockDisable}, S={specialDisable}, C={chargeDisable}"
+        );
+    }
     public virtual bool ChargeCheck(KeyCode charge)
     {
         if (charging)
