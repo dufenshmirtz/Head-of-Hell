@@ -980,7 +980,6 @@ GameObject:
   - component: {fileID: 40599123}
   - component: {fileID: 40599122}
   - component: {fileID: 40599121}
-  - component: {fileID: 40599124}
   m_Layer: 5
   m_Name: Slot5Button
   m_TagString: Untagged
@@ -1088,6 +1087,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 1586750640}
+        m_TargetAssemblyTypeName: SlotSelectionHandler, Assembly-CSharp
+        m_MethodName: EditSlot
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 5
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &40599122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1126,20 +1137,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 40599119}
   m_CullTransparentMesh: 1
---- !u!114 &40599124
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 40599119}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fb9726186f03ba47adab440e6df20e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  editNumber: 4
-  customRulesetUI: {fileID: 89366905}
 --- !u!1 &42755807
 GameObject:
   m_ObjectHideFlags: 0
@@ -2615,6 +2612,8 @@ MonoBehaviour:
   ppButton2non: {fileID: 1492094143}
   ccYesButton: {fileID: 1796343771}
   ccNoButton: {fileID: 162125277}
+  slotNameInitializer: {fileID: 1586750641}
+  currentSettingDisplay: {fileID: 349425580}
 --- !u!1 &92267581
 GameObject:
   m_ObjectHideFlags: 0
@@ -18017,7 +18016,6 @@ GameObject:
   - component: {fileID: 573786849}
   - component: {fileID: 573786848}
   - component: {fileID: 573786847}
-  - component: {fileID: 573786850}
   m_Layer: 5
   m_Name: Slot2Button
   m_TagString: Untagged
@@ -18175,20 +18173,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 573786845}
   m_CullTransparentMesh: 1
---- !u!114 &573786850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 573786845}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fb9726186f03ba47adab440e6df20e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  editNumber: 1
-  customRulesetUI: {fileID: 89366905}
 --- !u!1 &577646797
 GameObject:
   m_ObjectHideFlags: 0
@@ -22035,7 +22019,6 @@ GameObject:
   - component: {fileID: 657171953}
   - component: {fileID: 657171952}
   - component: {fileID: 657171951}
-  - component: {fileID: 657171954}
   m_Layer: 5
   m_Name: Slot4Button
   m_TagString: Untagged
@@ -22143,6 +22126,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 1586750640}
+        m_TargetAssemblyTypeName: SlotSelectionHandler, Assembly-CSharp
+        m_MethodName: EditSlot
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &657171952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22181,20 +22176,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 657171949}
   m_CullTransparentMesh: 1
---- !u!114 &657171954
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 657171949}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fb9726186f03ba47adab440e6df20e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  editNumber: 3
-  customRulesetUI: {fileID: 89366905}
 --- !u!1 &661409663
 GameObject:
   m_ObjectHideFlags: 0
@@ -30308,7 +30289,6 @@ GameObject:
   - component: {fileID: 945646598}
   - component: {fileID: 945646597}
   - component: {fileID: 945646596}
-  - component: {fileID: 945646599}
   m_Layer: 5
   m_Name: Slot3Button
   m_TagString: Untagged
@@ -30416,6 +30396,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 1586750640}
+        m_TargetAssemblyTypeName: SlotSelectionHandler, Assembly-CSharp
+        m_MethodName: EditSlot
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &945646597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30454,20 +30446,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 945646594}
   m_CullTransparentMesh: 1
---- !u!114 &945646599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 945646594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fb9726186f03ba47adab440e6df20e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  editNumber: 2
-  customRulesetUI: {fileID: 89366905}
 --- !u!1 &948962330
 GameObject:
   m_ObjectHideFlags: 0
@@ -50954,7 +50932,7 @@ MonoBehaviour:
   customRulesetUI: {fileID: 89366905}
   currentSettingDisplay: {fileID: 349425580}
   slotNameInitializer: {fileID: 1586750641}
-  customMenuCurrentText: {fileID: 0}
+  customMenuCurrentText: {fileID: 1499769435}
 --- !u!114 &1586750641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66616,7 +66594,6 @@ GameObject:
   - component: {fileID: 2134197181}
   - component: {fileID: 2134197180}
   - component: {fileID: 2134197179}
-  - component: {fileID: 2134197182}
   m_Layer: 5
   m_Name: Slot1Button
   m_TagString: Untagged
@@ -66774,20 +66751,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2134197177}
   m_CullTransparentMesh: 1
---- !u!114 &2134197182
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2134197177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fb9726186f03ba47adab440e6df20e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  editNumber: 0
-  customRulesetUI: {fileID: 89366905}
 --- !u!1 &2138035781
 GameObject:
   m_ObjectHideFlags: 0
@@ -67195,7 +67158,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 1863939076}
   - {fileID: 112913356}
-  - {fileID: 296451375}
   - {fileID: 2104332388}
   - {fileID: 1294468906}
   - {fileID: 796104404}
@@ -67203,4 +67165,5 @@ SceneRoots:
   - {fileID: 56500289}
   - {fileID: 1660368059}
   - {fileID: 1404970899}
+  - {fileID: 296451375}
   - {fileID: 170226041}
