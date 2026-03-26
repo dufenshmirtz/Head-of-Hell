@@ -84,6 +84,7 @@ public class Rager : Character
 
             // playerState
             stayStatic();
+            ignoreUpdate = true;
             canRotate = false;
 
             // enemy state
@@ -156,6 +157,7 @@ public class Rager : Character
 
         // player state reset
         stayDynamic();
+        ignoreUpdate = false;
         canRotate = true;
 
         // enemy state

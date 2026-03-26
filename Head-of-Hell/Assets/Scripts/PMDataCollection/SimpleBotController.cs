@@ -15,6 +15,9 @@ public class SimpleBotController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float preferredRange = 1.25f;
     [SerializeField] private float tooCloseRange = 0.55f;
+    [SerializeField] private float moveCommitMin = 0.10f;
+    [SerializeField] private float moveCommitMax = 0.24f;
+    [SerializeField] private float idleShimmyChance = 0.10f;
 
     [Header("Timing")]
     [SerializeField] private float thinkIntervalMin = 0.18f;
@@ -22,7 +25,7 @@ public class SimpleBotController : MonoBehaviour
     [SerializeField] private float actionCooldownMin = 0.35f;
     [SerializeField] private float actionCooldownMax = 0.80f;
 
-    [Header("Action Chances")]
+    [Header("Base Action Chances")]
     [SerializeField] private float quickChance = 0.62f;
     [SerializeField] private float heavyChance = 0.20f;
     [SerializeField] private float specialChance = 0.08f;
@@ -55,6 +58,17 @@ public class SimpleBotController : MonoBehaviour
 
     [SerializeField] private float antiChargeParryDelay = 0.5f;
 
+    [Header("Post Action Reposition")]
+    [SerializeField] private float repositionChance = 0.28f;
+    [SerializeField] private float repositionMinDuration = 0.08f;
+    [SerializeField] private float repositionMaxDuration = 0.18f;
+
+    // Personality traits (δεν αλλάζουν το meaning του skill)
+    private float aggression;     // πιο συχνά engage/attack
+    private float defenseBias;    // πιο συχνά block/retreat
+    private float mobilityBias;   // πιο πολύ jump/reposition/shimmy
+    private float patience;       // πιο πολύ wait for better moment
+
     private bool trackingEnemyCharge;
     private float enemyChargeTimer;
 
@@ -72,7 +86,13 @@ public class SimpleBotController : MonoBehaviour
     private float forcedHorizontalTimer;
     private float forcedHorizontalValue;
 
+    private float moveCommitTimer;
+    private float committedMove;
+
     private bool initialized;
+
+    private Transform selfTr;
+    private Transform targetTr;
 
     // =========================================================
     // INIT
@@ -80,6 +100,7 @@ public class SimpleBotController : MonoBehaviour
 
     private void Start()
     {
+        selfTr = transform;
         TryInitialize();
         RandomizePersonality();
     }
@@ -97,6 +118,9 @@ public class SimpleBotController : MonoBehaviour
         antiChargeReactionTimer = 0f;
         forcedHorizontalTimer = 0f;
         forcedHorizontalValue = 0f;
+
+        moveCommitTimer = 0f;
+        committedMove = 0f;
 
         initialized = false;
 
@@ -119,37 +143,43 @@ public class SimpleBotController : MonoBehaviour
         }
 
         if (character == null || setup == null || target == null)
-            return;
+        {
+            target = FindOpponent();
+            targetTr = target != null ? target.transform : null;
+            if (character == null || setup == null || target == null)
+                return;
+        }
 
         botInput.ClearFrameState();
 
-        thinkTimer -= Time.deltaTime;
-        actionTimer -= Time.deltaTime;
-        blockHoldTimer -= Time.deltaTime;
-        antiChargeReactionTimer -= Time.deltaTime;
+        float dt = Time.deltaTime;
 
-        UpdateForcedVertical();
-        UpdateForcedHorizontal();
+        thinkTimer -= dt;
+        actionTimer -= dt;
+        blockHoldTimer -= dt;
+        antiChargeReactionTimer -= dt;
+
+        UpdateForcedVertical(dt);
+        UpdateForcedHorizontal(dt);
+        UpdateEnemyChargeTracking(dt);
 
         if (blockHoldTimer <= 0f)
             botInput.SetKey(setup.block, false);
 
-        // πρώτα reactions, μετά movement/normal decisions
+        // πρώτα reactions
         if (TryReactToCharge())
         {
-            HandleMovement();
+            HandleMovement(dt);
             return;
         }
 
-        HandleMovement();
+        HandleMovement(dt);
 
         if (thinkTimer <= 0f)
         {
             thinkTimer = Random.Range(thinkIntervalMin, thinkIntervalMax);
             DecideAction();
         }
-
-        UpdateEnemyChargeTracking();
     }
 
     private void TryInitialize()
@@ -159,13 +189,19 @@ public class SimpleBotController : MonoBehaviour
 
         if (setup == null || character == null) return;
 
+        if (selfTr == null)
+            selfTr = transform;
+
         if (botInput == null)
         {
             botInput = new BotInputProvider();
             character.SetInput(botInput);
         }
 
-        if (target == null) target = FindOpponent();
+        if (target == null)
+            target = FindOpponent();
+
+        targetTr = target != null ? target.transform : null;
 
         if (target != null)
             initialized = true;
@@ -177,25 +213,38 @@ public class SimpleBotController : MonoBehaviour
 
     private void RandomizePersonality()
     {
-        if (!randomizePersonality) return;
+        if (!randomizePersonality)
+        {
+            aggression = 0.5f;
+            defenseBias = 0.5f;
+            mobilityBias = 0.5f;
+            patience = 0.5f;
+            return;
+        }
 
-        float f = Random.Range(0.8f, 1.2f);
-
-        quickChance *= f;
-        heavyChance *= f;
-        specialChance *= f;
-        jumpChance *= f;
-        blockChance *= f;
+        aggression = Random.Range(0.25f, 0.85f);
+        defenseBias = Random.Range(0.20f, 0.80f);
+        mobilityBias = Random.Range(0.20f, 0.80f);
+        patience = Random.Range(0.20f, 0.80f);
     }
 
     // =========================================================
     // MOVEMENT
     // =========================================================
 
-    private void HandleMovement()
+    private void HandleMovement(float dt)
     {
-        float dxSigned = target.transform.position.x - transform.position.x;
-        float dySigned = target.transform.position.y - transform.position.y;
+        if (targetTr == null)
+        {
+            ApplyMovement(0f);
+            return;
+        }
+
+        Vector3 myPos = selfTr.position;
+        Vector3 targetPos = targetTr.position;
+
+        float dxSigned = targetPos.x - myPos.x;
+        float dySigned = targetPos.y - myPos.y;
 
         float dx = Mathf.Abs(dxSigned);
         float dy = Mathf.Abs(dySigned);
@@ -204,15 +253,24 @@ public class SimpleBotController : MonoBehaviour
         bool targetBelow = dySigned < -sameLevelTolerance;
         bool inEngageRange = dx <= engageRange && sameLevel;
 
-        float move = 0f;
-
         // forced retreat / burst movement
         if (forcedHorizontalTimer > 0f)
         {
-            move = forcedHorizontalValue;
+            ApplyMovement(forcedHorizontalValue);
+            return;
         }
-        // ⭐ Anti-top-camp
-        else if (targetBelow && dx < 0.6f && !isDroppingThroughPlatform)
+
+        if (moveCommitTimer > 0f)
+        {
+            moveCommitTimer -= dt;
+            ApplyMovement(committedMove);
+            return;
+        }
+
+        float move = 0f;
+
+        // Anti-top-camp
+        if (targetBelow && dx < 0.6f && !isDroppingThroughPlatform)
         {
             float dropChance = Mathf.Lerp(0.4f, 0.75f, skill);
 
@@ -225,14 +283,57 @@ public class SimpleBotController : MonoBehaviour
                 move = Random.value < 0.5f ? -1f : 1f;
             }
         }
-        else if (!inEngageRange)
+        else
         {
-            if (dx > preferredRange)
-                move = Mathf.Sign(dxSigned);
-            else if (dx < tooCloseRange)
-                move = -Mathf.Sign(dxSigned);
+            float desiredRange =
+                preferredRange
+                + Mathf.Lerp(0.22f, -0.18f, aggression)
+                + Mathf.Lerp(-0.05f, 0.18f, defenseBias);
+
+            float retreatRange =
+                tooCloseRange
+                + Mathf.Lerp(-0.04f, 0.08f, defenseBias);
+
+            desiredRange = Mathf.Max(retreatRange + 0.08f, desiredRange);
+
+            if (!sameLevel && dy > sameLevelTolerance)
+            {
+                // Αν ο αντίπαλος είναι πολύ πιο πάνω, μην χορεύει ανούσια από κάτω
+                if (dx > 1.0f)
+                    move = Mathf.Sign(dxSigned);
+                else
+                    move = 0f;
+            }
+            else if (!inEngageRange)
+            {
+                if (dx > desiredRange)
+                    move = Mathf.Sign(dxSigned);
+                else if (dx < retreatRange)
+                    move = -Mathf.Sign(dxSigned);
+            }
+            else
+            {
+                // micro movement μέσα στο neutral
+                float shimmyChance = idleShimmyChance * Mathf.Lerp(0.7f, 1.5f, mobilityBias);
+
+                if (Random.value < shimmyChance)
+                {
+                    if (dx < retreatRange + 0.05f)
+                        move = -Mathf.Sign(dxSigned);
+                    else
+                        move = Random.value < 0.55f ? Mathf.Sign(dxSigned) : -Mathf.Sign(dxSigned);
+                }
+            }
         }
 
+        committedMove = Mathf.Clamp(move, -1f, 1f);
+        moveCommitTimer = Random.Range(moveCommitMin, moveCommitMax);
+
+        ApplyMovement(committedMove);
+    }
+
+    private void ApplyMovement(float move)
+    {
         string suffix = GetAxisSuffix();
 
         botInput.SetAxis("Horizontal" + suffix, move);
@@ -252,62 +353,174 @@ public class SimpleBotController : MonoBehaviour
 
     private void DecideAction()
     {
-        if (actionTimer > 0f || isDroppingThroughPlatform)
+        if (actionTimer > 0f || isDroppingThroughPlatform || targetTr == null)
             return;
 
-        float dx = Mathf.Abs(target.transform.position.x - transform.position.x);
-        float dy = Mathf.Abs(target.transform.position.y - transform.position.y);
+        Vector3 myPos = selfTr.position;
+        Vector3 targetPos = targetTr.position;
+
+        float dxSigned = targetPos.x - myPos.x;
+        float dySigned = targetPos.y - myPos.y;
+
+        float dx = Mathf.Abs(dxSigned);
+        float dy = Mathf.Abs(dySigned);
 
         bool sameLevel = dy <= sameLevelTolerance;
         bool inEngageRange = dx <= engageRange && sameLevel;
+        bool inCloseRange = dx <= tooCloseRange && sameLevel;
+        bool inPokeRange = dx <= engageRange * 1.20f && sameLevel;
 
-        // Defensive reaction
-        if (inEngageRange && Random.value < Mathf.Lerp(0.2f, 0.7f, skill))
+        // λίγο πιο ανθρώπινο hesitation
+        float hesitateChance = Mathf.Lerp(0.03f, 0.18f, patience);
+        if (Random.value < hesitateChance)
         {
-            botInput.SetKey(setup.block, true);
-            blockHoldTimer = Random.Range(0.12f, 0.28f);
-            actionTimer = 0.25f;
+            actionTimer = Random.Range(0.06f, 0.14f);
             return;
         }
 
-        // Far approach
-        if (!inEngageRange)
+        // Defensive reaction in close combat
+        float defendChance =
+            Mathf.Lerp(blockChance, blockChance + 0.28f, defenseBias) *
+            Mathf.Lerp(0.75f, 1.15f, skill);
+
+        if (inEngageRange && Random.value < defendChance)
         {
-            if (Random.value < jumpChance)
+            botInput.SetKey(setup.block, true);
+            blockHoldTimer = Random.Range(0.10f, 0.24f);
+            actionTimer = Random.Range(0.16f, 0.28f);
+            MaybeRepositionAfterAction(dxSigned, false);
+            return;
+        }
+
+        // FAR
+        if (!inPokeRange)
+        {
+            float jumpInChance = jumpChance * Mathf.Lerp(0.7f, 2.0f, mobilityBias);
+
+            if (character.IsGrounded && !character.JumpDisabled && Random.value < jumpInChance)
             {
                 PressOneFrame(setup.up);
-                actionTimer = Random.Range(actionCooldownMin, actionCooldownMax);
+                actionTimer = Random.Range(0.22f, 0.38f);
+                MaybeRepositionAfterAction(dxSigned, true);
             }
 
             return;
         }
 
-        // Engage attacks
-        float r = Random.value;
-
-        if (r < quickChance)
+        // CLOSE SCRAMBLE
+        if (inCloseRange)
         {
-            PressOneFrame(setup.lightAttack);
-            actionTimer = Random.Range(0.22f, 0.40f);
+            float quickW = quickChance * Mathf.Lerp(0.85f, 1.25f, aggression);
+            float retreatW = Mathf.Lerp(0.06f, 0.26f, defenseBias);
+            float specialW = CanUseSpecialNow() ? specialChance * Mathf.Lerp(0.5f, 1.0f, aggression) : 0f;
+            float waitW = Mathf.Lerp(0.04f, 0.18f, patience);
+
+            float total = quickW + retreatW + specialW + waitW;
+            float roll = Random.value * total;
+
+            if (roll < quickW)
+            {
+                PressOneFrame(setup.lightAttack);
+                actionTimer = Random.Range(0.18f, 0.32f);
+                MaybeRepositionAfterAction(dxSigned, true);
+                return;
+            }
+            roll -= quickW;
+
+            if (roll < retreatW)
+            {
+                ForceRetreatFromTarget(dxSigned, 0.14f);
+                actionTimer = 0.14f;
+                return;
+            }
+            roll -= retreatW;
+
+            if (roll < specialW)
+            {
+                PressOneFrame(setup.ability);
+                actionTimer = Random.Range(0.28f, 0.50f);
+                MaybeRepositionAfterAction(dxSigned, true);
+                return;
+            }
+
+            actionTimer = Random.Range(0.08f, 0.16f);
             return;
         }
 
-        r -= quickChance;
-
-        if (r < heavyChance)
+        // NORMAL ENGAGE / POKE RANGE
         {
-            PressOneFrame(setup.heavyAttack);
-            actionTimer = Random.Range(0.28f, 0.48f);
-            return;
-        }
+            float quickW =
+                quickChance * Mathf.Lerp(0.80f, 1.20f, aggression);
 
-        r -= heavyChance;
+            float heavyW =
+                heavyChance * Mathf.Lerp(0.70f, 1.15f, aggression) * Mathf.Lerp(0.85f, 1.15f, patience);
 
-        if (r < specialChance)
-        {
-            PressOneFrame(setup.ability);
-            actionTimer = Random.Range(0.35f, 0.60f);
-            return;
+            float specialW =
+                CanUseSpecialNow()
+                ? specialChance * Mathf.Lerp(0.75f, 1.35f, aggression)
+                : 0f;
+
+            float jumpW =
+                jumpChance * Mathf.Lerp(0.60f, 1.80f, mobilityBias);
+
+            float blockW =
+                blockChance * Mathf.Lerp(0.80f, 1.80f, defenseBias);
+
+            float waitW =
+                Mathf.Lerp(0.05f, 0.22f, patience);
+
+            float total = quickW + heavyW + specialW + jumpW + blockW + waitW;
+            float roll = Random.value * total;
+
+            if (roll < quickW)
+            {
+                PressOneFrame(setup.lightAttack);
+                actionTimer = Random.Range(0.20f, 0.36f);
+                MaybeRepositionAfterAction(dxSigned, true);
+                return;
+            }
+            roll -= quickW;
+
+            if (roll < heavyW)
+            {
+                PressOneFrame(setup.heavyAttack);
+                actionTimer = Random.Range(0.28f, 0.46f);
+                MaybeRepositionAfterAction(dxSigned, true);
+                return;
+            }
+            roll -= heavyW;
+
+            if (roll < specialW)
+            {
+                PressOneFrame(setup.ability);
+                actionTimer = Random.Range(0.32f, 0.56f);
+                MaybeRepositionAfterAction(dxSigned, true);
+                return;
+            }
+            roll -= specialW;
+
+            if (roll < jumpW)
+            {
+                if (character.IsGrounded && !character.JumpDisabled)
+                {
+                    PressOneFrame(setup.up);
+                    actionTimer = Random.Range(0.20f, 0.34f);
+                    MaybeRepositionAfterAction(dxSigned, true);
+                    return;
+                }
+            }
+            roll -= jumpW;
+
+            if (roll < blockW)
+            {
+                botInput.SetKey(setup.block, true);
+                blockHoldTimer = Random.Range(0.10f, 0.22f);
+                actionTimer = Random.Range(0.15f, 0.26f);
+                MaybeRepositionAfterAction(dxSigned, false);
+                return;
+            }
+
+            actionTimer = Random.Range(0.08f, 0.18f);
         }
     }
 
@@ -320,13 +533,16 @@ public class SimpleBotController : MonoBehaviour
         if (!antiChargeEnabled) return false;
         if (antiChargeReactionTimer > 0f) return false;
         if (actionTimer > 0f) return false;
-        if (character == null || target == null) return false;
+        if (character == null || target == null || targetTr == null) return false;
 
         if (character.IsCasting || character.IsStunned || character.IsKnocked)
             return false;
 
-        float dxSigned = target.transform.position.x - transform.position.x;
-        float dySigned = target.transform.position.y - transform.position.y;
+        Vector3 myPos = selfTr.position;
+        Vector3 targetPos = targetTr.position;
+
+        float dxSigned = targetPos.x - myPos.x;
+        float dySigned = targetPos.y - myPos.y;
 
         float dx = Mathf.Abs(dxSigned);
         float dy = Mathf.Abs(dySigned);
@@ -340,9 +556,7 @@ public class SimpleBotController : MonoBehaviour
 
         bool chargingTowardsMe = IsTargetChargingTowardsMe(dxSigned);
 
-        // =========================================================
-        // PRIORITY: SPECIAL σχεδόν πάντα όταν το charge έρχεται πάνω μας
-        // =========================================================
+        // PRIORITY: SPECIAL όταν το charge έρχεται πάνω μας
         if (chargingTowardsMe &&
             dx <= antiChargeSpecialRange &&
             CanUseSpecialNow())
@@ -430,21 +644,43 @@ public class SimpleBotController : MonoBehaviour
 
     private void ForceRetreatFromTarget(float dxSigned, float duration)
     {
-        // αν ο αντίπαλος είναι δεξιά, φύγε αριστερά, και το αντίστροφο
         forcedHorizontalValue = -Mathf.Sign(dxSigned);
 
-        // αν για κάποιο λόγο είναι ακριβώς πάνω μας
         if (Mathf.Abs(forcedHorizontalValue) < 0.01f)
             forcedHorizontalValue = Random.value < 0.5f ? -1f : 1f;
 
         forcedHorizontalTimer = duration;
+        moveCommitTimer = 0f;
+        committedMove = 0f;
     }
 
-    private void UpdateForcedHorizontal()
+    private void MaybeRepositionAfterAction(float dxSigned, bool allowToward)
+    {
+        float chance = repositionChance * Mathf.Lerp(0.7f, 1.5f, mobilityBias);
+
+        if (Random.value > chance)
+            return;
+
+        float dir;
+
+        if (allowToward && Random.value < 0.38f)
+            dir = Mathf.Sign(dxSigned);   // μικρό re-engage
+        else
+            dir = -Mathf.Sign(dxSigned);  // συνήθως space out
+
+        if (Mathf.Abs(dir) < 0.01f)
+            dir = Random.value < 0.5f ? -1f : 1f;
+
+        forcedHorizontalValue = dir;
+        forcedHorizontalTimer = Random.Range(repositionMinDuration, repositionMaxDuration);
+        moveCommitTimer = 0f;
+    }
+
+    private void UpdateForcedHorizontal(float dt)
     {
         if (forcedHorizontalTimer > 0f)
         {
-            forcedHorizontalTimer -= Time.deltaTime;
+            forcedHorizontalTimer -= dt;
             if (forcedHorizontalTimer <= 0f)
             {
                 forcedHorizontalTimer = 0f;
@@ -467,11 +703,11 @@ public class SimpleBotController : MonoBehaviour
         forcedVerticalTimer = dropHoldDuration;
     }
 
-    private void UpdateForcedVertical()
+    private void UpdateForcedVertical(float dt)
     {
         if (forcedVerticalTimer > 0f)
         {
-            forcedVerticalTimer -= Time.deltaTime;
+            forcedVerticalTimer -= dt;
 
             if (forcedVerticalTimer <= 0f)
             {
@@ -500,8 +736,10 @@ public class SimpleBotController : MonoBehaviour
         Character[] all = FindObjectsOfType<Character>();
 
         foreach (Character c in all)
-            if (c != character)
+        {
+            if (c != null && c != character)
                 return c;
+        }
 
         return null;
     }
@@ -509,6 +747,7 @@ public class SimpleBotController : MonoBehaviour
     public void SetTarget(Character newTarget)
     {
         target = newTarget;
+        targetTr = target != null ? target.transform : null;
     }
 
     public void SetSkill(float newSkill)
@@ -520,6 +759,7 @@ public class SimpleBotController : MonoBehaviour
     {
         character = self;
         target = enemy;
+        targetTr = target != null ? target.transform : null;
         setup = GetComponent<CharacterSetup>();
 
         if (botInput == null)
@@ -528,6 +768,7 @@ public class SimpleBotController : MonoBehaviour
         if (character != null)
             character.SetInput(botInput);
 
+        selfTr = transform;
         initialized = (character != null && setup != null && target != null);
     }
 
@@ -536,12 +777,8 @@ public class SimpleBotController : MonoBehaviour
         if (target == null) return false;
 
         float targetFacing = Mathf.Sign(target.transform.localScale.x);
-
-        // αν ο αντίπαλος είναι δεξιά μας, για να έρχεται προς εμάς πρέπει να κοιτάει αριστερά (-1)
-        // αν είναι αριστερά μας, για να έρχεται προς εμάς πρέπει να κοιτάει δεξιά (+1)
         float dirToMe = -Mathf.Sign(dxSigned);
 
-        // fallback αν είναι ακριβώς πάνω μας
         if (Mathf.Abs(dirToMe) < 0.01f)
             return true;
 
@@ -561,7 +798,7 @@ public class SimpleBotController : MonoBehaviour
             !character.SpecialDisabled;
     }
 
-    private void UpdateEnemyChargeTracking()
+    private void UpdateEnemyChargeTracking(float dt)
     {
         if (target == null)
         {
@@ -579,7 +816,7 @@ public class SimpleBotController : MonoBehaviour
             }
             else
             {
-                enemyChargeTimer += Time.deltaTime;
+                enemyChargeTimer += dt;
             }
         }
         else
