@@ -5,7 +5,7 @@ public class SteelagerSpecs : CharacterSpecsBase
 {
     //[Header("Spell")]
     public override float cooldown => 16f;
-    public override int damage => 20;
+    public override int damage => 16;
 
     [Header("Light Attack")]
     public int bombDamage = 6;
