@@ -4,7 +4,6 @@ using TMPro;
 
 public class SlotNameInitializer : MonoBehaviour
 {
-    // Public list of five TMP Text elements (assign in Unity Inspector)
     public List<TMP_Text> slotNameTexts = new List<TMP_Text>(5);
 
     void OnEnable()
@@ -12,37 +11,34 @@ public class SlotNameInitializer : MonoBehaviour
         InitializeSlotNames();
     }
 
-    // Method to initialize the TMP text fields with the slot names
     public void InitializeSlotNames()
     {
-        for (int i = 0; i < slotNameTexts.Count; i++)  // Loop through all TMP Texts
+        for (int i = 0; i < slotNameTexts.Count; i++)
         {
-            // Load the CustomRuleset for this slot (slots are 1-indexed, so i + 1)
-            CustomRuleset ruleset = RulesetManager.Instance.LoadCustomRuleset(i+1);
+            CustomRuleset ruleset = RulesetManager.Instance.LoadCustomRuleset(i + 1);
 
-            // Check if a ruleset exists for this slot
-            if (ruleset != null)
-            {
-                // Set the corresponding TMP text field to the slot's name
+            if (ruleset != null && !string.IsNullOrWhiteSpace(ruleset.slotName))
                 slotNameTexts[i].text = ruleset.slotName;
-            }
             else
-            {
-                // If no ruleset exists, mark the slot as empty
                 slotNameTexts[i].text = "Empty";
-            }
         }
     }
 
     public void UpdateSlotName(int slotIndex)
     {
-        // Load the saved ruleset
+        int uiIndex = slotIndex - 1;
+
+        if (uiIndex < 0 || uiIndex >= slotNameTexts.Count)
+        {
+            Debug.LogError("Invalid slot index for UI: " + slotIndex);
+            return;
+        }
+
         CustomRuleset ruleset = RulesetManager.Instance.LoadCustomRuleset(slotIndex);
 
-        if (ruleset != null && !string.IsNullOrEmpty(ruleset.slotName))
-            slotNameTexts[slotIndex].text = ruleset.slotName;
+        if (ruleset != null && !string.IsNullOrWhiteSpace(ruleset.slotName))
+            slotNameTexts[uiIndex].text = ruleset.slotName;
         else
-            slotNameTexts[slotIndex].text = "Empty";
+            slotNameTexts[uiIndex].text = "Empty";
     }
-
 }
