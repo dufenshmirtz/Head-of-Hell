@@ -40,31 +40,25 @@ def parse_file(fp):
 
     meta = doc.get("meta", {}) if isinstance(doc.get("meta", {}), dict) else {}
 
-    # raw ids
     raw_p1 = safe_get(meta, "p1Id", "player1Id", "p1")
     raw_p2 = safe_get(meta, "p2Id", "player2Id", "p2")
     winner = safe_get(meta, "winnerId", "winner", "winnerPlayerId")
 
-    # profile ids (preferred identity if present)
     p1_profile = safe_get(meta, "p1ProfileId")
     p2_profile = safe_get(meta, "p2ProfileId")
 
-    # profile names
     p1_profile_name = safe_get(meta, "p1ProfileName", default=p1_profile)
     p2_profile_name = safe_get(meta, "p2ProfileName", default=p2_profile)
 
-    # choose identity keys
     p1 = p1_profile if p1_profile not in (None, "", "GUEST") else raw_p1
     p2 = p2_profile if p2_profile not in (None, "", "GUEST") else raw_p2
 
-    # character context
     p1_char = safe_get(meta, "p1Character", "p1Char", "player1Character")
     p2_char = safe_get(meta, "p2Character", "p2Char", "player2Character")
 
     match_id = safe_get(meta, "matchId") or safe_get(doc, "matchId") or os.path.basename(fp)
     round_number = safe_get(meta, "roundNumber")
 
-    # --- DAMAGE AGGREGATION ---
     damage = {
         raw_p1: 0.0,
         raw_p2: 0.0,
@@ -90,7 +84,6 @@ def parse_file(fp):
     damage_p1 = damage.get(raw_p1, 0.0)
     damage_p2 = damage.get(raw_p2, 0.0)
 
-    # --- FINAL HP EXTRACTION ---
     final_hp = {
         raw_p1: None,
         raw_p2: None,
@@ -132,7 +125,6 @@ def parse_file(fp):
         if hp_after is not None:
             final_hp[defender] = max(0.0, hp_after)
 
-    # determine score for p1 (classic fallback, overridden later)
     sa = None
     if winner == p1:
         sa = 1.0
@@ -166,20 +158,16 @@ def parse_file(fp):
     }
 
 
-def main():
-    args = parse_args()
-    TELEMETRY_DIR = args.telemetry_dir
-    OUT_DIR = args.out_dir
+def run_elo(telemetry_dir: str, out_dir: str):
+    os.makedirs(out_dir, exist_ok=True)
 
-    os.makedirs(OUT_DIR, exist_ok=True)
-
-    files = sorted(glob.glob(os.path.join(TELEMETRY_DIR, "*.json")))
+    files = sorted(glob.glob(os.path.join(telemetry_dir, "*.json")))
     if not files:
-        raise FileNotFoundError(f"No JSON files in {TELEMETRY_DIR}")
+        raise FileNotFoundError(f"No JSON files in {telemetry_dir}")
 
-    overall = {}   # kept for match-by-match history/debug
-    per_char = {}  # (profile_id, character) -> rating
-    profile_name_map = {}  # profile_id -> profile_name
+    overall = {}
+    per_char = {}
+    profile_name_map = {}
     hist = []
     used = 0
     skipped = 0
@@ -194,7 +182,6 @@ def main():
             if info.get("p2_profile_name"):
                 profile_name_map[p2] = info["p2_profile_name"]
 
-            # skip invalid identities
             if not p1 or not p2 or p1 == "NONE" or p2 == "NONE":
                 skipped += 1
                 continue
@@ -214,7 +201,6 @@ def main():
 
             winner = info["winner"]
 
-            # fallback if final hp missing
             if final_hp_p1 is None:
                 if winner == info["p2"] or winner == info["raw_p2"]:
                     final_hp_p1 = 0.0
@@ -233,11 +219,9 @@ def main():
             margin = abs(final_hp_p1 - final_hp_p2) / max(max_hp, 1.0)
             margin = max(0.0, min(1.0, margin))
 
-            # weighted score from final HP margin
             s_win = 0.75 + 0.25 * margin
             s_lose = 1.0 - s_win
 
-            # override sa
             if winner == p1 or winner == info["raw_p1"]:
                 sa = s_win
             elif winner == p2 or winner == info["raw_p2"]:
@@ -249,7 +233,6 @@ def main():
 
             sb = 1.0 - sa
 
-            # direct overall ladder kept only for history/debug
             r1 = overall.get(p1, R0)
             r2 = overall.get(p2, R0)
             r1_new = update(r1, r2, sa)
@@ -258,7 +241,6 @@ def main():
             overall[p1] = r1_new
             overall[p2] = r2_new
 
-            # per-character Elo
             r1c_new = None
             r2c_new = None
             if info["p1_char"] and info["p2_char"]:
@@ -324,12 +306,8 @@ def main():
             "Open one JSON and confirm meta has p1Id, p2Id, winnerId."
         )
 
-    # save history
-    pd.DataFrame(hist).to_csv(os.path.join(OUT_DIR, "elo_history.csv"), index=False)
+    pd.DataFrame(hist).to_csv(os.path.join(out_dir, "elo_history.csv"), index=False)
 
-    # -----------------------------
-    # Compute weighted overall Elo from per-character Elo
-    # -----------------------------
     char_counts = defaultdict(int)
     total_matches = defaultdict(int)
 
@@ -381,7 +359,6 @@ def main():
 
         elo = data["num"] / data["den"]
 
-        # very light diversity penalty
         diversity = len(data["chars"])
         if diversity < 2:
             elo *= 0.97
@@ -402,9 +379,8 @@ def main():
     if not df_overall.empty:
         df_overall = df_overall.sort_values("overall_elo", ascending=False)
 
-    df_overall.to_csv(os.path.join(OUT_DIR, "elo_overall.csv"), index=False)
+    df_overall.to_csv(os.path.join(out_dir, "elo_overall.csv"), index=False)
 
-    # per-character output
     df_char = pd.DataFrame([
         {
             "profile_id": p,
@@ -419,13 +395,36 @@ def main():
     if not df_char.empty:
         df_char = df_char.sort_values("per_char_elo", ascending=False)
 
-    df_char.to_csv(os.path.join(OUT_DIR, "elo_per_character.csv"), index=False)
+    df_char.to_csv(os.path.join(out_dir, "elo_per_character.csv"), index=False)
 
     print(f"[OK] Elo computed. Used={used}  Skipped={skipped}")
     print("\nTop Overall Elo:")
     print(df_overall.head(10).to_string(index=False))
     print("\nTop Per-Character Elo:")
     print(df_char.head(10).to_string(index=False))
+
+    return {
+        "history": hist,
+        "overall_df": df_overall,
+        "per_char_df": df_char,
+        "used": used,
+        "skipped": skipped,
+    }
+
+
+def main_with_args(telemetry_dir: str, out_dir: str):
+    return run_elo(
+        telemetry_dir=telemetry_dir,
+        out_dir=out_dir,
+    )
+
+
+def main():
+    args = parse_args()
+    run_elo(
+        telemetry_dir=args.telemetry_dir,
+        out_dir=args.out_dir,
+    )
 
 
 if __name__ == "__main__":

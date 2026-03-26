@@ -1,0 +1,53 @@
+import argparse
+import os
+
+import extractor_upgraded
+import elo_from_telemetry
+import export_profile_analysis
+
+
+def ensure_dir(path):
+    if path:
+        os.makedirs(path, exist_ok=True)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--telemetry-dir", required=True)
+    parser.add_argument("--out-dir", required=True)
+    parser.add_argument("--elo-out-dir", required=True)
+    parser.add_argument("--unity-output", required=True)
+    args = parser.parse_args()
+
+    ensure_dir(args.out_dir)
+    ensure_dir(args.elo_out_dir)
+    ensure_dir(os.path.dirname(args.unity_output))
+
+    print("=== RUNTIME PIPELINE START ===")
+
+    print("Running extractor...")
+    extractor_upgraded.main_with_args(
+        telemetry_dir=args.telemetry_dir,
+        out_dir=args.out_dir,
+        skip_human_xlsx=True
+    )
+
+    print("Running elo...")
+    elo_from_telemetry.main_with_args(
+        telemetry_dir=args.telemetry_dir,
+        out_dir=args.elo_out_dir
+    )
+
+    print("Running export...")
+    export_profile_analysis.main_with_args(
+        input_path=os.path.join(args.out_dir, "dataset_profile_level.csv"),
+        elo_input=os.path.join(args.elo_out_dir, "elo_overall.csv"),
+        output_dir=os.path.join(args.out_dir, "profile_analysis"),
+        unity_output=args.unity_output
+    )
+
+    print("=== PIPELINE DONE ===")
+
+
+if __name__ == "__main__":
+    main()
