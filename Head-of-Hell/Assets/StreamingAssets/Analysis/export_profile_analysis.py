@@ -1,7 +1,6 @@
 ﻿import os
 import json
 import argparse
-import shutil
 from datetime import datetime, timezone
 
 import numpy as np
@@ -11,6 +10,29 @@ import pandas as pd
 # --------------------------------------------------
 # Helpers
 # --------------------------------------------------
+
+ELO_LABELS = [
+    (0, 1375, "Moron"),
+    (1375, 1425, "Noob"),
+    (1425, 1475, "Irrelevant"),
+    (1475, 1525, "Tryhard"),
+    (1525, 999999, "Virgin"),
+]
+
+
+def get_elo_label(elo: float) -> str:
+    try:
+        elo = float(elo)
+    except Exception:
+        return "Unranked"
+
+    for low, high, label in ELO_LABELS:
+        if low <= elo < high:
+            return label
+
+    return "Unranked"
+
+
 def ensure_dir(path: str) -> None:
     os.makedirs(path, exist_ok=True)
 
@@ -46,17 +68,14 @@ def classify_style(row: pd.Series) -> str:
         "Risky": r,
     }
 
-    # sort axes
     sorted_axes = sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
     top_label, top_value = sorted_axes[0]
     second_label, second_value = sorted_axes[1]
 
-    # BALANCED
-    if top_value < 0.55 or (top_value - second_value) < 0.08:
-        return "Wildcard"
+    if top_value < 0.33 :
+        return "Scripted Bot"
 
-    # COMBO styles
     if top_label == "Aggressive" and second_label == "Defensive" and second_value > 0.60:
         return "Braindead"
 
@@ -75,7 +94,6 @@ def classify_style(row: pd.Series) -> str:
     if top_label == "Mobile" and second_label == "Risky" and second_value > 0.60:
         return "Junkie"
 
-    # SOLO styles
     solo_map = {
         "Aggressive": "Rageaholic",
         "Defensive": "Coward",
@@ -104,34 +122,32 @@ def compute_style_axes_from_profile_df(df: pd.DataFrame) -> pd.DataFrame:
         "ema_heavy_rate",
         "ema_special_rate",
         "ema_charge_rate",
+        "ema_parry_rate",
     ]
     validate_required_columns(df, required)
 
     out = df.copy()
 
-    # numeric safety
     for col in required:
         out[col] = pd.to_numeric(out[col], errors="coerce").fillna(0.0)
 
-    # normalize EMA damage terms across profiles
     out["norm_ema_dps_dealt"] = safe_minmax(out["ema_dps_dealt"])
     out["norm_ema_dps_taken"] = safe_minmax(out["ema_dps_taken"])
 
-    # raw axes
     out["Aggression"] = (
         0.35 * out["ema_attack_rate"]
-        + 0.20 * out["ema_hit_rate"]
-        + 0.15 * out["ema_quick_rate"]
+        + 0.15 * out["ema_hit_rate"]
+        + 0.10 * out["ema_quick_rate"]
         + 0.15 * out["ema_heavy_rate"]
         + 0.10 * out["ema_charge_rate"]
-        + 0.05 * out["norm_ema_dps_dealt"]
+        + 0.15 * out["norm_ema_dps_dealt"]
     )
 
     out["Defense"] = (
         0.35 * out["ema_defense_rate"]
         + 0.25 * out["ema_block_rate"]
-        + 0.20 * out["ema_dodge_rate"]
-        + 0.20 * (1.0 - out["norm_ema_dps_taken"])
+        + 0.15 * out["ema_parry_rate"]
+        + 0.25 * (1.0 - out["norm_ema_dps_taken"])
     )
 
     out["Mobility"] = (
@@ -140,19 +156,17 @@ def compute_style_axes_from_profile_df(df: pd.DataFrame) -> pd.DataFrame:
     )
 
     out["Risk"] = (
-        0.35 * out["ema_miss_rate"]
-        + 0.30 * out["norm_ema_dps_taken"]
-        + 0.20 * out["ema_special_rate"]
-        + 0.15 * out["ema_charge_rate"]
+        0.20 * out["ema_miss_rate"]
+        + 0.20 * out["norm_ema_dps_taken"]
+        + 0.30 * out["ema_parry_rate"]
+        + 0.30 * out["ema_charge_rate"]
     )
 
-    # normalized axes for Unity
     out["Aggression_norm"] = safe_minmax(out["Aggression"])
     out["Defense_norm"] = safe_minmax(out["Defense"])
     out["Mobility_norm"] = safe_minmax(out["Mobility"])
     out["Risk_norm"] = safe_minmax(out["Risk"])
 
-    # style label
     out["style_label"] = out.apply(classify_style, axis=1)
 
     return out
@@ -184,6 +198,7 @@ def build_profile_summary(df: pd.DataFrame) -> pd.DataFrame:
         "ema_heavy_rate",
         "ema_special_rate",
         "ema_charge_rate",
+        "ema_parry_rate",
     ]
     validate_required_columns(df, required)
 
@@ -211,6 +226,7 @@ def build_profile_summary(df: pd.DataFrame) -> pd.DataFrame:
         "ema_heavy_rate",
         "ema_special_rate",
         "ema_charge_rate",
+        "ema_parry_rate",
     ]
     for col in numeric_cols:
         work[col] = pd.to_numeric(work[col], errors="coerce").fillna(0.0)
@@ -224,8 +240,6 @@ def build_profile_summary(df: pd.DataFrame) -> pd.DataFrame:
             miss_rate=("miss_rate", "mean"),
             avg_damage_dealt=("damage_dealt", "mean"),
             avg_damage_taken=("damage_taken", "mean"),
-
-            # keep last EMA snapshot per profile
             ema_attack_rate=("ema_attack_rate", "last"),
             ema_mobility_rate=("ema_mobility_rate", "last"),
             ema_defense_rate=("ema_defense_rate", "last"),
@@ -239,11 +253,13 @@ def build_profile_summary(df: pd.DataFrame) -> pd.DataFrame:
             ema_heavy_rate=("ema_heavy_rate", "last"),
             ema_special_rate=("ema_special_rate", "last"),
             ema_charge_rate=("ema_charge_rate", "last"),
+            ema_parry_rate=("ema_parry_rate", "last"),
         )
         .reset_index()
     )
 
     return grouped
+
 
 def load_elo_table(path: str) -> pd.DataFrame:
     if not os.path.exists(path):
@@ -254,7 +270,6 @@ def load_elo_table(path: str) -> pd.DataFrame:
     if elo.empty:
         return pd.DataFrame(columns=["profile_id", "elo_rating"])
 
-    # προσαρμογή σε πιθανά ονόματα στηλών
     cols = {c.lower(): c for c in elo.columns}
 
     profile_col = None
@@ -279,6 +294,8 @@ def load_elo_table(path: str) -> pd.DataFrame:
     out["elo_rating"] = pd.to_numeric(out["elo_rating"], errors="coerce").fillna(1500.0)
 
     return out
+
+
 # --------------------------------------------------
 # JSON export
 # --------------------------------------------------
@@ -294,25 +311,19 @@ def to_json_payload(df: pd.DataFrame) -> dict:
         profiles.append({
             "profile_id": str(row["profile_id"]),
             "profile_name": str(row["profile_name"]),
-
             "style_label": str(row["style_label"]),
-
+            "elo_label": get_elo_label(row["elo_rating"]),
             "matches_count": int(row["matches_count"]),
             "elo_rating": round(float(row["elo_rating"]), 2),
-
             "win_rate": round(float(row["win_rate"]), 4),
             "hit_rate": round(float(row["hit_rate"]), 4),
             "miss_rate": round(float(row["miss_rate"]), 4),
-
             "avg_damage_dealt": round(float(row["avg_damage_dealt"]), 4),
             "avg_damage_taken": round(float(row["avg_damage_taken"]), 4),
-
             "aggression_raw": round(float(row["Aggression"]), 4),
             "defense_raw": round(float(row["Defense"]), 4),
             "mobility_raw": round(float(row["Mobility"]), 4),
             "risk_raw": round(float(row["Risk"]), 4),
-
-            # normalized values used by Unity chart
             "aggression": round(float(row["Aggression_norm"]), 4),
             "defense": round(float(row["Defense_norm"]), 4),
             "mobility": round(float(row["Mobility_norm"]), 4),
@@ -333,6 +344,65 @@ def save_json(payload: dict, out_path: str) -> None:
 
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
+
+
+def run_export(
+    input_path: str,
+    elo_input: str,
+    output_dir: str,
+    output_name: str = "profile_analysis.json",
+    unity_output: str = None,
+    skip_unity_copy: bool = False,
+) -> dict:
+    if not os.path.exists(input_path):
+        raise FileNotFoundError(f"Input CSV not found: {input_path}")
+
+    ensure_dir(output_dir)
+
+    df = pd.read_csv(input_path)
+    if df.empty:
+        raise ValueError("Input CSV is empty.")
+
+    profile_summary = build_profile_summary(df)
+    elo_df = load_elo_table(elo_input)
+
+    profile_summary["profile_id"] = profile_summary["profile_id"].astype(str)
+    profile_summary = profile_summary.merge(elo_df, on="profile_id", how="left")
+    profile_summary["elo_rating"] = pd.to_numeric(
+        profile_summary["elo_rating"], errors="coerce"
+    ).fillna(1500.0)
+
+    scored_profiles = compute_style_axes_from_profile_df(profile_summary)
+    payload = to_json_payload(scored_profiles)
+
+    out_path = os.path.join(output_dir, output_name)
+    save_json(payload, out_path)
+    print(f"[OK] Saved JSON: {out_path}")
+
+    if not skip_unity_copy and unity_output:
+        save_json(payload, unity_output)
+        print(f"[OK] Exported to Unity: {unity_output}")
+
+    print(f"[OK] Profiles exported: {len(payload['profiles'])}")
+    return payload
+
+
+def main_with_args(
+    input_path: str,
+    elo_input: str,
+    output_dir: str,
+    unity_output: str = None,
+    output_name: str = "profile_analysis.json",
+    skip_unity_copy: bool = False,
+) -> dict:
+    return run_export(
+        input_path=input_path,
+        elo_input=elo_input,
+        output_dir=output_dir,
+        output_name=output_name,
+        unity_output=unity_output,
+        skip_unity_copy=skip_unity_copy,
+    )
 
 
 # --------------------------------------------------
@@ -363,47 +433,25 @@ def main() -> None:
         help="Output JSON filename",
     )
     parser.add_argument(
-    "--unity-output",
-    default=None,
-    help="Path to Unity StreamingAssets profile_analysis.json"
+        "--unity-output",
+        default=None,
+        help="Path to Unity profile_analysis.json"
     )
     parser.add_argument(
         "--skip-unity-copy",
         action="store_true",
-        help="If set, do not export/copy JSON to Unity StreamingAssets path",
+        help="If set, do not export/copy JSON to Unity path",
     )
     args = parser.parse_args()
 
-    if not os.path.exists(args.input):
-        raise FileNotFoundError(f"Input CSV not found: {args.input}")
-
-    ensure_dir(args.output_dir)
-
-    df = pd.read_csv(args.input)
-    if df.empty:
-        raise ValueError("Input CSV is empty.")
-
-    profile_summary = build_profile_summary(df)
-    elo_df = load_elo_table(args.elo_input)
-    profile_summary["profile_id"] = profile_summary["profile_id"].astype(str)
-    profile_summary = profile_summary.merge(elo_df, on="profile_id", how="left")
-    profile_summary["elo_rating"] = pd.to_numeric(
-        profile_summary["elo_rating"], errors="coerce"
-    ).fillna(1500.0)
-    scored_profiles = compute_style_axes_from_profile_df(profile_summary)
-    payload = to_json_payload(scored_profiles)
-
-    # save normal output
-    out_path = os.path.join(args.output_dir, args.output_name)
-    save_json(payload, out_path)
-    print(f"[OK] Saved JSON: {out_path}")
-
-    # save/copy to Unity StreamingAssets
-    if not args.skip_unity_copy and args.unity_output:
-        save_json(payload, args.unity_output)
-        print(f"[OK] Exported to Unity: {args.unity_output}")
-
-    print(f"[OK] Profiles exported: {len(payload['profiles'])}")
+    run_export(
+        input_path=args.input,
+        elo_input=args.elo_input,
+        output_dir=args.output_dir,
+        output_name=args.output_name,
+        unity_output=args.unity_output,
+        skip_unity_copy=args.skip_unity_copy,
+    )
 
 
 if __name__ == "__main__":
