@@ -11,7 +11,6 @@
 /[Uu]ser[Ss]ettings/
 
 # MemoryCaptures can get excessive in size.
-# They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
 
 # Recordings can get excessive in size
@@ -73,3 +72,32 @@ crashlytics-build.properties
 
 # Ml-json
 *Timer*.json
+
+# PYTHON
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# PYINSTALLER / PIPELINE
+Assets/StreamingAssets/Analysis/build/
+Assets/StreamingAssets/Analysis/dist/
+Assets/StreamingAssets/Analysis/*.spec
+Assets/StreamingAssets/Analysis/*.toc
+Assets/StreamingAssets/Analysis/*.pyz
+Assets/StreamingAssets/Analysis/*.pkg
+Assets/StreamingAssets/Analysis/pyimod*.pyc
+Assets/StreamingAssets/Analysis/base_library.zip
+Assets/StreamingAssets/Analysis/struct.pyc
+
+# Generated analysis outputs inside repo
+Assets/StreamingAssets/Analysis/out/
+Assets/StreamingAssets/Analysis/out_elo/
+Assets/StreamingAssets/Analysis/style_out/
+Assets/StreamingAssets/Analysis/style_maps/
+Assets/StreamingAssets/Analysis/player_style_maps/
+
+# Keep the pipeline exe
+!Assets/StreamingAssets/Analysis/Bin/
+!Assets/StreamingAssets/Analysis/Bin/*.exe
+!Assets/StreamingAssets/Analysis/Bin/*.exe.meta

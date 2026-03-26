@@ -42,15 +42,22 @@ public class TelemetryManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         telemetryRootFolderPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "My Games",
             "Head of Hell",
             "Telemetry"
         );
 
+        #if UNITY_EDITOR
+                string telemetryFolderPath = Path.Combine(telemetryRootFolderPath, "Editor");
+        #else
+        string telemetryFolderPath = Path.Combine(telemetryRootFolderPath, "Build");
+        #endif
+
         Directory.CreateDirectory(telemetryRootFolderPath);
         Directory.CreateDirectory(Path.Combine(telemetryRootFolderPath, "Editor"));
         Directory.CreateDirectory(Path.Combine(telemetryRootFolderPath, "Build"));
+        Directory.CreateDirectory(telemetryFolderPath); Directory.CreateDirectory(Path.Combine(telemetryRootFolderPath, "Build"));
     }
 
     // ---------------------------

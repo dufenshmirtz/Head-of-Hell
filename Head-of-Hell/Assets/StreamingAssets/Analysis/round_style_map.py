@@ -65,6 +65,7 @@ def compute_style_scores(df: pd.DataFrame) -> pd.DataFrame:
         "charge_rate",
         "dps_dealt",
         "dps_taken",
+        "parry_rate",
     ]
     validate_required_columns(df, required)
 
@@ -85,27 +86,27 @@ def compute_style_scores(df: pd.DataFrame) -> pd.DataFrame:
     # Derived style axes
     out["Aggression"] = (
         0.35 * out["attack_rate"]
-        + 0.20 * out["hit_rate"]
-        + 0.15 * out["quick_rate"]
+        + 0.15 * out["hit_rate"]
+        + 0.10 * out["quick_rate"]
         + 0.15 * out["heavy_rate"]
         + 0.10 * out["charge_rate"]
-        + 0.05 * out["norm_dps_dealt"]
+        + 0.15 * out["norm_dps_dealt"]
     )
 
     out["Defense"] = (
         0.35 * out["defense_rate"]
         + 0.25 * out["block_rate"]
-        + 0.20 * out["dodge_rate"]
-        + 0.20 * (1.0 - out["norm_dps_taken"])
+        + 0.15 * out["parry_rate"]
+        + 0.25 * (1.0 - out["norm_dps_taken"])
     )
 
     out["Mobility"] = 0.85 * out["mobility_rate"] + 0.15 * out["dodge_rate"]
 
     out["Risk"] = (
-        0.35 * out["miss_rate"]
-        + 0.30 * out["norm_dps_taken"]
-        + 0.20 * out["special_rate"]
-        + 0.15 * out["charge_rate"]
+        0.20 * out["miss_rate"]
+        + 0.20 * out["norm_dps_taken"]
+        + 0.30 * out["parry_rate"]
+        + 0.30 * out["charge_rate"]
     )
 
     # Normalized axes for cleaner comparison in scatter plots.
