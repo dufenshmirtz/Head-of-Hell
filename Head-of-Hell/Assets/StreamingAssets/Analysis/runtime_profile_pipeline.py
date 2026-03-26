@@ -1,10 +1,18 @@
 import argparse
 import os
+import sys
 
 import extractor_upgraded
 import elo_from_telemetry
 import export_profile_analysis
 
+os.environ["PYTHONIOENCODING"] = "utf-8"
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 def ensure_dir(path):
     if path:
