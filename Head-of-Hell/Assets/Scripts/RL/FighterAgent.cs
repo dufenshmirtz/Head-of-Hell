@@ -30,99 +30,106 @@ public class FighterAgent : Agent
     KeyCode upK, downK, leftK, rightK, lightK, heavyK, blockK, abilityK, chargeK, parryK;
 
     [Header("Main Rewards")]
-    [SerializeField] float rewardDamageDealt = +0.01f;
-    [SerializeField] float rewardDamageTaken = -0.01f;
-    [SerializeField] float rewardWin = +1.0f;
-    [SerializeField] float rewardLoss = -1.0f;
-    [SerializeField] float stepPenalty = -0.0001f;
+     float rewardDamageDealt = +0.01f;
+     float rewardDamageTaken = -0.01f;
+     float rewardWin = +1.0f;
+     float rewardLoss = -1.0f;
+     float stepPenalty = -0.0001f;
 
     [Header("Minimal Spacing Shaping")]
-    [SerializeField] float spacingBonus = +0.0003f;
+     float spacingBonus = +0.0003f;
 
     [Tooltip("Useful horizontal spacing for common melee attacks.")]
-    [SerializeField] float usefulRangeMinX = 0.4f;
+     float usefulRangeMinX = 0.4f;
 
     [Tooltip("Useful horizontal spacing for common melee attacks.")]
-    [SerializeField] float usefulRangeMaxX = 0.90f;
+     float usefulRangeMaxX = 0.90f;
 
     [Tooltip("Useful vertical spacing for common melee attacks.")]
-    [SerializeField] float usefulRangeMaxY = 0.50f;
+     float usefulRangeMaxY = 0.50f;
 
     [Tooltip("Penalty when agents end up in degenerate stacked states.")]
-    [SerializeField] float stackPenalty = -0.00015f;
+     float stackPenalty = -0.00015f;
 
     [Tooltip("Very small horizontal gap -> likely overlap/stack exploit.")]
-    [SerializeField] float stackBadX = 0.2f;
+     float stackBadX = 0.2f;
 
     [Tooltip("Minimum vertical offset for bad head-stack detection.")]
-    [SerializeField] float stackBadMinY = 0.8f;
+     float stackBadMinY = 0.8f;
 
     [Tooltip("Maximum vertical offset for bad head-stack detection.")]
-    [SerializeField] float stackBadMaxY = 1.2f;
+     float stackBadMaxY = 1.2f;
 
     [Header("Observation scales")]
-    [SerializeField] float relXScale = 9f;
-    [SerializeField] float relYScale = 5f;
-    [SerializeField] float velScale = 10f;
+     float relXScale = 9f;
+     float relYScale = 5f;
+     float velScale = 10f;
 
-    [SerializeField] int totalCharacterCount = 10;
+     int totalCharacterCount = 10;
 
     [Header("Behavior Hygiene")]
-    [SerializeField] float mashPenalty = -0.0006f;
-    [SerializeField] float airJumpPenalty = -0.0008f;
-    [SerializeField] float edgeCampPenalty = -0.0007f;
+     float mashPenalty = -0.0006f;
+     float airJumpPenalty = -0.0008f;
+     float edgeCampPenalty = -0.0007f;
 
     [Tooltip("How many consecutive action changes before we start punishing noisy mashing.")]
-    [SerializeField] int mashChangeThreshold = 3;
+     int mashChangeThreshold = 3;
 
     [Tooltip("World X beyond which we consider the fighter near the edge.")]
-    [SerializeField] float edgeZoneX = 8f;
+     float edgeZoneX = 8f;
 
     [Tooltip("How long (seconds) the fighter can stay near the edge before mild penalty starts.")]
-    [SerializeField] float edgeGraceTime = 1.75f;
+     float edgeGraceTime = 1.75f;
 
     [Tooltip("Small x movement range considered 'camping in place'.")]
-    [SerializeField] float edgeSmallMoveThreshold = 0.35f;
+     float edgeSmallMoveThreshold = 0.35f;
 
     [Header("Move Semantics")]
-    [SerializeField] private ReachType lightReachType = ReachType.Melee;
-    [SerializeField] private ReachType specialReachType = ReachType.Melee;
+     private ReachType lightReachType = ReachType.Melee;
+     private ReachType specialReachType = ReachType.Melee;
 
     [Header("Range Logic")]
-    [SerializeField] float extremeFarThreshold = 8.5f;
+     float extremeFarThreshold = 8.5f;
 
     [Tooltip("Tiny penalty for using heavy from absurdly far away.")]
-    [SerializeField] float extremeFarHeavyPenalty = -0.0007f;
+     float extremeFarHeavyPenalty = -0.0007f;
 
     [Tooltip("Tiny penalty for using charge from absurdly far away.")]
-    [SerializeField] float extremeFarChargePenalty = -0.0008f;
+     float extremeFarChargePenalty = -0.0008f;
 
     [Tooltip("Reward for reducing distance when clearly outside melee threat range.")]
-    [SerializeField] float approachBonus = +0.00025f;
+     float approachBonus = +0.00025f;
 
     [Tooltip("Extra margin beyond useful melee range before approach shaping starts.")]
-    [SerializeField] float approachStartMargin = 0.75f;
+     float approachStartMargin = 0.75f;
 
     [Tooltip("Tiny penalty for using clearly melee light from absurdly far away.")]
-    [SerializeField] float farMeleeLightPenalty = -0.00035f;
+     float farMeleeLightPenalty = -0.00035f;
 
     [Tooltip("Tiny penalty for using clearly melee special from absurdly far away.")]
-    [SerializeField] float farMeleeSpecialPenalty = -0.00035f;
+     float farMeleeSpecialPenalty = -0.00035f;
 
     [Header("Directional Hygiene")]
     [Tooltip("Tiny penalty for using a Dash-type move without horizontal direction input.")]
-    [SerializeField] float dashNoDirectionPenalty = -0.0005f;
+     float dashNoDirectionPenalty = -0.0005f;
 
     [Tooltip("Tiny penalty for using special while not facing the opponent.")]
-    [SerializeField] float wrongFacingSpecialPenalty = -0.0005f;
+     float wrongFacingSpecialPenalty = -0.0005f;
 
     //anti-charge-exploit
-    [SerializeField] int freeConsecutiveCharges = 3;
-    [SerializeField] float repeatedChargePenaltyBase = -0.00015f;
-    [SerializeField] float repeatedChargePenaltyStep = -0.00010f;
-    [SerializeField] float repeatedChargePenaltyCap = -0.00060f;
+     int freeConsecutiveCharges = 2;
+     float repeatedChargePenaltyBase = -0.00015f;
+     float repeatedChargePenaltyStep = -0.00010f;
+     float repeatedChargePenaltyCap = -0.001f;
 
-    [SerializeField] float chargeChainDecaySeconds = 0.9f;
+     float chargeChainDecaySeconds = 0.9f;
+
+    [Header("Charge Release Outcome")]
+    [SerializeField] float emptyReleasedChargePenalty = -0.004f;
+
+    bool chargeTrackingActive = false;
+    int chargeStartOppHP = 0;
+    bool chargeWasFullyCharged = false;
 
     private FighterAgentRewardDebugger rewardDebugger;
 
@@ -541,6 +548,7 @@ public class FighterAgent : Agent
         DirectionalHygieneRewards(moveX, light, special);
 
         ChargeSpamPenalty(chargeMode);
+        ChargeReleaseOutcomePenalty(chargeMode);
 
     }
 
@@ -643,6 +651,10 @@ public class FighterAgent : Agent
         lastChargeMode = 0;
         consecutiveChargeStarts = 0;
         timeSinceLastChargeStart = 999f;
+
+        chargeTrackingActive = false;
+        chargeStartOppHP = 0;
+        chargeWasFullyCharged = false;
     }
 
     private void OnDestroy()
@@ -1057,6 +1069,58 @@ public class FighterAgent : Agent
                 rewardDebugger?.LogLossChargeSpam(penalty);
 
             }
+        }
+
+        lastChargeMode = chargeMode;
+    }
+
+    void ChargeReleaseOutcomePenalty(int chargeMode)
+    {
+        if (self == null || opp == null)
+            return;
+
+        if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
+            return;
+
+        bool chargeStartedNow = (chargeMode == 1 && lastChargeMode != 1);
+        bool chargeReleasedNow = (chargeMode == 2);
+
+        // Ξεκινάμε tracking όταν αρχίζει το hold
+        if (chargeStartedNow)
+        {
+            chargeTrackingActive = true;
+            chargeStartOppHP = opp.GetCurrentHealth();
+            chargeWasFullyCharged = false;
+        }
+
+        // Αν στο μεταξύ έγινε fully charged, το θυμόμαστε
+        if (chargeTrackingActive && self.IsCharged)
+        {
+            chargeWasFullyCharged = true;
+        }
+
+        // Όταν γίνει release, κρίνουμε το αποτέλεσμα
+        if (chargeTrackingActive && chargeReleasedNow)
+        {
+            int oppHPNow = opp.GetCurrentHealth();
+            bool dealtDamage = oppHPNow < chargeStartOppHP;
+
+            // Τιμώρησε μόνο αν ήταν πραγματικό charged attempt
+            if (chargeWasFullyCharged && !dealtDamage)
+            {
+                AddReward(emptyReleasedChargePenalty);
+                rewardDebugger?.LogLossChargeSpam(emptyReleasedChargePenalty);
+            }
+
+            chargeTrackingActive = false;
+            chargeWasFullyCharged = false;
+        }
+
+        // Αν για κάποιο λόγο βγει από charging state χωρίς σωστό release, καθάρισε tracking
+        if (chargeTrackingActive && !self.IsCharging && chargeMode == 0 && lastChargeMode == 1)
+        {
+            chargeTrackingActive = false;
+            chargeWasFullyCharged = false;
         }
 
         lastChargeMode = chargeMode;
