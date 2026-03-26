@@ -6776,46 +6776,7 @@ MonoBehaviour:
   selfManager: {fileID: 221568179}
   enemyManager: {fileID: 1367423825}
   playerSuffix: _P1
-  rewardDamageDealt: 0.02
-  rewardDamageTaken: -0.02
-  rewardWin: 1
-  rewardLoss: -1
-  stepPenalty: -0.0005
-  spacingBonus: 0.0003
-  usefulRangeMinX: 0.35
-  usefulRangeMaxX: 0.9
-  usefulRangeMaxY: 0.5
-  stackPenalty: -0.0015
-  stackBadX: 0.2
-  stackBadMinY: 0.3
-  stackBadMaxY: 1.2
-  relXScale: 9
-  relYScale: 5
-  velScale: 10
-  totalCharacterCount: 10
-  mashPenalty: -0.0006
-  airJumpPenalty: -0.0008
-  edgeCampPenalty: -0.0007
-  mashChangeThreshold: 3
-  edgeZoneX: 8
-  edgeGraceTime: 1.75
-  edgeSmallMoveThreshold: 0.35
-  lightReachType: 0
-  specialReachType: 0
-  extremeFarThreshold: 8.5
-  extremeFarHeavyPenalty: -0.0007
-  extremeFarChargePenalty: -0.0006
-  approachBonus: 0.00025
-  approachStartMargin: 0.75
-  farMeleeLightPenalty: -0.00035
-  farMeleeSpecialPenalty: -0.00035
-  dashNoDirectionPenalty: -0.00045
-  wrongFacingSpecialPenalty: -0.0005
-  freeConsecutiveCharges: 2
-  repeatedChargePenaltyBase: -0.00015
-  repeatedChargePenaltyStep: -0.0001
-  repeatedChargePenaltyCap: -0.0006
-  chargeChainDecaySeconds: 0.9
+  emptyReleasedChargePenalty: -0.0004
 --- !u!114 &221568216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36413,7 +36374,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367423824}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd19557386e32f14d9047b5a9971820e, type: 3}
   m_Name: 
@@ -36425,46 +36386,7 @@ MonoBehaviour:
   selfManager: {fileID: 1367423825}
   enemyManager: {fileID: 221568179}
   playerSuffix: _P2
-  rewardDamageDealt: 0.02
-  rewardDamageTaken: -0.02
-  rewardWin: 1
-  rewardLoss: -1
-  stepPenalty: -0.0005
-  spacingBonus: 0.0003
-  usefulRangeMinX: 0.35
-  usefulRangeMaxX: 0.9
-  usefulRangeMaxY: 0.5
-  stackPenalty: -0.0015
-  stackBadX: 0.2
-  stackBadMinY: 0.3
-  stackBadMaxY: 1.2
-  relXScale: 9
-  relYScale: 5
-  velScale: 10
-  totalCharacterCount: 10
-  mashPenalty: -0.0006
-  airJumpPenalty: -0.0008
-  edgeCampPenalty: -0.0007
-  mashChangeThreshold: 3
-  edgeZoneX: 8
-  edgeGraceTime: 1.75
-  edgeSmallMoveThreshold: 0.35
-  lightReachType: 0
-  specialReachType: 0
-  extremeFarThreshold: 8.5
-  extremeFarHeavyPenalty: -0.0007
-  extremeFarChargePenalty: -0.0006
-  approachBonus: 0.00025
-  approachStartMargin: 0.75
-  farMeleeLightPenalty: -0.00035
-  farMeleeSpecialPenalty: -0.00035
-  dashNoDirectionPenalty: -0.00045
-  wrongFacingSpecialPenalty: -0.0005
-  freeConsecutiveCharges: 2
-  repeatedChargePenaltyBase: -0.00015
-  repeatedChargePenaltyStep: -0.0001
-  repeatedChargePenaltyCap: -0.0006
-  chargeChainDecaySeconds: 0.9
+  emptyReleasedChargePenalty: -0.0004
 --- !u!114 &1367423862
 MonoBehaviour:
   m_ObjectHideFlags: 0

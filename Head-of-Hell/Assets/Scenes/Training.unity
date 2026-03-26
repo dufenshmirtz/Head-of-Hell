@@ -6196,46 +6196,7 @@ MonoBehaviour:
   selfManager: {fileID: 221568179}
   enemyManager: {fileID: 1367423825}
   playerSuffix: _P1
-  rewardDamageDealt: 0.02
-  rewardDamageTaken: -0.02
-  rewardWin: 1
-  rewardLoss: -1
-  stepPenalty: -0.0005
-  spacingBonus: 0.0003
-  usefulRangeMinX: 0.35
-  usefulRangeMaxX: 0.9
-  usefulRangeMaxY: 0.5
-  stackPenalty: -0.0015
-  stackBadX: 0.2
-  stackBadMinY: 0.3
-  stackBadMaxY: 1.2
-  relXScale: 9
-  relYScale: 5
-  velScale: 10
-  totalCharacterCount: 10
-  mashPenalty: -0.0006
-  airJumpPenalty: -0.0008
-  edgeCampPenalty: -0.0007
-  mashChangeThreshold: 3
-  edgeZoneX: 8
-  edgeGraceTime: 1.75
-  edgeSmallMoveThreshold: 0.35
-  lightReachType: 0
-  specialReachType: 0
-  extremeFarThreshold: 8.5
-  extremeFarHeavyPenalty: -0.0007
-  extremeFarChargePenalty: -0.0006
-  approachBonus: 0.00025
-  approachStartMargin: 0.75
-  farMeleeLightPenalty: -0.00035
-  farMeleeSpecialPenalty: -0.00035
-  dashNoDirectionPenalty: -0.00045
-  wrongFacingSpecialPenalty: -0.0005
-  freeConsecutiveCharges: 2
-  repeatedChargePenaltyBase: -0.00015
-  repeatedChargePenaltyStep: -0.0001
-  repeatedChargePenaltyCap: -0.0006
-  chargeChainDecaySeconds: 0.9
+  emptyReleasedChargePenalty: -0.004
 --- !u!114 &221568216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34933,46 +34894,7 @@ MonoBehaviour:
   selfManager: {fileID: 1367423825}
   enemyManager: {fileID: 221568179}
   playerSuffix: _P2
-  rewardDamageDealt: 0.02
-  rewardDamageTaken: -0.02
-  rewardWin: 1
-  rewardLoss: -1
-  stepPenalty: -0.0005
-  spacingBonus: 0.0003
-  usefulRangeMinX: 0.35
-  usefulRangeMaxX: 0.9
-  usefulRangeMaxY: 0.5
-  stackPenalty: -0.0015
-  stackBadX: 0.2
-  stackBadMinY: 0.3
-  stackBadMaxY: 1.2
-  relXScale: 9
-  relYScale: 5
-  velScale: 10
-  totalCharacterCount: 10
-  mashPenalty: -0.0006
-  airJumpPenalty: -0.0008
-  edgeCampPenalty: -0.0007
-  mashChangeThreshold: 3
-  edgeZoneX: 8
-  edgeGraceTime: 1.75
-  edgeSmallMoveThreshold: 0.35
-  lightReachType: 0
-  specialReachType: 0
-  extremeFarThreshold: 8.5
-  extremeFarHeavyPenalty: -0.0007
-  extremeFarChargePenalty: -0.0006
-  approachBonus: 0.00025
-  approachStartMargin: 0.75
-  farMeleeLightPenalty: -0.00035
-  farMeleeSpecialPenalty: -0.00035
-  dashNoDirectionPenalty: -0.00045
-  wrongFacingSpecialPenalty: -0.0005
-  freeConsecutiveCharges: 2
-  repeatedChargePenaltyBase: -0.00015
-  repeatedChargePenaltyStep: -0.0001
-  repeatedChargePenaltyCap: -0.0006
-  chargeChainDecaySeconds: 0.9
+  emptyReleasedChargePenalty: -0.004
 --- !u!114 &1367423862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34995,7 +34917,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: b34254f8ab1c8b844bd7b5c9a8c7f417, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 4fa720a4a75bd664d8eaf6798ee4d372, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 2
   m_BehaviorName: Fighter
@@ -35065,11 +34987,15 @@ MonoBehaviour:
   antiChargeReactionCooldown: 0.45
   antiChargeBaseChance: 0.5
   antiChargeSkillBonus: 0.5
-  antiChargeParryWeight: 0.4
+  antiChargeParryWeight: 0.8
   antiChargeJumpWeight: 0.4
   antiChargeRetreatWeight: 0.1
-  antiChargeBlockWeight: 0.1
+  antiChargeBlockWeight: 0
   retreatDuration: 0.22
+  antiChargeSpecialChance: 0.92
+  antiChargeSpecialRange: 2
+  antiChargeSpecialCooldown: 0.3
+  antiChargeParryDelay: 0.5
 --- !u!114 &1367423899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43608,16 +43534,16 @@ MonoBehaviour:
   behaviorP2: {fileID: 1367423862}
   decisionP2: {fileID: 1367423863}
   botP2: {fileID: 1367423888}
-  oldOpponentModel: {fileID: 5022602860645237092, guid: 079bb765e2b6d77468c35fa892a2bad6, type: 3}
-  phase2StartEpisode: 500
-  phase3StartEpisode: 1000
-  phase4StartEpisode: 2000
+  oldOpponentModel: {fileID: 5022602860645237092, guid: 4fa720a4a75bd664d8eaf6798ee4d372, type: 3}
+  phase2StartEpisode: 1
+  phase3StartEpisode: 2
+  phase4StartEpisode: 3
   scriptedWeight: 0.5
   inferenceWeight: 0.25
   mirrorWeight: 0.25
   minScriptedSkill: 0.35
   maxScriptedSkill: 1
-  curriculumEpisodes: 1201
+  curriculumEpisodes: 5
   currentMode: 0
   episodeIndex: 0
   currentScriptedSkill: 0.5

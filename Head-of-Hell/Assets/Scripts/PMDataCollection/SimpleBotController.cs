@@ -49,6 +49,15 @@ public class SimpleBotController : MonoBehaviour
     [SerializeField] private float antiChargeBlockWeight = 0.10f;
     [SerializeField] private float retreatDuration = 0.22f;
 
+    [SerializeField] private float antiChargeSpecialChance = 0.92f;
+    [SerializeField] private float antiChargeSpecialRange = 2f;
+    [SerializeField] private float antiChargeSpecialCooldown = 0.30f;
+
+    [SerializeField] private float antiChargeParryDelay = 0.5f;
+
+    private bool trackingEnemyCharge;
+    private float enemyChargeTimer;
+
     private BotInputProvider botInput;
     private float thinkTimer;
     private float actionTimer;
@@ -90,6 +99,9 @@ public class SimpleBotController : MonoBehaviour
         forcedHorizontalValue = 0f;
 
         initialized = false;
+
+        trackingEnemyCharge = false;
+        enemyChargeTimer = 0f;
     }
 
     private void OnDisable()
@@ -136,6 +148,8 @@ public class SimpleBotController : MonoBehaviour
             thinkTimer = Random.Range(thinkIntervalMin, thinkIntervalMax);
             DecideAction();
         }
+
+        UpdateEnemyChargeTracking();
     }
 
     private void TryInitialize()
@@ -308,7 +322,6 @@ public class SimpleBotController : MonoBehaviour
         if (actionTimer > 0f) return false;
         if (character == null || target == null) return false;
 
-        // αν εμείς είμαστε ήδη locked σε bad state, μην προσπαθήσουμε
         if (character.IsCasting || character.IsStunned || character.IsKnocked)
             return false;
 
@@ -325,9 +338,26 @@ public class SimpleBotController : MonoBehaviour
         if (!opponentCharging || !closeEnough || !sameLevel)
             return false;
 
+        bool chargingTowardsMe = IsTargetChargingTowardsMe(dxSigned);
+
+        // =========================================================
+        // PRIORITY: SPECIAL σχεδόν πάντα όταν το charge έρχεται πάνω μας
+        // =========================================================
+        if (chargingTowardsMe &&
+            dx <= antiChargeSpecialRange &&
+            CanUseSpecialNow())
+        {
+            if (Random.value < antiChargeSpecialChance)
+            {
+                PressOneFrame(setup.ability);
+                antiChargeReactionTimer = antiChargeSpecialCooldown;
+                actionTimer = 0.20f;
+                return true;
+            }
+        }
+
         float reactChance = antiChargeBaseChance + antiChargeSkillBonus * skill;
 
-        // αν ο αντίπαλος έχει ήδη fully charged attack, αύξησε λίγο την αντίδραση
         if (target.IsCharged)
             reactChance += 0.15f;
 
@@ -349,7 +379,9 @@ public class SimpleBotController : MonoBehaviour
         // 1) PARRY
         if (roll < antiChargeParryWeight)
         {
-            if (character.CanParry && !character.IsCasting)
+            bool parryTimingReady = trackingEnemyCharge && enemyChargeTimer >= antiChargeParryDelay;
+
+            if (parryTimingReady && character.CanParry && !character.IsCasting)
             {
                 PressOneFrame(setup.parry);
                 actionTimer = 0.22f;
@@ -367,10 +399,7 @@ public class SimpleBotController : MonoBehaviour
             if (character.IsGrounded && !character.JumpDisabled && !character.IsCasting)
             {
                 PressOneFrame(setup.up);
-
-                // μικρό retreat στον αέρα
                 ForceRetreatFromTarget(dxSigned, retreatDuration * 0.75f);
-
                 actionTimer = 0.25f;
                 return true;
             }
@@ -500,5 +529,63 @@ public class SimpleBotController : MonoBehaviour
             character.SetInput(botInput);
 
         initialized = (character != null && setup != null && target != null);
+    }
+
+    private bool IsTargetChargingTowardsMe(float dxSigned)
+    {
+        if (target == null) return false;
+
+        float targetFacing = Mathf.Sign(target.transform.localScale.x);
+
+        // αν ο αντίπαλος είναι δεξιά μας, για να έρχεται προς εμάς πρέπει να κοιτάει αριστερά (-1)
+        // αν είναι αριστερά μας, για να έρχεται προς εμάς πρέπει να κοιτάει δεξιά (+1)
+        float dirToMe = -Mathf.Sign(dxSigned);
+
+        // fallback αν είναι ακριβώς πάνω μας
+        if (Mathf.Abs(dirToMe) < 0.01f)
+            return true;
+
+        return targetFacing == dirToMe;
+    }
+
+    private bool CanUseSpecialNow()
+    {
+        if (character == null) return false;
+
+        return
+            !character.IsCasting &&
+            !character.IsStunned &&
+            !character.IsKnocked &&
+            character.CanCast &&
+            !character.OnAbilityCD &&
+            !character.SpecialDisabled;
+    }
+
+    private void UpdateEnemyChargeTracking()
+    {
+        if (target == null)
+        {
+            trackingEnemyCharge = false;
+            enemyChargeTimer = 0f;
+            return;
+        }
+
+        if (target.IsCharging)
+        {
+            if (!trackingEnemyCharge)
+            {
+                trackingEnemyCharge = true;
+                enemyChargeTimer = 0f;
+            }
+            else
+            {
+                enemyChargeTimer += Time.deltaTime;
+            }
+        }
+        else
+        {
+            trackingEnemyCharge = false;
+            enemyChargeTimer = 0f;
+        }
     }
 }
