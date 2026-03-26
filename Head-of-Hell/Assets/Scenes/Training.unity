@@ -34965,7 +34965,7 @@ MonoBehaviour:
   character: {fileID: 0}
   setup: {fileID: 1367423877}
   target: {fileID: 0}
-  skill: 0
+  skill: 1
   randomizePersonality: 1
   preferredRange: 1.25
   tooCloseRange: 0.55
@@ -34984,8 +34984,8 @@ MonoBehaviour:
   antiChargeEnabled: 1
   antiChargeRange: 2
   antiChargeHeightTolerance: 1
-  antiChargeReactionCooldown: 0.45
-  antiChargeBaseChance: 0.5
+  antiChargeReactionCooldown: 0.2
+  antiChargeBaseChance: 0.9
   antiChargeSkillBonus: 0.5
   antiChargeParryWeight: 0.8
   antiChargeJumpWeight: 0.4
@@ -43534,16 +43534,16 @@ MonoBehaviour:
   behaviorP2: {fileID: 1367423862}
   decisionP2: {fileID: 1367423863}
   botP2: {fileID: 1367423888}
-  oldOpponentModel: {fileID: 5022602860645237092, guid: 4fa720a4a75bd664d8eaf6798ee4d372, type: 3}
-  phase2StartEpisode: 1
-  phase3StartEpisode: 2
-  phase4StartEpisode: 3
+  oldOpponentModel: {fileID: 5022602860645237092, guid: b34254f8ab1c8b844bd7b5c9a8c7f417, type: 3}
+  phase2StartEpisode: 400
+  phase3StartEpisode: 800
+  phase4StartEpisode: 1200
   scriptedWeight: 0.5
   inferenceWeight: 0.25
   mirrorWeight: 0.25
-  minScriptedSkill: 0.35
+  minScriptedSkill: 0.659
   maxScriptedSkill: 1
-  curriculumEpisodes: 5
+  curriculumEpisodes: 100
   currentMode: 0
   episodeIndex: 0
   currentScriptedSkill: 0.5

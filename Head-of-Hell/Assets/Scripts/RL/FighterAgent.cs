@@ -49,16 +49,16 @@ public class FighterAgent : Agent
      float usefulRangeMaxY = 0.50f;
 
     [Tooltip("Penalty when agents end up in degenerate stacked states.")]
-     float stackPenalty = -0.00015f;
+     float stackPenalty = -0.0003f;
 
     [Tooltip("Very small horizontal gap -> likely overlap/stack exploit.")]
-     float stackBadX = 0.2f;
+     float stackBadX = 0.3f;
 
     [Tooltip("Minimum vertical offset for bad head-stack detection.")]
      float stackBadMinY = 0.8f;
 
     [Tooltip("Maximum vertical offset for bad head-stack detection.")]
-     float stackBadMaxY = 1.2f;
+     float stackBadMaxY = 1.4f;
 
     [Header("Observation scales")]
      float relXScale = 9f;
@@ -125,7 +125,7 @@ public class FighterAgent : Agent
      float chargeChainDecaySeconds = 0.9f;
 
     [Header("Charge Release Outcome")]
-    [SerializeField] float emptyReleasedChargePenalty = -0.0004f;
+    [SerializeField] float emptyReleasedChargePenalty = -0.0008f;
 
     bool chargeTrackingActive = false;
     int chargeStartOppHP = 0;
