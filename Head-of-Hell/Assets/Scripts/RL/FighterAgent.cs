@@ -48,18 +48,6 @@ public class FighterAgent : Agent
     [Tooltip("Useful vertical spacing for common melee attacks.")]
      float usefulRangeMaxY = 0.50f;
 
-    [Tooltip("Penalty when agents end up in degenerate stacked states.")]
-     float stackPenalty = -0.0003f;
-
-    [Tooltip("Very small horizontal gap -> likely overlap/stack exploit.")]
-     float stackBadX = 0.3f;
-
-    [Tooltip("Minimum vertical offset for bad head-stack detection.")]
-     float stackBadMinY = 0.8f;
-
-    [Tooltip("Maximum vertical offset for bad head-stack detection.")]
-     float stackBadMaxY = 1.4f;
-
     [Header("Observation scales")]
      float relXScale = 9f;
      float relYScale = 5f;
@@ -126,6 +114,31 @@ public class FighterAgent : Agent
 
     [Header("Charge Release Outcome")]
     [SerializeField] float emptyReleasedChargePenalty = -0.0008f;
+
+    [Header("Anti Vertical Cheese")]
+    [Tooltip("How long they can stay vertically stacked before punishment starts.")]
+    float verticalCheeseGraceTime = 0.25f;
+
+    [Tooltip("Very small horizontal gap while one fighter stays above/below the other.")]
+    float verticalCheeseMaxX = 0.5f;
+
+    [Tooltip("Minimum vertical offset that counts as useless top/bottom stacking.")]
+    float verticalCheeseMinY = 0.75f;
+
+    [Tooltip("Base penalty once grace time is exceeded.")]
+    float verticalCheesePenaltyBase = -0.00015f;
+
+    [Tooltip("Extra penalty added per second after grace time.")]
+     float verticalCheesePenaltyPerSecond = -0.00045f;
+
+    [Tooltip("Maximum total penalty per step from vertical cheese.")]
+    float verticalCheesePenaltyCap = -0.009f;
+
+    float verticalCheeseTimer = 0f;
+    [Tooltip("How quickly the vertical cheese timer decays when they leave the bad state.")]
+     float verticalCheeseDecayPerSecond = 1.2f;
+
+
 
     bool chargeTrackingActive = false;
     int chargeStartOppHP = 0;
@@ -387,15 +400,47 @@ public class FighterAgent : Agent
             rewardDebugger?.LogSpacing(spacingBonus);
         }
 
-        bool badStack =
-            absDx < stackBadX &&
-            absDy > stackBadMinY &&
-            absDy < stackBadMaxY;
+        bool badVerticalCheese =
+            absDx <= verticalCheeseMaxX &&
+            absDy >= verticalCheeseMinY;
 
-        if (badStack)
+        if (badVerticalCheese)
         {
-            AddReward(stackPenalty);
-            rewardDebugger?.LogStackPenalty(stackPenalty);
+            float dt = Time.deltaTime;
+            if (dt <= 0f)
+            {
+                dt = 0.016f;
+            }
+
+            verticalCheeseTimer += dt;
+
+            if (verticalCheeseTimer > verticalCheeseGraceTime)
+            {
+                float extraTime = verticalCheeseTimer - verticalCheeseGraceTime;
+
+                float penalty =
+                    verticalCheesePenaltyBase +
+                    extraTime * verticalCheesePenaltyPerSecond;
+
+                penalty = Mathf.Max(penalty, verticalCheesePenaltyCap);
+
+                AddReward(penalty);
+                rewardDebugger?.LogStackPenalty(penalty);
+            }
+        }
+        else
+        {
+            float dt = Time.deltaTime;
+            if (dt <= 0f)
+            {
+                dt = 0.016f;
+            }
+
+            verticalCheeseTimer -= verticalCheeseDecayPerSecond * dt;
+            if (verticalCheeseTimer < 0f)
+            {
+                verticalCheeseTimer = 0f;
+            }
         }
     }
 
@@ -655,6 +700,8 @@ public class FighterAgent : Agent
         chargeTrackingActive = false;
         chargeStartOppHP = 0;
         chargeWasFullyCharged = false;
+
+        verticalCheeseTimer = 0f;
     }
 
     private void OnDestroy()

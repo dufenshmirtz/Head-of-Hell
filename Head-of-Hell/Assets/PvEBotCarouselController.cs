@@ -47,7 +47,7 @@ public class PvEBotCarouselController : MonoBehaviour
         );
 
         ApplyCurrentSelections();
-        RefreshDifficultyAvailability();
+        //RefreshDifficultyAvailability();
     }
 
     private void ApplyCurrentSelections()
@@ -67,15 +67,11 @@ public class PvEBotCarouselController : MonoBehaviour
         PvESelectionState.SelectedBotType =
             index == 0 ? PvEBotType.MLAgent : PvEBotType.ScriptedBot;
 
-        RefreshDifficultyAvailability();
+        //RefreshDifficultyAvailability();
     }
 
     private void OnDifficultyChanged(int index)
     {
-        // Αν είναι ML Agent, αγνόησε τελείως το difficulty carousel
-        if (PvESelectionState.SelectedBotType == PvEBotType.MLAgent)
-            return;
-
         PvESelectionState.SelectedDifficulty = (PvEDifficulty)index;
     }
 

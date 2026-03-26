@@ -259,8 +259,8 @@ public class TrainingOpponentDirector : MonoBehaviour
         else if (episodeIndex >= phase2StartEpisode)
         {
             // Phase 2: balanced transition
-            scriptedWeight = 0.40f;
-            inferenceWeight = 0.30f;
+            scriptedWeight = 0.30f;
+            inferenceWeight = 0.40f;
             mirrorWeight = 0.30f;
         }
         else

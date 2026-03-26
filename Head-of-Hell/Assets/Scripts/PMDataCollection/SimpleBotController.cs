@@ -272,15 +272,31 @@ public class SimpleBotController : MonoBehaviour
         // Anti-top-camp
         if (targetBelow && dx < 0.6f && !isDroppingThroughPlatform)
         {
-            float dropChance = Mathf.Lerp(0.4f, 0.75f, skill);
+            bool enemyChargingOrReady =
+                target != null &&
+                (target.IsCharging || target.IsCharged);
 
-            if (Random.value < dropChance)
+            if (!enemyChargingOrReady)
             {
-                TriggerDropPlatform();
+                float dropChance = Mathf.Lerp(0.4f, 0.75f, skill);
+
+                if (Random.value < dropChance)
+                {
+                    TriggerDropPlatform();
+                }
+                else
+                {
+                    move = Random.value < 0.5f ? -1f : 1f;
+                }
             }
             else
             {
-                move = Random.value < 0.5f ? -1f : 1f;
+                // Μη δίνεις free exploit πέφτοντας πάνω σε charge.
+                // Αντί για drop, κάνε reposition μακριά από το x του αντιπάλου.
+                move = -Mathf.Sign(dxSigned);
+
+                if (Mathf.Abs(move) < 0.01f)
+                    move = Random.value < 0.5f ? -1f : 1f;
             }
         }
         else
