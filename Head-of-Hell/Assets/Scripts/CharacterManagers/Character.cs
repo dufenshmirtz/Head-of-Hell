@@ -901,7 +901,7 @@ public abstract class Character : MonoBehaviour
         if(rb.bodyType == RigidbodyType2D.Static && !isStatic)
         {
             stayDynamic();
-            Debug.Log("Static Error.");
+            Debug.LogWarning("Static Error.");
         }
     }
     #endregion
@@ -1407,7 +1407,6 @@ public abstract class Character : MonoBehaviour
 
     protected void ClearParryState()
     {
-        print("k&");
         counterDone = false;
         counterIsOn = false;
         knockable = true;

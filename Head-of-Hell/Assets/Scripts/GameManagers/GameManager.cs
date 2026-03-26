@@ -151,8 +151,6 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        print("rn: "+roundNumber);
-
         ActivateIndicators();
     }
 
@@ -334,21 +332,19 @@ public class GameManager : MonoBehaviour
             {
                 player2Wins++;
             }
-
-            ActivateIndicators();
-
         }
+        ActivateIndicators();
     }
 
     public void CheckForEnd(int playerNum, string winnerName)
     {
-        if (tie)
+        if (tie && roundNumber != 1)
         {
             tie = false;
             return;
         }
 
-        if (player1Wins > roundNumber / 2 || player2Wins > roundNumber / 2)
+        if (player1Wins > roundNumber / 2 || player2Wins > roundNumber / 2 || roundNumber==1)
         {
             if (trainingMode)//training
             {
@@ -580,7 +576,7 @@ public class GameManager : MonoBehaviour
         var c1 = p1Manager ? p1Manager.GetCurrentCharacter() : null;
         var c2 = p2Manager ? p2Manager.GetCurrentCharacter() : null;
 
-        Debug.Log("(*) SoftReset");
+        //Debug.Log("(*) SoftReset");
 
         // 3) Reset χαρακτήρων
         if (c1) c1.ResetForEpisode2();
