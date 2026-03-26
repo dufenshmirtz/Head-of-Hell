@@ -1,28 +1,29 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;  // Import TextMeshPro for input fields
+using TMPro;
 
 public class CustomRulesetUI : MonoBehaviour
 {
-    //interface
-    public TMP_InputField slotNameInput;     // TextMeshPro InputField for slot name
-    public Button rounds1Button, rounds2Button, rounds3Button;  // Buttons for rounds
-    public Button powerupsYesButton, powerupsNoButton;          // Buttons for powerups
-    public TMP_InputField healthInput;       // TextMeshPro InputField for health
-    public Button saveButton;                // Save button
+    public TMP_InputField slotNameInput;
+    public Button rounds1Button, rounds2Button, rounds3Button;
+    public Button powerupsYesButton, powerupsNoButton;
+    public TMP_InputField healthInput;
+    public Button saveButton;
     public Button speedButtonSlow, speedButtonNormal, speedButtonFast, speedButtonDoped;
     public Button quick, heavy, block, special, charge;
     public Button hideHealthButton;
     public Button devToolsButton;
-    public Button ppButton0,ppButton1, ppButton2, ppButton1non, ppButton2non;
+    public Button ppButton0, ppButton1, ppButton2, ppButton1non, ppButton2non;
     public Button ccYesButton, ccNoButton;
 
-    //values
+    public SlotNameInitializer slotNameInitializer;
+    public TextMeshProUGUI currentSettingDisplay;
+
     private int rounds = 1;
     private bool powerupsEnabled = true;
     private int health = 100;
-    private int selectedSlot; // The currently selected slot
-    private int playerSpeed = 4; // Default to "Slow"
+    private int selectedSlot;
+    private int playerSpeed = 4;
     private bool quickDisabled = false, heavyDisabled = false, blockDisabled = false, specialDisabled = false, chargeDisabled = false;
     private bool hideHealth = false;
     private bool devTools = false;
@@ -31,22 +32,18 @@ public class CustomRulesetUI : MonoBehaviour
 
     void Start()
     {
-        // Set up the button listeners for round buttons
         rounds1Button.onClick.AddListener(() => SetRounds(1));
         rounds2Button.onClick.AddListener(() => SetRounds(3));
         rounds3Button.onClick.AddListener(() => SetRounds(5));
 
-        // Set up the button listeners for powerup buttons
         powerupsYesButton.onClick.AddListener(() => SetPowerups(true));
         powerupsNoButton.onClick.AddListener(() => SetPowerups(false));
 
-        // Set up the button listeners for speed buttons
         speedButtonSlow.onClick.AddListener(() => SetSpeed(3));
         speedButtonNormal.onClick.AddListener(() => SetSpeed(4));
         speedButtonFast.onClick.AddListener(() => SetSpeed(5));
         speedButtonDoped.onClick.AddListener(() => SetSpeed(6));
 
-        // Set up the button listeners for ability buttons
         quick.onClick.AddListener(() => ToggleAbility(ref quickDisabled, quick));
         heavy.onClick.AddListener(() => ToggleAbility(ref heavyDisabled, heavy));
         block.onClick.AddListener(() => ToggleAbility(ref blockDisabled, block));
@@ -59,23 +56,18 @@ public class CustomRulesetUI : MonoBehaviour
         ppButton1non.onClick.AddListener(() => Setportals(3));
         ppButton2non.onClick.AddListener(() => Setportals(4));
 
-        // Restrict health input to only integers
         healthInput.contentType = TMP_InputField.ContentType.IntegerNumber;
-        hideHealthButton.onClick.AddListener(() => ToggleButton(ref hideHealth,hideHealthButton));
-
+        hideHealthButton.onClick.AddListener(() => ToggleButton(ref hideHealth, hideHealthButton));
         devToolsButton.onClick.AddListener(() => ToggleButton(ref devTools, devToolsButton));
 
-        // Set up the listener for save button
         saveButton.onClick.AddListener(SaveCustomRuleset);
 
         ccYesButton.onClick.AddListener(() => SetChanChanMode(true));
         ccNoButton.onClick.AddListener(() => SetChanChanMode(false));
-
     }
 
     public void Initialize(int slotNumber)
     {
-        // Load the current slot settings into the UI if a ruleset exists
         selectedSlot = slotNumber;
         CustomRuleset ruleset = RulesetManager.Instance.LoadCustomRuleset(slotNumber);
 
@@ -86,7 +78,6 @@ public class CustomRulesetUI : MonoBehaviour
             SetRounds(ruleset.rounds);
             SetPowerups(ruleset.powerupsEnabled);
             SetHideHealth(ruleset.hideHealth);
-            // Load speed and ability states (if they are part of your CustomRuleset)
             SetSpeed(ruleset.playerSpeed);
             SetAbilityStates(ruleset.quickDisabled, ruleset.heavyDisabled, ruleset.blockDisabled, ruleset.specialDisabled, ruleset.chargeDisabled);
             SetDevTools(ruleset.devTools);
@@ -95,7 +86,6 @@ public class CustomRulesetUI : MonoBehaviour
         }
         else
         {
-            // Default values
             slotNameInput.text = "";
             healthInput.text = "100";
             SetRounds(1);
@@ -109,7 +99,6 @@ public class CustomRulesetUI : MonoBehaviour
         }
     }
 
-    // Method to set rounds and update UI
     private void SetRounds(int roundValue)
     {
         rounds = roundValue;
@@ -118,7 +107,6 @@ public class CustomRulesetUI : MonoBehaviour
         rounds3Button.interactable = rounds != 5;
     }
 
-    // Method to set powerups and update UI
     private void SetPowerups(bool isEnabled)
     {
         powerupsEnabled = isEnabled;
@@ -146,7 +134,7 @@ public class CustomRulesetUI : MonoBehaviour
     private void SetHideHealth(bool hide)
     {
         hideHealth = hide;
-        UpdateButtonVisual(hideHealthButton,hideHealth);
+        UpdateButtonVisual(hideHealthButton, hideHealth);
     }
 
     private void SetDevTools(bool dev)
@@ -155,7 +143,6 @@ public class CustomRulesetUI : MonoBehaviour
         UpdateButtonVisual(devToolsButton, devTools);
     }
 
-    // Method to set player speed and update UI
     private void SetSpeed(int speedValue)
     {
         playerSpeed = speedValue;
@@ -165,36 +152,30 @@ public class CustomRulesetUI : MonoBehaviour
         speedButtonDoped.interactable = playerSpeed != 6;
     }
 
-    // Method to toggle abilities on and off and update UI
     private void ToggleAbility(ref bool abilityDisabled, Button button)
     {
-        abilityDisabled = !abilityDisabled; // Toggle the state
-        UpdateButtonVisual(button, abilityDisabled); // Update the button's visual state
+        abilityDisabled = !abilityDisabled;
+        UpdateButtonVisual(button, abilityDisabled);
     }
 
     private void ToggleButton(ref bool hide, Button button)
     {
-        hide = !hide; // Toggle the state
-        UpdateButtonVisual(button, hide); // Update the button's visual state
+        hide = !hide;
+        UpdateButtonVisual(button, hide);
     }
 
-    // Method to update the button's visual state based on abilityDisabled
     private void UpdateButtonVisual(Button button, bool abilityDisabled)
     {
-        Transform firstChild = button.transform.GetChild(0);
+        if (button == null || button.transform.childCount == 0)
+        {
+            Debug.LogWarning("Button visual setup missing child.");
+            return;
+        }
 
-        if (firstChild != null)
-        {
-            // Enable or disable the first child based on abilityDisabled
-            firstChild.gameObject.SetActive(abilityDisabled);
-        }
-        else
-        {
-            Debug.Log("Error possible wrong button setup.");
-        }
+        Transform firstChild = button.transform.GetChild(0);
+        firstChild.gameObject.SetActive(abilityDisabled);
     }
 
-    // Method to set initial ability states and update button visuals
     private void SetAbilityStates(bool quickState, bool heavyState, bool blockState, bool specialState, bool chargeState)
     {
         quickDisabled = quickState;
@@ -210,14 +191,20 @@ public class CustomRulesetUI : MonoBehaviour
         UpdateButtonVisual(charge, chargeDisabled);
     }
 
-    // Method to save the current ruleset
     private void SaveCustomRuleset()
     {
         int.TryParse(healthInput.text, out health);
 
+        if (health <= 0)
+            health = 100;
+
+        string cleanSlotName = string.IsNullOrWhiteSpace(slotNameInput.text)
+            ? "Empty"
+            : slotNameInput.text.Trim();
+
         CustomRuleset newRuleset = new CustomRuleset()
         {
-            slotName = slotNameInput.text,
+            slotName = cleanSlotName,
             rounds = rounds,
             powerupsEnabled = powerupsEnabled,
             health = health,
@@ -234,10 +221,20 @@ public class CustomRulesetUI : MonoBehaviour
         };
 
         RulesetManager.Instance.SaveCustomRuleset(selectedSlot, newRuleset);
+
+        CustomRulesetScreenManager.selectedSlot = selectedSlot;
+        CustomRulesetScreenManager.currentRuleset = newRuleset;
+        RulesetSelectionState.SelectSlot(selectedSlot);
+
+        if (slotNameInitializer != null)
+            slotNameInitializer.UpdateSlotName(selectedSlot);
+
+        if (currentSettingDisplay != null)
+            currentSettingDisplay.text = "Current Setting: " + cleanSlotName;
+
         PrintCustomRuleset(newRuleset);
     }
 
-    // Method to print the ruleset details for debugging
     private void PrintCustomRuleset(CustomRuleset ruleset)
     {
         Debug.Log($"Slot Name: {ruleset.slotName}");
