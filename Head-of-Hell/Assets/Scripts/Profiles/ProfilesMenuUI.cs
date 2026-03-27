@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,10 @@ public class ProfilesMenuUI : MonoBehaviour
         public Button slotButton;     // το κουμπί που πατάς για select/view
         public TMP_Text slotText;     // το κείμενο "Empty" ή profile name
         public Button editButton;     // το edit κουμπί
+        public Button deleteButton;   // το delete κουμπί
     }
+
+    public DeleteConfirmUI deleteConfirmUI;
 
     [Header("Slots (size=5)")]
     public SlotUI[] slots = new SlotUI[5];
@@ -28,11 +32,12 @@ public class ProfilesMenuUI : MonoBehaviour
         StartCoroutine(InitNextFrame());
     }
 
-    private System.Collections.IEnumerator InitNextFrame()
+    private IEnumerator InitNextFrame()
     {
         yield return null;
 
-        if (ProfileManager.I == null) yield break;
+        if (ProfileManager.I == null)
+            yield break;
 
         Refresh();
         WireButtons();
@@ -45,7 +50,13 @@ public class ProfilesMenuUI : MonoBehaviour
         for (int i = 0; i < slots.Length; i++)
         {
             var p = db.GetAt(i);
-            slots[i].slotText.text = (p == null) ? "Empty" : p.profileName;
+            bool hasProfile = p != null;
+
+            if (slots[i].slotText != null)
+                slots[i].slotText.text = hasProfile ? p.profileName : "";
+
+            if (slots[i].deleteButton != null)
+                slots[i].deleteButton.gameObject.SetActive(hasProfile);
         }
     }
 
@@ -55,47 +66,85 @@ public class ProfilesMenuUI : MonoBehaviour
         {
             int index = i;
 
-            slots[index].slotButton.onClick.RemoveAllListeners();
-            slots[index].editButton.onClick.RemoveAllListeners();
+            if (slots[index].slotButton != null)
+                slots[index].slotButton.onClick.RemoveAllListeners();
+
+            if (slots[index].editButton != null)
+                slots[index].editButton.onClick.RemoveAllListeners();
+
+            if (slots[index].deleteButton != null)
+                slots[index].deleteButton.onClick.RemoveAllListeners();
 
             // Slot click -> open analysis screen if profile exists
-            slots[index].slotButton.onClick.AddListener(() =>
+            if (slots[index].slotButton != null)
             {
-                string profileName = slots[index].slotText != null
-                    ? slots[index].slotText.text
-                    : "Empty";
-
-                if (string.IsNullOrWhiteSpace(profileName) || profileName == "Empty")
+                slots[index].slotButton.onClick.AddListener(() =>
                 {
-                    Debug.Log($"Slot {index} is empty. Clearing analysis view.");
+                    var db = ProfileManager.I.GetDatabase();
+                    var profileData = db != null ? db.GetAt(index) : null;
+
+                    if (profileData == null || string.IsNullOrWhiteSpace(profileData.id))
+                    {
+                        Debug.Log($"Slot {index} is empty. Clearing analysis view.");
+
+                        if (profileAnalysisPanelUI != null)
+                            profileAnalysisPanelUI.ClearProfileView();
+
+                        return;
+                    }
+
+                    Debug.Log($"ProfilesMenuUI: slot {index} clicked -> id='{profileData.id}', name='{profileData.profileName}'");
+
+                    ProfileManager.I.SelectProfile(playerNum, index);
+                    Refresh();
 
                     if (profileAnalysisPanelUI != null)
                     {
-                        profileAnalysisPanelUI.ClearProfileView();
+                        profileAnalysisPanelUI.OpenForProfileId(profileData.id);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("ProfilesMenuUI: profileAnalysisPanelUI is not assigned.");
+                    }
+                });
+            }
+
+            // Edit button
+            if (slots[index].editButton != null)
+            {
+                slots[index].editButton.onClick.AddListener(() =>
+                {
+                    ProfileEditContext.EditingIndex = index;
+                    OpenEditor(index);
+                });
+            }
+
+            // Delete button -> open confirm panel
+            if (slots[index].deleteButton != null)
+            {
+                slots[index].deleteButton.onClick.AddListener(() =>
+                {
+                    var db = ProfileManager.I.GetDatabase();
+                    var profileData = db != null ? db.GetAt(index) : null;
+
+                    if (profileData == null)
+                    {
+                        Debug.Log($"Delete ignored: slot {index} already empty.");
+                        return;
                     }
 
-                    return;
-                }
+                    Debug.Log($"Delete requested for slot {index} -> id='{profileData.id}', name='{profileData.profileName}'");
 
-                ProfileManager.I.SelectProfile(playerNum, index);
-                Refresh();
-
-                if (profileAnalysisPanelUI != null)
-                {
-                    profileAnalysisPanelUI.OpenForProfileName(profileName);
-                }
-                else
-                {
-                    Debug.LogWarning("ProfilesMenuUI: profileAnalysisPanelUI is not assigned.");
-                }
-            });
-
-            // Edit button -> keep current behavior
-            slots[index].editButton.onClick.AddListener(() =>
-            {
-                ProfileEditContext.EditingIndex = index;
-                OpenEditor(index);
-            });
+                    if (deleteConfirmUI != null)
+                    {
+                        deleteConfirmUI.Open(index);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("ProfilesMenuUI: deleteConfirmUI is not assigned.");
+                    }
+                });
+            }
         }
     }
 
@@ -106,6 +155,4 @@ public class ProfilesMenuUI : MonoBehaviour
         if (profilesMenuRoot != null) profilesMenuRoot.SetActive(false);
         if (profileEditorRoot != null) profileEditorRoot.SetActive(true);
     }
-
-
 }
