@@ -522,9 +522,33 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        // Restart anytime during normal gameplay (not training)
+        if (!trainingMode && Input.GetKeyDown(KeyCode.Return))
+        {
+            QuickRestart();
+        }
     }
 
+    private void QuickRestart()
+    {
+        // Reset basic state
+        tie = false;
+        gameEnd = false;
+        roundCounter = 1;
+        player1Wins = 0;
+        player2Wins = 0;
+
+        if (trainingMode)
+        {
+            SoftResetRound();
+            return;
+        }
+        // IMPORTANT: reset telemetry properly (optional but cleaner)
+        TelemetryManager.Instance?.EndSession("ManualRestart");
+
+        // Reload scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
     public void ResetStatics()
     {
         roundCounter = 1;

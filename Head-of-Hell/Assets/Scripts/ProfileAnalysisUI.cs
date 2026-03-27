@@ -227,7 +227,6 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
 
             float scale = maxVal * 1.2f; // <-- soft cap
 
-            scale = 0.4f;
 
             combatChart.SetValues(
                 p.aggression_raw / scale,
@@ -235,7 +234,15 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
                 (p.mobility_raw / 2f) / scale,
                 p.risk_raw / scale
             );
-           
+
+            //NORMALIZED STATS SAME AS PIPELINE 
+            //combatChart.SetValues(
+            //    Mathf.Clamp01(p.aggression),
+            //    Mathf.Clamp01(p.defense),
+            //    Mathf.Clamp01(p.mobility),
+            //    Mathf.Clamp01(p.risk)
+            //);
+
         }
     }
 }
