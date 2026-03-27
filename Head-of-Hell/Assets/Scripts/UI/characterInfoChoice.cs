@@ -82,7 +82,7 @@ public class characterInfoChoice : MonoBehaviour
     public void InfoProceedure()
     {
         // Get the parent object name
-        GameObject parentObject = transform.parent.gameObject;
+        GameObject parentObject = transform.parent.parent.gameObject;
         parentName = parentObject.name;
 
         // Debugging: Log the parent name

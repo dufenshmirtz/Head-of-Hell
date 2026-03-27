@@ -106,14 +106,14 @@ public class FighterAgent : Agent
 
     //anti-charge-exploit
      int freeConsecutiveCharges = 2;
-     float repeatedChargePenaltyBase = -0.00015f;
-     float repeatedChargePenaltyStep = -0.00010f;
-     float repeatedChargePenaltyCap = -0.002f;
+     float repeatedChargePenaltyBase = -0.0003f;
+     float repeatedChargePenaltyStep = -0.0003f;
+     float repeatedChargePenaltyCap = -0.009f;
 
      float chargeChainDecaySeconds = 0.9f;
 
     [Header("Charge Release Outcome")]
-    [SerializeField] float emptyReleasedChargePenalty = -0.0008f;
+    [SerializeField] float emptyReleasedChargePenalty = -0.0009f;
 
     [Header("Anti Vertical Cheese")]
     [Tooltip("How long they can stay vertically stacked before punishment starts.")]
