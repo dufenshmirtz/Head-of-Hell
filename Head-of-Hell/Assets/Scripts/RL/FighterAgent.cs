@@ -108,7 +108,7 @@ public class FighterAgent : Agent
      int freeConsecutiveCharges = 2;
      float repeatedChargePenaltyBase = -0.00015f;
      float repeatedChargePenaltyStep = -0.00010f;
-     float repeatedChargePenaltyCap = -0.001f;
+     float repeatedChargePenaltyCap = -0.002f;
 
      float chargeChainDecaySeconds = 0.9f;
 
@@ -719,7 +719,7 @@ public class FighterAgent : Agent
         }
     }
 
-    void BehaviorHygieneRewards(int jump, int drop, int light, int heavy, int blockHold, int special, int chargeMode, int parry)
+   void BehaviorHygieneRewards(int jump, int drop, int light, int heavy, int blockHold, int special, int chargeMode, int parry)
     {
         if (self == null || opp == null)
         {
@@ -757,6 +757,12 @@ public class FighterAgent : Agent
             rewardDebugger?.LogAirJumpPenalty(airJumpPenalty);
         }
 
+        float dt = Time.deltaTime;
+        if (dt <= 0f)
+        {
+            dt = 0.016f;
+        }
+
         float x = self.transform.position.x;
         bool nearEdge = Mathf.Abs(x) >= edgeZoneX;
 
@@ -773,7 +779,7 @@ public class FighterAgent : Agent
 
             if (movedFromAnchor <= edgeSmallMoveThreshold)
             {
-                edgeStayTimer += Time.fixedDeltaTime;
+                edgeStayTimer += dt;
 
                 if (edgeStayTimer > edgeGraceTime)
                 {
@@ -784,7 +790,9 @@ public class FighterAgent : Agent
             else
             {
                 edgeAnchorX = x;
-                edgeStayTimer = 0f;
+
+                // decay αντί για πλήρες reset
+                edgeStayTimer = Mathf.Max(0f, edgeStayTimer - dt * 1.5f);
             }
         }
         else
