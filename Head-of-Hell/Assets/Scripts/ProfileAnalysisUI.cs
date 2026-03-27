@@ -227,10 +227,12 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
 
             float scale = maxVal * 1.2f; // <-- soft cap
 
+            scale = 0.4f;
+
             combatChart.SetValues(
                 p.aggression_raw / scale,
                 p.defense_raw / scale,
-                (p.mobility_raw / 2f) / scale,
+                p.mobility_raw / 2f / scale,
                 p.risk_raw / scale
             );
         }

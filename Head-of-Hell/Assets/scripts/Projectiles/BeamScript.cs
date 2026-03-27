@@ -5,36 +5,37 @@ public class BeamScript : MonoBehaviour
 {
     public LazyBigus playa;
 
-    // Reference to the Collider2D on this object (assuming it's 2D)
     private Collider2D beamCollider;
+    private bool hasHit;
 
-    void Start()
+    private void Awake()
     {
-        // Get the Collider2D component attached to this GameObject
         beamCollider = GetComponent<Collider2D>();
-
-        // Initially deactivate the collider
-        DeactivateCollider();
-
-        
     }
 
-    void Update()
+    private void OnEnable()
     {
-        // Start a coroutine to disable the beam after 1 second
-        StartCoroutine(DisableBeamAfterTime(1f));
+        hasHit = false;
+
+        if (beamCollider != null)
+        {
+            beamCollider.enabled = false;
+        }
+
+        StartCoroutine(BeamLifetime(1f));
     }
 
-    // Method to activate the collider
     public void ActivateCollider()
     {
         if (beamCollider != null)
         {
             beamCollider.enabled = true;
+
+            // Προαιρετικό: άμεσο check για κάποιον που είναι ήδη μέσα
+            CheckOverlappingPlayers();
         }
     }
 
-    // Method to deactivate the collider
     public void DeactivateCollider()
     {
         if (beamCollider != null)
@@ -43,23 +44,51 @@ public class BeamScript : MonoBehaviour
         }
     }
 
-    // Detect when the collider hits something
-    void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Check if the object we hit has the tag "Player"
+        TryHit(collision);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        TryHit(collision);
+    }
+
+    private void TryHit(Collider2D collision)
+    {
+        if (hasHit) return;
+
         if (collision.CompareTag("Player"))
         {
-                playa.BeamHit();
+            hasHit = true;
+            playa.BeamHit();
         }
     }
 
-    // Coroutine to disable the beam GameObject after a delay
-    private IEnumerator DisableBeamAfterTime(float delay)
+    private void CheckOverlappingPlayers()
     {
-        // Wait for the specified amount of time
-        yield return new WaitForSeconds(delay);
+        if (beamCollider == null) return;
 
-        // Deactivate this GameObject (disabling the beam)
+        Collider2D[] hits = Physics2D.OverlapBoxAll(
+            beamCollider.bounds.center,
+            beamCollider.bounds.size,
+            0f
+        );
+
+        foreach (Collider2D hit in hits)
+        {
+            if (hit != beamCollider && hit.CompareTag("Player"))
+            {
+                hasHit = true;
+                playa.BeamHit();
+                break;
+            }
+        }
+    }
+
+    private IEnumerator BeamLifetime(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         gameObject.SetActive(false);
     }
 }
