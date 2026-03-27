@@ -83,11 +83,12 @@ public class LazyBigus : Character
     {
         if(!beamHit){
             enemy.TakeDamage(beamDamage,true);
+            enemy.StopPunching();
+            enemy.BreakCharge();
             enemy.Knockback(13f, 0.5f, true);
             audioManager.PlaySFX(audioManager.beamHit, 1.8f);
             StartCoroutine(Poison(beamPoisonDamage/5,1f,5));
             StartCoroutine(BeamDetectorReset());
-            enemy.BreakCharge();
         }
     }
 
