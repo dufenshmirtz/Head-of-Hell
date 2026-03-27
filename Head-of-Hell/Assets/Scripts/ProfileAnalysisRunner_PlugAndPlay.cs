@@ -44,6 +44,11 @@ public class ProfileAnalysisRunner_PlugAndPlay : MonoBehaviour
                 "profile_analysis.json"
             );
 
+            string profilesJsonPath = Path.Combine(
+                Application.persistentDataPath,
+                "profiles.json"
+            );
+
             string unityJsonDir = Path.GetDirectoryName(unityJsonPath);
             if (!string.IsNullOrWhiteSpace(unityJsonDir))
                 Directory.CreateDirectory(unityJsonDir);
@@ -56,6 +61,8 @@ public class ProfileAnalysisRunner_PlugAndPlay : MonoBehaviour
             if (telemetryFiles.Length == 0)
                 throw new Exception("No telemetry JSON files found in Build folder: " + telemetryDir);
 
+            UnityEngine.Debug.Log("Profiles JSON path: " + profilesJsonPath);
+
             ProcessStartInfo psi = new ProcessStartInfo
             {
                 FileName = exePath,
@@ -63,7 +70,8 @@ public class ProfileAnalysisRunner_PlugAndPlay : MonoBehaviour
                     $"--telemetry-dir \"{telemetryDir}\" " +
                     $"--out-dir \"{runtimeOutDir}\" " +
                     $"--elo-out-dir \"{runtimeEloOutDir}\" " +
-                    $"--unity-output \"{unityJsonPath}\"",
+                    $"--unity-output \"{unityJsonPath}\" " +
+                    $"--profiles-json \"{profilesJsonPath}\"",
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,

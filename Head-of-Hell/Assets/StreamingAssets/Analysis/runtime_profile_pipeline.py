@@ -14,6 +14,7 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
+
 def ensure_dir(path):
     if path:
         os.makedirs(path, exist_ok=True)
@@ -25,6 +26,7 @@ def main():
     parser.add_argument("--out-dir", required=True)
     parser.add_argument("--elo-out-dir", required=True)
     parser.add_argument("--unity-output", required=True)
+    parser.add_argument("--profiles-json", required=True)
     args = parser.parse_args()
 
     ensure_dir(args.out_dir)
@@ -51,7 +53,8 @@ def main():
         input_path=os.path.join(args.out_dir, "dataset_profile_level.csv"),
         elo_input=os.path.join(args.elo_out_dir, "elo_overall.csv"),
         output_dir=os.path.join(args.out_dir, "profile_analysis"),
-        unity_output=args.unity_output
+        unity_output=args.unity_output,
+        profiles_json=args.profiles_json
     )
 
     print("=== PIPELINE DONE ===")
