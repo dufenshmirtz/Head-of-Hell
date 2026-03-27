@@ -63,6 +63,21 @@ public class SimpleBotController : MonoBehaviour
     [SerializeField] private float repositionMinDuration = 0.08f;
     [SerializeField] private float repositionMaxDuration = 0.18f;
 
+    [Header("Vertical / Head-Stack Avoidance")]
+    [SerializeField] private float headStackXThreshold = 0.55f;
+    [SerializeField] private float headStackMinY = 0.65f;
+    [SerializeField] private float headStackMaxY = 2.2f;
+    [SerializeField] private float headStackEscapeMin = 0.18f;
+    [SerializeField] private float headStackEscapeMax = 0.32f;
+    [SerializeField] private float crossLevelFollowXThreshold = 1.6f;
+
+    [Header("Anti-Charge Danger")]
+    [SerializeField] private float antiChargeDangerRange = 1.35f;
+    [SerializeField] private float antiChargeDangerHeightTolerance = 1.4f;
+    [SerializeField] private float antiChargeEmergencyRetreatTime = 0.30f;
+    [SerializeField] private float antiChargeEmergencyJumpChance = 0.75f;
+    [SerializeField] private float antiChargeEmergencyParryChance = 0.55f;
+
     // Personality traits (δεν αλλάζουν το meaning του skill)
     private float aggression;     // πιο συχνά engage/attack
     private float defenseBias;    // πιο συχνά block/retreat
@@ -253,6 +268,24 @@ public class SimpleBotController : MonoBehaviour
         bool targetBelow = dySigned < -sameLevelTolerance;
         bool inEngageRange = dx <= engageRange && sameLevel;
 
+        bool headStacking = IsHeadStackingTarget(dx, dySigned);
+
+        if (headStacking)
+        {
+            float escapeDir = -Mathf.Sign(dxSigned);
+
+            if (Mathf.Abs(escapeDir) < 0.01f)
+                escapeDir = Random.value < 0.5f ? -1f : 1f;
+
+            forcedHorizontalValue = escapeDir;
+            forcedHorizontalTimer = Random.Range(headStackEscapeMin, headStackEscapeMax);
+            moveCommitTimer = 0f;
+            committedMove = 0f;
+
+            ApplyMovement(forcedHorizontalValue);
+            return;
+        }
+
         // forced retreat / burst movement
         if (forcedHorizontalTimer > 0f)
         {
@@ -270,7 +303,7 @@ public class SimpleBotController : MonoBehaviour
         float move = 0f;
 
         // Anti-top-camp
-        if (targetBelow && dx < 0.6f && !isDroppingThroughPlatform)
+        if (targetBelow && dx < 0.6f && !isDroppingThroughPlatform && !headStacking)
         {
             bool enemyChargingOrReady =
                 target != null &&
@@ -312,13 +345,25 @@ public class SimpleBotController : MonoBehaviour
 
             desiredRange = Mathf.Max(retreatRange + 0.08f, desiredRange);
 
-            if (!sameLevel && dy > sameLevelTolerance)
+            if (!sameLevel)
             {
-                // Αν ο αντίπαλος είναι πολύ πιο πάνω, μην χορεύει ανούσια από κάτω
-                if (dx > 1.0f)
+                // Όταν είμαστε σε άλλο level, μη ζητάς υπερβολικό x-alignment.
+                // Μόνο αν έχει ξεφύγει αρκετά ο αντίπαλος οριζόντια τον ακολουθείς.
+                if (dx > crossLevelFollowXThreshold)
+                {
                     move = Mathf.Sign(dxSigned);
+                }
                 else
+                {
                     move = 0f;
+                }
+            }
+            else if (!inEngageRange)
+            {
+                if (dx > desiredRange)
+                    move = Mathf.Sign(dxSigned);
+                else if (dx < retreatRange)
+                    move = -Mathf.Sign(dxSigned);
             }
             else if (!inEngageRange)
             {
@@ -548,8 +593,12 @@ public class SimpleBotController : MonoBehaviour
     {
         if (!antiChargeEnabled) return false;
         if (antiChargeReactionTimer > 0f) return false;
-        if (actionTimer > 0f) return false;
         if (character == null || target == null || targetTr == null) return false;
+
+        bool emergencyChargeThreat = target.IsCharging || target.IsCharged;
+
+        if (actionTimer > 0f && !emergencyChargeThreat)
+            return false;
 
         if (character.IsCasting || character.IsStunned || character.IsKnocked)
             return false;
@@ -571,6 +620,51 @@ public class SimpleBotController : MonoBehaviour
             return false;
 
         bool chargingTowardsMe = IsTargetChargingTowardsMe(dxSigned);
+
+        bool inDangerZone =
+            dx <= antiChargeDangerRange &&
+            dy <= antiChargeDangerHeightTolerance &&
+            chargingTowardsMe;
+
+        if (inDangerZone)
+        {
+            // 1. αν μπορώ να τον κόψω με special, κάν’ το
+            if (dx <= antiChargeSpecialRange && CanUseSpecialNow())
+            {
+                PressOneFrame(setup.ability);
+                antiChargeReactionTimer = antiChargeSpecialCooldown;
+                actionTimer = 0.16f;
+                return true;
+            }
+
+            // 2. αν είμαι grounded, συνήθως jump out
+            if (character.IsGrounded && !character.JumpDisabled && !character.IsCasting)
+            {
+                if (trackingEnemyCharge && enemyChargeTimer >= antiChargeParryDelay &&
+                    character.CanParry && Random.value < antiChargeEmergencyParryChance)
+                {
+                    PressOneFrame(setup.parry);
+                    antiChargeReactionTimer = antiChargeReactionCooldown;
+                    actionTimer = 0.18f;
+                    return true;
+                }
+
+                if (Random.value < antiChargeEmergencyJumpChance)
+                {
+                    PressOneFrame(setup.up);
+                    ForceRetreatFromTarget(dxSigned, antiChargeEmergencyRetreatTime);
+                    antiChargeReactionTimer = antiChargeReactionCooldown * 0.75f;
+                    actionTimer = 0.18f;
+                    return true;
+                }
+            }
+
+            // 3. fallback = hard retreat
+            ForceRetreatFromTarget(dxSigned, antiChargeEmergencyRetreatTime);
+            antiChargeReactionTimer = antiChargeReactionCooldown * 0.75f;
+            actionTimer = 0.16f;
+            return true;
+        }
 
         // PRIORITY: SPECIAL όταν το charge έρχεται πάνω μας
         if (chargingTowardsMe &&
@@ -840,5 +934,16 @@ public class SimpleBotController : MonoBehaviour
             trackingEnemyCharge = false;
             enemyChargeTimer = 0f;
         }
+    }
+
+    private bool IsHeadStackingTarget(float dx, float dySigned)
+    {
+        float absDy = Mathf.Abs(dySigned);
+
+        bool iAmAboveTarget = dySigned < 0f;
+        bool closeInX = dx <= headStackXThreshold;
+        bool badYBand = absDy >= headStackMinY && absDy <= headStackMaxY;
+
+        return iAmAboveTarget && closeInX && badYBand;
     }
 }
