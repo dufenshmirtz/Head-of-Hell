@@ -235,6 +235,15 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
                 p.mobility_raw / 2f / scale,
                 p.risk_raw / scale
             );
+
+            //NORMALIZED STATS SAME AS PIPELINE 
+            //combatChart.SetValues(
+            //    Mathf.Clamp01(p.aggression),
+            //    Mathf.Clamp01(p.defense),
+            //    Mathf.Clamp01(p.mobility),
+            //    Mathf.Clamp01(p.risk)
+            //);
+
         }
     }
 }
