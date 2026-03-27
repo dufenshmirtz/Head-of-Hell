@@ -1,27 +1,32 @@
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public class ProfileData
 {
     public string id;          // unique (GUID)
     public string profileName; // εμφανιζόμενο όνομα
-
-    // TODO later: controls, stats, etc.
+    public List<string> legacyIds = new List<string>();
 
     public ProfileData(string name)
     {
         id = Guid.NewGuid().ToString();
         profileName = name;
+        legacyIds = new List<string>();
     }
 
-    public ProfileData() { }
-    //HELPER FOR GUEST
+    public ProfileData()
+    {
+        legacyIds = new List<string>();
+    }
+
     public static ProfileData CreateGuest()
     {
         return new ProfileData
         {
             id = "GUEST",
-            profileName = "Guest"
+            profileName = "Guest",
+            legacyIds = new List<string>()
         };
     }
 }

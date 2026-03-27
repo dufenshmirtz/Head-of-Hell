@@ -61,28 +61,27 @@ public class ProfilesMenuUI : MonoBehaviour
             // Slot click -> open analysis screen if profile exists
             slots[index].slotButton.onClick.AddListener(() =>
             {
-                string profileName = slots[index].slotText != null
-                    ? slots[index].slotText.text
-                    : "Empty";
+                var db = ProfileManager.I.GetDatabase();
+                var profileData = db != null ? db.GetAt(index) : null;
 
-                if (string.IsNullOrWhiteSpace(profileName) || profileName == "Empty")
+                if (profileData == null || string.IsNullOrWhiteSpace(profileData.id))
                 {
                     Debug.Log($"Slot {index} is empty. Clearing analysis view.");
 
                     if (profileAnalysisPanelUI != null)
-                    {
                         profileAnalysisPanelUI.ClearProfileView();
-                    }
 
                     return;
                 }
+
+                Debug.Log($"ProfilesMenuUI: slot {index} clicked -> id='{profileData.id}', name='{profileData.profileName}'");
 
                 ProfileManager.I.SelectProfile(playerNum, index);
                 Refresh();
 
                 if (profileAnalysisPanelUI != null)
                 {
-                    profileAnalysisPanelUI.OpenForProfileName(profileName);
+                    profileAnalysisPanelUI.OpenForProfileId(profileData.id);
                 }
                 else
                 {

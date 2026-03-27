@@ -40,6 +40,37 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         }
     }
 
+
+    public void OpenForProfileId(string profileId)
+    {
+
+        if (string.IsNullOrWhiteSpace(profileId) || profileId == "GUEST")
+        {
+            Debug.LogWarning("ProfileAnalysisPanelUI: invalid profile id.");
+            return;
+        }
+
+        if (loader == null || loader.Data == null || loader.Data.profiles == null)
+        {
+            Debug.LogError("ProfileAnalysisPanelUI: loader/data is null.");
+            return;
+        }
+
+        var profile = loader.Data.profiles
+            .FirstOrDefault(p => p.profile_id == profileId);
+
+        if (profile == null)
+        {
+            Debug.LogWarning($"ProfileAnalysisPanelUI: profile id '{profileId}' not found in JSON.");
+            return;
+        }
+
+        Debug.Log($"OpenForProfileId -> requested id='{profileId}', found name='{profile.profile_name}'");
+        ShowProfile(profile);
+
+        if (profilesMenuRoot != null) profilesMenuRoot.SetActive(false);
+        if (profileAnalysisRoot != null) profileAnalysisRoot.SetActive(true);
+    }
     public void OpenForProfileName(string profileName)
     {
         if (string.IsNullOrWhiteSpace(profileName))

@@ -55,6 +55,9 @@ def validate_required_columns(df: pd.DataFrame, required: list[str]) -> None:
         )
 
 
+# --------------------------------------------------
+# Style labels
+# --------------------------------------------------
 def classify_style(row: pd.Series) -> str:
     a = row["Aggression_norm"]
     d = row["Defense_norm"]
@@ -73,7 +76,7 @@ def classify_style(row: pd.Series) -> str:
     top_label, top_value = sorted_axes[0]
     second_label, second_value = sorted_axes[1]
 
-    if top_value < 0.33 :
+    if top_value < 0.33:
         return "Scripted Bot"
 
     if top_label == "Aggressive" and second_label == "Defensive" and second_value > 0.60:
@@ -231,8 +234,13 @@ def build_profile_summary(df: pd.DataFrame) -> pd.DataFrame:
     for col in numeric_cols:
         work[col] = pd.to_numeric(work[col], errors="coerce").fillna(0.0)
 
+    work = work[
+        (work["profile_id"] != "GUEST") &
+        (work["profile_id"] != "UNKNOWN_PROFILE")
+    ].copy()
+
     grouped = (
-        work.groupby(["profile_id", "profile_name"], dropna=False)
+        work.groupby("profile_id", dropna=False)
         .agg(
             matches_count=("match_id", "nunique"),
             win_rate=("won_round", "mean"),
@@ -258,7 +266,54 @@ def build_profile_summary(df: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
     )
 
+    latest_names = (
+        work.groupby("profile_id", as_index=False)["profile_name"]
+        .last()
+    )
+
+    grouped = grouped.merge(latest_names, on="profile_id", how="left")
+
     return grouped
+
+
+# --------------------------------------------------
+# Identity / legacy IDs
+# --------------------------------------------------
+def load_profile_identity_map(path: str) -> tuple[pd.DataFrame, dict]:
+    if not path or not os.path.exists(path):
+        print(f"[WARN] profiles.json not found: {path}")
+        empty_df = pd.DataFrame(columns=["profile_id", "profile_name_current"])
+        return empty_df, {}
+
+    with open(path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    profiles = data.get("profiles", [])
+    rows = []
+    legacy_to_current = {}
+
+    for p in profiles:
+        current_id = str(p.get("id", "")).strip()
+        current_name = str(p.get("profileName", "")).strip()
+        legacy_ids = p.get("legacyIds", []) or []
+
+        if not current_id:
+            continue
+
+        rows.append({
+            "profile_id": current_id,
+            "profile_name_current": current_name
+        })
+
+        legacy_to_current[current_id] = current_id
+
+        for legacy_id in legacy_ids:
+            legacy_id = str(legacy_id).strip()
+            if legacy_id:
+                legacy_to_current[legacy_id] = current_id
+
+    current_profiles_df = pd.DataFrame(rows)
+    return current_profiles_df, legacy_to_current
 
 
 def load_elo_table(path: str) -> pd.DataFrame:
@@ -352,6 +407,7 @@ def run_export(
     output_dir: str,
     output_name: str = "profile_analysis.json",
     unity_output: str = None,
+    profiles_json: str = None,
     skip_unity_copy: bool = False,
 ) -> dict:
     if not os.path.exists(input_path):
@@ -363,14 +419,40 @@ def run_export(
     if df.empty:
         raise ValueError("Input CSV is empty.")
 
-    profile_summary = build_profile_summary(df)
     elo_df = load_elo_table(elo_input)
+    current_profiles_df, legacy_to_current = load_profile_identity_map(profiles_json)
+
+    if "profile_id" in df.columns:
+        df["profile_id"] = df["profile_id"].astype(str)
+
+    if legacy_to_current:
+        df["profile_id"] = df["profile_id"].map(
+            lambda pid: legacy_to_current.get(str(pid), str(pid))
+        )
+
+    if not elo_df.empty and legacy_to_current:
+        elo_df["profile_id"] = elo_df["profile_id"].astype(str).map(
+            lambda pid: legacy_to_current.get(str(pid), str(pid))
+        )
+
+        elo_df = (
+            elo_df.groupby("profile_id", dropna=False)["elo_rating"]
+            .last()
+            .reset_index()
+        )
+
+    profile_summary = build_profile_summary(df)
 
     profile_summary["profile_id"] = profile_summary["profile_id"].astype(str)
     profile_summary = profile_summary.merge(elo_df, on="profile_id", how="left")
     profile_summary["elo_rating"] = pd.to_numeric(
         profile_summary["elo_rating"], errors="coerce"
     ).fillna(1500.0)
+
+    if not current_profiles_df.empty:
+        profile_summary = profile_summary.merge(current_profiles_df, on="profile_id", how="left")
+        profile_summary["profile_name"] = profile_summary["profile_name_current"].fillna(profile_summary["profile_name"])
+        profile_summary = profile_summary.drop(columns=["profile_name_current"], errors="ignore")
 
     scored_profiles = compute_style_axes_from_profile_df(profile_summary)
     payload = to_json_payload(scored_profiles)
@@ -392,6 +474,7 @@ def main_with_args(
     elo_input: str,
     output_dir: str,
     unity_output: str = None,
+    profiles_json: str = None,
     output_name: str = "profile_analysis.json",
     skip_unity_copy: bool = False,
 ) -> dict:
@@ -401,6 +484,7 @@ def main_with_args(
         output_dir=output_dir,
         output_name=output_name,
         unity_output=unity_output,
+        profiles_json=profiles_json,
         skip_unity_copy=skip_unity_copy,
     )
 
@@ -428,6 +512,11 @@ def main() -> None:
         help="Directory to save profile_analysis.json",
     )
     parser.add_argument(
+        "--profiles-json",
+        default=None,
+        help="Path to Unity profiles.json for current display names"
+    )
+    parser.add_argument(
         "--output-name",
         default="profile_analysis.json",
         help="Output JSON filename",
@@ -450,6 +539,7 @@ def main() -> None:
         output_dir=args.output_dir,
         output_name=args.output_name,
         unity_output=args.unity_output,
+        profiles_json=args.profiles_json,
         skip_unity_copy=args.skip_unity_copy,
     )
 
