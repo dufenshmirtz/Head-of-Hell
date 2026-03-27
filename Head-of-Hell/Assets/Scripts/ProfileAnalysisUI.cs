@@ -62,6 +62,7 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         if (profile == null)
         {
             Debug.LogWarning($"ProfileAnalysisPanelUI: profile id '{profileId}' not found in JSON.");
+            ClearProfileView();
             return;
         }
 
@@ -88,6 +89,7 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         if (loader == null || loader.Data == null || loader.Data.profiles == null)
         {
             Debug.LogError("ProfileAnalysisPanelUI: loader/data is null.");
+            ClearProfileView();
             return;
         }
 
