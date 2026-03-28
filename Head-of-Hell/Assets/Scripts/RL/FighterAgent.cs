@@ -83,7 +83,7 @@ public class FighterAgent : Agent
      float extremeFarHeavyPenalty = -0.0007f;
 
     [Tooltip("Tiny penalty for using charge from absurdly far away.")]
-     float extremeFarChargePenalty = -0.0008f;
+     float extremeFarChargePenalty = -0.001f;
 
     [Tooltip("Reward for reducing distance when clearly outside melee threat range.")]
      float approachBonus = +0.00025f;

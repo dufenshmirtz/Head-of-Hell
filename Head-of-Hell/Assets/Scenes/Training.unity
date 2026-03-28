@@ -34937,7 +34937,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 4
+  DecisionPeriod: 6
   TakeActionsBetweenDecisions: 0
 --- !u!114 &1367423877 stripped
 MonoBehaviour:
@@ -35002,6 +35002,17 @@ MonoBehaviour:
   repositionChance: 0.28
   repositionMinDuration: 0.08
   repositionMaxDuration: 0.18
+  headStackXThreshold: 0.55
+  headStackMinY: 0.65
+  headStackMaxY: 2.2
+  headStackEscapeMin: 0.18
+  headStackEscapeMax: 0.32
+  crossLevelFollowXThreshold: 1.6
+  antiChargeDangerRange: 1.35
+  antiChargeDangerHeightTolerance: 1.4
+  antiChargeEmergencyRetreatTime: 0.3
+  antiChargeEmergencyJumpChance: 0.75
+  antiChargeEmergencyParryChance: 0.55
 --- !u!114 &1367423899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43540,16 +43551,16 @@ MonoBehaviour:
   behaviorP2: {fileID: 1367423862}
   decisionP2: {fileID: 1367423863}
   botP2: {fileID: 1367423888}
-  oldOpponentModel: {fileID: 5022602860645237092, guid: b34254f8ab1c8b844bd7b5c9a8c7f417, type: 3}
-  phase2StartEpisode: 3
-  phase3StartEpisode: 500
-  phase4StartEpisode: 800
+  oldOpponentModel: {fileID: 5022602860645237092, guid: 1c09822b4a043fc4b90dbb97ec59222e, type: 3}
+  phase2StartEpisode: 1000
+  phase3StartEpisode: 2000
+  phase4StartEpisode: 3000
   scriptedWeight: 0.5
   inferenceWeight: 0.25
   mirrorWeight: 0.25
   minScriptedSkill: 0.659
   maxScriptedSkill: 1
-  curriculumEpisodes: 100
+  curriculumEpisodes: 200
   currentMode: 0
   episodeIndex: 0
   currentScriptedSkill: 0.5
