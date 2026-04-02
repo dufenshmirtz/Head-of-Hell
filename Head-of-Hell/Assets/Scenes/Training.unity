@@ -6196,7 +6196,6 @@ MonoBehaviour:
   selfManager: {fileID: 221568179}
   enemyManager: {fileID: 1367423825}
   playerSuffix: _P1
-  emptyReleasedChargePenalty: -0.004
 --- !u!114 &221568216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34894,7 +34893,6 @@ MonoBehaviour:
   selfManager: {fileID: 1367423825}
   enemyManager: {fileID: 221568179}
   playerSuffix: _P2
-  emptyReleasedChargePenalty: -0.004
 --- !u!114 &1367423862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34937,7 +34935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 6
+  DecisionPeriod: 4
   TakeActionsBetweenDecisions: 0
 --- !u!114 &1367423877 stripped
 MonoBehaviour:
@@ -43551,12 +43549,16 @@ MonoBehaviour:
   behaviorP2: {fileID: 1367423862}
   decisionP2: {fileID: 1367423863}
   botP2: {fileID: 1367423888}
-  oldOpponentModel: {fileID: 5022602860645237092, guid: b34254f8ab1c8b844bd7b5c9a8c7f417, type: 3}
+  inferenceModel1: {fileID: 5022602860645237092, guid: a0c3f1d050ebbd04e848184047bcf162, type: 3}
+  inferenceModel2: {fileID: 5022602860645237092, guid: bfb592bfffb728a408c32664027af397, type: 3}
+  inferenceModel3: {fileID: 5022602860645237092, guid: b64c02a4b6959904dab0ff284d5094d9, type: 3}
   phase2StartEpisode: 1000
   phase3StartEpisode: 2000
   phase4StartEpisode: 3000
   scriptedWeight: 0.5
-  inferenceWeight: 0.25
+  inference1Weight: 0.15
+  inference2Weight: 0.1
+  inference3Weight: 0.1
   mirrorWeight: 0.25
   minScriptedSkill: 0.659
   maxScriptedSkill: 1

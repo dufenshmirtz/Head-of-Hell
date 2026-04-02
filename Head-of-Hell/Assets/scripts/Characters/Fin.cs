@@ -80,6 +80,7 @@ public class Fin : Character
 
             enemy.StopPunching();
             enemy.BreakCharge();
+            enemy.DamagedAnimation();
             enemy.Stun(flashStunDuration);
         }
         else
