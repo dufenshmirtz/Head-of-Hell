@@ -134,6 +134,9 @@ public class LazyBigus : Character
     {
         if (!isShootin)
         {
+            Unblock();
+            isLightAttacking=true;
+            moveSpeed = OGMoveSpeed;
             QuickAttackIndicatorDisable();
             animator.SetTrigger("QuickAttack");
             StartCoroutine(ResetShooting());

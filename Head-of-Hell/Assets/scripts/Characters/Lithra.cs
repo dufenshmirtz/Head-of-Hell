@@ -117,6 +117,9 @@ public class Lithra : Character
         // Check if air spin is ready and the player is moving either left or right (controller or keyboard)
         if (airSpinready && (input.GetKey(left) || input.GetKey(right) || (controller && input.GetAxis("Horizontal" + playerString) != 0)))
         {
+            Unblock();
+            isLightAttacking=true;
+            moveSpeed = OGMoveSpeed;
             TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
             QuickAttackIndicatorDisable();
             StartCoroutine(PerformLightAttack());

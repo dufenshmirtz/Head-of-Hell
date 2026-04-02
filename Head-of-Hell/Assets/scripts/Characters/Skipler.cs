@@ -212,7 +212,9 @@ public class Skipler : Character
     {
         if (lightReady)
         {
-            
+            Unblock();
+            isLightAttacking=true;
+            moveSpeed = OGMoveSpeed;
             lightReady = false;
             TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
             QuickAttackIndicatorDisable();

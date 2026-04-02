@@ -186,6 +186,9 @@ public class Lupen : Character
     {
         if (wipReady)
         {
+            Unblock();
+            isLightAttacking=true;
+            moveSpeed = OGMoveSpeed;
             TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
             QuickAttackIndicatorDisable();
             animator.SetTrigger("QuickAttack");

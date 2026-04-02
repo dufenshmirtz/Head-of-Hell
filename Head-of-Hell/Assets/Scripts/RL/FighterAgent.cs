@@ -106,14 +106,14 @@ public class FighterAgent : Agent
 
     //anti-charge-exploit
      int freeConsecutiveCharges = 2;
-     float repeatedChargePenaltyBase = -0.0003f;
+     float repeatedChargePenaltyBase = -0.0001f;
      float repeatedChargePenaltyStep = -0.0003f;
-     float repeatedChargePenaltyCap = -0.009f;
+     float repeatedChargePenaltyCap = -0.003f;
 
      float chargeChainDecaySeconds = 0.9f;
 
     [Header("Charge Release Outcome")]
-    [SerializeField] float emptyReleasedChargePenalty = -0.0009f;
+    [SerializeField] float emptyReleasedChargePenalty = -0.0006f;
 
     [Header("Anti Vertical Cheese")]
     [Tooltip("How long they can stay vertically stacked before punishment starts.")]
@@ -137,6 +137,29 @@ public class FighterAgent : Agent
     float verticalCheeseTimer = 0f;
     [Tooltip("How quickly the vertical cheese timer decays when they leave the bad state.")]
      float verticalCheeseDecayPerSecond = 1.2f;
+
+    [Header("Block Hold Hygiene")]
+    [Tooltip("How long block can be held before tiny penalty starts.")]
+    float blockHoldGraceTime = 2f;
+
+    [Tooltip("Very small penalty applied while holding block too long.")]
+    float longBlockHoldPenalty = -0.00018f;
+
+    [Tooltip("How quickly the block hold timer decays after releasing block.")]
+    float blockHoldDecayPerSecond = 1.6f;
+
+    [Header("Repeat Move Hygiene")]
+    [Tooltip("How many consecutive starts of the same move are free.")]
+    int freeRepeatedSameMoveStarts = 3;
+
+    [Tooltip("Tiny penalty base for repeating the exact same move too many times.")]
+    float repeatedSameMovePenaltyBase = -0.00012f;
+
+    [Tooltip("Extra tiny penalty per extra repeated start.")]
+    float repeatedSameMovePenaltyStep = -0.00005f;
+
+    [Tooltip("Cap for repeated same move penalty.")]
+    float repeatedSameMovePenaltyCap = -0.00035f;
 
 
 
@@ -167,6 +190,11 @@ public class FighterAgent : Agent
     int consecutiveChargeStarts = 0;
 
     float timeSinceLastChargeStart = 999f;
+
+    float blockHoldTimer = 0f;
+
+    int lastStartedIntent = 0;
+    int consecutiveSameMoveStarts = 0;
 
     // optional
     FighterAgent oppAgent;
@@ -702,6 +730,10 @@ public class FighterAgent : Agent
         chargeWasFullyCharged = false;
 
         verticalCheeseTimer = 0f;
+
+        blockHoldTimer = 0f;
+        lastStartedIntent = 0;
+        consecutiveSameMoveStarts = 0;
     }
 
     private void OnDestroy()
@@ -719,7 +751,7 @@ public class FighterAgent : Agent
         }
     }
 
-   void BehaviorHygieneRewards(int jump, int drop, int light, int heavy, int blockHold, int special, int chargeMode, int parry)
+    void BehaviorHygieneRewards(int jump, int drop, int light, int heavy, int blockHold, int special, int chargeMode, int parry)
     {
         if (self == null || opp == null)
         {
@@ -732,12 +764,13 @@ public class FighterAgent : Agent
         }
 
         int currentIntent = GetActionIntent(jump, drop, light, heavy, blockHold, special, chargeMode, parry);
+        int previousIntent = lastActionIntent;
 
-        if (currentIntent != 0 && lastActionIntent != 0 && currentIntent != lastActionIntent)
+        if (currentIntent != 0 && previousIntent != 0 && currentIntent != previousIntent)
         {
             consecutiveActionChanges++;
         }
-        else if (currentIntent == 0 || currentIntent == lastActionIntent)
+        else if (currentIntent == 0 || currentIntent == previousIntent)
         {
             consecutiveActionChanges = 0;
         }
@@ -747,8 +780,6 @@ public class FighterAgent : Agent
             AddReward(mashPenalty);
             rewardDebugger?.LogMashPenalty(mashPenalty);
         }
-
-        lastActionIntent = currentIntent;
 
         bool jumpPressedNow = (jump == 1 && lastJumpAction == 0);
         if (jumpPressedNow && !self.IsGrounded)
@@ -761,6 +792,54 @@ public class FighterAgent : Agent
         if (dt <= 0f)
         {
             dt = 0.016f;
+        }
+
+        // Long block hold punishment
+        if (blockHold == 1)
+        {
+            blockHoldTimer += dt;
+
+            if (blockHoldTimer > blockHoldGraceTime)
+            {
+                AddReward(longBlockHoldPenalty);
+            }
+        }
+        else
+        {
+            blockHoldTimer -= blockHoldDecayPerSecond * dt;
+            if (blockHoldTimer < 0f)
+            {
+                blockHoldTimer = 0f;
+            }
+        }
+
+        // Repeated same move punishment (only on new starts)
+        bool startedNow = (currentIntent != 0 && previousIntent == 0);
+
+        if (startedNow)
+        {
+            if (currentIntent == lastStartedIntent)
+            {
+                consecutiveSameMoveStarts++;
+            }
+            else
+            {
+                lastStartedIntent = currentIntent;
+                consecutiveSameMoveStarts = 1;
+            }
+
+            if (consecutiveSameMoveStarts > freeRepeatedSameMoveStarts)
+            {
+                int extraRepeats = consecutiveSameMoveStarts - freeRepeatedSameMoveStarts - 1;
+
+                float repeatPenalty =
+                    repeatedSameMovePenaltyBase +
+                    extraRepeats * repeatedSameMovePenaltyStep;
+
+                repeatPenalty = Mathf.Max(repeatPenalty, repeatedSameMovePenaltyCap);
+
+                AddReward(repeatPenalty);
+            }
         }
 
         float x = self.transform.position.x;
@@ -790,8 +869,6 @@ public class FighterAgent : Agent
             else
             {
                 edgeAnchorX = x;
-
-                // decay αντί για πλήρες reset
                 edgeStayTimer = Mathf.Max(0f, edgeStayTimer - dt * 1.5f);
             }
         }
@@ -801,6 +878,7 @@ public class FighterAgent : Agent
             edgeStayTimer = 0f;
         }
 
+        lastActionIntent = currentIntent;
         lastJumpAction = jump;
     }
 

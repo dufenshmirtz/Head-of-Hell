@@ -179,6 +179,8 @@ public class Rager : Character
     public override void LightAttack()
     {
         TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
+        Unblock();
+        isLightAttacking=true;
         animator.SetTrigger("QuickAttack");
     }
     public void QuickPunchDamage()
