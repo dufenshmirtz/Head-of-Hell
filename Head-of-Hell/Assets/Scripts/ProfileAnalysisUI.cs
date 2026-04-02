@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,12 +43,15 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
 
     public void OpenForProfileId(string profileId)
     {
-
         if (string.IsNullOrWhiteSpace(profileId) || profileId == "GUEST")
         {
             Debug.LogWarning("ProfileAnalysisPanelUI: invalid profile id.");
             return;
         }
+
+        // κράτα το requested profile ακόμα κι αν δεν υπάρχει ακόμα στο JSON
+        currentProfileId = profileId;
+        currentProfileName = null;
 
         if (loader == null || loader.Data == null || loader.Data.profiles == null)
         {
@@ -61,8 +64,11 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
 
         if (profile == null)
         {
-            Debug.LogWarning($"ProfileAnalysisPanelUI: profile id '{profileId}' not found in JSON.");
-            ClearProfileView();
+            Debug.LogWarning($"ProfileAnalysisPanelUI: profile id '{profileId}' not found in JSON yet.");
+            ClearProfileViewButKeepSelection();
+
+            if (profilesMenuRoot != null) profilesMenuRoot.SetActive(false);
+            if (profileAnalysisRoot != null) profileAnalysisRoot.SetActive(true);
             return;
         }
 
@@ -71,6 +77,22 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
 
         if (profilesMenuRoot != null) profilesMenuRoot.SetActive(false);
         if (profileAnalysisRoot != null) profileAnalysisRoot.SetActive(true);
+    }
+
+    private void ClearProfileViewButKeepSelection()
+    {
+        if (profileNameText != null) profileNameText.text = "";
+        if (styleLabelText != null) styleLabelText.text = "";
+        if (eloText != null) eloText.text = "";
+        if (matchesText != null) matchesText.text = "";
+        if (winRateText != null) winRateText.text = "";
+        if (hitRateText != null) hitRateText.text = "";
+        if (missRateText != null) missRateText.text = "";
+        if (avgDamageDealtText != null) avgDamageDealtText.text = "";
+        if (avgDamageTakenText != null) avgDamageTakenText.text = "";
+
+        if (combatChart != null)
+            combatChart.SetValues(0f, 0f, 0f, 0f);
     }
     public void OpenForProfileName(string profileName)
     {
@@ -193,6 +215,7 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
     }
     private void ShowProfile(ProfileAnalysisEntry p)
     {
+        
         currentProfileId = p.profile_id;
         currentProfileName = p.profile_name;
       
