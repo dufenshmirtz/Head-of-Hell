@@ -113,7 +113,7 @@ public class FighterAgent : Agent
      float chargeChainDecaySeconds = 0.9f;
 
     [Header("Charge Release Outcome")]
-    [SerializeField] float emptyReleasedChargePenalty = -0.0006f;
+    [SerializeField] float emptyReleasedChargePenalty = -0.0003f;
 
     [Header("Anti Vertical Cheese")]
     [Tooltip("How long they can stay vertically stacked before punishment starts.")]
@@ -140,26 +140,26 @@ public class FighterAgent : Agent
 
     [Header("Block Hold Hygiene")]
     [Tooltip("How long block can be held before tiny penalty starts.")]
-    float blockHoldGraceTime = 2f;
+    float blockHoldGraceTime = 5f;
 
     [Tooltip("Very small penalty applied while holding block too long.")]
-    float longBlockHoldPenalty = -0.00018f;
+    float longBlockHoldPenalty = -0.00001f;
 
     [Tooltip("How quickly the block hold timer decays after releasing block.")]
-    float blockHoldDecayPerSecond = 3f;
+    float blockHoldDecayPerSecond = 1f;
 
     [Header("Repeat Move Hygiene")]
     [Tooltip("How many consecutive starts of the same move are free.")]
     int freeRepeatedSameMoveStarts = 3;
 
     [Tooltip("Tiny penalty base for repeating the exact same move too many times.")]
-    float repeatedSameMovePenaltyBase = -0.00012f;
+    float repeatedSameMovePenaltyBase = -0.00001f;
 
     [Tooltip("Extra tiny penalty per extra repeated start.")]
     float repeatedSameMovePenaltyStep = -0.00005f;
 
     [Tooltip("Cap for repeated same move penalty.")]
-    float repeatedSameMovePenaltyCap = -0.00035f;
+    float repeatedSameMovePenaltyCap = -0.0005f;
 
 
 
