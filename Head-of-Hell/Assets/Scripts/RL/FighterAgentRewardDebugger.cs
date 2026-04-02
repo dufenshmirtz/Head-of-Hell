@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Text;
 
 public class FighterAgentRewardDebugger : MonoBehaviour
 {
@@ -7,10 +8,9 @@ public class FighterAgentRewardDebugger : MonoBehaviour
     [SerializeField] private bool debugProfileLogging = false;
     [SerializeField] private int debugLogEveryNEpisodes = 10;
 
-    // episode counters
     private int localEpisodeCounter = 0;
 
-    // reward buckets
+    // totals
     private float epStepPenaltyTotal;
     private float epDamageDealtRewardTotal;
     private float epDamageTakenRewardTotal;
@@ -26,9 +26,35 @@ public class FighterAgentRewardDebugger : MonoBehaviour
     private float epFarMeleeSpecialPenaltyTotal;
     private float epDashNoDirectionPenaltyTotal;
     private float epWrongFacingSpecialPenaltyTotal;
+    private float epBlockHoldPenaltyTotal;
+    private float epRepeatSameMovePenaltyTotal;
+    private float epChargeSpamPenaltyTotal;
+    private float epEmptyChargeReleasePenaltyTotal;
     private float epWinRewardTotal;
     private float epLossRewardTotal;
-    private float epChargeSpamTotal;
+
+    // counts
+    private int epStepPenaltyCount;
+    private int epDamageDealtCount;
+    private int epDamageTakenCount;
+    private int epSpacingCount;
+    private int epStackPenaltyCount;
+    private int epMashPenaltyCount;
+    private int epAirJumpPenaltyCount;
+    private int epEdgeCampPenaltyCount;
+    private int epApproachRewardCount;
+    private int epExtremeFarHeavyPenaltyCount;
+    private int epExtremeFarChargePenaltyCount;
+    private int epFarMeleeLightPenaltyCount;
+    private int epFarMeleeSpecialPenaltyCount;
+    private int epDashNoDirectionPenaltyCount;
+    private int epWrongFacingSpecialPenaltyCount;
+    private int epBlockHoldPenaltyCount;
+    private int epRepeatSameMovePenaltyCount;
+    private int epChargeSpamPenaltyCount;
+    private int epEmptyChargeReleasePenaltyCount;
+    private int epWinRewardCount;
+    private int epLossRewardCount;
 
     public void BeginEpisode(string playerSuffix, int? characterId, ReachType lightReach, ReachType specialReach, bool profileLoaded)
     {
@@ -45,24 +71,137 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         }
     }
 
-    public void LogStepPenalty(float value) => epStepPenaltyTotal += value;
-    public void LogDamageDealt(float value) => epDamageDealtRewardTotal += value;
-    public void LogDamageTaken(float value) => epDamageTakenRewardTotal += value;
-    public void LogSpacing(float value) => epSpacingRewardTotal += value;
-    public void LogStackPenalty(float value) => epStackPenaltyTotal += value;
-    public void LogMashPenalty(float value) => epMashPenaltyTotal += value;
-    public void LogAirJumpPenalty(float value) => epAirJumpPenaltyTotal += value;
-    public void LogEdgeCampPenalty(float value) => epEdgeCampPenaltyTotal += value;
-    public void LogApproachReward(float value) => epApproachRewardTotal += value;
-    public void LogExtremeFarHeavyPenalty(float value) => epExtremeFarHeavyPenaltyTotal += value;
-    public void LogExtremeFarChargePenalty(float value) => epExtremeFarChargePenaltyTotal += value;
-    public void LogFarMeleeLightPenalty(float value) => epFarMeleeLightPenaltyTotal += value;
-    public void LogFarMeleeSpecialPenalty(float value) => epFarMeleeSpecialPenaltyTotal += value;
-    public void LogDashNoDirectionPenalty(float value) => epDashNoDirectionPenaltyTotal += value;
-    public void LogWrongFacingSpecialPenalty(float value) => epWrongFacingSpecialPenaltyTotal += value;
-    public void LogWinReward(float value) => epWinRewardTotal += value;
-    public void LogLossReward(float value) => epLossRewardTotal += value;
-    public void LogLossChargeSpam(float value) => epChargeSpamTotal += value;
+    public void LogStepPenalty(float value)
+    {
+        epStepPenaltyTotal += value;
+        epStepPenaltyCount++;
+    }
+
+    public void LogDamageDealt(float value)
+    {
+        epDamageDealtRewardTotal += value;
+        if (value != 0f)
+        {
+            epDamageDealtCount++;
+        }
+    }
+
+    public void LogDamageTaken(float value)
+    {
+        epDamageTakenRewardTotal += value;
+        if (value != 0f)
+        {
+            epDamageTakenCount++;
+        }
+    }
+
+    public void LogSpacing(float value)
+    {
+        epSpacingRewardTotal += value;
+        epSpacingCount++;
+    }
+
+    public void LogStackPenalty(float value)
+    {
+        epStackPenaltyTotal += value;
+        epStackPenaltyCount++;
+    }
+
+    public void LogMashPenalty(float value)
+    {
+        epMashPenaltyTotal += value;
+        epMashPenaltyCount++;
+    }
+
+    public void LogAirJumpPenalty(float value)
+    {
+        epAirJumpPenaltyTotal += value;
+        epAirJumpPenaltyCount++;
+    }
+
+    public void LogEdgeCampPenalty(float value)
+    {
+        epEdgeCampPenaltyTotal += value;
+        epEdgeCampPenaltyCount++;
+    }
+
+    public void LogApproachReward(float value)
+    {
+        epApproachRewardTotal += value;
+        epApproachRewardCount++;
+    }
+
+    public void LogExtremeFarHeavyPenalty(float value)
+    {
+        epExtremeFarHeavyPenaltyTotal += value;
+        epExtremeFarHeavyPenaltyCount++;
+    }
+
+    public void LogExtremeFarChargePenalty(float value)
+    {
+        epExtremeFarChargePenaltyTotal += value;
+        epExtremeFarChargePenaltyCount++;
+    }
+
+    public void LogFarMeleeLightPenalty(float value)
+    {
+        epFarMeleeLightPenaltyTotal += value;
+        epFarMeleeLightPenaltyCount++;
+    }
+
+    public void LogFarMeleeSpecialPenalty(float value)
+    {
+        epFarMeleeSpecialPenaltyTotal += value;
+        epFarMeleeSpecialPenaltyCount++;
+    }
+
+    public void LogDashNoDirectionPenalty(float value)
+    {
+        epDashNoDirectionPenaltyTotal += value;
+        epDashNoDirectionPenaltyCount++;
+    }
+
+    public void LogWrongFacingSpecialPenalty(float value)
+    {
+        epWrongFacingSpecialPenaltyTotal += value;
+        epWrongFacingSpecialPenaltyCount++;
+    }
+
+    public void LogBlockHoldPenalty(float value)
+    {
+        epBlockHoldPenaltyTotal += value;
+        epBlockHoldPenaltyCount++;
+    }
+
+    public void LogRepeatSameMovePenalty(float value)
+    {
+        epRepeatSameMovePenaltyTotal += value;
+        epRepeatSameMovePenaltyCount++;
+    }
+
+    public void LogChargeSpamPenalty(float value)
+    {
+        epChargeSpamPenaltyTotal += value;
+        epChargeSpamPenaltyCount++;
+    }
+
+    public void LogEmptyChargeReleasePenalty(float value)
+    {
+        epEmptyChargeReleasePenaltyTotal += value;
+        epEmptyChargeReleasePenaltyCount++;
+    }
+
+    public void LogWinReward(float value)
+    {
+        epWinRewardTotal += value;
+        epWinRewardCount++;
+    }
+
+    public void LogLossReward(float value)
+    {
+        epLossRewardTotal += value;
+        epLossRewardCount++;
+    }
 
     public void EndEpisode(
         string playerSuffix,
@@ -72,9 +211,20 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         ReachType specialReach,
         bool profileLoaded)
     {
-        if (!debugRewardBreakdown) return;
-        if (debugLogEveryNEpisodes <= 0) debugLogEveryNEpisodes = 1;
-        if (localEpisodeCounter % debugLogEveryNEpisodes != 0) return;
+        if (!debugRewardBreakdown)
+        {
+            return;
+        }
+
+        if (debugLogEveryNEpisodes <= 0)
+        {
+            debugLogEveryNEpisodes = 1;
+        }
+
+        if (localEpisodeCounter % debugLogEveryNEpisodes != 0)
+        {
+            return;
+        }
 
         float total =
             epStepPenaltyTotal +
@@ -92,34 +242,56 @@ public class FighterAgentRewardDebugger : MonoBehaviour
             epFarMeleeSpecialPenaltyTotal +
             epDashNoDirectionPenaltyTotal +
             epWrongFacingSpecialPenaltyTotal +
+            epBlockHoldPenaltyTotal +
+            epRepeatSameMovePenaltyTotal +
+            epChargeSpamPenaltyTotal +
+            epEmptyChargeReleasePenaltyTotal +
             epWinRewardTotal +
-            epLossRewardTotal +
-            epChargeSpamTotal;
+            epLossRewardTotal;
 
-        Debug.Log(
+        StringBuilder sb = new StringBuilder();
+
+        sb.AppendLine(
             $"[Agent {playerSuffix}] Episode {localEpisodeCounter} END={endReason} | " +
-            $"CharID={(characterId.HasValue ? characterId.Value.ToString() : "?")}, " +
-            $"LightReach={lightReach}, SpecialReach={specialReach}, ProfileLoaded={profileLoaded}\n" +
-            $"Total={total:F4}\n" +
-            $"  DamageDealt={epDamageDealtRewardTotal:F4}\n" +
-            $"  DamageTaken={epDamageTakenRewardTotal:F4}\n" +
-            $"  Win={epWinRewardTotal:F4}\n" +
-            $"  Loss={epLossRewardTotal:F4}\n" +
-            $"  Step={epStepPenaltyTotal:F4}\n" +
-            $"  Spacing={epSpacingRewardTotal:F4}\n" +
-            $"  Stack={epStackPenaltyTotal:F4}\n" +
-            $"  Mash={epMashPenaltyTotal:F4}\n" +
-            $"  AirJump={epAirJumpPenaltyTotal:F4}\n" +
-            $"  EdgeCamp={epEdgeCampPenaltyTotal:F4}\n" +
-            $"  Approach={epApproachRewardTotal:F4}\n" +
-            $"  ExtremeFarHeavy={epExtremeFarHeavyPenaltyTotal:F4}\n" +
-            $"  ExtremeFarCharge={epExtremeFarChargePenaltyTotal:F4}\n" +
-            $"  FarMeleeLight={epFarMeleeLightPenaltyTotal:F4}\n" +
-            $"  FarMeleeSpecial={epFarMeleeSpecialPenaltyTotal:F4}\n" +
-            $"  DashNoDirection={epDashNoDirectionPenaltyTotal:F4}\n" +
-            $"  WrongFacingSpecial={epWrongFacingSpecialPenaltyTotal:F4}\n" +
-            $"  ChargeSpam={epChargeSpamTotal:F4}"
+            $"CharID={(characterId.HasValue ? characterId.Value.ToString() : "?")} | " +
+            $"LightReach={lightReach} | SpecialReach={specialReach} | ProfileLoaded={profileLoaded}"
         );
+
+        sb.AppendLine($"Total={total:F4}");
+
+        AppendLine(sb, "DamageDealt", epDamageDealtRewardTotal, epDamageDealtCount);
+        AppendLine(sb, "DamageTaken", epDamageTakenRewardTotal, epDamageTakenCount);
+        AppendLine(sb, "Win", epWinRewardTotal, epWinRewardCount);
+        AppendLine(sb, "Loss", epLossRewardTotal, epLossRewardCount);
+        AppendLine(sb, "Step", epStepPenaltyTotal, epStepPenaltyCount);
+        AppendLine(sb, "Spacing", epSpacingRewardTotal, epSpacingCount);
+        AppendLine(sb, "Stack", epStackPenaltyTotal, epStackPenaltyCount);
+        AppendLine(sb, "Mash", epMashPenaltyTotal, epMashPenaltyCount);
+        AppendLine(sb, "AirJump", epAirJumpPenaltyTotal, epAirJumpPenaltyCount);
+        AppendLine(sb, "EdgeCamp", epEdgeCampPenaltyTotal, epEdgeCampPenaltyCount);
+        AppendLine(sb, "Approach", epApproachRewardTotal, epApproachRewardCount);
+        AppendLine(sb, "ExtremeFarHeavy", epExtremeFarHeavyPenaltyTotal, epExtremeFarHeavyPenaltyCount);
+        AppendLine(sb, "ExtremeFarCharge", epExtremeFarChargePenaltyTotal, epExtremeFarChargePenaltyCount);
+        AppendLine(sb, "FarMeleeLight", epFarMeleeLightPenaltyTotal, epFarMeleeLightPenaltyCount);
+        AppendLine(sb, "FarMeleeSpecial", epFarMeleeSpecialPenaltyTotal, epFarMeleeSpecialPenaltyCount);
+        AppendLine(sb, "DashNoDirection", epDashNoDirectionPenaltyTotal, epDashNoDirectionPenaltyCount);
+        AppendLine(sb, "WrongFacingSpecial", epWrongFacingSpecialPenaltyTotal, epWrongFacingSpecialPenaltyCount);
+        AppendLine(sb, "BlockHold", epBlockHoldPenaltyTotal, epBlockHoldPenaltyCount);
+        AppendLine(sb, "RepeatSameMove", epRepeatSameMovePenaltyTotal, epRepeatSameMovePenaltyCount);
+        AppendLine(sb, "ChargeSpam", epChargeSpamPenaltyTotal, epChargeSpamPenaltyCount);
+        AppendLine(sb, "EmptyChargeRelease", epEmptyChargeReleasePenaltyTotal, epEmptyChargeReleasePenaltyCount);
+
+        Debug.Log(sb.ToString());
+    }
+
+    private void AppendLine(StringBuilder sb, string label, float total, int count)
+    {
+        if (count <= 0 && Mathf.Approximately(total, 0f))
+        {
+            return;
+        }
+
+        sb.AppendLine($"  {label}: total={total:F4}, count={count}");
     }
 
     private void ResetEpisodeRewardDebug()
@@ -139,8 +311,33 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         epFarMeleeSpecialPenaltyTotal = 0f;
         epDashNoDirectionPenaltyTotal = 0f;
         epWrongFacingSpecialPenaltyTotal = 0f;
+        epBlockHoldPenaltyTotal = 0f;
+        epRepeatSameMovePenaltyTotal = 0f;
+        epChargeSpamPenaltyTotal = 0f;
+        epEmptyChargeReleasePenaltyTotal = 0f;
         epWinRewardTotal = 0f;
         epLossRewardTotal = 0f;
-        epChargeSpamTotal = 0f;
+
+        epStepPenaltyCount = 0;
+        epDamageDealtCount = 0;
+        epDamageTakenCount = 0;
+        epSpacingCount = 0;
+        epStackPenaltyCount = 0;
+        epMashPenaltyCount = 0;
+        epAirJumpPenaltyCount = 0;
+        epEdgeCampPenaltyCount = 0;
+        epApproachRewardCount = 0;
+        epExtremeFarHeavyPenaltyCount = 0;
+        epExtremeFarChargePenaltyCount = 0;
+        epFarMeleeLightPenaltyCount = 0;
+        epFarMeleeSpecialPenaltyCount = 0;
+        epDashNoDirectionPenaltyCount = 0;
+        epWrongFacingSpecialPenaltyCount = 0;
+        epBlockHoldPenaltyCount = 0;
+        epRepeatSameMovePenaltyCount = 0;
+        epChargeSpamPenaltyCount = 0;
+        epEmptyChargeReleasePenaltyCount = 0;
+        epWinRewardCount = 0;
+        epLossRewardCount = 0;
     }
 }

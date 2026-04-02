@@ -1,6 +1,8 @@
 public enum OpponentMode
 {
     ScriptedBot,
-    InferenceModel,
+    InferenceModel1,
+    InferenceModel2,
+    InferenceModel3,
     MirrorSelfPlay
 }

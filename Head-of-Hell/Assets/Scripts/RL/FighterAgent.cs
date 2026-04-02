@@ -113,7 +113,7 @@ public class FighterAgent : Agent
      float chargeChainDecaySeconds = 0.9f;
 
     [Header("Charge Release Outcome")]
-    [SerializeField] float emptyReleasedChargePenalty = -0.0003f;
+    float emptyReleasedChargePenalty = -0.0003f;
 
     [Header("Anti Vertical Cheese")]
     [Tooltip("How long they can stay vertically stacked before punishment starts.")]
@@ -140,13 +140,13 @@ public class FighterAgent : Agent
 
     [Header("Block Hold Hygiene")]
     [Tooltip("How long block can be held before tiny penalty starts.")]
-    float blockHoldGraceTime = 5f;
+    float blockHoldGraceTime = 1.2f;
 
     [Tooltip("Very small penalty applied while holding block too long.")]
-    float longBlockHoldPenalty = -0.00001f;
+    float longBlockHoldPenaltyPerSecond = -0.001f;
 
     [Tooltip("How quickly the block hold timer decays after releasing block.")]
-    float blockHoldDecayPerSecond = 1f;
+    float blockHoldDecayPerSecond = 1.6f;
 
     [Header("Repeat Move Hygiene")]
     [Tooltip("How many consecutive starts of the same move are free.")]
@@ -186,7 +186,8 @@ public class FighterAgent : Agent
     int lastSpecialAction = 0;
     int lastJumpAction = 0;
 
-    int lastChargeMode = 0;
+    int lastChargeModeForSpam = 0;
+    int lastChargeModeForOutcome = 0;
     int consecutiveChargeStarts = 0;
 
     float timeSinceLastChargeStart = 999f;
@@ -721,7 +722,8 @@ public class FighterAgent : Agent
         lastSpecialAction = 0;
         lastJumpAction = 0;
 
-        lastChargeMode = 0;
+        lastChargeModeForSpam = 0;
+        lastChargeModeForOutcome = 0;
         consecutiveChargeStarts = 0;
         timeSinceLastChargeStart = 999f;
 
@@ -801,7 +803,10 @@ public class FighterAgent : Agent
 
             if (blockHoldTimer > blockHoldGraceTime)
             {
-                AddReward(longBlockHoldPenalty);
+                float blockPenalty = longBlockHoldPenaltyPerSecond * dt;
+                AddReward(blockPenalty);
+                rewardDebugger?.LogBlockHoldPenalty(blockPenalty);
+                AddReward(longBlockHoldPenaltyPerSecond * dt);
             }
         }
         else
@@ -838,6 +843,8 @@ public class FighterAgent : Agent
 
                 repeatPenalty = Mathf.Max(repeatPenalty, repeatedSameMovePenaltyCap);
 
+                AddReward(repeatPenalty);
+                rewardDebugger?.LogRepeatSameMovePenalty(repeatPenalty);
                 AddReward(repeatPenalty);
             }
         }
@@ -1158,28 +1165,32 @@ public class FighterAgent : Agent
     void ChargeSpamPenalty(int chargeMode)
     {
         if (self == null || opp == null)
+        {
             return;
+        }
 
         if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
+        {
             return;
+        }
 
         float dt = Time.deltaTime;
         if (dt <= 0f)
+        {
             dt = 0.016f;
+        }
 
         timeSinceLastChargeStart += dt;
 
-        // Αν πέρασε αρκετός χρόνος χωρίς νέο charge start, το streak σπάει
         if (timeSinceLastChargeStart > chargeChainDecaySeconds)
         {
             consecutiveChargeStarts = 0;
         }
 
-        bool chargeStartedNow = (chargeMode == 1 && lastChargeMode != 1);
+        bool chargeStartedNow = (chargeMode == 1 && lastChargeModeForSpam != 1);
 
         if (chargeStartedNow)
         {
-            // Αν το νέο charge ήρθε αρκετά αργά, ξεκινάει νέο chain
             if (timeSinceLastChargeStart > chargeChainDecaySeconds)
             {
                 consecutiveChargeStarts = 0;
@@ -1193,32 +1204,31 @@ public class FighterAgent : Agent
                 int extraCharges = consecutiveChargeStarts - freeConsecutiveCharges - 1;
 
                 float penalty = repeatedChargePenaltyBase + extraCharges * repeatedChargePenaltyStep;
-
-                // επειδή τα penalties είναι αρνητικά, αυτό βάζει κάτω όριο
                 penalty = Mathf.Max(penalty, repeatedChargePenaltyCap);
 
                 AddReward(penalty);
-
-                rewardDebugger?.LogLossChargeSpam(penalty);
-
+                rewardDebugger?.LogChargeSpamPenalty(penalty);
             }
         }
 
-        lastChargeMode = chargeMode;
+        lastChargeModeForSpam = chargeMode;
     }
 
     void ChargeReleaseOutcomePenalty(int chargeMode)
     {
         if (self == null || opp == null)
+        {
             return;
+        }
 
         if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
+        {
             return;
+        }
 
-        bool chargeStartedNow = (chargeMode == 1 && lastChargeMode != 1);
+        bool chargeStartedNow = (chargeMode == 1 && lastChargeModeForOutcome != 1);
         bool chargeReleasedNow = (chargeMode == 2);
 
-        // Ξεκινάμε tracking όταν αρχίζει το hold
         if (chargeStartedNow)
         {
             chargeTrackingActive = true;
@@ -1226,36 +1236,32 @@ public class FighterAgent : Agent
             chargeWasFullyCharged = false;
         }
 
-        // Αν στο μεταξύ έγινε fully charged, το θυμόμαστε
         if (chargeTrackingActive && self.IsCharged)
         {
             chargeWasFullyCharged = true;
         }
 
-        // Όταν γίνει release, κρίνουμε το αποτέλεσμα
         if (chargeTrackingActive && chargeReleasedNow)
         {
             int oppHPNow = opp.GetCurrentHealth();
             bool dealtDamage = oppHPNow < chargeStartOppHP;
 
-            // Τιμώρησε μόνο αν ήταν πραγματικό charged attempt
             if (chargeWasFullyCharged && !dealtDamage)
             {
                 AddReward(emptyReleasedChargePenalty);
-                rewardDebugger?.LogLossChargeSpam(emptyReleasedChargePenalty);
+                rewardDebugger?.LogEmptyChargeReleasePenalty(emptyReleasedChargePenalty);
             }
 
             chargeTrackingActive = false;
             chargeWasFullyCharged = false;
         }
 
-        // Αν για κάποιο λόγο βγει από charging state χωρίς σωστό release, καθάρισε tracking
-        if (chargeTrackingActive && !self.IsCharging && chargeMode == 0 && lastChargeMode == 1)
+        if (chargeTrackingActive && !self.IsCharging && chargeMode == 0 && lastChargeModeForOutcome == 1)
         {
             chargeTrackingActive = false;
             chargeWasFullyCharged = false;
         }
 
-        lastChargeMode = chargeMode;
+        lastChargeModeForOutcome = chargeMode;
     }
 }

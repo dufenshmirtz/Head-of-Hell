@@ -1498,6 +1498,11 @@ public abstract class Character : MonoBehaviour
         }
     }
 
+    public void DamagedAnimation()
+    {
+        animator.SetTrigger("tookDmg");
+    }
+
     #endregion
 
     #region Passive and Damage
