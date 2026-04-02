@@ -146,7 +146,7 @@ public class FighterAgent : Agent
     float longBlockHoldPenalty = -0.00018f;
 
     [Tooltip("How quickly the block hold timer decays after releasing block.")]
-    float blockHoldDecayPerSecond = 1.6f;
+    float blockHoldDecayPerSecond = 3f;
 
     [Header("Repeat Move Hygiene")]
     [Tooltip("How many consecutive starts of the same move are free.")]
