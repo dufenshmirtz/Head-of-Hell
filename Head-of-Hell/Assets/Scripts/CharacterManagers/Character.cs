@@ -583,6 +583,7 @@ public abstract class Character : MonoBehaviour
         {
             if (!heavyDisable && !casting)
             {
+                Unblock();
                 heavyAttacking=true;
                 HeavyAttack();
             }
@@ -629,8 +630,6 @@ public abstract class Character : MonoBehaviour
         {
             if (!quickDisable && !casting)
             {
-                isLightAttacking=true;
-                moveSpeed = OGMoveSpeed;
                 LightAttack();
                 StartCoroutine(ResetLightAttackIndicator());
             }
@@ -650,6 +649,7 @@ public abstract class Character : MonoBehaviour
         {
             if (canParry && canCast && !casting)
             {
+                Unblock();
                 Parry();
             }
         }

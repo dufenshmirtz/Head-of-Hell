@@ -112,6 +112,9 @@ public class Steelager : Character
     {
         if (!bombCharging)
         {
+            Unblock();
+            isLightAttacking=true;
+            moveSpeed = OGMoveSpeed;
             TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
             QuickAttackIndicatorDisable();
             ThrowBomb();

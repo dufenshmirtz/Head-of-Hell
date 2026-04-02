@@ -100,7 +100,10 @@ public class Fin : Character
     override public void LightAttack() 
     {
         if (rollReady)
-        {           
+        {         
+            Unblock();
+            isLightAttacking=true;
+            moveSpeed = OGMoveSpeed;  
             QuickAttackIndicatorDisable();
             rollReady = false;
             StartCoroutine(Roll());

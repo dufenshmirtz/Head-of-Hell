@@ -131,6 +131,9 @@ public class Vander : Character
     {
         if (katanaready)
         {
+            Unblock();
+            isLightAttacking=true;
+            moveSpeed = OGMoveSpeed;
             TelemetryManager.Instance?.LogAction(PlayerId, "Quick");
             QuickAttackIndicatorDisable();
             animator.SetTrigger("QuickAttack");
