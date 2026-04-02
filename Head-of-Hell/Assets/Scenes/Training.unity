@@ -43551,7 +43551,7 @@ MonoBehaviour:
   behaviorP2: {fileID: 1367423862}
   decisionP2: {fileID: 1367423863}
   botP2: {fileID: 1367423888}
-  oldOpponentModel: {fileID: 5022602860645237092, guid: 1c09822b4a043fc4b90dbb97ec59222e, type: 3}
+  oldOpponentModel: {fileID: 5022602860645237092, guid: b34254f8ab1c8b844bd7b5c9a8c7f417, type: 3}
   phase2StartEpisode: 1000
   phase3StartEpisode: 2000
   phase4StartEpisode: 3000
