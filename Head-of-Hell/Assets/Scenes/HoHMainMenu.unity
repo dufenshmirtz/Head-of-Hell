@@ -14252,10 +14252,10 @@ MonoBehaviour:
   avgDamageDealtText: {fileID: 1635687818}
   avgDamageTakenText: {fileID: 428513479}
   eloText: {fileID: 876120405}
-  aggressionValueText: {fileID: 0}
-  defenseValueText: {fileID: 0}
-  mobilityValueText: {fileID: 0}
-  riskValueText: {fileID: 0}
+  aggressionValueText: {fileID: 606696563}
+  defenseValueText: {fileID: 1898614375}
+  mobilityValueText: {fileID: 963728619}
+  riskValueText: {fileID: 1549826324}
   combatChart: {fileID: 2110088973}
   backButton: {fileID: 1327579927}
 --- !u!114 &392337614
