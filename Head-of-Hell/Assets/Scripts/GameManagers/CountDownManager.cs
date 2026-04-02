@@ -13,6 +13,19 @@ public class CountdownManager : MonoBehaviour
 
     void Start()
     {
+        if (FindObjectOfType<TutorialManager>() != null)
+        {
+            if (countdownText != null)
+            {
+                countdownText.text = "";
+            }
+
+            gameManager.roundOn = true;
+            p1Manager?.Resume();
+            p2Manager?.Resume();
+            return;
+        }
+
         if (gameManager.trainingMode) //for training
         {
             return;
