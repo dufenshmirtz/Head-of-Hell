@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,8 +22,14 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
     public TMP_Text avgDamageDealtText;
     public TMP_Text avgDamageTakenText;
     public TMP_Text eloText;
+    public TMP_Text aggressionValueText;
+    public TMP_Text defenseValueText;
+    public TMP_Text mobilityValueText;
+    public TMP_Text riskValueText;
     private string currentProfileName;
     private string currentProfileId;
+
+    private const float ChartScale = 0.4f;
 
     [Header("Chart")]
     public CombatSignatureChart combatChart;
@@ -33,6 +39,8 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
 
     private void Awake()
     {
+        AutoAssignCombatValueTexts();
+
         if (backButton != null)
         {
             backButton.onClick.RemoveAllListeners();
@@ -43,12 +51,15 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
 
     public void OpenForProfileId(string profileId)
     {
-
         if (string.IsNullOrWhiteSpace(profileId) || profileId == "GUEST")
         {
             Debug.LogWarning("ProfileAnalysisPanelUI: invalid profile id.");
             return;
         }
+
+        // κράτα το requested profile ακόμα κι αν δεν υπάρχει ακόμα στο JSON
+        currentProfileId = profileId;
+        currentProfileName = null;
 
         if (loader == null || loader.Data == null || loader.Data.profiles == null)
         {
@@ -61,8 +72,11 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
 
         if (profile == null)
         {
-            Debug.LogWarning($"ProfileAnalysisPanelUI: profile id '{profileId}' not found in JSON.");
-            ClearProfileView();
+            Debug.LogWarning($"ProfileAnalysisPanelUI: profile id '{profileId}' not found in JSON yet.");
+            ClearProfileViewButKeepSelection();
+
+            if (profilesMenuRoot != null) profilesMenuRoot.SetActive(false);
+            if (profileAnalysisRoot != null) profileAnalysisRoot.SetActive(true);
             return;
         }
 
@@ -71,6 +85,23 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
 
         if (profilesMenuRoot != null) profilesMenuRoot.SetActive(false);
         if (profileAnalysisRoot != null) profileAnalysisRoot.SetActive(true);
+    }
+
+    private void ClearProfileViewButKeepSelection()
+    {
+        if (profileNameText != null) profileNameText.text = "";
+        if (styleLabelText != null) styleLabelText.text = "";
+        if (eloText != null) eloText.text = "";
+        if (matchesText != null) matchesText.text = "";
+        if (winRateText != null) winRateText.text = "";
+        if (hitRateText != null) hitRateText.text = "";
+        if (missRateText != null) missRateText.text = "";
+        if (avgDamageDealtText != null) avgDamageDealtText.text = "";
+        if (avgDamageTakenText != null) avgDamageTakenText.text = "";
+        SetCombatValueTexts(0f, 0f, 0f, 0f);
+
+        if (combatChart != null)
+            combatChart.SetValues(0f, 0f, 0f, 0f);
     }
     public void OpenForProfileName(string profileName)
     {
@@ -128,6 +159,7 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         if (missRateText != null) missRateText.text = "";
         if (avgDamageDealtText != null) avgDamageDealtText.text = "";
         if (avgDamageTakenText != null) avgDamageTakenText.text = "";
+        SetCombatValueTexts(0f, 0f, 0f, 0f);
 
         if (combatChart != null)
         {
@@ -193,6 +225,7 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
     }
     private void ShowProfile(ProfileAnalysisEntry p)
     {
+        
         currentProfileId = p.profile_id;
         currentProfileName = p.profile_name;
       
@@ -213,6 +246,13 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
         if (missRateText != null) missRateText.text = $"Miss Rate: {p.miss_rate:P0}";
         if (avgDamageDealtText != null) avgDamageDealtText.text = $"Avg Damage Dealt: {p.avg_damage_dealt:F1}";
         if (avgDamageTakenText != null) avgDamageTakenText.text = $"Avg Damage Taken: {p.avg_damage_taken:F1}";
+        SetCombatValueTexts(
+            p.aggression_raw,
+            p.defense_raw,
+            p.mobility_raw / 2f,
+            p.risk_raw
+        );
+
         if (combatChart != null)
         {
             float maxVal = Mathf.Max(
@@ -225,7 +265,9 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
             if (maxVal <= 0f)
                 maxVal = 1f;
 
-            float scale = maxVal * 1.2f; // <-- soft cap
+            //float scale = maxVal * 1.2f; // <-- soft cap
+
+            float scale = ChartScale; //temp random max for chart
 
             scale = 0.4f;
 
@@ -245,5 +287,47 @@ public class ProfileAnalysisPanelUI : MonoBehaviour
             //);
 
         }
+    }
+
+    private void SetCombatValueTexts(float aggressionValue, float defenseValue, float mobilityValue, float riskValue)
+    {
+        SetCombatValueText(aggressionValueText, "Aggression", aggressionValue);
+        SetCombatValueText(defenseValueText, "Defense", defenseValue);
+        SetCombatValueText(mobilityValueText, "Mobility", mobilityValue);
+        SetCombatValueText(riskValueText, "Risk", riskValue);
+    }
+
+    private void SetCombatValueText(TMP_Text target, string label, float rawValue)
+    {
+        if (target == null)
+            return;
+
+        float percentValue = rawValue <= 0f ? 0f : (rawValue / ChartScale) * 100f;
+        target.text = $"{label}\n{percentValue:F0}%";
+    }
+
+    private void AutoAssignCombatValueTexts()
+    {
+        aggressionValueText = aggressionValueText != null ? aggressionValueText : FindTextInAnalysisRoot("AggressionLabel");
+        defenseValueText = defenseValueText != null ? defenseValueText : FindTextInAnalysisRoot("DefenseLabel");
+        mobilityValueText = mobilityValueText != null ? mobilityValueText : FindTextInAnalysisRoot("MobilityLabel");
+        riskValueText = riskValueText != null ? riskValueText : FindTextInAnalysisRoot("RiskLabel");
+    }
+
+    private TMP_Text FindTextInAnalysisRoot(string objectName)
+    {
+        if (profileAnalysisRoot == null)
+            return null;
+
+        Transform[] children = profileAnalysisRoot.GetComponentsInChildren<Transform>(true);
+        foreach (Transform child in children)
+        {
+            if (child.name != objectName)
+                continue;
+
+            return child.GetComponent<TMP_Text>();
+        }
+
+        return null;
     }
 }
