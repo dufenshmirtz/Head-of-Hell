@@ -43549,12 +43549,12 @@ MonoBehaviour:
   behaviorP2: {fileID: 1367423862}
   decisionP2: {fileID: 1367423863}
   botP2: {fileID: 1367423888}
-  inferenceModel1: {fileID: 5022602860645237092, guid: a0c3f1d050ebbd04e848184047bcf162, type: 3}
-  inferenceModel2: {fileID: 5022602860645237092, guid: bfb592bfffb728a408c32664027af397, type: 3}
-  inferenceModel3: {fileID: 5022602860645237092, guid: b64c02a4b6959904dab0ff284d5094d9, type: 3}
-  phase2StartEpisode: 1000
-  phase3StartEpisode: 2000
-  phase4StartEpisode: 3000
+  inferenceModel1: {fileID: 5022602860645237092, guid: e5000afe833126049b0f713178c53607, type: 3}
+  inferenceModel2: {fileID: 5022602860645237092, guid: a0c3f1d050ebbd04e848184047bcf162, type: 3}
+  inferenceModel3: {fileID: 5022602860645237092, guid: bfb592bfffb728a408c32664027af397, type: 3}
+  phase2StartEpisode: 1
+  phase3StartEpisode: 50
+  phase4StartEpisode: 500
   scriptedWeight: 0.5
   inference1Weight: 0.15
   inference2Weight: 0.1
