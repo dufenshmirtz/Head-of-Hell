@@ -31,7 +31,7 @@ public class FighterAgent : Agent
 
     [Header("Main Rewards")]
      float rewardDamageDealt = +0.01f;
-     float rewardDamageTaken = -0.01f;
+     float rewardDamageTaken = -0.009f;
      float rewardWin = +1.0f;
      float rewardLoss = -1.0f;
      float stepPenalty = -0.0001f;
@@ -108,12 +108,12 @@ public class FighterAgent : Agent
      int freeConsecutiveCharges = 2;
      float repeatedChargePenaltyBase = -0.0001f;
      float repeatedChargePenaltyStep = -0.0003f;
-     float repeatedChargePenaltyCap = -0.003f;
+     float repeatedChargePenaltyCap = -0.0006f;
 
      float chargeChainDecaySeconds = 0.9f;
 
     [Header("Charge Release Outcome")]
-    float emptyReleasedChargePenalty = -0.0003f;
+    float emptyReleasedChargePenalty = -0.00003f;  // must be removed along with code for it
 
     [Header("Anti Vertical Cheese")]
     [Tooltip("How long they can stay vertically stacked before punishment starts.")]
@@ -143,7 +143,7 @@ public class FighterAgent : Agent
     float blockHoldGraceTime = 1.2f;
 
     [Tooltip("Very small penalty applied while holding block too long.")]
-    float longBlockHoldPenaltyPerSecond = -0.001f;
+    float longBlockHoldPenaltyPerSecond = -0.003f;
 
     [Tooltip("How quickly the block hold timer decays after releasing block.")]
     float blockHoldDecayPerSecond = 1.6f;
@@ -159,7 +159,7 @@ public class FighterAgent : Agent
     float repeatedSameMovePenaltyStep = -0.00005f;
 
     [Tooltip("Cap for repeated same move penalty.")]
-    float repeatedSameMovePenaltyCap = -0.0005f;
+    float repeatedSameMovePenaltyCap = -0.0001f;
 
 
 
@@ -1248,8 +1248,8 @@ public class FighterAgent : Agent
 
             if (chargeWasFullyCharged && !dealtDamage)
             {
-                AddReward(emptyReleasedChargePenalty);
-                rewardDebugger?.LogEmptyChargeReleasePenalty(emptyReleasedChargePenalty);
+                //AddReward(emptyReleasedChargePenalty);
+                //rewardDebugger?.LogEmptyChargeReleasePenalty(emptyReleasedChargePenalty);
             }
 
             chargeTrackingActive = false;
