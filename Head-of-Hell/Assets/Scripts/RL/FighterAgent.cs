@@ -37,7 +37,7 @@ public class FighterAgent : Agent
      float stepPenalty = -0.0001f;
 
     [Header("Minimal Spacing Shaping")]
-     float spacingBonus = +0.0003f;
+     float spacingBonus = +0.0004f;
 
     [Tooltip("Useful horizontal spacing for common melee attacks.")]
      float usefulRangeMinX = 0.4f;
@@ -86,7 +86,7 @@ public class FighterAgent : Agent
      float extremeFarChargePenalty = -0.001f;
 
     [Tooltip("Reward for reducing distance when clearly outside melee threat range.")]
-     float approachBonus = +0.00025f;
+     float approachBonus = +0.00045f;
 
     [Tooltip("Extra margin beyond useful melee range before approach shaping starts.")]
      float approachStartMargin = 0.75f;
@@ -1248,8 +1248,8 @@ public class FighterAgent : Agent
 
             if (chargeWasFullyCharged && !dealtDamage)
             {
-                //AddReward(emptyReleasedChargePenalty);
-                //rewardDebugger?.LogEmptyChargeReleasePenalty(emptyReleasedChargePenalty);
+                AddReward(emptyReleasedChargePenalty);
+                rewardDebugger?.LogEmptyChargeReleasePenalty(emptyReleasedChargePenalty);
             }
 
             chargeTrackingActive = false;
