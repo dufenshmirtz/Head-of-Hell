@@ -6184,7 +6184,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 221568178}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd19557386e32f14d9047b5a9971820e, type: 3}
   m_Name: 
@@ -43550,11 +43550,11 @@ MonoBehaviour:
   decisionP2: {fileID: 1367423863}
   botP2: {fileID: 1367423888}
   inferenceModel1: {fileID: 5022602860645237092, guid: e5000afe833126049b0f713178c53607, type: 3}
-  inferenceModel2: {fileID: 5022602860645237092, guid: a0c3f1d050ebbd04e848184047bcf162, type: 3}
+  inferenceModel2: {fileID: 5022602860645237092, guid: 5584398a3b6d37247871de3bf2f8435d, type: 3}
   inferenceModel3: {fileID: 5022602860645237092, guid: bfb592bfffb728a408c32664027af397, type: 3}
-  phase2StartEpisode: 1
-  phase3StartEpisode: 50
-  phase4StartEpisode: 100
+  phase2StartEpisode: 500
+  phase3StartEpisode: 1000
+  phase4StartEpisode: 1500
   scriptedWeight: 0.5
   inference1Weight: 0.15
   inference2Weight: 0.1
