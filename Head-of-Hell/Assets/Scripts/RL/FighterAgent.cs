@@ -31,13 +31,13 @@ public class FighterAgent : Agent
 
     [Header("Main Rewards")]
      float rewardDamageDealt = +0.01f;
-     float rewardDamageTaken = -0.009f;
+     float rewardDamageTaken = -0.005f;
      float rewardWin = +1.0f;
      float rewardLoss = -1.0f;
      float stepPenalty = -0.0001f;
 
     [Header("Minimal Spacing Shaping")]
-     float spacingBonus = +0.0004f;
+     float spacingBonus = +0.0002f;
 
     [Tooltip("Useful horizontal spacing for common melee attacks.")]
      float usefulRangeMinX = 0.4f;
@@ -56,7 +56,7 @@ public class FighterAgent : Agent
      int totalCharacterCount = 10;
 
     [Header("Behavior Hygiene")]
-     float mashPenalty = -0.0006f;
+     float mashPenalty = -0.0003f;
      float airJumpPenalty = -0.0008f;
      float edgeCampPenalty = -0.0007f;
 
@@ -86,7 +86,7 @@ public class FighterAgent : Agent
      float extremeFarChargePenalty = -0.001f;
 
     [Tooltip("Reward for reducing distance when clearly outside melee threat range.")]
-     float approachBonus = +0.00045f;
+     float approachBonus = +0.00065f;
 
     [Tooltip("Extra margin beyond useful melee range before approach shaping starts.")]
      float approachStartMargin = 0.75f;
@@ -143,7 +143,7 @@ public class FighterAgent : Agent
     float blockHoldGraceTime = 1.2f;
 
     [Tooltip("Very small penalty applied while holding block too long.")]
-    float longBlockHoldPenaltyPerSecond = -0.003f;
+    float longBlockHoldPenaltyPerSecond = -0.0015f;
 
     [Tooltip("How quickly the block hold timer decays after releasing block.")]
     float blockHoldDecayPerSecond = 1.6f;
@@ -156,12 +156,56 @@ public class FighterAgent : Agent
     float repeatedSameMovePenaltyBase = -0.00001f;
 
     [Tooltip("Extra tiny penalty per extra repeated start.")]
-    float repeatedSameMovePenaltyStep = -0.00005f;
+    float repeatedSameMovePenaltyStep = -0.00003f;
 
     [Tooltip("Cap for repeated same move penalty.")]
     float repeatedSameMovePenaltyCap = -0.0001f;
 
+        [Header("Pressure / Aggression Shaping")]
+    [Tooltip("Reward for actively moving toward the opponent while outside close range.")]
+    float forwardPressureBonus = +0.00035f;
 
+    [Tooltip("Small reward for staying active and advancing in close pressure range.")]
+    float closePressureBonus = +0.00015f;
+
+    [Tooltip("Tiny penalty for backing away while already in a good fighting range.")]
+    float retreatFromCloseRangePenalty = -0.00001f;
+
+    [Tooltip("Max horizontal distance where we consider it close enough for pressure.")]
+    float closePressureRangeX = 1.4f;
+
+    [Tooltip("Max vertical distance where we consider it close enough for pressure.")]
+    float closePressureRangeY = 0.7f;
+
+    [Header("Offensive Intent Rewards")]
+    [Tooltip("Reward for starting a light attack in a good attack window.")]
+    float goodLightIntentBonus = +0.00035f;
+
+    [Tooltip("Reward for starting a heavy attack in a good attack window.")]
+    float goodHeavyIntentBonus = +0.00025f;
+
+    [Tooltip("Reward for starting a special in a good attack window.")]
+    float goodSpecialIntentBonus = +0.00030f;
+
+    [Tooltip("Horizontal range where attack-start rewards are allowed.")]
+    float attackIntentRangeX = 1.10f;
+
+    [Tooltip("Vertical range where attack-start rewards are allowed.")]
+    float attackIntentRangeY = 0.65f;
+
+    [Header("Anti-Passivity")]
+    [Tooltip("How long the agent may stay near the opponent without offensive action before punishment starts.")]
+    float passiveNearGraceTime = 1.0f;
+
+    [Tooltip("Penalty per second for staying near the opponent without offensive action.")]
+    float passiveNearPenaltyPerSecond = -0.0009f;
+
+    [Tooltip("Extra multiplier when the passive behavior is specifically defensive (block/parry).")]
+    float defensivePassivityMultiplier = 1.25f;
+
+    float passiveNearTimer = 0f;
+
+    int lastHeavyAction = 0;
 
     bool chargeTrackingActive = false;
     int chargeStartOppHP = 0;
@@ -619,7 +663,10 @@ public class FighterAgent : Agent
         ShapingRewards();
         BehaviorHygieneRewards(jump, drop, light, heavy, blockHold, special, chargeMode, parry);
         TacticalRangeRewards(light, heavy, special, chargeMode);
+
         DirectionalHygieneRewards(moveX, light, special);
+        PressureRewards(moveX, blockHold);
+        PassivityPenalty(light, heavy, special, chargeMode, parry, blockHold);
 
         ChargeSpamPenalty(chargeMode);
         ChargeReleaseOutcomePenalty(chargeMode);
@@ -736,6 +783,9 @@ public class FighterAgent : Agent
         blockHoldTimer = 0f;
         lastStartedIntent = 0;
         consecutiveSameMoveStarts = 0;
+
+        passiveNearTimer = 0f;
+        lastHeavyAction = 0;
     }
 
     private void OnDestroy()
@@ -806,7 +856,6 @@ public class FighterAgent : Agent
                 float blockPenalty = longBlockHoldPenaltyPerSecond * dt;
                 AddReward(blockPenalty);
                 rewardDebugger?.LogBlockHoldPenalty(blockPenalty);
-                AddReward(longBlockHoldPenaltyPerSecond * dt);
             }
         }
         else
@@ -843,9 +892,8 @@ public class FighterAgent : Agent
 
                 repeatPenalty = Mathf.Max(repeatPenalty, repeatedSameMovePenaltyCap);
 
-                AddReward(repeatPenalty);
-                rewardDebugger?.LogRepeatSameMovePenalty(repeatPenalty);
-                AddReward(repeatPenalty);
+                //AddReward(repeatPenalty); TempRemoval
+                //rewardDebugger?.LogRepeatSameMovePenalty(repeatPenalty);
             }
         }
 
@@ -1263,5 +1311,160 @@ public class FighterAgent : Agent
         }
 
         lastChargeModeForOutcome = chargeMode;
+    }
+
+        void PressureRewards(int moveX, int blockHold)
+    {
+        if (self == null || opp == null)
+        {
+            return;
+        }
+
+        if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
+        {
+            return;
+        }
+
+        float dx = opp.transform.position.x - self.transform.position.x;
+        float absDx = Mathf.Abs(dx);
+        float absDy = Mathf.Abs(opp.transform.position.y - self.transform.position.y);
+
+        int towardOpponent = dx > 0f ? 1 : -1;
+        bool movingToward = moveX != 0 && moveX == towardOpponent;
+        bool movingAway = moveX != 0 && moveX == -towardOpponent;
+
+        bool closeEnoughToPressure =
+            absDx <= closePressureRangeX &&
+            absDy <= closePressureRangeY;
+
+        bool outsideCloseRange =
+            absDx > usefulRangeMaxX + 0.2f;
+
+        // Reward advancing when not yet in threatening range
+        if (outsideCloseRange && movingToward)
+        {
+            AddReward(forwardPressureBonus);
+            rewardDebugger?.LogApproachReward(forwardPressureBonus);
+        }
+
+        // Reward active close pressure instead of freezing
+        if (closeEnoughToPressure && movingToward && blockHold == 0)
+        {
+            AddReward(closePressureBonus);
+        }
+
+        // Tiny penalty for retreating when already close enough to interact
+        if (closeEnoughToPressure && movingAway)
+        {
+            AddReward(retreatFromCloseRangePenalty);
+        }
+    }
+
+        void OffensiveIntentRewards(int light, int heavy, int special)  //maybe remove
+    {
+        if (self == null || opp == null)
+        {
+            return;
+        }
+
+        if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
+        {
+            return;
+        }
+
+        float absDx = Mathf.Abs(opp.transform.position.x - self.transform.position.x);
+        float absDy = Mathf.Abs(opp.transform.position.y - self.transform.position.y);
+
+        bool facingOpponent = IsFacingOpponent();
+
+        bool lightPressedNow = (light == 1 && lastLightAction == 0);
+        bool heavyPressedNow = (heavy == 1 && lastHeavyAction == 0);
+        bool specialPressedNow = (special == 1 && lastSpecialAction == 0);
+
+        bool inAttackWindow =
+            absDx <= attackIntentRangeX &&
+            absDy <= attackIntentRangeY &&
+            facingOpponent;
+
+        if (inAttackWindow)
+        {
+            if (lightPressedNow)
+            {
+                AddReward(goodLightIntentBonus);
+            }
+
+            if (heavyPressedNow)
+            {
+                AddReward(goodHeavyIntentBonus);
+            }
+
+            if (specialPressedNow)
+            {
+                AddReward(goodSpecialIntentBonus);
+            }
+        }
+
+        lastHeavyAction = heavy;
+    }
+
+        void PassivityPenalty(int light, int heavy, int special, int chargeMode, int parry, int blockHold)
+    {
+        if (self == null || opp == null)
+        {
+            return;
+        }
+
+        if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
+        {
+            return;
+        }
+
+        float dt = Time.deltaTime;
+        if (dt <= 0f)
+        {
+            dt = 0.016f;
+        }
+
+        float absDx = Mathf.Abs(opp.transform.position.x - self.transform.position.x);
+        float absDy = Mathf.Abs(opp.transform.position.y - self.transform.position.y);
+
+        bool closeNeutral =
+            absDx <= closePressureRangeX &&
+            absDy <= closePressureRangeY;
+
+        bool offensiveAction =
+            (light == 1) ||
+            (heavy == 1) ||
+            (special == 1) ||
+            (chargeMode != 0);
+
+        bool defensiveAction =
+            (blockHold == 1) ||
+            (parry == 1);
+
+        if (closeNeutral && !offensiveAction)
+        {
+            passiveNearTimer += dt;
+
+            if (passiveNearTimer > passiveNearGraceTime)
+            {
+                float penalty = passiveNearPenaltyPerSecond * dt;
+
+                if (defensiveAction)
+                {
+                    penalty *= defensivePassivityMultiplier;
+                }
+
+                AddReward(penalty);
+            }
+        }
+        else
+        {
+            passiveNearTimer -= 2f * dt;
+            if (passiveNearTimer < 0f)
+            {
+                passiveNearTimer = 0f;
+            }
+        }
     }
 }
