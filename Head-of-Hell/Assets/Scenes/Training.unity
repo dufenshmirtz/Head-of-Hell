@@ -43552,9 +43552,9 @@ MonoBehaviour:
   inferenceModel1: {fileID: 5022602860645237092, guid: e5000afe833126049b0f713178c53607, type: 3}
   inferenceModel2: {fileID: 5022602860645237092, guid: 5584398a3b6d37247871de3bf2f8435d, type: 3}
   inferenceModel3: {fileID: 5022602860645237092, guid: bfb592bfffb728a408c32664027af397, type: 3}
-  phase2StartEpisode: 500
-  phase3StartEpisode: 1000
-  phase4StartEpisode: 1500
+  phase2StartEpisode: 1
+  phase3StartEpisode: 500
+  phase4StartEpisode: 1000
   scriptedWeight: 0.5
   inference1Weight: 0.15
   inference2Weight: 0.1
