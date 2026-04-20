@@ -105,7 +105,7 @@ public class FighterAgent : Agent
      float wrongFacingSpecialPenalty = -0.0005f;
 
     //anti-charge-exploit
-     int freeConsecutiveCharges = 3;
+     int freeConsecutiveCharges = 4;
      float repeatedChargePenaltyBase = -0.0001f;
      float repeatedChargePenaltyStep = -0.0003f;
      float repeatedChargePenaltyCap = -0.0006f;
