@@ -370,29 +370,37 @@ public class TrainingOpponentDirector : MonoBehaviour
 
     private void ApplyMirrorMode()
     {
-        // Κλείσε bot
         if (botP2 != null)
         {
             botP2.enabled = false;
         }
 
-        // Στήσε behavior πρώτα
-        if (behaviorP2 != null)
+        if (decisionP2 != null)
         {
-            behaviorP2.Model = null;
-            behaviorP2.BehaviorType = BehaviorType.Default;
+            decisionP2.enabled = false;
         }
 
-        // Μετά requester
+        if (agentP2 != null)
+        {
+            agentP2.ClearInput();
+            agentP2.enabled = false;
+        }
+
+        // ΠΡΩΤΑ αλλάζεις behavior type
+        if (behaviorP2 != null)
+        {
+            behaviorP2.BehaviorType = BehaviorType.Default;
+            behaviorP2.Model = null;
+        }
+
+        // ΜΕΤΑ ξανανοίγεις requester + agent
         if (decisionP2 != null)
         {
             decisionP2.enabled = true;
         }
 
-        // Τέλος agent
         if (agentP2 != null)
         {
-            agentP2.ClearInput();
             agentP2.enabled = true;
         }
     }
@@ -401,34 +409,40 @@ public class TrainingOpponentDirector : MonoBehaviour
     {
         if (model == null)
         {
-            Debug.LogWarning("[TrainingOpponentDirector] ApplyInferenceMode called with null model. Falling back.");
+            Debug.LogWarning("[TrainingOpponentDirector] ApplyInferenceMode called with null model.");
             FallbackFromInference("NullModel");
             return;
         }
 
-        // Κλείσε bot
         if (botP2 != null)
         {
             botP2.enabled = false;
         }
 
-        // Πολύ σημαντικό: πρώτα behavior/model
+        if (decisionP2 != null)
+        {
+            decisionP2.enabled = false;
+        }
+
+        if (agentP2 != null)
+        {
+            agentP2.ClearInput();
+            agentP2.enabled = false;
+        }
+
         if (behaviorP2 != null)
         {
             behaviorP2.Model = model;
             behaviorP2.BehaviorType = BehaviorType.InferenceOnly;
         }
 
-        // Μετά requester
         if (decisionP2 != null)
         {
             decisionP2.enabled = true;
         }
 
-        // Τέλος agent enable
         if (agentP2 != null)
         {
-            agentP2.ClearInput();
             agentP2.enabled = true;
         }
     }
