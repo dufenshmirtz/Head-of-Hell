@@ -31,7 +31,7 @@ public class FighterAgent : Agent
 
     [Header("Main Rewards")]
      float rewardDamageDealt = +0.01f;
-     float rewardDamageTaken = -0.005f;
+     float rewardDamageTaken = -0.007f;
      float rewardWin = +1.0f;
      float rewardLoss = -1.0f;
      float stepPenalty = -0.0001f;
@@ -105,7 +105,7 @@ public class FighterAgent : Agent
      float wrongFacingSpecialPenalty = -0.0005f;
 
     //anti-charge-exploit
-     int freeConsecutiveCharges = 2;
+     int freeConsecutiveCharges = 3;
      float repeatedChargePenaltyBase = -0.0001f;
      float repeatedChargePenaltyStep = -0.0003f;
      float repeatedChargePenaltyCap = -0.0006f;
@@ -140,7 +140,7 @@ public class FighterAgent : Agent
 
     [Header("Block Hold Hygiene")]
     [Tooltip("How long block can be held before tiny penalty starts.")]
-    float blockHoldGraceTime = 1.2f;
+    float blockHoldGraceTime = 2f;
 
     [Tooltip("Very small penalty applied while holding block too long.")]
     float longBlockHoldPenaltyPerSecond = -0.0015f;
@@ -153,7 +153,7 @@ public class FighterAgent : Agent
     int freeRepeatedSameMoveStarts = 3;
 
     [Tooltip("Tiny penalty base for repeating the exact same move too many times.")]
-    float repeatedSameMovePenaltyBase = -0.00001f;
+    float repeatedSameMovePenaltyBase = -0.00000f;
 
     [Tooltip("Extra tiny penalty per extra repeated start.")]
     float repeatedSameMovePenaltyStep = -0.00003f;
@@ -161,7 +161,7 @@ public class FighterAgent : Agent
     [Tooltip("Cap for repeated same move penalty.")]
     float repeatedSameMovePenaltyCap = -0.0001f;
 
-        [Header("Pressure / Aggression Shaping")]
+    [Header("Pressure / Aggression Shaping")]
     [Tooltip("Reward for actively moving toward the opponent while outside close range.")]
     float forwardPressureBonus = +0.00035f;
 
@@ -201,7 +201,7 @@ public class FighterAgent : Agent
     float passiveNearPenaltyPerSecond = -0.0009f;
 
     [Tooltip("Extra multiplier when the passive behavior is specifically defensive (block/parry).")]
-    float defensivePassivityMultiplier = 1.25f;
+    float defensivePassivityMultiplier = 1f;
 
     float passiveNearTimer = 0f;
 
@@ -1296,8 +1296,8 @@ public class FighterAgent : Agent
 
             if (chargeWasFullyCharged && !dealtDamage)
             {
-                AddReward(emptyReleasedChargePenalty);
-                rewardDebugger?.LogEmptyChargeReleasePenalty(emptyReleasedChargePenalty);
+                //AddReward(emptyReleasedChargePenalty);
+                //rewardDebugger?.LogEmptyChargeReleasePenalty(emptyReleasedChargePenalty);
             }
 
             chargeTrackingActive = false;
