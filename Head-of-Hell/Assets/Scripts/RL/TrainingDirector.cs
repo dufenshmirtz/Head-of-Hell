@@ -54,7 +54,32 @@ public class TrainingOpponentDirector : MonoBehaviour
     {
         episodeIndex = 0;
         ValidateReferences();
-        PrepareNextEpisode();
+
+        // IMPORTANT:
+        // Δεν κάνουμε PrepareNextEpisode() εδώ.
+        // Το αρχικό startup του ML-Agents πρέπει να βρει το scene σε safe κατάσταση.
+        ApplySafeStartupMode();
+    }
+
+    private void ApplySafeStartupMode()
+    {
+        currentMode = OpponentMode.ScriptedBot;
+        currentScriptedSkill = EvaluateScriptedSkill();
+
+        if (CanApplyScriptedMode())
+        {
+            ApplyScriptedBotMode();
+        }
+        else if (CanApplyMirrorMode())
+        {
+            Debug.LogWarning("[TrainingOpponentDirector] Safe startup fallback to MirrorSelfPlay.");
+            currentMode = OpponentMode.MirrorSelfPlay;
+            ApplyMirrorMode();
+        }
+        else
+        {
+            Debug.LogError("[TrainingOpponentDirector] Could not apply any safe startup mode.");
+        }
     }
 
     public OpponentMode SelectNextMode()
@@ -131,6 +156,12 @@ public class TrainingOpponentDirector : MonoBehaviour
 
     public void PrepareNextEpisode()
     {
+        if (gameManager == null)
+        {
+            Debug.LogWarning("[TrainingOpponentDirector] PrepareNextEpisode aborted: gameManager is null.");
+            return;
+        }
+
         if (!gameManager.trainingMode)
         {
             return;
@@ -161,11 +192,15 @@ public class TrainingOpponentDirector : MonoBehaviour
                     {
                         ApplyScriptedBotMode();
                     }
-                    else
+                    else if (CanApplyMirrorMode())
                     {
                         Debug.LogWarning("[TrainingOpponentDirector] Scripted mode unavailable. Falling back to MirrorSelfPlay.");
                         currentMode = OpponentMode.MirrorSelfPlay;
                         ApplyMirrorMode();
+                    }
+                    else
+                    {
+                        Debug.LogError("[TrainingOpponentDirector] Scripted and Mirror modes unavailable.");
                     }
                     break;
                 }
@@ -178,9 +213,7 @@ public class TrainingOpponentDirector : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogWarning("[TrainingOpponentDirector] InferenceModel1 unavailable. Falling back to ScriptedBot.");
-                        currentMode = OpponentMode.ScriptedBot;
-                        ApplyScriptedBotMode();
+                        FallbackFromInference("InferenceModel1");
                     }
                     break;
                 }
@@ -193,9 +226,7 @@ public class TrainingOpponentDirector : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogWarning("[TrainingOpponentDirector] InferenceModel2 unavailable. Falling back to ScriptedBot.");
-                        currentMode = OpponentMode.ScriptedBot;
-                        ApplyScriptedBotMode();
+                        FallbackFromInference("InferenceModel2");
                     }
                     break;
                 }
@@ -208,9 +239,7 @@ public class TrainingOpponentDirector : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogWarning("[TrainingOpponentDirector] InferenceModel3 unavailable. Falling back to ScriptedBot.");
-                        currentMode = OpponentMode.ScriptedBot;
-                        ApplyScriptedBotMode();
+                        FallbackFromInference("InferenceModel3");
                     }
                     break;
                 }
@@ -223,9 +252,7 @@ public class TrainingOpponentDirector : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogWarning("[TrainingOpponentDirector] InferenceModel4 unavailable. Falling back to ScriptedBot.");
-                        currentMode = OpponentMode.ScriptedBot;
-                        ApplyScriptedBotMode();
+                        FallbackFromInference("InferenceModel4");
                     }
                     break;
                 }
@@ -238,9 +265,7 @@ public class TrainingOpponentDirector : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogWarning("[TrainingOpponentDirector] InferenceModel5 unavailable. Falling back to ScriptedBot.");
-                        currentMode = OpponentMode.ScriptedBot;
-                        ApplyScriptedBotMode();
+                        FallbackFromInference("InferenceModel5");
                     }
                     break;
                 }
@@ -251,14 +276,38 @@ public class TrainingOpponentDirector : MonoBehaviour
                     {
                         ApplyMirrorMode();
                     }
-                    else
+                    else if (CanApplyScriptedMode())
                     {
                         Debug.LogWarning("[TrainingOpponentDirector] Mirror mode unavailable. Falling back to ScriptedBot.");
                         currentMode = OpponentMode.ScriptedBot;
                         ApplyScriptedBotMode();
                     }
+                    else
+                    {
+                        Debug.LogError("[TrainingOpponentDirector] Mirror and Scripted modes unavailable.");
+                    }
                     break;
                 }
+        }
+    }
+
+    private void FallbackFromInference(string modeName)
+    {
+        Debug.LogWarning($"[TrainingOpponentDirector] {modeName} unavailable. Falling back.");
+
+        if (CanApplyScriptedMode())
+        {
+            currentMode = OpponentMode.ScriptedBot;
+            ApplyScriptedBotMode();
+        }
+        else if (CanApplyMirrorMode())
+        {
+            currentMode = OpponentMode.MirrorSelfPlay;
+            ApplyMirrorMode();
+        }
+        else
+        {
+            Debug.LogError($"[TrainingOpponentDirector] No valid fallback available from {modeName}.");
         }
     }
 
@@ -293,18 +342,7 @@ public class TrainingOpponentDirector : MonoBehaviour
 
     private void ApplyScriptedBotMode()
     {
-        if (botP2 != null)
-        {
-            botP2.enabled = true;
-            botP2.SetSkill(currentScriptedSkill);
-        }
-
-        if (agentP2 != null)
-        {
-            agentP2.ClearInput();
-            agentP2.enabled = false;
-        }
-
+        // Πρώτα σβήνουμε ML side του P2
         if (decisionP2 != null)
         {
             decisionP2.enabled = false;
@@ -315,55 +353,83 @@ public class TrainingOpponentDirector : MonoBehaviour
             behaviorP2.BehaviorType = BehaviorType.Default;
             behaviorP2.Model = null;
         }
+
+        if (agentP2 != null)
+        {
+            agentP2.ClearInput();
+            agentP2.enabled = false;
+        }
+
+        // Μετά ανοίγουμε το bot
+        if (botP2 != null)
+        {
+            botP2.enabled = true;
+            botP2.SetSkill(currentScriptedSkill);
+        }
     }
 
     private void ApplyMirrorMode()
     {
+        // Κλείσε bot
         if (botP2 != null)
         {
             botP2.enabled = false;
         }
 
-        if (agentP2 != null)
+        // Στήσε behavior πρώτα
+        if (behaviorP2 != null)
         {
-            agentP2.ClearInput();
-            agentP2.enabled = true;
+            behaviorP2.Model = null;
+            behaviorP2.BehaviorType = BehaviorType.Default;
         }
 
+        // Μετά requester
         if (decisionP2 != null)
         {
             decisionP2.enabled = true;
         }
 
-        if (behaviorP2 != null)
+        // Τέλος agent
+        if (agentP2 != null)
         {
-            behaviorP2.BehaviorType = BehaviorType.Default;
-            behaviorP2.Model = null;
+            agentP2.ClearInput();
+            agentP2.enabled = true;
         }
     }
 
     private void ApplyInferenceMode(NNModel model)
     {
+        if (model == null)
+        {
+            Debug.LogWarning("[TrainingOpponentDirector] ApplyInferenceMode called with null model. Falling back.");
+            FallbackFromInference("NullModel");
+            return;
+        }
+
+        // Κλείσε bot
         if (botP2 != null)
         {
             botP2.enabled = false;
         }
 
-        if (agentP2 != null)
+        // Πολύ σημαντικό: πρώτα behavior/model
+        if (behaviorP2 != null)
         {
-            agentP2.ClearInput();
-            agentP2.enabled = true;
+            behaviorP2.Model = model;
+            behaviorP2.BehaviorType = BehaviorType.InferenceOnly;
         }
 
+        // Μετά requester
         if (decisionP2 != null)
         {
             decisionP2.enabled = true;
         }
 
-        if (behaviorP2 != null)
+        // Τέλος agent enable
+        if (agentP2 != null)
         {
-            behaviorP2.Model = model;
-            behaviorP2.BehaviorType = BehaviorType.InferenceOnly;
+            agentP2.ClearInput();
+            agentP2.enabled = true;
         }
     }
 
@@ -486,12 +552,17 @@ public class TrainingOpponentDirector : MonoBehaviour
 
     private bool CanApplyInferenceMode(NNModel model)
     {
-        return agentP2 != null && decisionP2 != null && behaviorP2 != null && model != null;
+        return agentP2 != null &&
+               decisionP2 != null &&
+               behaviorP2 != null &&
+               model != null;
     }
 
     private bool CanApplyMirrorMode()
     {
-        return agentP2 != null && decisionP2 != null && behaviorP2 != null;
+        return agentP2 != null &&
+               decisionP2 != null &&
+               behaviorP2 != null;
     }
 
     public OpponentMode GetCurrentMode()
