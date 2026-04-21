@@ -21524,7 +21524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   easyModel: {fileID: 5022602860645237092, guid: a0c3f1d050ebbd04e848184047bcf162, type: 3}
-  mediumModel: {fileID: 5022602860645237092, guid: e5000afe833126049b0f713178c53607, type: 3}
+  mediumModel: {fileID: 5022602860645237092, guid: b34254f8ab1c8b844bd7b5c9a8c7f417, type: 3}
   hardModel: {fileID: 5022602860645237092, guid: 298fdfa968c71ff49bfd283cbd1f9f82, type: 3}
   useInferenceOnly: 1
 --- !u!1 &790769231
