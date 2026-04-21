@@ -562,6 +562,11 @@ public class GameManager : MonoBehaviour
         if (trainingRoundOn)
         {
             trainingRoundOn = false;
+            if (trainingMode && opponentDirector != null)
+            {
+                opponentDirector.RecordEpisodeResult(winnerPlayerNum);
+            }
+
             StartCoroutine(SoftResetRound_Co());
         }
         
