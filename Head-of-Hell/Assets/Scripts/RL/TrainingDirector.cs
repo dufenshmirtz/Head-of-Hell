@@ -1,10 +1,41 @@
-using UnityEngine;
+using System;
+using System.Collections.Generic;
+using Unity.Barracuda;
 using Unity.MLAgents;
 using Unity.MLAgents.Policies;
-using Unity.Barracuda;
+using UnityEngine;
+
+
 
 public class TrainingOpponentDirector : MonoBehaviour
 {
+    [Serializable]
+    public class OpponentStats
+    {
+        public int episodes;
+        public int winsP1;
+        public int winsP2;
+        public int draws;
+
+        public float WinRateP1
+        {
+            get
+            {
+                if (episodes <= 0) return 0f;
+                return (float)winsP1 / episodes;
+            }
+        }
+
+        public float WinRateP2
+        {
+            get
+            {
+                if (episodes <= 0) return 0f;
+                return (float)winsP2 / episodes;
+            }
+        }
+    }
+
     [Header("Core References")]
     public GameManager gameManager;
 
@@ -50,15 +81,39 @@ public class TrainingOpponentDirector : MonoBehaviour
     [SerializeField] private int episodeIndex = 0;
     public float currentScriptedSkill = 0.35f;
 
+    [Header("Training Stats")]
+    [SerializeField] private bool printStatsEveryEpisode = true;
+    [SerializeField] private int printSummaryEveryNEpisodes = 25;
+
+    private readonly Dictionary<OpponentMode, OpponentStats> statsByMode = new Dictionary<OpponentMode, OpponentStats>();
+
+    // Το mode που έπαιξε το τρέχον/τελευταίο episode.
+    private OpponentMode episodeMode;
+
     private void Awake()
     {
         episodeIndex = 0;
         ValidateReferences();
+        InitializeStats();
 
         // IMPORTANT:
         // Δεν κάνουμε PrepareNextEpisode() εδώ.
         // Το αρχικό startup του ML-Agents πρέπει να βρει το scene σε safe κατάσταση.
         ApplySafeStartupMode();
+
+        // Το safe startup mode θεωρείται το πρώτο active episode mode
+        episodeMode = currentMode;
+    }
+
+    private void InitializeStats()
+    {
+        foreach (OpponentMode mode in Enum.GetValues(typeof(OpponentMode)))
+        {
+            if (!statsByMode.ContainsKey(mode))
+            {
+                statsByMode.Add(mode, new OpponentStats());
+            }
+        }
     }
 
     private void ApplySafeStartupMode()
@@ -100,7 +155,7 @@ public class TrainingOpponentDirector : MonoBehaviour
             return currentMode;
         }
 
-        float r = Random.value * total;
+        float r = UnityEngine.Random.value * total;
 
         if (r < scriptedWeight)
         {
@@ -173,6 +228,9 @@ public class TrainingOpponentDirector : MonoBehaviour
         SelectNextMode();
         EvaluateScriptedSkill();
 
+        // Αυτό είναι το mode που θα παίξει το ΝΕΟ episode
+        episodeMode = currentMode;
+
         Debug.Log(
             $"[TrainingOpponentDirector] Episode {episodeIndex} | OpponentMode={currentMode} | " +
             $"Weights=({scriptedWeight:F2}, {inference1Weight:F2}, {inference2Weight:F2}, {inference3Weight:F2}, {inference4Weight:F2}, {inference5Weight:F2}, {mirrorWeight:F2}) | " +
@@ -196,6 +254,7 @@ public class TrainingOpponentDirector : MonoBehaviour
                     {
                         Debug.LogWarning("[TrainingOpponentDirector] Scripted mode unavailable. Falling back to MirrorSelfPlay.");
                         currentMode = OpponentMode.MirrorSelfPlay;
+                        episodeMode = currentMode;
                         ApplyMirrorMode();
                     }
                     else
@@ -280,6 +339,7 @@ public class TrainingOpponentDirector : MonoBehaviour
                     {
                         Debug.LogWarning("[TrainingOpponentDirector] Mirror mode unavailable. Falling back to ScriptedBot.");
                         currentMode = OpponentMode.ScriptedBot;
+                        episodeMode = currentMode;
                         ApplyScriptedBotMode();
                     }
                     else
@@ -298,17 +358,95 @@ public class TrainingOpponentDirector : MonoBehaviour
         if (CanApplyScriptedMode())
         {
             currentMode = OpponentMode.ScriptedBot;
+            episodeMode = currentMode;
             ApplyScriptedBotMode();
         }
         else if (CanApplyMirrorMode())
         {
             currentMode = OpponentMode.MirrorSelfPlay;
+            episodeMode = currentMode;
             ApplyMirrorMode();
         }
         else
         {
             Debug.LogError($"[TrainingOpponentDirector] No valid fallback available from {modeName}.");
         }
+    }
+
+    public void RecordEpisodeResult(int winnerPlayerNum)
+    {
+        if (!statsByMode.ContainsKey(episodeMode))
+        {
+            statsByMode[episodeMode] = new OpponentStats();
+        }
+
+        OpponentStats stats = statsByMode[episodeMode];
+        stats.episodes++;
+
+        if (winnerPlayerNum == 1)
+        {
+            stats.winsP1++;
+        }
+        else if (winnerPlayerNum == 2)
+        {
+            stats.winsP2++;
+        }
+        else
+        {
+            stats.draws++;
+        }
+
+        if (printStatsEveryEpisode)
+        {
+            Debug.Log(
+                $"[OpponentStats] Mode={episodeMode} | " +
+                $"Episodes={stats.episodes} | P1Wins={stats.winsP1} | P2Wins={stats.winsP2} | Draws={stats.draws} | " +
+                $"P1WinRate={stats.WinRateP1:P2}"
+            );
+        }
+
+        int totalEpisodesRecorded = GetTotalRecordedEpisodes();
+        if (printSummaryEveryNEpisodes > 0 && totalEpisodesRecorded % printSummaryEveryNEpisodes == 0)
+        {
+            PrintAllStats();
+        }
+    }
+
+    private int GetTotalRecordedEpisodes()
+    {
+        int total = 0;
+        foreach (var kvp in statsByMode)
+        {
+            total += kvp.Value.episodes;
+        }
+        return total;
+    }
+
+    public void PrintAllStats()
+    {
+        Debug.Log("========== TRAINING OPPONENT STATS ==========");
+
+        foreach (var kvp in statsByMode)
+        {
+            OpponentMode mode = kvp.Key;
+            OpponentStats s = kvp.Value;
+
+            Debug.Log(
+                $"Mode={mode} | Episodes={s.episodes} | " +
+                $"P1Wins={s.winsP1} | P2Wins={s.winsP2} | Draws={s.draws} | " +
+                $"P1WinRate={s.WinRateP1:P2}"
+            );
+        }
+    }
+
+    public OpponentStats GetStatsForMode(OpponentMode mode)
+    {
+        if (!statsByMode.ContainsKey(mode))
+        {
+            statsByMode[mode] = new OpponentStats();
+        }
+
+        return statsByMode[mode];
     }
 
     public void RebindAfterCharacterSwap()
@@ -386,14 +524,12 @@ public class TrainingOpponentDirector : MonoBehaviour
             agentP2.enabled = false;
         }
 
-        // ΠΡΩΤΑ αλλάζεις behavior type
         if (behaviorP2 != null)
         {
             behaviorP2.BehaviorType = BehaviorType.Default;
             behaviorP2.Model = null;
         }
 
-        // ΜΕΤΑ ξανανοίγεις requester + agent
         if (decisionP2 != null)
         {
             decisionP2.enabled = true;
@@ -587,6 +723,11 @@ public class TrainingOpponentDirector : MonoBehaviour
     public string GetCurrentModeName()
     {
         return currentMode.ToString();
+    }
+
+    public string GetEpisodeModeName()
+    {
+        return episodeMode.ToString();
     }
 
     public bool IsScriptedMode()
