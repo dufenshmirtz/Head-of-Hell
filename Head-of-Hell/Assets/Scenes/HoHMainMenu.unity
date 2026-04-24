@@ -10284,8 +10284,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
-  m_fontSizeBase: 150
+  m_fontSize: 135
+  m_fontSizeBase: 135
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -14275,6 +14275,14 @@ MonoBehaviour:
   exeName: runtime_profile_pipeline.exe
   panelUI: {fileID: 392337611}
   loadingScreenRoot: {fileID: 0}
+  loadingEyeFrames:
+  - {fileID: 21300000, guid: f9e91b6c397ee324d82f35bbd1b0afdd, type: 3}
+  - {fileID: 21300000, guid: b8191330469b33f41ada0fa8a2445aa3, type: 3}
+  - {fileID: 21300000, guid: ecb33b88b8665be44b79f2fe63bc6d63, type: 3}
+  - {fileID: 21300000, guid: 86c89327bacd16b489fefaed7849720a, type: 3}
+  - {fileID: 21300000, guid: d00cfe692d605d1439622d62f9904402, type: 3}
+  - {fileID: 21300000, guid: f83657982b45ff44e8c8e79be013c9e5, type: 3}
+  - {fileID: 21300000, guid: b3fc9dac746e47846927497f2f94ad83, type: 3}
   processTimeoutMs: 120000
 --- !u!1 &393517124
 GameObject:
@@ -23646,8 +23654,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
-  m_fontSizeBase: 150
+  m_fontSize: 135
+  m_fontSizeBase: 135
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

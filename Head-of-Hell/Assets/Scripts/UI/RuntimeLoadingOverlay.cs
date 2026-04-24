@@ -7,23 +7,34 @@ public class RuntimeLoadingOverlay : MonoBehaviour
     [SerializeField] private TMP_Text statusText;
     [SerializeField] private TMP_Text hintText;
     [SerializeField] private RectTransform spinnerRoot;
-    [SerializeField] private RectTransform spinnerNeedle;
+    [SerializeField] private Image eyeImage;
+    [SerializeField] private Sprite[] eyeFrames;
     [SerializeField] private RectTransform progressTrack;
     [SerializeField] private Image progressFill;
     [SerializeField] private Image glowBar;
     [SerializeField] private string baseMessage = "Refreshing player stats";
     [SerializeField] private float dotIntervalSeconds = 0.35f;
-    [SerializeField] private float spinnerSpeed = 90f;
     [SerializeField] private float pulseSpeed = 1.6f;
     [SerializeField] private float progressSmoothingSpeed = 1.8f;
+    [SerializeField] private float eyeBlinkIntervalSeconds = 2.0f;
+    [SerializeField] private float eyeBlinkFrameDuration = 0.06f;
 
     private float timer;
     private int dotCount;
     private float animationTime;
     private float currentProgress;
     private float targetProgress;
+    private int currentEyeFrameIndex;
+    private float eyeBlinkTimer;
+    private float eyeFrameTimer;
+    private bool eyeBlinking;
+    private bool eyeClosing = true;
 
-    public static RuntimeLoadingOverlay Create(TMP_FontAsset fontAsset = null, string overlayName = "RuntimeLoadingOverlay")
+    public static RuntimeLoadingOverlay Create(
+        TMP_FontAsset fontAsset = null,
+        Sprite[] loadingEyeFrames = null,
+        string overlayName = "RuntimeLoadingOverlay"
+    )
     {
         GameObject root = new GameObject(
             overlayName,
@@ -79,7 +90,7 @@ public class RuntimeLoadingOverlay : MonoBehaviour
         panelRect.anchorMin = new Vector2(0.5f, 0.5f);
         panelRect.anchorMax = new Vector2(0.5f, 0.5f);
         panelRect.pivot = new Vector2(0.5f, 0.5f);
-        panelRect.sizeDelta = new Vector2(620f, 300f);
+        panelRect.sizeDelta = new Vector2(820f, 500f);
         panelRect.anchoredPosition = Vector2.zero;
         panel.GetComponent<Image>().color = new Color(0.11f, 0.06f, 0.08f, 0.97f);
 
@@ -92,52 +103,41 @@ public class RuntimeLoadingOverlay : MonoBehaviour
         borderRect.offsetMax = new Vector2(-10f, -10f);
         panelBorder.GetComponent<Image>().color = new Color(0.66f, 0.26f, 0.35f, 0.28f);
 
-        GameObject topAccent = new GameObject("TopAccent", typeof(RectTransform), typeof(Image));
-        topAccent.transform.SetParent(panel.transform, false);
-        RectTransform topAccentRect = topAccent.GetComponent<RectTransform>();
-        topAccentRect.anchorMin = new Vector2(0f, 1f);
-        topAccentRect.anchorMax = new Vector2(1f, 1f);
-        topAccentRect.pivot = new Vector2(0.5f, 1f);
-        topAccentRect.sizeDelta = new Vector2(0f, 12f);
-        topAccentRect.anchoredPosition = new Vector2(0f, -18f);
-        topAccent.GetComponent<Image>().color = new Color(0.78f, 0.30f, 0.38f, 0.9f);
+        GameObject eyeRoot = new GameObject("EyeRoot", typeof(RectTransform));
+        eyeRoot.transform.SetParent(panel.transform, false);
+        RectTransform eyeRootRect = eyeRoot.GetComponent<RectTransform>();
+        eyeRootRect.anchorMin = new Vector2(0.5f, 0.5f);
+        eyeRootRect.anchorMax = new Vector2(0.5f, 0.5f);
+        eyeRootRect.pivot = new Vector2(0.5f, 0.5f);
+        eyeRootRect.sizeDelta = new Vector2(240f, 130f);
+        eyeRootRect.anchoredPosition = new Vector2(0f, 125f);
 
-        GameObject spinner = new GameObject("SpinnerRoot", typeof(RectTransform));
-        spinner.transform.SetParent(panel.transform, false);
-        RectTransform spinnerRect = spinner.GetComponent<RectTransform>();
-        spinnerRect.anchorMin = new Vector2(0.5f, 0.5f);
-        spinnerRect.anchorMax = new Vector2(0.5f, 0.5f);
-        spinnerRect.pivot = new Vector2(0.5f, 0.5f);
-        spinnerRect.sizeDelta = new Vector2(100f, 100f);
-        spinnerRect.anchoredPosition = new Vector2(0f, 78f);
+        GameObject eyeImageObject = new GameObject("EyeImage", typeof(RectTransform), typeof(Image));
+        eyeImageObject.transform.SetParent(eyeRoot.transform, false);
+        RectTransform eyeImageRect = eyeImageObject.GetComponent<RectTransform>();
+        eyeImageRect.anchorMin = new Vector2(0.5f, 0.5f);
+        eyeImageRect.anchorMax = new Vector2(0.5f, 0.5f);
+        eyeImageRect.pivot = new Vector2(0.5f, 0.5f);
+        eyeImageRect.sizeDelta = new Vector2(240f, 130f);
+        eyeImageRect.anchoredPosition = Vector2.zero;
+        Image eyeImage = eyeImageObject.GetComponent<Image>();
+        eyeImage.preserveAspect = true;
 
-        GameObject spinnerRing = new GameObject("SpinnerRing", typeof(RectTransform), typeof(Image));
-        spinnerRing.transform.SetParent(spinner.transform, false);
-        RectTransform ringRect = spinnerRing.GetComponent<RectTransform>();
-        ringRect.anchorMin = new Vector2(0.5f, 0.5f);
-        ringRect.anchorMax = new Vector2(0.5f, 0.5f);
-        ringRect.sizeDelta = new Vector2(100f, 100f);
-        ringRect.anchoredPosition = Vector2.zero;
-        spinnerRing.GetComponent<Image>().color = new Color(0.45f, 0.17f, 0.23f, 0.6f);
+        if (loadingEyeFrames != null && loadingEyeFrames.Length > 0)
+        {
+            eyeImage.sprite = loadingEyeFrames[0];
 
-        GameObject spinnerCore = new GameObject("SpinnerCore", typeof(RectTransform), typeof(Image));
-        spinnerCore.transform.SetParent(spinner.transform, false);
-        RectTransform coreRect = spinnerCore.GetComponent<RectTransform>();
-        coreRect.anchorMin = new Vector2(0.5f, 0.5f);
-        coreRect.anchorMax = new Vector2(0.5f, 0.5f);
-        coreRect.sizeDelta = new Vector2(28f, 28f);
-        coreRect.anchoredPosition = Vector2.zero;
-        spinnerCore.GetComponent<Image>().color = new Color(0.95f, 0.79f, 0.70f, 1f);
-
-        GameObject needle = new GameObject("SpinnerNeedle", typeof(RectTransform), typeof(Image));
-        needle.transform.SetParent(spinner.transform, false);
-        RectTransform needleRect = needle.GetComponent<RectTransform>();
-        needleRect.anchorMin = new Vector2(0.5f, 0.5f);
-        needleRect.anchorMax = new Vector2(0.5f, 0.5f);
-        needleRect.sizeDelta = new Vector2(10f, 40f);
-        needleRect.anchoredPosition = new Vector2(0f, 20f);
-        needleRect.pivot = new Vector2(0.5f, 0.08f);
-        needle.GetComponent<Image>().color = new Color(0.92f, 0.43f, 0.41f, 1f);
+            for (int i = 0; i < loadingEyeFrames.Length; i++)
+            {
+                if (loadingEyeFrames[i] != null && loadingEyeFrames[i].texture != null)
+                    loadingEyeFrames[i].texture.filterMode = FilterMode.Point;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("RuntimeLoadingOverlay: loading eye sprite not assigned.");
+            eyeImage.enabled = false;
+        }
 
         GameObject title = new GameObject("StatusText", typeof(RectTransform), typeof(TextMeshProUGUI));
         title.transform.SetParent(panel.transform, false);
@@ -145,12 +145,12 @@ public class RuntimeLoadingOverlay : MonoBehaviour
         titleRect.anchorMin = new Vector2(0.5f, 0.5f);
         titleRect.anchorMax = new Vector2(0.5f, 0.5f);
         titleRect.pivot = new Vector2(0.5f, 0.5f);
-        titleRect.sizeDelta = new Vector2(520f, 74f);
-        titleRect.anchoredPosition = new Vector2(0f, 6f);
+        titleRect.sizeDelta = new Vector2(700f, 90f);
+        titleRect.anchoredPosition = new Vector2(0f, 35f);
 
         TextMeshProUGUI text = title.GetComponent<TextMeshProUGUI>();
         text.alignment = TextAlignmentOptions.Center;
-        text.fontSize = 42f;
+        text.fontSize = 54f;
         text.color = new Color(0.95f, 0.86f, 0.76f, 1f);
         if (fontAsset != null)
             text.font = fontAsset;
@@ -162,12 +162,12 @@ public class RuntimeLoadingOverlay : MonoBehaviour
         subtitleRect.anchorMin = new Vector2(0.5f, 0.5f);
         subtitleRect.anchorMax = new Vector2(0.5f, 0.5f);
         subtitleRect.pivot = new Vector2(0.5f, 0.5f);
-        subtitleRect.sizeDelta = new Vector2(520f, 56f);
-        subtitleRect.anchoredPosition = new Vector2(0f, -52f);
+        subtitleRect.sizeDelta = new Vector2(700f, 70f);
+        subtitleRect.anchoredPosition = new Vector2(0f, -45f);
 
         TextMeshProUGUI hint = subtitle.GetComponent<TextMeshProUGUI>();
         hint.alignment = TextAlignmentOptions.Center;
-        hint.fontSize = 22f;
+        hint.fontSize = 28f;
         hint.color = new Color(0.84f, 0.74f, 0.70f, 1f);
         if (fontAsset != null)
             hint.font = fontAsset;
@@ -179,8 +179,8 @@ public class RuntimeLoadingOverlay : MonoBehaviour
         progressTrackRect.anchorMin = new Vector2(0.5f, 0.5f);
         progressTrackRect.anchorMax = new Vector2(0.5f, 0.5f);
         progressTrackRect.pivot = new Vector2(0.5f, 0.5f);
-        progressTrackRect.sizeDelta = new Vector2(460f, 12f);
-        progressTrackRect.anchoredPosition = new Vector2(0f, -105f);
+        progressTrackRect.sizeDelta = new Vector2(620f, 18f);
+        progressTrackRect.anchoredPosition = new Vector2(0f, -135f);
         progressTrackObject.GetComponent<Image>().color = new Color(0.23f, 0.10f, 0.13f, 1f);
 
         GameObject progressFillObject = new GameObject("ProgressFill", typeof(RectTransform), typeof(Image));
@@ -200,7 +200,7 @@ public class RuntimeLoadingOverlay : MonoBehaviour
         glowRect.anchorMin = new Vector2(0f, 0f);
         glowRect.anchorMax = new Vector2(0f, 1f);
         glowRect.pivot = new Vector2(0.5f, 0.5f);
-        glowRect.sizeDelta = new Vector2(24f, 0f);
+        glowRect.sizeDelta = new Vector2(32f, 0f);
         glowRect.anchoredPosition = Vector2.zero;
         Image glowImage = glow.GetComponent<Image>();
         glowImage.color = new Color(1f, 0.88f, 0.80f, 0.75f);
@@ -208,14 +208,22 @@ public class RuntimeLoadingOverlay : MonoBehaviour
         RuntimeLoadingOverlay overlay = root.GetComponent<RuntimeLoadingOverlay>();
         overlay.statusText = text;
         overlay.hintText = hint;
-        overlay.spinnerRoot = spinnerRect;
-        overlay.spinnerNeedle = needleRect;
+        overlay.spinnerRoot = eyeRootRect;
+        overlay.eyeImage = eyeImage;
+        overlay.eyeFrames = loadingEyeFrames;
         overlay.progressTrack = progressTrackRect;
         overlay.progressFill = progressFillImage;
         overlay.glowBar = glowImage;
         overlay.baseMessage = "Refreshing player stats";
         overlay.currentProgress = 0f;
         overlay.targetProgress = 0f;
+        overlay.currentEyeFrameIndex = loadingEyeFrames != null && loadingEyeFrames.Length > 0
+            ? loadingEyeFrames.Length - 1
+            : 0;
+        overlay.eyeBlinkTimer = 0f;
+        overlay.eyeFrameTimer = 0f;
+        overlay.eyeBlinking = false;
+        overlay.eyeClosing = true;
         overlay.UpdateLabel(force: true);
         overlay.ApplyProgressVisuals();
 
@@ -234,8 +242,16 @@ public class RuntimeLoadingOverlay : MonoBehaviour
         animationTime = 0f;
         currentProgress = 0f;
         targetProgress = 0f;
+        currentEyeFrameIndex = eyeFrames != null && eyeFrames.Length > 0
+            ? eyeFrames.Length - 1
+            : 0;
+        eyeBlinkTimer = 0f;
+        eyeFrameTimer = 0f;
+        eyeBlinking = false;
+        eyeClosing = true;
         UpdateLabel(force: true);
         ApplyProgressVisuals();
+        UpdateEyeFrame();
         gameObject.SetActive(true);
     }
 
@@ -246,7 +262,7 @@ public class RuntimeLoadingOverlay : MonoBehaviour
 
     public void SetProgress(float progress, string message = null, string hint = null)
     {
-        targetProgress = Mathf.Clamp01(progress);
+        targetProgress = Mathf.Max(targetProgress, Mathf.Clamp01(progress));
 
         if (!string.IsNullOrWhiteSpace(message))
             baseMessage = message;
@@ -293,15 +309,7 @@ public class RuntimeLoadingOverlay : MonoBehaviour
 
     private void AnimateVisuals()
     {
-        if (spinnerRoot != null)
-            spinnerRoot.Rotate(0f, 0f, -spinnerSpeed * Time.unscaledDeltaTime);
-
-        if (spinnerNeedle != null)
-        {
-            float needleAngle = Mathf.Sin(animationTime * 2.2f) * 18f;
-            spinnerNeedle.localRotation = Quaternion.Euler(0f, 0f, needleAngle);
-        }
-
+        UpdateEyeFrame();
         ApplyProgressVisuals();
 
         if (glowBar != null && progressFill != null)
@@ -317,6 +325,69 @@ public class RuntimeLoadingOverlay : MonoBehaviour
             hintColor.a = Mathf.Lerp(0.72f, 1f, 0.5f + 0.5f * Mathf.Sin(animationTime * 1.7f));
             hintText.color = hintColor;
         }
+    }
+
+    private void UpdateEyeFrame()
+    {
+        if (eyeImage == null || eyeFrames == null || eyeFrames.Length == 0 || !eyeImage.enabled)
+            return;
+
+        if (eyeFrames.Length == 1)
+        {
+            eyeImage.sprite = eyeFrames[eyeFrames.Length - 1];
+            return;
+        }
+
+        if (!eyeBlinking)
+        {
+            currentEyeFrameIndex = eyeFrames.Length - 1;
+            eyeImage.sprite = eyeFrames[currentEyeFrameIndex];
+            eyeBlinkTimer += Time.unscaledDeltaTime;
+
+            if (eyeBlinkTimer >= eyeBlinkIntervalSeconds)
+            {
+                eyeBlinking = true;
+                eyeClosing = true;
+                eyeBlinkTimer = 0f;
+                eyeFrameTimer = 0f;
+            }
+
+            return;
+        }
+
+        eyeFrameTimer += Time.unscaledDeltaTime;
+        if (eyeFrameTimer < eyeBlinkFrameDuration)
+            return;
+
+        eyeFrameTimer = 0f;
+
+        if (eyeClosing)
+        {
+            if (currentEyeFrameIndex > 0)
+            {
+                currentEyeFrameIndex--;
+            }
+            else
+            {
+                eyeClosing = false;
+                if (currentEyeFrameIndex < eyeFrames.Length - 1)
+                    currentEyeFrameIndex++;
+            }
+        }
+        else
+        {
+            if (currentEyeFrameIndex < eyeFrames.Length - 1)
+            {
+                currentEyeFrameIndex++;
+            }
+            else
+            {
+                eyeBlinking = false;
+                eyeClosing = true;
+            }
+        }
+
+        eyeImage.sprite = eyeFrames[currentEyeFrameIndex];
     }
 
     private void ApplyProgressVisuals()
