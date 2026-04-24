@@ -10234,8 +10234,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -10.33}
-  m_SizeDelta: {x: 0, y: -20.66}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &276241623
 MonoBehaviour:
@@ -10284,8 +10284,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 150
+  m_fontSizeBase: 150
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -14274,6 +14274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   exeName: runtime_profile_pipeline.exe
   panelUI: {fileID: 392337611}
+  loadingScreenRoot: {fileID: 0}
   processTimeoutMs: 120000
 --- !u!1 &393517124
 GameObject:
@@ -23595,8 +23596,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -9.865}
-  m_SizeDelta: {x: 0, y: -19.73}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &631857461
 MonoBehaviour:
@@ -23645,8 +23646,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 150
+  m_fontSizeBase: 150
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -28711,6 +28712,9 @@ MonoBehaviour:
   randomButton: {fileID: 0}
   gameSetupMenu: {fileID: 832322830}
   characterSelectionMenu: {fileID: 893962519}
+  mainMenu: {fileID: 2043734447}
+  botSelectionMenu: {fileID: 869598109}
+  menuBackground: {fileID: 1937351130}
   selectionText: {fileID: 0}
 --- !u!224 &832322832
 RectTransform:
@@ -63582,8 +63586,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 241, y: -481.00006}
-  m_SizeDelta: {x: 302.0682, y: 124.8773}
+  m_AnchoredPosition: {x: 240.2, y: -512}
+  m_SizeDelta: {x: 443.9991, y: 152.57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1879705570
 MonoBehaviour:
@@ -66418,8 +66422,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 240.99994, y: -287.00003}
-  m_SizeDelta: {x: 454.2035, y: 152.5721}
+  m_AnchoredPosition: {x: 241, y: -284}
+  m_SizeDelta: {x: 690.3048, y: 152.5721}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1956395751
 MonoBehaviour:
@@ -67854,10 +67858,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 832322830}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 832322831}
+        m_TargetAssemblyTypeName: StageChoiceManager, Assembly-CSharp
+        m_MethodName: OnBack
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -67866,46 +67870,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2043734447}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
       - m_Target: {fileID: 344690514}
         m_TargetAssemblyTypeName: MainMenuMusic, Assembly-CSharp
         m_MethodName: ButtonSound
         m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 231687233}
-        m_TargetAssemblyTypeName: StageChoiceButtons, Assembly-CSharp
-        m_MethodName: ResetStageSelection
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 1937351130}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -70111,7 +70079,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 241, y: -45.59806}
+  m_AnchoredPosition: {x: 241, y: -43.598}
   m_SizeDelta: {x: 445.5907, y: 187.1969}
   m_Pivot: {x: 0.50000024, y: 0.5}
 --- !u!114 &2083534950
