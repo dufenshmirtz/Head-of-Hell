@@ -1,18 +1,31 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
 public class ProfileAnalysisRunner_PlugAndPlay : MonoBehaviour
 {
+    [Serializable]
+    private struct LoadingStageText
+    {
+        public float progress;
+        public string title;
+        public string hint;
+    }
+
     [Header("Pipeline EXE")]
     public string exeName = "runtime_profile_pipeline.exe";
 
     [Header("UI")]
     public ProfileAnalysisPanelUI panelUI;
     public GameObject loadingScreenRoot;
+    [SerializeField] private Sprite[] loadingEyeFrames;
+    [SerializeField] private LoadingStageText[] loadingStageTexts;
 
     [Header("Safety")]
     public int processTimeoutMs = 120000; // 120 sec
@@ -32,11 +45,21 @@ public class ProfileAnalysisRunner_PlugAndPlay : MonoBehaviour
         {
             UpdateLoadingProgress(0.05f, "Preparing analysis", "Collecting telemetry files");
             PlugAndPlayPipelineRequest request = BuildPipelineRequest();
-            UpdateLoadingProgress(0.15f, "Running analysis pipeline", "Extracting combat behaviour");
-            await Task.Yield();
-            PlugAndPlayPipelineResult result = await Task.Run(() => RunPipelineInternal(request));
+            SynchronizationContext unityContext = SynchronizationContext.Current;
 
-            UpdateLoadingProgress(0.85f, "Finalizing analysis", "Pipeline output received");
+            await Task.Yield();
+            PlugAndPlayPipelineResult result = await Task.Run(() =>
+                RunPipelineInternal(
+                    request,
+                    (progress, message, hint) =>
+                    {
+                        if (unityContext == null)
+                            return;
+
+                        unityContext.Post(_ => UpdateLoadingProgress(progress, message, hint), null);
+                    }
+                )
+            );
 
             if (panelUI != null)
             {
@@ -60,12 +83,19 @@ public class ProfileAnalysisRunner_PlugAndPlay : MonoBehaviour
             UnityEngine.Debug.Log("PIPELINE SUCCESS -> JSON READY");
             UnityEngine.Debug.Log("RUNTIME JSON PATH = " + request.UnityJsonPath);
             UnityEngine.Debug.Log("RUNTIME JSON LAST WRITE = " + File.GetLastWriteTime(request.UnityJsonPath));
-            UpdateLoadingProgress(1f, "Analysis complete", "Profile data updated");
+
+            if (!result.CompletedProgressReported)
+                UpdateLoadingProgress(1f, "Analysis complete", "Profile data updated");
+
             await Task.Delay(180);
         }
         catch (Exception ex)
         {
-            UpdateLoadingProgress(runtimeLoadingOverlay != null ? runtimeLoadingOverlay.CurrentProgress : 0f, "Analysis failed", "Check Unity Console for details");
+            UpdateLoadingProgress(
+                runtimeLoadingOverlay != null ? runtimeLoadingOverlay.CurrentProgress : 0f,
+                "Analysis failed",
+                "Check Unity Console for details"
+            );
             UnityEngine.Debug.LogError("Plug-and-play pipeline failed: " + ex.Message);
 
             if (panelUI != null && panelUI.profileAnalysisRoot != null)
@@ -134,7 +164,10 @@ public class ProfileAnalysisRunner_PlugAndPlay : MonoBehaviour
         };
     }
 
-    private PlugAndPlayPipelineResult RunPipelineInternal(PlugAndPlayPipelineRequest request)
+    private PlugAndPlayPipelineResult RunPipelineInternal(
+        PlugAndPlayPipelineRequest request,
+        Action<float, string, string> onProgress
+    )
     {
         ProcessStartInfo psi = new ProcessStartInfo
         {
@@ -151,22 +184,46 @@ public class ProfileAnalysisRunner_PlugAndPlay : MonoBehaviour
             RedirectStandardError = true
         };
 
-        string stdout;
-        string stderr;
+        StringBuilder stdout = new StringBuilder();
+        StringBuilder stderr = new StringBuilder();
+        bool completedProgressReported = false;
 
         using (Process process = new Process())
         {
             process.StartInfo = psi;
-            process.Start();
+            process.OutputDataReceived += (_, e) =>
+            {
+                if (string.IsNullOrWhiteSpace(e.Data))
+                    return;
 
-            stdout = process.StandardOutput.ReadToEnd();
-            stderr = process.StandardError.ReadToEnd();
+                stdout.AppendLine(e.Data);
+
+                if (!TryParseProgressLine(e.Data, out float progress, out string message, out string hint))
+                    return;
+
+                if (progress >= 1f)
+                    completedProgressReported = true;
+
+                onProgress?.Invoke(progress, message, hint);
+            };
+            process.ErrorDataReceived += (_, e) =>
+            {
+                if (string.IsNullOrWhiteSpace(e.Data))
+                    return;
+
+                stderr.AppendLine(e.Data);
+            };
+            process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
 
             if (!process.WaitForExit(processTimeoutMs))
             {
                 try { process.Kill(); } catch { }
                 throw new Exception("Pipeline EXE timed out.");
             }
+
+            process.WaitForExit();
 
             if (process.ExitCode != 0)
             {
@@ -182,8 +239,9 @@ public class ProfileAnalysisRunner_PlugAndPlay : MonoBehaviour
 
         return new PlugAndPlayPipelineResult
         {
-            Stdout = stdout,
-            Stderr = stderr
+            Stdout = stdout.ToString(),
+            Stderr = stderr.ToString(),
+            CompletedProgressReported = completedProgressReported
         };
     }
 
@@ -199,7 +257,7 @@ public class ProfileAnalysisRunner_PlugAndPlay : MonoBehaviour
         }
 
         if (runtimeLoadingOverlay == null)
-            runtimeLoadingOverlay = RuntimeLoadingOverlay.Create(GetReferenceFont());
+            runtimeLoadingOverlay = RuntimeLoadingOverlay.Create(GetReferenceFont(), loadingEyeFrames);
 
         runtimeLoadingOverlay.Show();
     }
@@ -219,7 +277,89 @@ public class ProfileAnalysisRunner_PlugAndPlay : MonoBehaviour
     private void UpdateLoadingProgress(float progress, string message = null, string hint = null)
     {
         if (runtimeLoadingOverlay != null)
-            runtimeLoadingOverlay.SetProgress(progress, message, hint);
+        {
+            ResolveStageText(progress, message, hint, out string resolvedTitle, out string resolvedHint);
+            runtimeLoadingOverlay.SetProgress(progress, resolvedTitle, resolvedHint);
+        }
+    }
+
+    private void ResolveStageText(float progress, string fallbackTitle, string fallbackHint, out string title, out string hint)
+    {
+        float roundedProgress = (float)Math.Round(progress, 2, MidpointRounding.AwayFromZero);
+
+        if (loadingStageTexts != null)
+        {
+            for (int i = 0; i < loadingStageTexts.Length; i++)
+            {
+                if (Mathf.Abs(loadingStageTexts[i].progress - roundedProgress) > 0.001f)
+                    continue;
+
+                title = string.IsNullOrWhiteSpace(loadingStageTexts[i].title) ? fallbackTitle : loadingStageTexts[i].title;
+                hint = string.IsNullOrWhiteSpace(loadingStageTexts[i].hint) ? fallbackHint : loadingStageTexts[i].hint;
+                return;
+            }
+        }
+
+        switch (Mathf.RoundToInt(roundedProgress * 100f))
+        {
+            case 5:
+                title = "Preparing dem filez";
+                hint = "O VROMOESOROUXAKIAS TON PAIRNEI";
+                return;
+            case 20:
+                title = "Extracting features";
+                hint = "Reading match telemetry";
+                return;
+            case 35:
+                title = "Extracting features";
+                hint = "Feature datasets ready";
+                return;
+            case 45:
+                title = "Calculating Elo";
+                hint = "Updating player ratings";
+                return;
+            case 65:
+                title = "Building profile summary";
+                hint = "Aggregating player behaviour";
+                return;
+            case 82:
+                title = "Exporting Unity data";
+                hint = "Writing profile_analysis.json";
+                return;
+            case 95:
+                title = "Reloading profile data";
+                hint = "Applying refreshed charts and stats";
+                return;
+            case 100:
+                title = "Analysis complete";
+                hint = "Profile data updated";
+                return;
+            default:
+                title = fallbackTitle;
+                hint = fallbackHint;
+                return;
+        }
+    }
+
+    private static bool TryParseProgressLine(string line, out float progress, out string message, out string hint)
+    {
+        progress = 0f;
+        message = null;
+        hint = null;
+
+        if (string.IsNullOrWhiteSpace(line) || !line.StartsWith("PROGRESS:", StringComparison.Ordinal))
+            return false;
+
+        string[] parts = line.Split(new[] { ':' }, 4);
+        if (parts.Length < 3)
+            return false;
+
+        if (!float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out progress))
+            return false;
+
+        message = parts[2];
+        hint = parts.Length >= 4 ? parts[3] : null;
+        return true;
     }
 
     private TMP_FontAsset GetReferenceFont()
@@ -250,5 +390,6 @@ public class ProfileAnalysisRunner_PlugAndPlay : MonoBehaviour
     {
         public string Stdout;
         public string Stderr;
+        public bool CompletedProgressReported;
     }
 }
