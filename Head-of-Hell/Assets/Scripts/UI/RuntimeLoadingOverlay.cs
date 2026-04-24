@@ -61,17 +61,17 @@ public class RuntimeLoadingOverlay : MonoBehaviour
         dimmerRect.offsetMax = Vector2.zero;
         dimmerRect.sizeDelta = Vector2.zero;
         dimmerRect.anchoredPosition = Vector2.zero;
-        dimmer.GetComponent<Image>().color = new Color(0.04f, 0.015f, 0.03f, 0.95f);
+        dimmer.GetComponent<Image>().color = new Color(0.055f, 0.012f, 0.028f, 1f);
 
         GameObject aura = new GameObject("Aura", typeof(RectTransform), typeof(Image));
         aura.transform.SetParent(root.transform, false);
         RectTransform auraRect = aura.GetComponent<RectTransform>();
         auraRect.anchorMin = new Vector2(0.5f, 0.5f);
         auraRect.anchorMax = new Vector2(0.5f, 0.5f);
-        auraRect.sizeDelta = new Vector2(1180f, 1180f);
-        auraRect.anchoredPosition = new Vector2(0f, -20f);
+        auraRect.sizeDelta = new Vector2(1800f, 1200f);
+        auraRect.anchoredPosition = Vector2.zero;
         Image auraImage = aura.GetComponent<Image>();
-        auraImage.color = new Color(0.45f, 0.10f, 0.18f, 0.18f);
+        auraImage.color = new Color(0.35f, 0.06f, 0.10f, 0.10f);
 
         GameObject panel = new GameObject("Panel", typeof(RectTransform), typeof(Image));
         panel.transform.SetParent(root.transform, false);
