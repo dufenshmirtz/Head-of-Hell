@@ -140,13 +140,13 @@ public class FighterAgent : Agent
 
     [Header("Block Hold Hygiene")]
     [Tooltip("How long block can be held before tiny penalty starts.")]
-    float blockHoldGraceTime = 2f;
+    float blockHoldGraceTime = 6f;
 
     [Tooltip("Very small penalty applied while holding block too long.")]
     float longBlockHoldPenaltyPerSecond = -0.0015f;
 
     [Tooltip("How quickly the block hold timer decays after releasing block.")]
-    float blockHoldDecayPerSecond = 1.6f;
+    float blockHoldDecayPerSecond = 1.5f;
 
     [Header("Repeat Move Hygiene")]
     [Tooltip("How many consecutive starts of the same move are free.")]
@@ -156,10 +156,10 @@ public class FighterAgent : Agent
     float repeatedSameMovePenaltyBase = -0.00000f;
 
     [Tooltip("Extra tiny penalty per extra repeated start.")]
-    float repeatedSameMovePenaltyStep = -0.00003f;
+    float repeatedSameMovePenaltyStep = -0.00001f;
 
     [Tooltip("Cap for repeated same move penalty.")]
-    float repeatedSameMovePenaltyCap = -0.0001f;
+    float repeatedSameMovePenaltyCap = -0.00009f;
 
     [Header("Pressure / Aggression Shaping")]
     [Tooltip("Reward for actively moving toward the opponent while outside close range.")]
