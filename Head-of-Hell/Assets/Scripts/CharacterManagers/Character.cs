@@ -1700,6 +1700,13 @@ public abstract class Character : MonoBehaviour
         }
         else if (enemy.currHealth <= 0)
         {
+            if (gameManager.trainingMode && TrainingCharacterWinrateTracker.Instance != null)
+            {
+                TrainingCharacterWinrateTracker.Instance.RecordTie(
+                    characterID,
+                    enemy.GetCharID()
+                );
+            }
             gameManager.RoundEndTie(playerNum);
         }
         else
@@ -2140,6 +2147,14 @@ public abstract class Character : MonoBehaviour
     {
         if (gameManager.trainingMode)
         {
+            if (TrainingCharacterWinrateTracker.Instance != null)
+            {
+                TrainingCharacterWinrateTracker.Instance.RecordResult(
+                    winnerID,
+                    loserID,
+                    playerNum
+                );
+            }
             return;
         }
         
