@@ -1,43 +1,7 @@
 {
     "Fighter": {
-        "elo": 1890.094149298124,
+        "elo": 1885.7777933327184,
         "checkpoints": [
-            {
-                "steps": 51499941,
-                "file_path": "results\\hoh_run1\\Fighter\\Fighter-51499941.onnx",
-                "reward": 1.1633428337518126,
-                "creation_time": 1777410975.0051851,
-                "auxillary_file_paths": [
-                    "results\\hoh_run1\\Fighter\\Fighter-51499941.pt"
-                ]
-            },
-            {
-                "steps": 51534827,
-                "file_path": "results\\hoh_run1\\Fighter\\Fighter-51534827.onnx",
-                "reward": 0.33596032826527433,
-                "creation_time": 1777412107.9332814,
-                "auxillary_file_paths": [
-                    "results\\hoh_run1\\Fighter\\Fighter-51534827.pt"
-                ]
-            },
-            {
-                "steps": 51999972,
-                "file_path": "results\\hoh_run1\\Fighter\\Fighter-51999972.onnx",
-                "reward": 0.06927660157412498,
-                "creation_time": 1777431512.63494,
-                "auxillary_file_paths": [
-                    "results\\hoh_run1\\Fighter\\Fighter-51999972.pt"
-                ]
-            },
-            {
-                "steps": 52499890,
-                "file_path": "results\\hoh_run1\\Fighter\\Fighter-52499890.onnx",
-                "reward": -0.09803421808303231,
-                "creation_time": 1777453256.4005964,
-                "auxillary_file_paths": [
-                    "results\\hoh_run1\\Fighter\\Fighter-52499890.pt"
-                ]
-            },
             {
                 "steps": 52517701,
                 "file_path": "results\\hoh_run1\\Fighter\\Fighter-52517701.onnx",
@@ -46,15 +10,51 @@
                 "auxillary_file_paths": [
                     "results\\hoh_run1\\Fighter\\Fighter-52517701.pt"
                 ]
+            },
+            {
+                "steps": 52838704,
+                "file_path": "results\\hoh_run1\\Fighter\\Fighter-52838704.onnx",
+                "reward": 0.26372261149143533,
+                "creation_time": 1777469836.6141288,
+                "auxillary_file_paths": [
+                    "results\\hoh_run1\\Fighter\\Fighter-52838704.pt"
+                ]
+            },
+            {
+                "steps": 52999913,
+                "file_path": "results\\hoh_run1\\Fighter\\Fighter-52999913.onnx",
+                "reward": -0.8418317645700881,
+                "creation_time": 1777473707.5225751,
+                "auxillary_file_paths": [
+                    "results\\hoh_run1\\Fighter\\Fighter-52999913.pt"
+                ]
+            },
+            {
+                "steps": 53499946,
+                "file_path": "results\\hoh_run1\\Fighter\\Fighter-53499946.onnx",
+                "reward": -16.18760597560322,
+                "creation_time": 1777489481.0371265,
+                "auxillary_file_paths": [
+                    "results\\hoh_run1\\Fighter\\Fighter-53499946.pt"
+                ]
+            },
+            {
+                "steps": 53764892,
+                "file_path": "results\\hoh_run1\\Fighter\\Fighter-53764892.onnx",
+                "reward": 0.58665087618283,
+                "creation_time": 1777497215.5198252,
+                "auxillary_file_paths": [
+                    "results\\hoh_run1\\Fighter\\Fighter-53764892.pt"
+                ]
             }
         ],
         "final_checkpoint": {
-            "steps": 52517701,
+            "steps": 53764892,
             "file_path": "results\\hoh_run1\\Fighter.onnx",
-            "reward": 0.21854576834344439,
-            "creation_time": 1777453826.9940963,
+            "reward": 0.58665087618283,
+            "creation_time": 1777497215.5198252,
             "auxillary_file_paths": [
-                "results\\hoh_run1\\Fighter\\Fighter-52517701.pt"
+                "results\\hoh_run1\\Fighter\\Fighter-53764892.pt"
             ]
         }
     },
