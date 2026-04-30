@@ -59,7 +59,26 @@ public class bombScript : MonoBehaviour
         {
             character = other.GetComponentInParent<Character>();
         }
-        bool validEnemy = character != null && character != playa;
+        if (character == null)
+        {
+            return;
+        }
+
+        bool isOwner = character == playa;
+        bool validEnemy = !isOwner;
+
+        if (isOwner && exploded && !dmgEnd && !jumpDone)
+        {
+            // Steelager's passive: his own bomb launches him toward the current enemy.
+            Character closestEnemy = FindClosestEnemyForOwner();
+            if (closestEnemy != null)
+            {
+                character.SetEnemy(closestEnemy);
+            }
+            character.Knockback(13f, 0.3333f, true);
+            jumpDone = true;
+            return;
+        }
 
         if (validEnemy && exploded && !dmgEnd && !damageDealt)
         {
@@ -81,11 +100,35 @@ public class bombScript : MonoBehaviour
             damageDealt = true;
         }
 
-        if (validEnemy && exploded && !dmgEnd && !jumpDone)
+    }
+
+    private Character FindClosestEnemyForOwner()
+    {
+        if (playa == null)
         {
-            character.Knockback(13f, 0.3333f, true);
-            jumpDone = true;
+            return null;
         }
+
+        Character[] characters = FindObjectsOfType<Character>();
+        Character closest = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (Character candidate in characters)
+        {
+            if (candidate == null || candidate == playa || !candidate.isActiveAndEnabled || candidate.IsDead())
+            {
+                continue;
+            }
+
+            float distance = Vector2.Distance(playa.transform.position, candidate.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closest = candidate;
+            }
+        }
+
+        return closest;
     }
 
     public void Explode()

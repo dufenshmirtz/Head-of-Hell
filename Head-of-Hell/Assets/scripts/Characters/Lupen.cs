@@ -105,15 +105,17 @@ public class Lupen : Character
 
     void KnockNearbyEnemies()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(transform.position, passiveRange, enemyLayer);
-        Character target = ResolveTargetFromHit(hitEnemy);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, passiveRange, enemyLayer);
+        var targets = ResolveTargetsFromHits(hitEnemies);
 
-        if (target != null)
+        if (targets.Count > 0)
         {
-            // Telemetry: special interaction (no damage, but successful effect on enemy)
-            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
-
-            enemy.Knockback(9f, 0.5f, false);
+            for (int i = 0; i < targets.Count; i++)
+            {
+                Character target = targets[i];
+                TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Special);
+                target.Knockback(9f, 0.5f, false);
+            }
         }
         else
         {
@@ -137,10 +139,15 @@ public class Lupen : Character
         stolenCharacter = characterChoiceHandler.CharacterChoice(1);
         stolenCharacter.overrideDeath = true; //in case he dies in form
         stayDynamic();
-        enemy.ChangeEnemy(stolenCharacter);
+        Character currentTarget = GetCurrentCombatTarget();
+        if (currentTarget != null)
+        {
+            stolenCharacter.ChangeEnemy(currentTarget);
+        }
         //SaveValues and change form
         spirit.SetInput(GetInputProvider());        // NEW: give the same provider
         spirit.stolenCharacter = stolenCharacter;
+        spirit.enemy = currentTarget;
         spirit.currentHealth = currHealth;
         spirit.whipDamage = wipDamage;
         spirit.robberyCounter = robberyCountter;
@@ -173,7 +180,11 @@ public class Lupen : Character
 
             characterChoiceHandler.ChangeCharacter("Lupen");
             cEvents.ChangeCharacterEvents(2);
-            enemy.ChangeEnemy(characterChoiceHandler.CharacterChoice(1));
+            Character currentTarget = GetCurrentCombatTarget();
+            if (currentTarget != null)
+            {
+                characterChoiceHandler.CharacterChoice(1).ChangeEnemy(currentTarget);
+            }
             P1Name.text = "Lupen";
 
             Debug.Log($"Removed component: {lastComponent.GetType().Name}");

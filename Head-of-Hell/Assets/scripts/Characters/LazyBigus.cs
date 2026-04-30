@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Transform = UnityEngine.Transform;
 
@@ -10,17 +11,16 @@ public class LazyBigus : Character
     public float bulletSpeed = 35f; // Speed of the bullet
     bool isShootin = false;
     public float cooldown = 20f;
-    int poisonCounter = 0;
     public GameObject beam;
     public BeamScript bScript;
-    private Coroutine poisonResetCoroutine;
     public BulletScript bulletScript;
     bool beamHit=false;
     int beamDamage = 10;
     int beamPoisonDamage = 10; 
     int passiveDamage = 4;
     float resetBullet=2f;
-    Character poisonTarget;
+    private readonly Dictionary<Character, int> poisonStacks = new Dictionary<Character, int>();
+    private readonly Dictionary<Character, Coroutine> poisonResetCoroutines = new Dictionary<Character, Coroutine>();
 
     float spellTime = 1f;
 
@@ -51,7 +51,7 @@ public class LazyBigus : Character
             audioManager.PlaySFX(audioManager.volchBiteSuccess, 1.5f);
             enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
             enemy.TakeDamage(heavyDamage, true);
-            ToxicTouch();
+            ToxicTouch(target);
 
             if (! enemy.isBlocking)
             {
@@ -82,17 +82,17 @@ public class LazyBigus : Character
         StartCoroutine(SpellSafety(spellTime,cooldown));
     }
 
-    public void BeamHitEnemy()
+    public void BeamHitEnemy(Character target)
     {
-        if(!beamHit){
-            poisonTarget = enemy;
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Projectile, SourceType.Projectile);
-            enemy.TakeDamage(beamDamage,true);
-            enemy.StopPunching();
-            enemy.BreakCharge();
-            enemy.Knockback(13f, 0.5f, true);
+        if(!beamHit && target != null){
+            SetEnemy(target);
+            target.SetIncomingDamageContext(PlayerId, MoveType.Projectile, SourceType.Projectile);
+            target.TakeDamage(beamDamage,true);
+            target.StopPunching();
+            target.BreakCharge();
+            target.Knockback(13f, 0.5f, true);
             audioManager.PlaySFX(audioManager.beamHit, 1.8f);
-            StartCoroutine(Poison(poisonTarget, beamPoisonDamage/5,1f,5));
+            StartCoroutine(Poison(target, beamPoisonDamage/5,1f,5));
             StartCoroutine(BeamDetectorReset());
         }
     }
@@ -220,7 +220,7 @@ public class LazyBigus : Character
             enemy.SetIncomingDamageContext(PlayerId, MoveType.Charge, SourceType.Melee);
             enemy.TakeDamage(chargeDmg, false);
             enemy.Knockback(13f, 0.4f, false);
-            ToxicTouch();
+            ToxicTouch(target);
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
             if (chargeHitSound != null)
             {
@@ -250,16 +250,22 @@ public class LazyBigus : Character
 
     #region Passive
 
-    void ToxicTouch()
+    void ToxicTouch(Character target)
     {
-        if(poisonCounter == 3)
+        if (target == null)
         {
-            StartCoroutine(Poison(enemy, passiveDamage/4,1f,4));
-            poisonCounter = 0;
             return;
         }
 
-        AddPoison(enemy);
+        int currentStacks = GetPoisonStackCount(target);
+        if(currentStacks >= 3)
+        {
+            StartCoroutine(Poison(target, passiveDamage/4,1f,4));
+            ResetPoisonStacks(target);
+            return;
+        }
+
+        AddPoison(target);
     }
 
     public void AddPoison(Character target)
@@ -269,42 +275,42 @@ public class LazyBigus : Character
             return;
         }
 
-        poisonTarget = target;
+        int currentStacks = GetPoisonStackCount(target);
 
         if (!target.IsPoisoned())
         {
-            if(poisonCounter < 3)
+            if(currentStacks < 3)
             {
-                if(poisonCounter==0)
+                if(currentStacks==0)
                 {
                     target.StackPoison1(true);
                 }
-                if (poisonCounter == 1)
+                if (currentStacks == 1)
                 {
                     target.StackPoison1(false);
                     target.StackPoison2(true);
                 }
-                if (poisonCounter == 2)
+                if (currentStacks == 2)
                 {
                     target.StackPoison2(false);
                     target.StackPoison3(true);
                 }
-                poisonCounter++;
+                poisonStacks[target] = currentStacks + 1;
             }
         }
         // Restart the poison reset coroutine
-        if (poisonResetCoroutine != null)
+        if (poisonResetCoroutines.TryGetValue(target, out Coroutine poisonResetCoroutine) && poisonResetCoroutine != null)
         {
             StopCoroutine(poisonResetCoroutine);
         }
-        poisonResetCoroutine = StartCoroutine(ResetPoisonAfterDelay(target));
+        poisonResetCoroutines[target] = StartCoroutine(ResetPoisonAfterDelay(target));
     }
 
     private IEnumerator ResetPoisonAfterDelay(Character target)
     {
-        yield return new WaitForSeconds(10f); // Wait for 5 seconds
+        yield return new WaitForSeconds(10f);
         ResetPoisonStacks(target);
-        poisonCounter = 0; // Reset the poison counter
+        poisonResetCoroutines.Remove(target);
     }
 
     private void ResetPoisonStacks(Character target)
@@ -317,18 +323,27 @@ public class LazyBigus : Character
         target.StackPoison1(false);
         target.StackPoison2(false);
         target.StackPoison3(false);
+        poisonStacks.Remove(target);
     }
 
-    public void BeamHit()
+    private int GetPoisonStackCount(Character target)
     {
-        BeamHitEnemy();
+        if (target == null)
+        {
+            return 0;
+        }
+
+        return poisonStacks.TryGetValue(target, out int count) ? count : 0;
     }
 
-    public void StackPoison()
+    public void BeamHit(Character target)
     {
+        BeamHitEnemy(target);
+    }
 
-        AddPoison(enemy);
-
+    public void StackPoison(Character target)
+    {
+        AddPoison(target);
     }
     #endregion
 }

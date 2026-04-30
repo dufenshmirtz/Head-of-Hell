@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
@@ -1498,11 +1499,18 @@ public abstract class Character : MonoBehaviour
 
     public void Countered()
     {
+        Character target = GetCurrentCombatTarget();
+        if (target == null)
+        {
+            CounterVariablesOff();
+            return;
+        }
+
         TelemetryManager.Instance?.LogAction(PlayerId, "Parry");
 
         animator.SetTrigger("counterHit");
         audioManager.PlaySFX(audioManager.counterSucces, 1.5f);
-        enemy.stayStatic();
+        target.stayStatic();
         stayStatic();
         ignoreCounterOff = true;
         counterDone = true;
@@ -1512,18 +1520,25 @@ public abstract class Character : MonoBehaviour
 
     virtual public void DealCounterDmg()
     {
-        enemy.StopPunching();
-        enemy.BreakCharge();
+        Character target = GetCurrentCombatTarget();
+        if (target == null)
+        {
+            stayDynamic();
+            return;
+        }
+
+        target.StopPunching();
+        target.BreakCharge();
 
         audioManager.PlaySFX(audioManager.counterClong, 0.5f);
 
-        enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Melee);
-        enemy.TakeDamage(parryDamage, true);
+        target.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Melee);
+        target.TakeDamage(parryDamage, true);
 
         stayDynamic();
-        enemy.stayDynamic();
+        target.stayDynamic();
 
-        enemy.Knockback(10f, .3f, false);
+        target.Knockback(10f, .3f, false);
 
     }
 
@@ -1546,7 +1561,11 @@ public abstract class Character : MonoBehaviour
         safety = true;
         ignoreCounterOff = false;
         ignoreUpdate = false;
-        enemy.stayDynamic();
+        Character target = GetCurrentCombatTarget();
+        if (target != null)
+        {
+            target.stayDynamic();
+        }
         stayDynamic();
     }
 
@@ -1587,33 +1606,101 @@ public abstract class Character : MonoBehaviour
 
     protected Character ResolveTargetFromHit(params Collider2D[] hits)
     {
-        if (hits == null)
+        List<Character> targets = ResolveTargetsFromHits(hits);
+        if (targets.Count == 0)
         {
             return null;
         }
 
+        Character closestTarget = null;
+        float closestDistanceSq = float.MaxValue;
+
+        for (int i = 0; i < targets.Count; i++)
+        {
+            Character target = targets[i];
+            float distanceSq = (target.transform.position - transform.position).sqrMagnitude;
+            if (distanceSq < closestDistanceSq)
+            {
+                closestDistanceSq = distanceSq;
+                closestTarget = target;
+            }
+        }
+
+        SetCombatTarget(closestTarget);
+        return closestTarget;
+    }
+
+    protected List<Character> ResolveTargetsFromHits(params Collider2D[] hits)
+    {
+        List<Character> targets = new List<Character>();
+        if (hits == null)
+        {
+            return targets;
+        }
+
+        HashSet<Character> uniqueTargets = new HashSet<Character>();
+
         for (int i = 0; i < hits.Length; i++)
         {
-            Collider2D hit = hits[i];
-            if (hit == null)
+            Character target = GetCharacterFromCollider(hits[i]);
+            if (!IsValidCombatTarget(target) || !uniqueTargets.Add(target))
             {
                 continue;
             }
 
-            Character target = hit.GetComponent<Character>();
-            if (target == null)
-            {
-                target = hit.GetComponentInParent<Character>();
-            }
+            targets.Add(target);
+        }
 
-            if (target == null || target == this || !target.isActiveAndEnabled)
-            {
-                continue;
-            }
+        return targets;
+    }
 
-            enemy = target;
-            target.SetEnemy(this);
-            return target;
+    protected void SetCombatTarget(Character target)
+    {
+        if (!IsValidCombatTarget(target))
+        {
+            return;
+        }
+
+        enemy = target;
+        target.SetEnemy(this);
+    }
+
+    protected Character GetCharacterFromCollider(Collider2D hit)
+    {
+        if (hit == null)
+        {
+            return null;
+        }
+
+        Character target = hit.GetComponent<Character>();
+        if (target == null)
+        {
+            target = hit.GetComponentInParent<Character>();
+        }
+
+        return target;
+    }
+
+    protected bool IsValidCombatTarget(Character target)
+    {
+        return target != null
+            && target != this
+            && target.isActiveAndEnabled
+            && !target.IsDead();
+    }
+
+    protected Character GetCurrentCombatTarget()
+    {
+        Character attacker = GetCharacterForPlayerId(incomingAttackerId);
+        if (IsValidCombatTarget(attacker))
+        {
+            enemy = attacker;
+            return attacker;
+        }
+
+        if (IsValidCombatTarget(enemy))
+        {
+            return enemy;
         }
 
         return null;

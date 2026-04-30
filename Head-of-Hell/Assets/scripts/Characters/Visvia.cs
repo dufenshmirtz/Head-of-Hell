@@ -284,10 +284,11 @@ public class Visvia : Character
 
         while (elapsed < overheatDuration && !animator.GetBool("isDead"))
         {
-            Collider2D hit = Physics2D.OverlapCircle(attackPoint.position, shotgunRange, enemyLayer);
-            Character target = ResolveTargetFromHit(hit);
-            if (target != null)
+            Collider2D[] hits = Physics2D.OverlapCircleAll(attackPoint.position, shotgunRange, enemyLayer);
+            var targets = ResolveTargetsFromHits(hits);
+            for (int i = 0; i < targets.Count; i++)
             {
+                Character target = targets[i];
                 target.SetIncomingDamageContext(PlayerId, MoveType.PoisonTick, SourceType.Dot);
                 target.TakeDamage(overheatDamage, false, false, false);
             }

@@ -60,14 +60,30 @@ public class BeamScript : MonoBehaviour
 
         if (collision.CompareTag("Player"))
         {
-            Character target = collision.GetComponent<Character>();
-            if (target != null && target != playa)
+            Character target = GetCharacterFromCollider(collision);
+            if (target == null || target == playa)
             {
-                playa.ChangeEnemy(target);
+                return;
             }
             hasHit = true;
-            playa.BeamHit();
+            playa.BeamHit(target);
         }
+    }
+
+    private Character GetCharacterFromCollider(Collider2D collision)
+    {
+        if (collision == null)
+        {
+            return null;
+        }
+
+        Character target = collision.GetComponent<Character>();
+        if (target == null)
+        {
+            target = collision.GetComponentInParent<Character>();
+        }
+
+        return target;
     }
 
     private void CheckOverlappingPlayers()
@@ -80,19 +96,34 @@ public class BeamScript : MonoBehaviour
             0f
         );
 
+        Character closestTarget = null;
+        float closestDistanceSq = float.MaxValue;
+
         foreach (Collider2D hit in hits)
         {
-            if (hit != beamCollider && hit.CompareTag("Player"))
+            if (hit == beamCollider || !hit.CompareTag("Player"))
             {
-                Character target = hit.GetComponent<Character>();
-                if (target != null && target != playa)
-                {
-                    playa.ChangeEnemy(target);
-                }
-                hasHit = true;
-                playa.BeamHit();
-                break;
+                continue;
             }
+
+            Character target = GetCharacterFromCollider(hit);
+            if (target == null || target == playa)
+            {
+                continue;
+            }
+
+            float distanceSq = (target.transform.position - playa.transform.position).sqrMagnitude;
+            if (distanceSq < closestDistanceSq)
+            {
+                closestDistanceSq = distanceSq;
+                closestTarget = target;
+            }
+        }
+
+        if (closestTarget != null)
+        {
+            hasHit = true;
+            playa.BeamHit(closestTarget);
         }
     }
 

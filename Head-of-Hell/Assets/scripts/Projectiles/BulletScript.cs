@@ -27,14 +27,19 @@ public class BulletScript : MonoBehaviour
     {
         if (other.CompareTag("Player") && !hasHit)
         {
-            hasHit = true;
-            Destroy(gameObject);
-
             Character character = other.GetComponent<Character>();
             if (character == null)
             {
                 character = other.GetComponentInParent<Character>();
             }
+            if (character == null || initiator == null || character == initiator)
+            {
+                return;
+            }
+
+            hasHit = true;
+            Destroy(gameObject);
+
             if (character != null)
             {
                 TelemetryManager.Instance?.LogHitAttempt(
@@ -50,7 +55,7 @@ public class BulletScript : MonoBehaviour
                 );
 
                 character.TakeDamage(3, true);
-                initiator.StackPoison();
+                initiator.StackPoison(character);
             }
         }
     }
