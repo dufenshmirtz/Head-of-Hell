@@ -68,7 +68,10 @@ public class LupenSpirit : MonoBehaviour
         bool abilityPressed =
             (input.GetKeyDown(ability) || (controller && input.GetButtonDown("Spell" + playerString))) && lupen.isActiveAndEnabled == false;
 
-        if (abilityPressed && lupen.isActiveAndEnabled == false && !enemy.AmICasting() && spammingCheck==true)
+        Character currentTarget = stolenCharacter != null ? stolenCharacter.GetEnemy() : enemy;
+        bool targetIsCasting = currentTarget != null && currentTarget.AmICasting();
+
+        if (abilityPressed && lupen.isActiveAndEnabled == false && !targetIsCasting && spammingCheck==true)
         {
             spammingCheck = false;
             stolenCharacter.chargeDisable = true;

@@ -108,9 +108,7 @@ public class Rager : Character
 
             audioManager.PlaySFX(audioManager.swoosh, audioManager.swooshVolume);
             animator.SetBool("isUsingAbility", false);
-            comboTarget = null;
-            ResetQuickPunch();
-            OnCooldown(cooldown);
+            ResetComboState(false);
         }
     }
 
@@ -173,11 +171,7 @@ public class Rager : Character
         Character target = comboTarget != null ? comboTarget : enemy;
         if (target == null)
         {
-            spellHit = false;
-            comboTarget = null;
-            ResetQuickPunch();
-            animator.SetBool("ComboReady", false);
-            OnCooldown(cooldown);
+            ResetComboState(false);
             return;
         }
 
@@ -196,13 +190,7 @@ public class Rager : Character
         target.moveSpeed = OGMoveSpeed;
         target.Knockback(8f, .25f, false);
 
-        // cd
-        spellHit = false;
-        comboTarget = null;
-        ResetQuickPunch();
-        animator.SetBool("ComboReady", false);
-
-        OnCooldown(cooldown);
+        ResetComboState(false);
     }
     #endregion
 
@@ -241,6 +229,27 @@ public class Rager : Character
 
     }
     #endregion
+
+    private void ResetComboState(bool restoreTargetState)
+    {
+        Character target = comboTarget != null ? comboTarget : enemy;
+
+        if (restoreTargetState && target != null && target.isActiveAndEnabled)
+        {
+            target.stayDynamic();
+            target.AbilityEnabled();
+            target.moveSpeed = OGMoveSpeed;
+        }
+
+        spellHit = false;
+        comboTarget = null;
+        stayDynamic();
+        ignoreUpdate = false;
+        canRotate = true;
+        ResetQuickPunch();
+        animator.SetBool("ComboReady", false);
+        OnCooldown(cooldown);
+    }
 
     #region ChargeAttack
     public override void ChargeAttack()
