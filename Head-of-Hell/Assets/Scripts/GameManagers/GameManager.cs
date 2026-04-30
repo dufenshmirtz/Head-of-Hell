@@ -42,12 +42,15 @@ public class GameManager : MonoBehaviour
     public FighterAgent agentP1, agentP2;       // drag the two FighterAgent components
     public Transform p1Spawn, p2Spawn;          // empty transforms as spawn points
 
+    public bool testMode = false;
+
     public float tScale = 1f;
 
     public bool roundOn = false;
     public bool trainingRoundOn = false;
     public TrainingOpponentDirector opponentDirector;
 
+    public EvaluationMatchLogger evaluationLogger;
 
     // Start is called before the first frame update
     void Start()
@@ -136,7 +139,7 @@ public class GameManager : MonoBehaviour
             portalNumber = Random.Range(0, 5);
         }
 
-        if (trainingMode)
+        if (trainingMode || testMode)
         {
             roundOn = true;
             portalNumber = 0;
@@ -164,6 +167,11 @@ public class GameManager : MonoBehaviour
         }
 
         ActivateIndicators();
+
+        if (testMode)
+        {
+            evaluationLogger?.BeginMatch();
+        }
     }
 
     void Awake()
@@ -181,7 +189,7 @@ public class GameManager : MonoBehaviour
 
         QualitySettings.vSyncCount = 0;
 
-        if (trainingMode)
+        if (trainingMode || testMode)
             Application.targetFrameRate = -1;   // unlimited
         else
             Application.targetFrameRate = 60;
@@ -214,12 +222,6 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        winner.gameObject.SetActive(true);
-        DisableGamePlay();
-        winner.text = winnerName + " prevails!";
-
-        ShortWins(playerNum, winnerName);
-
         if (!roundTelemetryClosed)
         {
             string p1Char = p1Manager ? p1Manager.GetCharacterName(1) : "";
@@ -248,6 +250,20 @@ public class GameManager : MonoBehaviour
             roundTelemetryClosed = true;
         }
 
+        
+        ShortWins(playerNum, winnerName);
+
+        if (testMode)
+        {
+            evaluationLogger?.RecordMatchEnd(playerNum, false, false);
+            SoftResetRound(playerNum);
+            return;
+        }
+
+        winner.gameObject.SetActive(true);
+        DisableGamePlay();
+        winner.text = winnerName + " prevails!";
+
         StartCoroutine(WaitAndCheck(playerNum, winnerName));
         roundOn = false;
     }
@@ -261,10 +277,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        winner.gameObject.SetActive(true);
-        DisableGamePlay();
-        winner.text = "Tie?\nDEATH PREVAILS...";
-        tie = true;
+        
 
         if (!roundTelemetryClosed)
         {
@@ -287,6 +300,18 @@ public class GameManager : MonoBehaviour
 
             TelemetryManager.Instance?.EndSession("RoundEnded_Tie");
             roundTelemetryClosed = true;
+
+            if (testMode)
+            {
+                evaluationLogger?.RecordMatchEnd(playerNum, false, false);
+                SoftResetRound(playerNum);
+                return;
+            }
+
+            winner.gameObject.SetActive(true);
+            DisableGamePlay();
+            winner.text = "Tie?\nDEATH PREVAILS...";
+            tie = true;
         }
 
         if (playerNum == 1)
@@ -313,11 +338,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        winner.gameObject.SetActive(true);
-        DisableGamePlay();
-        winner.text = "FLAWLESS\n" + winnerName + " prevails!";
-
-        ShortWins(playerNum, winnerName);
+        
 
         if (!roundTelemetryClosed)
         {
@@ -345,6 +366,19 @@ public class GameManager : MonoBehaviour
 
             TelemetryManager.Instance?.EndSession($"RoundEnded_Flawless_winner={winnerName}");
             roundTelemetryClosed = true;
+
+            ShortWins(playerNum, winnerName);
+
+            if (testMode)
+            {
+                evaluationLogger?.RecordMatchEnd(playerNum, false, false);
+                SoftResetRound(playerNum);
+                return;
+            }
+
+            winner.gameObject.SetActive(true);
+            DisableGamePlay();
+            winner.text = "FLAWLESS\n" + winnerName + " prevails!";
         }
 
         StartCoroutine(WaitAndCheck(playerNum, winnerName));
@@ -559,7 +593,7 @@ public class GameManager : MonoBehaviour
     // Training
     public void SoftResetRound(int winnerPlayerNum = 0)
     {
-        if (trainingRoundOn)
+        if (trainingRoundOn || testMode)
         {
             trainingRoundOn = false;
             if (trainingMode && opponentDirector != null)
@@ -646,5 +680,9 @@ public class GameManager : MonoBehaviour
         EnableGamePlay();
 
         // 5) ΤΕΛΟΣ, τώρα κλείσε το episode (ώστε OnEpisodeBegin να δει καθαρό state)
+        if (testMode)
+        {
+            evaluationLogger?.BeginMatch();
+        }
     }
 }

@@ -36377,7 +36377,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367423824}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd19557386e32f14d9047b5a9971820e, type: 3}
   m_Name: 
@@ -54227,6 +54227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2144866981}
   - component: {fileID: 2144866982}
+  - component: {fileID: 2144866983}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -54293,10 +54294,32 @@ MonoBehaviour:
   agentP2: {fileID: 1367423861}
   p1Spawn: {fileID: 221568191}
   p2Spawn: {fileID: 1367423837}
+  testMode: 1
   tScale: 1
   roundOn: 0
   trainingRoundOn: 0
   opponentDirector: {fileID: 0}
+  evaluationLogger: {fileID: 0}
+--- !u!114 &2144866983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144866980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7edf1bdd3cbe9448dd74b2311e3788, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableLogging: 1
+  onlyInTestMode: 1
+  gameManager: {fileID: 2144866982}
+  p1Manager: {fileID: 221568179}
+  p2Manager: {fileID: 1367423825}
+  agentPlayerNum: 2
+  manualOpponentLabel: Fotios
+  outputFolderName: EvaluationLogs
 --- !u!1 &2147385444
 GameObject:
   m_ObjectHideFlags: 0
