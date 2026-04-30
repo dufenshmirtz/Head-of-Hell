@@ -60,11 +60,13 @@ public class Lupen : Character
     override public void DealHeavyDamage()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
 
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
             enemy.TakeDamage(heavyDamage, true);
             Robbed();
 
@@ -103,7 +105,10 @@ public class Lupen : Character
 
     void KnockNearbyEnemies()
     {
-        if (IsEnemyClose())
+        Collider2D hitEnemy = Physics2D.OverlapCircle(transform.position, passiveRange, enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
+
+        if (target != null)
         {
             // Telemetry: special interaction (no damage, but successful effect on enemy)
             TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
@@ -201,8 +206,9 @@ public class Lupen : Character
     {
         audioManager.PlaySFX(audioManager.whip , audioManager.normalVol);
         Collider2D hitEnemy = Physics2D.OverlapCapsule(wipPoint.position,size, CapsuleDirection2D.Horizontal,0f,enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
             TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
             enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);

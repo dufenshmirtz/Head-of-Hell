@@ -36,7 +36,16 @@ public abstract class Character : MonoBehaviour
 {
 
 
-    public string PlayerId => playerNum == 1 ? "P1" : "P2";
+    public string PlayerId
+    {
+        get
+        {
+            if (playerNum == 1) return "P1";
+            if (playerNum == 2) return "P2";
+            if (playerNum == 3) return "P3";
+            return $"P{playerNum}";
+        }
+    }
     public bool CanDropPlatform => isonpad > 0;
     protected string incomingAttackerId;
     protected MoveType incomingMoveType;
@@ -249,6 +258,12 @@ public abstract class Character : MonoBehaviour
         incomingAttackerId = attackerId;
         incomingMoveType = moveType;
         incomingSourceType = sourceType;
+
+        Character attacker = GetCharacterForPlayerId(attackerId);
+        if (attacker != null && attacker != this)
+        {
+            enemy = attacker;
+        }
     }
     #region Base
     public virtual void Start()
@@ -286,7 +301,7 @@ public abstract class Character : MonoBehaviour
             {
                 maxHealth = loadedRuleset.health;
                 currHealth = maxHealth;
-                healthbar.SetMaxHealth(maxHealth);
+                SetHealthbarMaxSafe(maxHealth);
             }
 
 
@@ -300,7 +315,7 @@ public abstract class Character : MonoBehaviour
 
             if (loadedRuleset.hideHealth)
             {
-                healthbar.gameObject.SetActive(false);
+                SetHealthbarVisibleSafe(false);
             }
         }
         else
@@ -321,7 +336,7 @@ public abstract class Character : MonoBehaviour
         OGMoveSpeed = moveSpeed;
         heavySpeed = moveSpeed / 2;
 
-        cooldownSlider.maxValue = 1f;
+        SetCooldownSliderMaxSafe(1f);
 
         _spawnPos = transform.position;
 
@@ -410,6 +425,10 @@ public abstract class Character : MonoBehaviour
             }
 
         }
+        else if (playerNum == 3)
+        {
+            playerString = "_P3";
+        }
 
         animator = GetComponent<Animator>();
 
@@ -441,6 +460,88 @@ public abstract class Character : MonoBehaviour
         else
         {
             return 1;
+        }
+    }
+
+    private float GetHorizontalInput()
+    {
+        if (!controller)
+        {
+            float move = 0f;
+            if (input.GetKey(left)) move -= 1f;
+            if (input.GetKey(right)) move += 1f;
+            return move;
+        }
+
+        return input.GetAxis("Horizontal" + playerString);
+    }
+
+    private float GetVerticalInput()
+    {
+        if (!controller)
+        {
+            float move = 0f;
+            if (input.GetKey(down)) move -= 1f;
+            if (input.GetKey(up)) move += 1f;
+            return move;
+        }
+
+        return input.GetAxis("Vertical" + playerString);
+    }
+
+    private void SetHealthbarMaxSafe(int value)
+    {
+        if (healthbar != null)
+        {
+            healthbar.SetMaxHealth(value);
+        }
+    }
+
+    private void SetHealthbarSafe(int value)
+    {
+        if (healthbar != null)
+        {
+            healthbar.SetHealth(value);
+        }
+    }
+
+    private void SetHealthbarVisibleSafe(bool visible)
+    {
+        if (healthbar != null)
+        {
+            healthbar.gameObject.SetActive(visible);
+        }
+    }
+
+    private void SetCooldownSliderMaxSafe(float value)
+    {
+        if (cooldownSlider != null)
+        {
+            cooldownSlider.maxValue = value;
+        }
+    }
+
+    private void SetCooldownSliderValueSafe(float value)
+    {
+        if (cooldownSlider != null)
+        {
+            cooldownSlider.value = value;
+        }
+    }
+
+    private void SetCooldownSpriteSafe(Sprite sprite)
+    {
+        if (cdbarimage != null)
+        {
+            cdbarimage.sprite = sprite;
+        }
+    }
+
+    private void SetQuickAttackIndicatorSafe(bool visible)
+    {
+        if (quickAttackIndicator != null)
+        {
+            quickAttackIndicator.SetActive(visible);
         }
     }
 
@@ -519,7 +620,7 @@ public abstract class Character : MonoBehaviour
             return;
         }
 
-        float moveDirection = input.GetAxis("Horizontal" + playerString);
+        float moveDirection = GetHorizontalInput();
         int dir = (moveDirection > 0.1f) ? 1 : (moveDirection < -0.1f) ? -1 : 0;
 
         
@@ -565,7 +666,7 @@ public abstract class Character : MonoBehaviour
             animator.SetBool("cWalk", false);
         }
 
-        float v = input.GetAxis("Vertical" + playerString);
+        float v = GetVerticalInput();
         bool axisUp = v > 0.5f;
 
         // Jumping
@@ -617,7 +718,7 @@ public abstract class Character : MonoBehaviour
         }
 
         //Get down from pad
-        if (input.GetKeyDown(down) || (controller && input.GetAxis("Vertical" + playerString) < -0.5f))
+        if (input.GetKeyDown(down) || (controller && GetVerticalInput() < -0.5f))
         {
             Collider2D[] colliders = GetComponents<Collider2D>();
             if (CanDropPlatform)
@@ -696,7 +797,7 @@ public abstract class Character : MonoBehaviour
         // Now it's safe to assign the value
         maxHealth = gameManager.maxHealth;
         currHealth = maxHealth;
-        healthbar.SetMaxHealth(maxHealth);
+        SetHealthbarMaxSafe(maxHealth);
     }
 
 
@@ -916,7 +1017,7 @@ public abstract class Character : MonoBehaviour
             EnemyAbilityEnable();
         }      
         knockable = true;
-        cdbarimage.sprite = ogSprite;
+        SetCooldownSpriteSafe(ogSprite);
         animator.SetBool("isUsingAbility", false);
         animator.SetBool("Casting", false);
         casting = false;
@@ -949,7 +1050,7 @@ public abstract class Character : MonoBehaviour
     void UpdateCooldownSlider(float duration)
     {
         float progress = Mathf.Clamp01(1f - cdTimer / duration);
-        cooldownSlider.value = progress;
+        SetCooldownSliderValueSafe(progress);
     }
 
     public void EnemyAbilityBlock()
@@ -981,7 +1082,7 @@ public abstract class Character : MonoBehaviour
         animator.SetBool("Casting", true);
         EnemyAbilityBlock();
         animator.SetBool("isUsingAbility", true);
-        cdbarimage.sprite = activeSprite;
+        SetCooldownSpriteSafe(activeSprite);
         isBlocking = false;
         UpdateCooldownSlider(cd);
 
@@ -1025,7 +1126,10 @@ public abstract class Character : MonoBehaviour
         {
             knockbackXaxis = axis;
             audioManager.PlaySFX(audioManager.knockback, audioManager.lessVol);
-            bool enemyOnRight = enemy.transform.position.x > this.transform.position.x;
+            Character knockbackSource = GetKnockbackSource();
+            bool enemyOnRight = knockbackSource != null
+                ? knockbackSource.transform.position.x > this.transform.position.x
+                : transform.localScale.x > 0f;
             //This if must be removed when knockback tranfers to playerscript, its used for a Stellger Passive Function
             if (time == 0.3333f)
             {
@@ -1105,8 +1209,9 @@ public abstract class Character : MonoBehaviour
     {
         TelemetryManager.Instance?.LogAction(PlayerId, "ChargeRelease");
         Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
             enemy.StopPunching();
             if (!enemy.counterIsOn) {
@@ -1308,6 +1413,7 @@ public abstract class Character : MonoBehaviour
     public Collider2D HitEnemy()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
+        ResolveTargetFromHit(hitEnemy);
         return hitEnemy;
     }
 
@@ -1411,6 +1517,7 @@ public abstract class Character : MonoBehaviour
 
         audioManager.PlaySFX(audioManager.counterClong, 0.5f);
 
+        enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Melee);
         enemy.TakeDamage(parryDamage, true);
 
         stayDynamic();
@@ -1460,12 +1567,12 @@ public abstract class Character : MonoBehaviour
 
     protected void QuickAttackIndicatorEnable()
     {
-        quickAttackIndicator.SetActive(true);
+        SetQuickAttackIndicatorSafe(true);
     }
 
     protected void QuickAttackIndicatorDisable()
     {
-        quickAttackIndicator?.SetActive(false);
+        SetQuickAttackIndicatorSafe(false);
     }
 
     public Character GetEnemy()
@@ -1476,6 +1583,81 @@ public abstract class Character : MonoBehaviour
     public void SetEnemy(Character changeEnemy)
     {
         enemy = changeEnemy;
+    }
+
+    protected Character ResolveTargetFromHit(params Collider2D[] hits)
+    {
+        if (hits == null)
+        {
+            return null;
+        }
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            Collider2D hit = hits[i];
+            if (hit == null)
+            {
+                continue;
+            }
+
+            Character target = hit.GetComponent<Character>();
+            if (target == null)
+            {
+                target = hit.GetComponentInParent<Character>();
+            }
+
+            if (target == null || target == this || !target.isActiveAndEnabled)
+            {
+                continue;
+            }
+
+            enemy = target;
+            target.SetEnemy(this);
+            return target;
+        }
+
+        return null;
+    }
+
+    private Character GetCharacterForPlayerId(string playerId)
+    {
+        if (gameManager == null || string.IsNullOrEmpty(playerId))
+        {
+            return null;
+        }
+
+        if (playerId == "P1")
+        {
+            return gameManager.p1Manager != null ? gameManager.p1Manager.GetCurrentCharacter() : null;
+        }
+
+        if (playerId == "P2")
+        {
+            return gameManager.p2Manager != null ? gameManager.p2Manager.GetCurrentCharacter() : null;
+        }
+
+        if (playerId == "P3")
+        {
+            return gameManager.p3Manager != null ? gameManager.p3Manager.GetCurrentCharacter() : null;
+        }
+
+        return null;
+    }
+
+    private Character GetKnockbackSource()
+    {
+        Character source = GetCharacterForPlayerId(incomingAttackerId);
+        if (source != null && source != this)
+        {
+            return source;
+        }
+
+        if (enemy != null && enemy != this)
+        {
+            return enemy;
+        }
+
+        return null;
     }
 
     public bool AmICasting()
@@ -1579,7 +1761,7 @@ public abstract class Character : MonoBehaviour
             {
                 currHealth -= 5;
                 //Debug.Log("Took 5 damage.");
-                healthbar.SetHealth(currHealth);
+                SetHealthbarSafe(currHealth);
                 StartCoroutine(TriggerDamageCounter(5));
             }
 
@@ -1587,7 +1769,7 @@ public abstract class Character : MonoBehaviour
             {
                 currHealth -= dmg;
                 //Debug.Log("Took " + dmg + " damage.");
-                healthbar.SetHealth(currHealth);
+                SetHealthbarSafe(currHealth);
                 moveSpeed = OGMoveSpeed;
                 StartCoroutine(TriggerDamageCounter(dmg));
             }
@@ -1621,7 +1803,7 @@ public abstract class Character : MonoBehaviour
             currHealth -= dmg;
             CheckForCrit(canCrit);
             animator.SetTrigger("tookDmg");
-            healthbar.SetHealth(currHealth);
+            SetHealthbarSafe(currHealth);
             StartCoroutine(TriggerDamageCounter(dmg));
 
             //Debug.Log("Took " + dmg + " damage.");
@@ -1665,7 +1847,6 @@ public abstract class Character : MonoBehaviour
 
     public void Die()
     {
-        int winnerNum = (playerNum == 1) ? 2 : 1;   // ή: int winnerNum = enemy.playerNum;
         if (overrideDeath) {
             return;
         }
@@ -1687,6 +1868,17 @@ public abstract class Character : MonoBehaviour
 
         ActivateHealthBars(); //In case they are hidden
 
+        if (gameManager != null && gameManager.IsThreePlayerMatch())
+        {
+            audioManager.PlaySFX(audioManager.dearth, audioManager.doubleVol);
+            if (gameManager.HandleThreePlayerDeath(this))
+            {
+                audioManager.StopMusic();
+            }
+            return;
+        }
+
+        int winnerNum = (playerNum == 1) ? 2 : 1;   // ή: int winnerNum = enemy.playerNum;
         enemy.Win();
         enemy.stayStatic();
 
@@ -1727,8 +1919,8 @@ public abstract class Character : MonoBehaviour
 
     public void ActivateHealthBars()
     {
-        healthbar.gameObject.SetActive(true);
-        enemy.healthbar.gameObject.SetActive(true);
+        SetHealthbarVisibleSafe(true);
+        enemy?.SetHealthbarVisibleSafe(true);
     }
 
     virtual public void TakeDamageNoAnimation(int dmg, bool blockable, bool parryable = true)
@@ -1796,7 +1988,7 @@ public abstract class Character : MonoBehaviour
 
             currHealth -= dmg;
 
-            healthbar.SetHealth(currHealth);
+            SetHealthbarSafe(currHealth);
             StartCoroutine(TriggerDamageCounter(dmg));
         }
 
@@ -1835,6 +2027,10 @@ public abstract class Character : MonoBehaviour
     }
 
     IEnumerator TriggerDamageCounter(int damage) {
+        if (damageCounter == null)
+        {
+            yield break;
+        }
 
         if (damageCounter.gameObject.activeSelf) {
             damage += int.Parse(damageCounter.text);
@@ -1850,6 +2046,7 @@ public abstract class Character : MonoBehaviour
 
     public void DealDamageToEnemy(int amount)
     {
+        enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
         enemy.TakeDamageNoAnimation(amount, false);
     }
 
@@ -1959,7 +2156,17 @@ public abstract class Character : MonoBehaviour
 
     public bool IsEnemyClose()
     {
+        if (enemy == null)
+        {
+            return false;
+        }
+
         return Vector3.Distance(this.transform.position, enemy.transform.position) <= 4f;
+    }
+
+    public bool IsDead()
+    {
+        return animator != null && animator.GetBool("isDead");
     }
 
     public int GetCurrentHealth()
@@ -1970,7 +2177,7 @@ public abstract class Character : MonoBehaviour
     public void SetCurrentHealth(int value)
     {
         currHealth = value;
-        healthbar.SetHealth(value);
+        SetHealthbarSafe(value);
     }
     #endregion
 
@@ -2031,7 +2238,7 @@ public abstract class Character : MonoBehaviour
             {
                 currHealth = maxHealth;
             }
-            healthbar.SetHealth(currHealth);
+            SetHealthbarSafe(currHealth);
         }
 
     }

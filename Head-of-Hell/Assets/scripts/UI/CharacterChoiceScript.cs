@@ -16,6 +16,7 @@ public class CharacterChoiceScript : MonoBehaviour
 
     private Button p1PickedButton = null;
     private Button p2PickedButton = null;
+    private Button p3PickedButton = null;
 
     void Start()
     {
@@ -26,6 +27,7 @@ public class CharacterChoiceScript : MonoBehaviour
             HideHoverBorder(btn);
             HideP1Border(btn);
             HideP2Border(btn);
+            HideP3Border(btn);
 
             EventTrigger trigger = btn.gameObject.GetComponent<EventTrigger>();
             if (trigger == null)
@@ -131,15 +133,13 @@ public class CharacterChoiceScript : MonoBehaviour
 
     void TriggerStartButton()
     {
-        if (startButton != null)
-        {
-            startButton.onClick.Invoke();
-        }
-    }
+        Button targetStartButton = startButton;
+        if (targetStartButton == null && characterChoiceMenu != null)
+            targetStartButton = characterChoiceMenu.startButton;
 
-    // =========================
-    // LOCKED PICKS
-    // =========================
+        if (targetStartButton != null)
+            targetStartButton.onClick.Invoke();
+    }
 
     public void SetPlayer1Picked(Button button)
     {
@@ -171,9 +171,21 @@ public class CharacterChoiceScript : MonoBehaviour
         }
     }
 
-    // =========================
-    // BORDER HELPERS
-    // =========================
+    public void SetPlayer3Picked(Button button)
+    {
+        if (p3PickedButton != null)
+        {
+            HideP3Border(p3PickedButton);
+        }
+
+        p3PickedButton = button;
+
+        if (p3PickedButton != null)
+        {
+            ShowP3Border(p3PickedButton);
+        }
+    }
+
     public void ClearPlayer1Picked()
     {
         if (p1PickedButton != null)
@@ -191,6 +203,16 @@ public class CharacterChoiceScript : MonoBehaviour
             p2PickedButton = null;
         }
     }
+
+    public void ClearPlayer3Picked()
+    {
+        if (p3PickedButton != null)
+        {
+            HideP3Border(p3PickedButton);
+            p3PickedButton = null;
+        }
+    }
+
     void ShowHoverBorder(Button button)
     {
         Transform t = button.transform.Find("HoverBorder");
@@ -224,6 +246,18 @@ public class CharacterChoiceScript : MonoBehaviour
     void HideP2Border(Button button)
     {
         Transform t = button.transform.Find("P2Border");
+        if (t != null) t.gameObject.SetActive(false);
+    }
+
+    void ShowP3Border(Button button)
+    {
+        Transform t = button.transform.Find("P3Border");
+        if (t != null) t.gameObject.SetActive(true);
+    }
+
+    void HideP3Border(Button button)
+    {
+        Transform t = button.transform.Find("P3Border");
         if (t != null) t.gameObject.SetActive(false);
     }
 }

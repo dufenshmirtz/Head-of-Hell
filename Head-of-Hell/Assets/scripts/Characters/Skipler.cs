@@ -60,8 +60,9 @@ public class Skipler : Character
     override public void DealHeavyDamage()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
 
             audioManager.PlaySFX(audioManager.heavyGlitchHit, 1.3f);
@@ -197,7 +198,8 @@ public class Skipler : Character
 
     override protected void OnTriggerEnter2D(Collider2D other)
     {
-        if (dashing && other.CompareTag("Player") && !dashHit)  //--here
+        Character target = ResolveTargetFromHit(other);
+        if (dashing && target != null && !dashHit)  //--here
         {
             DealDashDmg();
             dashHit = true;
@@ -281,8 +283,9 @@ public class Skipler : Character
     public void DealBlinkDmg()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
             TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
             enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);

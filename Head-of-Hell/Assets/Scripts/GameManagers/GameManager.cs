@@ -15,10 +15,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI finalWinner;
     public TextMeshProUGUI p1ProfileNameText;
     public TextMeshProUGUI p2ProfileNameText;
+    public TextMeshProUGUI p3ProfileNameText;
     string p1, p2;
     static int roundNumber = 1;
     static int roundCounter = 1;
-    public CharacterManager p1Manager, p2Manager;
+    public CharacterManager p1Manager, p2Manager, p3Manager;
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
     public GameObject saveReplayButton;
@@ -52,7 +53,16 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("[GameManager] CurrentMode = " + GameModeSelectionState.CurrentMode);
+        Debug.Log("[GameManager] PlayerCount = " + GameModeSelectionState.PlayerCount);
+        Debug.Log("[GameManager] RequiresThirdPlayerSelection = " + GameModeSelectionState.RequiresThirdPlayerSelection);
         roundTelemetryClosed = false;
+        bool threePlayerMode = IsThreePlayerMode();
+
+        if (p3Manager != null)
+        {
+            p3Manager.gameObject.SetActive(threePlayerMode);
+        }
 
         stageName = PlayerPrefs.GetString("SelectedStage", "Stage 1");
         if (stageName == "Stage 1")
@@ -186,7 +196,165 @@ public class GameManager : MonoBehaviour
         else
             Application.targetFrameRate = 60;
     }
+    private bool IsThreePlayerMode()
+    {
+        return GameModeSelectionState.CurrentMode == SelectedGameMode.PvP_1v1v1;
+    }
 
+    public bool IsThreePlayerMatch()
+    {
+        return IsThreePlayerMode();
+    }
+
+    private Character GetCharacterForPlayer(int playerNum)
+    {
+        if (playerNum == 1)
+            return p1Manager != null ? p1Manager.GetCurrentCharacter() : null;
+
+        if (playerNum == 2)
+            return p2Manager != null ? p2Manager.GetCurrentCharacter() : null;
+
+        if (playerNum == 3)
+            return p3Manager != null ? p3Manager.GetCurrentCharacter() : null;
+
+        return null;
+    }
+
+    private bool IsCharacterAlive(Character character)
+    {
+        return character != null && character.isActiveAndEnabled && !character.IsDead();
+    }
+
+    private string GetWinnerId(int playerNum)
+    {
+        if (playerNum == 1) return "P1";
+        if (playerNum == 2) return "P2";
+        if (playerNum == 3) return "P3";
+        return "";
+    }
+
+    private string GetWinnerCharacterName(int playerNum)
+    {
+        if (playerNum == 1)
+            return p1Manager != null ? p1Manager.GetCharacterName(1) : "";
+
+        if (playerNum == 2)
+            return p2Manager != null ? p2Manager.GetCharacterName(1) : "";
+
+        if (playerNum == 3)
+            return p3Manager != null ? p3Manager.GetCharacterName(1) : "";
+
+        return "";
+    }
+
+    private string GetWinnerDisplayName(int playerNum)
+    {
+        return GetWinnerCharacterName(playerNum);
+    }
+
+    public bool HandleThreePlayerDeath(Character deadCharacter)
+    {
+        if (!IsThreePlayerMode() || deadCharacter == null)
+        {
+            return false;
+        }
+
+        int aliveCount = 0;
+        int survivingPlayerNum = 0;
+
+        for (int playerNum = 1; playerNum <= 3; playerNum++)
+        {
+            Character character = GetCharacterForPlayer(playerNum);
+            if (!IsCharacterAlive(character))
+            {
+                continue;
+            }
+
+            aliveCount++;
+            survivingPlayerNum = playerNum;
+        }
+
+        if (aliveCount != 1)
+        {
+            return false;
+        }
+
+        string winnerName = GetWinnerDisplayName(survivingPlayerNum);
+        RoundEndThreePlayer(survivingPlayerNum, winnerName);
+        return true;
+    }
+
+    private void RoundEndThreePlayer(int winnerPlayerNum, string winnerName)
+    {
+        if (trainingMode)
+        {
+            SoftResetRound(winnerPlayerNum);
+            return;
+        }
+
+        winner.gameObject.SetActive(true);
+        DisableGamePlay();
+        winner.text = winnerName + " prevails!";
+
+        if (!roundTelemetryClosed)
+        {
+            TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
+            {
+                map = stageName,
+                mode = GetTelemetryMode(),
+                roundNumber_ = roundCounter,
+                trainingMode = trainingMode,
+
+                p1Id = "P1",
+                p1Character = GetWinnerCharacterName(1),
+                p2Id = "P2",
+                p2Character = GetWinnerCharacterName(2),
+                p3Id = "P3",
+                p3Character = GetWinnerCharacterName(3),
+
+                winnerId = GetWinnerId(winnerPlayerNum),
+                winnerCharacter = GetWinnerCharacterName(winnerPlayerNum)
+            });
+
+            TelemetryManager.Instance?.EndSession($"RoundEnded_LastAlive_winner={winnerName}");
+            roundTelemetryClosed = true;
+        }
+
+        StartCoroutine(WaitAndCheckThreePlayer(winnerName));
+        roundOn = false;
+    }
+
+    private IEnumerator WaitAndCheckThreePlayer(string winnerName)
+    {
+        yield return new WaitForSeconds(3f);
+
+        finalWinner.text = "Victory belongs to " + winnerName + "!\n Chan Chan smiles...";
+        winner.gameObject.SetActive(false);
+        finalWinner.gameObject.SetActive(true);
+        roundCounter = 1;
+        player1Wins = 0;
+        player2Wins = 0;
+
+        audioManager.PlaySFX(audioManager.dramaticDrums, audioManager.doubleVol);
+
+        gameEnd = true;
+        if (victoryScreenNavigation != null)
+            victoryScreenNavigation.SetActive(true);
+
+        playAgainButton.SetActive(true);
+        mainMenuButton.SetActive(true);
+        saveReplayButton.SetActive(true);
+
+        CheckForRandomCharacters();
+    }
+
+    private string GetTelemetryMode()
+    {
+        if (trainingMode)
+            return "training";
+
+        return IsThreePlayerMode() ? "1v1v1" : "1v1";
+    }
     private void ApplyRulesetToCurrentCharacters(CustomRuleset ruleset)
     {
         if (p1Manager != null)
@@ -447,14 +615,20 @@ public class GameManager : MonoBehaviour
 
     public void EnableGamePlay()
     {
-        p1Manager.Resume();
-        p2Manager.Resume();
+        if (p1Manager != null) p1Manager.Resume();
+        if (p2Manager != null) p2Manager.Resume();
+
+        if (IsThreePlayerMode() && p3Manager != null && p3Manager.gameObject.activeInHierarchy)
+            p3Manager.Resume();
     }
 
     public void DisableGamePlay()
     {
-        p1Manager.Pause();
-        p2Manager.Pause();
+        if (p1Manager != null) p1Manager.Pause();
+        if (p2Manager != null) p2Manager.Pause();
+
+        if (IsThreePlayerMode() && p3Manager != null && p3Manager.gameObject.activeInHierarchy)
+            p3Manager.Pause();
     }
 
     void ActivateIndicators()

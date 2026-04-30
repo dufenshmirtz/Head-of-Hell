@@ -36,8 +36,9 @@ public class Fin : Character
     override public void DealHeavyDamage()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
             TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
@@ -72,14 +73,16 @@ public class Fin : Character
     public void FlashingPriest()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
             // Telemetry: successful special interaction (no damage, but still a "hit")
             TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
 
             enemy.StopPunching();
             enemy.BreakCharge();
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
             enemy.TakeDamage(1,true,true,false);
             enemy.Stun(flashStunDuration);
         }
@@ -206,6 +209,7 @@ public class Fin : Character
     {
         base.DealCounterDmg();
 
+        enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Melee);
         enemy.TakeDamageNoAnimation(passiveDamage,false,false);
     }
     #endregion

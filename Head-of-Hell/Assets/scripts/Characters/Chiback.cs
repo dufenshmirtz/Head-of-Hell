@@ -40,8 +40,9 @@ public class Chiback : Character
     override public void DealHeavyDamage()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
             audioManager.PlaySFX(audioManager.katanaHit, 1.8f);
             TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
@@ -110,7 +111,8 @@ public class Chiback : Character
         {
             // Check for enemy collision
             Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
-            if (hitEnemy != null)
+            Character target = ResolveTargetFromHit(hitEnemy);
+            if (target != null)
             {
                 enemy.BreakCharge();
                 animator.SetTrigger("SpellHit");
@@ -128,19 +130,19 @@ public class Chiback : Character
                     // Telemetry: ensure context is set right before TakeDamage
                     enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
                     enemy.TakeDamage(shortJumpDamage, true);
-                    Enraged(shortJumpDamage);
+                    Enraged(enemy, shortJumpDamage);
                 }
                 else if (elapsedTime < 0.66f)
                 {
                     enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
                     enemy.TakeDamage(MedJumpDamage, true);
-                    Enraged(MedJumpDamage);
+                    Enraged(enemy, MedJumpDamage);
                 }
                 else
                 {
                     enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
                     enemy.TakeDamage(wideJumpDamage, true);
-                    Enraged(wideJumpDamage);
+                    Enraged(enemy, wideJumpDamage);
                 }
 
                 // Reset enraging hits if the threshold is reached
@@ -191,8 +193,9 @@ public class Chiback : Character
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle( mirrorFireAttackPoint.position,  attackRange,  enemyLayer);
         Collider2D hitEnemy2 = Physics2D.OverlapCircle( fireAttackPoint.position,  attackRange,  enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy, hitEnemy2);
 
-        if (hitEnemy != null || hitEnemy2!=null)
+        if (target != null)
         {
             audioManager.PlaySFX(audioManager.skiplaHeavyHit, 1f);
             TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
@@ -207,7 +210,7 @@ public class Chiback : Character
             }
             enemy.DisableBlock(true);
             enemy.DisableJump(true);
-            StartCoroutine(ResetBlockability());
+            StartCoroutine(ResetBlockability(enemy));
             
         }
         else
@@ -225,14 +228,23 @@ public class Chiback : Character
         QuickAttackIndicatorEnable();
     }
 
-    private IEnumerator ResetBlockability()
+    private IEnumerator ResetBlockability(Character target)
     {
+        if (target == null)
+        {
+            yield break;
+        }
 
         // Wait for 1.1 seconds before enabling the block
         yield return new WaitForSeconds(jumpDuration+0.1f);
 
-        enemy.EnableBlock();
-        enemy.DisableJump(false);
+        if (target == null || !target.isActiveAndEnabled)
+        {
+            yield break;
+        }
+
+        target.EnableBlock();
+        target.DisableJump(false);
     }
 
     #endregion
@@ -261,11 +273,12 @@ public class Chiback : Character
         base.TakeDamage(dmg, blockable);
     }
 
-    void Enraged(int jumpDamage)
+    void Enraged(Character target, int jumpDamage)
     {
-        if (timesHit == enragingNum)
+        if (timesHit == enragingNum && target != null)
         {
-            enemy.TakeDamageNoAnimation(jumpDamage / 2,true);
+            target.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
+            target.TakeDamageNoAnimation(jumpDamage / 2,true);
             roarPlayed = false;
         }
     }

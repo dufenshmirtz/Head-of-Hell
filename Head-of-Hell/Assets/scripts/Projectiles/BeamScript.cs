@@ -60,6 +60,11 @@ public class BeamScript : MonoBehaviour
 
         if (collision.CompareTag("Player"))
         {
+            Character target = collision.GetComponent<Character>();
+            if (target != null && target != playa)
+            {
+                playa.ChangeEnemy(target);
+            }
             hasHit = true;
             playa.BeamHit();
         }
@@ -79,6 +84,11 @@ public class BeamScript : MonoBehaviour
         {
             if (hit != beamCollider && hit.CompareTag("Player"))
             {
+                Character target = hit.GetComponent<Character>();
+                if (target != null && target != playa)
+                {
+                    playa.ChangeEnemy(target);
+                }
                 hasHit = true;
                 playa.BeamHit();
                 break;

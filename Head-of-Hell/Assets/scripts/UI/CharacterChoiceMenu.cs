@@ -8,12 +8,14 @@ public class CharacterChoiceMenu : MonoBehaviour
     public Button[] characterButtons;
 
     private int currentPlayer = 1;
-
-    Button p1b;
+    private int requiredPlayers = 2;
+    private int picksMade = 0;
 
     public TextMeshProUGUI p1characterNameText;
-
     public TextMeshProUGUI p2characterNameText;
+    public TextMeshProUGUI p3characterNameText;
+
+    public GameObject p3SelectionRoot;
 
     public Button startButton, randomButton;
 
@@ -26,16 +28,22 @@ public class CharacterChoiceMenu : MonoBehaviour
     void Start()
     {
         picked = false;
+        RefreshModeUI();
+
         foreach (Button button in characterButtons)
         {
             button.onClick.AddListener(() => OnCharacterButtonClicked(button));
         }
     }
 
+    void OnEnable()
+    {
+        RefreshModeUI();
+    }
+
     void Update()
     {
-        // Detect right mouse button click to undo selection
-        if (Input.GetMouseButtonDown(1)) // 1 = right mouse button
+        if (Input.GetMouseButtonDown(1))
         {
             DeselectCharacter();
         }
@@ -48,139 +56,86 @@ public class CharacterChoiceMenu : MonoBehaviour
             return;
         }
 
-        // Get the character index or identifier from the button
-        int characterIndex = System.Array.IndexOf(characterButtons, button);
+        AssignPick(currentPlayer, button);
+        picksMade++;
 
-        // Assign the character to the current player
-        if (currentPlayer == 1)
+        if (picksMade >= requiredPlayers)
         {
-            Transform childP1 = button.transform.Find("P1");
-            if (childP1 != null) childP1.gameObject.SetActive(true);
-            cscript.SetPlayer1Picked(button);
-            currentPlayer = 2;
-            p1b = button;
+            picked = true;
+            cscript.BothPicked(true);
 
-            p1characterNameText.text = button.name;
+            if (startButton != null)
+                startButton.gameObject.SetActive(true);
 
-            CharacterSound(button.name);
-
-            PlayerPrefs.SetString("Player1Choice", button.name);
-        }
-        else
-        {
-            Transform childP2 = button.transform.Find("P2");
-            if (childP2 != null) childP2.gameObject.SetActive(true);
-            cscript.SetPlayer2Picked(button);
-            button.Select();
-            p2characterNameText.text = button.name;
-
-            PlayerPrefs.SetString("Player2Choice", button.name);
-
-            CharacterSound(button.name);
-
-            foreach (Button butt in characterButtons)
+            if (requiredPlayers == 2)
             {
-                if (butt != p1b && butt != button)
+                foreach (Button butt in characterButtons)
                 {
-                    butt.interactable = false;
+                    if (!IsChosenButton(butt))
+                        butt.interactable = false;
                 }
             }
 
-            picked = true;
-
-            cscript.BothPicked(true);
-
-            startButton.gameObject.SetActive(true);
+            return;
         }
+
+        currentPlayer = picksMade + 1;
     }
 
     void DeselectCharacter()
     {
-        if (picked) // Both players have picked
-        {
-            // Deselect Player 2 first
-            foreach (Button button in characterButtons)
-            {
-                Transform childP2 = button.transform.Find("P2");
-                if (childP2 != null) childP2.gameObject.SetActive(false);
-                button.interactable = true;
-            }
-            p2characterNameText.text = "";
-            PlayerPrefs.DeleteKey("Player2Choice");
-            cscript.ClearPlayer2Picked();
+        if (picksMade <= 0)
+            return;
 
-            // Reset game state for Player 2
+        if (picked)
+        {
             picked = false;
             cscript.BothPicked(false);
-            startButton.gameObject.SetActive(false);
 
-            // Switch back to Player 2 to allow picking again
-            currentPlayer = 2;
+            if (startButton != null)
+                startButton.gameObject.SetActive(false);
         }
-        else if (currentPlayer == 2 && p1b != null) // Only Player 1 has picked
-        {
-            // Deselect Player 1
-            Transform childP1 = p1b.transform.Find("P1");
-            if (childP1 != null) childP1.gameObject.SetActive(false);
-            p1characterNameText.text = "";
-            PlayerPrefs.DeleteKey("Player1Choice");
-            cscript.ClearPlayer1Picked();
-            p1b.interactable = true;
-            p1b = null;
 
-            // Switch back to Player 1
-            currentPlayer = 1;
-        }
-        else if (currentPlayer == 1) // Only Player 2 has picked
-        {
-            // Deselect Player 2
-            foreach (Button button in characterButtons)
-            {
-                Transform childP2 = button.transform.Find("P2");
-                if (childP2 != null) childP2.gameObject.SetActive(false);
-                button.interactable = true;
-            }
-            p2characterNameText.text = "";
-            PlayerPrefs.DeleteKey("Player2Choice");
+        ClearPick(picksMade);
 
-            // Reset game state
-            picked = false;
-            cscript.BothPicked(false);
-            startButton.gameObject.SetActive(false);
-        }
+        foreach (Button button in characterButtons)
+            button.interactable = true;
+
+        picksMade--;
+        currentPlayer = picksMade + 1;
     }
 
     public void ResetCharacterSelection()
     {
-        // Reactivate all character buttons
+        RefreshModeUI();
+
         foreach (Button button in characterButtons)
         {
             button.interactable = true;
-            // Deactivate any child objects indicating player choices
-            Transform childP1 = button.transform.Find("P1");
-            if (childP1 != null)
-            {
-                childP1.gameObject.SetActive(false);
-            }
-            Transform childP2 = button.transform.Find("P2");
-            if (childP2 != null)
-            {
-                childP2.gameObject.SetActive(false);
-            }
+            ToggleChild(button, "P1", false);
+            ToggleChild(button, "P2", false);
+            ToggleChild(button, "P3", false);
         }
-        // Reset current player to 1
-        currentPlayer = 1;
 
+        currentPlayer = 1;
+        picksMade = 0;
         picked = false;
 
         cscript.BothPicked(false);
         cscript.ClearPlayer1Picked();
         cscript.ClearPlayer2Picked();
+        cscript.ClearPlayer3Picked();
 
-        p1characterNameText.text = "";
-        p2characterNameText.text = "";
+        if (p1characterNameText != null) p1characterNameText.text = "";
+        if (p2characterNameText != null) p2characterNameText.text = "";
+        if (p3characterNameText != null) p3characterNameText.text = "";
 
-        startButton.gameObject.SetActive(false);
+        PlayerPrefs.DeleteKey("Player1Choice");
+        PlayerPrefs.DeleteKey("Player2Choice");
+        PlayerPrefs.DeleteKey("Player3Choice");
+
+        if (startButton != null)
+            startButton.gameObject.SetActive(false);
     }
 
     public void HoveringIn(string name)
@@ -190,14 +145,7 @@ public class CharacterChoiceMenu : MonoBehaviour
             return;
         }
 
-        if (currentPlayer == 1)
-        {
-            p1characterNameText.text = name;
-        }
-        else
-        {
-            p2characterNameText.text = name;
-        }
+        SetChoiceLabel(currentPlayer, name);
     }
 
     void CharacterSound(string name)
@@ -248,14 +196,7 @@ public class CharacterChoiceMenu : MonoBehaviour
             return;
         }
 
-        if (currentPlayer == 1)
-        {
-            p1characterNameText.text = "";
-        }
-        else
-        {
-            p2characterNameText.text = "";
-        }
+        SetChoiceLabel(currentPlayer, "");
     }
 
     public void ManualCharacterButtonClick(Button button)
@@ -273,5 +214,101 @@ public class CharacterChoiceMenu : MonoBehaviour
         return availableButtons[randomIndex];
     }
 
+    private void RefreshModeUI()
+    {
+        requiredPlayers = GameModeSelectionState.PlayerCount;
 
+        if (p3SelectionRoot != null)
+            p3SelectionRoot.SetActive(requiredPlayers == 3);
+
+        if (requiredPlayers != 3)
+        {
+            if (p3characterNameText != null)
+                p3characterNameText.text = "";
+
+            PlayerPrefs.DeleteKey("Player3Choice");
+        }
+    }
+
+    private void AssignPick(int playerNumber, Button button)
+    {
+        SetChoiceLabel(playerNumber, button.name);
+        CharacterSound(button.name);
+        PlayerPrefs.SetString($"Player{playerNumber}Choice", button.name);
+
+        switch (playerNumber)
+        {
+            case 1:
+                ToggleChild(button, "P1", true);
+                cscript.SetPlayer1Picked(button);
+                break;
+            case 2:
+                ToggleChild(button, "P2", true);
+                cscript.SetPlayer2Picked(button);
+                break;
+            case 3:
+                ToggleChild(button, "P3", true);
+                cscript.SetPlayer3Picked(button);
+                // TODO(GamePlayScene): read Player3Choice and spawn a P3 CharacterManager in 1v1v1.
+                break;
+        }
+    }
+
+    private void ClearPick(int playerNumber)
+    {
+        foreach (Button button in characterButtons)
+        {
+            ToggleChild(button, $"P{playerNumber}", false);
+        }
+
+        switch (playerNumber)
+        {
+            case 1:
+                cscript.ClearPlayer1Picked();
+                break;
+            case 2:
+                cscript.ClearPlayer2Picked();
+                break;
+            case 3:
+                cscript.ClearPlayer3Picked();
+                break;
+        }
+
+        SetChoiceLabel(playerNumber, "");
+        PlayerPrefs.DeleteKey($"Player{playerNumber}Choice");
+    }
+
+    private void SetChoiceLabel(int playerNumber, string characterName)
+    {
+        switch (playerNumber)
+        {
+            case 1:
+                if (p1characterNameText != null) p1characterNameText.text = characterName;
+                break;
+            case 2:
+                if (p2characterNameText != null) p2characterNameText.text = characterName;
+                break;
+            case 3:
+                if (p3characterNameText != null) p3characterNameText.text = characterName;
+                break;
+        }
+    }
+
+    private bool IsChosenButton(Button button)
+    {
+        Transform p1 = button.transform.Find("P1");
+        Transform p2 = button.transform.Find("P2");
+        Transform p3 = button.transform.Find("P3");
+
+        return (p1 != null && p1.gameObject.activeSelf)
+            || (p2 != null && p2.gameObject.activeSelf)
+            || (p3 != null && p3.gameObject.activeSelf);
+    }
+
+    private void ToggleChild(Button button, string childName, bool active)
+    {
+        Transform child = button.transform.Find(childName);
+        if (child != null)
+            child.gameObject.SetActive(active);
+    }
 }

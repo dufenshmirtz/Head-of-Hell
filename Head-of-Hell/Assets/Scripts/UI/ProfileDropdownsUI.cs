@@ -6,6 +6,8 @@ public class ProfileDropdownsUI : MonoBehaviour
 {
     public TMP_Dropdown p1Dropdown;
     public TMP_Dropdown p2Dropdown;
+    public TMP_Dropdown p3Dropdown;
+    public GameObject p3SelectionRoot;
 
     // mapping: dropdown option index -> profileIndex (-2 guest, >=0 slot index)
     private readonly List<int> optionMap = new List<int>();
@@ -23,13 +25,21 @@ public class ProfileDropdownsUI : MonoBehaviour
 
         p1Dropdown.onValueChanged.RemoveAllListeners();
         p2Dropdown.onValueChanged.RemoveAllListeners();
+        if (p3Dropdown != null)
+            p3Dropdown.onValueChanged.RemoveAllListeners();
 
         p1Dropdown.onValueChanged.AddListener(v => OnChanged(1, v));
         p2Dropdown.onValueChanged.AddListener(v => OnChanged(2, v));
+        if (p3Dropdown != null)
+            p3Dropdown.onValueChanged.AddListener(v => OnChanged(3, v));
     }
     public void RefreshDropdowns()
     {
         if (ProfileManager.I == null) return;
+
+        bool showP3 = GameModeSelectionState.RequiresThirdPlayerSelection;
+        if (p3SelectionRoot != null)
+            p3SelectionRoot.SetActive(showP3);
 
         // Build options once and apply to both dropdowns
         optionMap.Clear();
@@ -52,10 +62,14 @@ public class ProfileDropdownsUI : MonoBehaviour
 
         ApplyOptions(p1Dropdown, options);
         ApplyOptions(p2Dropdown, options);
+        if (p3Dropdown != null)
+            ApplyOptions(p3Dropdown, options);
 
         // set dropdown values based on current selections
         p1Dropdown.SetValueWithoutNotify(FindOptionForPlayer(1));
         p2Dropdown.SetValueWithoutNotify(FindOptionForPlayer(2));
+        if (showP3 && p3Dropdown != null)
+            p3Dropdown.SetValueWithoutNotify(FindOptionForPlayer(3));
     }
 
     private void ApplyOptions(TMP_Dropdown dd, List<TMP_Dropdown.OptionData> options)

@@ -41,8 +41,9 @@ public class Lithra : Character
     override public void DealHeavyDamage()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
             audioManager.PlaySFX(audioManager.bellPunch, 1.8f);
             audioManager.PlaySFX(audioManager.lightattack, 0.5f);
@@ -78,8 +79,9 @@ public class Lithra : Character
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle(bellPoint.position, attackRange * 2, enemyLayer);
         Collider2D bellStunPoint = Physics2D.OverlapCircle(bellStunPointTransf.position, attackRange / 3, enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy, bellStunPoint);
 
-        if (hitEnemy != null || bellStunPoint != null)
+        if (target != null)
         {
             // Telemetry: successful special interaction + context for damage
             TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
@@ -168,7 +170,8 @@ public class Lithra : Character
 
             // Check for enemy collision
             Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
-            if (hitEnemy != null)
+            Character target = ResolveTargetFromHit(hitEnemy);
+            if (target != null)
             {
                 TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
                 enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
@@ -235,8 +238,9 @@ public class Lithra : Character
     {
         TelemetryManager.Instance?.LogAction(PlayerId, "ChargeRelease");
         Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
             enemy.StopPunching();
             if (!enemy.counterIsOn)

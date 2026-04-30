@@ -39,8 +39,9 @@ public class Steelager : Character
     override public void DealHeavyDamage()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
             audioManager.PlaySFX(audioManager.explosion, audioManager.lessVol);
             TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
@@ -48,6 +49,7 @@ public class Steelager : Character
             enemy.TakeDamage(heavyDamage, true);
 
             if(knocked){
+                enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
                 enemy.TakeDamageNoAnimation(comboDamage,false);
             }
 
@@ -81,8 +83,9 @@ public class Steelager : Character
     public void DealExplosionDamage()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle(explosionPoint.position, attackRange * 4, enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
             // Telemetry: successful special hit + context before damage
             TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
