@@ -78,6 +78,14 @@ public class CharacterManager : MonoBehaviour
         {
             characterName = PlayerPrefs.GetString("Player1Choice");
         }
+        else if (playerNum == 2)
+        {
+            characterName = PlayerPrefs.GetString("Player2Choice");
+        }
+        else if (playerNum == 3)
+        {
+            characterName = PlayerPrefs.GetString("Player3Choice");
+        }
         else
         {
             characterName = PlayerPrefs.GetString("Player2Choice");

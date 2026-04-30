@@ -31,6 +31,10 @@ public class BulletScript : MonoBehaviour
             Destroy(gameObject);
 
             Character character = other.GetComponent<Character>();
+            if (character == null)
+            {
+                character = other.GetComponentInParent<Character>();
+            }
             if (character != null)
             {
                 TelemetryManager.Instance?.LogHitAttempt(

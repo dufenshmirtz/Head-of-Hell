@@ -20,6 +20,7 @@ public class LazyBigus : Character
     int beamPoisonDamage = 10; 
     int passiveDamage = 4;
     float resetBullet=2f;
+    Character poisonTarget;
 
     float spellTime = 1f;
 
@@ -42,11 +43,13 @@ public class LazyBigus : Character
     override public void DealHeavyDamage()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
 
             audioManager.PlaySFX(audioManager.volchBiteSuccess, 1.5f);
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
             enemy.TakeDamage(heavyDamage, true);
             ToxicTouch();
 
@@ -82,12 +85,14 @@ public class LazyBigus : Character
     public void BeamHitEnemy()
     {
         if(!beamHit){
+            poisonTarget = enemy;
+            enemy.SetIncomingDamageContext(PlayerId, MoveType.Projectile, SourceType.Projectile);
             enemy.TakeDamage(beamDamage,true);
             enemy.StopPunching();
             enemy.BreakCharge();
             enemy.Knockback(13f, 0.5f, true);
             audioManager.PlaySFX(audioManager.beamHit, 1.8f);
-            StartCoroutine(Poison(beamPoisonDamage/5,1f,5));
+            StartCoroutine(Poison(poisonTarget, beamPoisonDamage/5,1f,5));
             StartCoroutine(BeamDetectorReset());
         }
     }
@@ -101,10 +106,15 @@ public class LazyBigus : Character
         beamHit=false;
     }
 
-    private IEnumerator Poison(int damageAmount, float interval, int times)
+    private IEnumerator Poison(Character target, int damageAmount, float interval, int times)
     {
-        ResetPoisonStacks();
-        enemy.ActivatePoison(true);
+        if (target == null)
+        {
+            yield break;
+        }
+
+        ResetPoisonStacks(target);
+        target.ActivatePoison(true);
 
         audioManager.PlaySFX(audioManager.poison, 2.5f);
         for (int i = 0; i < times; i++)
@@ -112,10 +122,18 @@ public class LazyBigus : Character
             yield return new WaitForSeconds(interval);
 
             // Deal damage to the enemy
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.PoisonTick, SourceType.Dot);
-            enemy.TakeDamageNoAnimation(damageAmount,false,false);
+            if (target == null || !target.isActiveAndEnabled)
+            {
+                yield break;
+            }
+
+            target.SetIncomingDamageContext(PlayerId, MoveType.PoisonTick, SourceType.Dot);
+            target.TakeDamageNoAnimation(damageAmount,false,false);
         }
-        enemy.ActivatePoison(false);
+        if (target != null && target.isActiveAndEnabled)
+        {
+            target.ActivatePoison(false);
+        }
     }
 
     public void BeamEnd()
@@ -189,8 +207,9 @@ public class LazyBigus : Character
     {
         TelemetryManager.Instance?.LogAction(PlayerId, "ChargeRelease");
         Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
             enemy.StopPunching();
             if (!enemy.counterIsOn)
@@ -235,33 +254,40 @@ public class LazyBigus : Character
     {
         if(poisonCounter == 3)
         {
-            StartCoroutine(Poison(passiveDamage/4,1f,4));
+            StartCoroutine(Poison(enemy, passiveDamage/4,1f,4));
             poisonCounter = 0;
             return;
         }
 
-        AddPoison();
+        AddPoison(enemy);
     }
 
-    public void AddPoison()
+    public void AddPoison(Character target)
     {
-        if (!enemy.IsPoisoned())
+        if (target == null)
+        {
+            return;
+        }
+
+        poisonTarget = target;
+
+        if (!target.IsPoisoned())
         {
             if(poisonCounter < 3)
             {
                 if(poisonCounter==0)
                 {
-                    enemy.StackPoison1(true);
+                    target.StackPoison1(true);
                 }
                 if (poisonCounter == 1)
                 {
-                    enemy.StackPoison1(false);
-                    enemy.StackPoison2(true);
+                    target.StackPoison1(false);
+                    target.StackPoison2(true);
                 }
                 if (poisonCounter == 2)
                 {
-                    enemy.StackPoison2(false);
-                    enemy.StackPoison3(true);
+                    target.StackPoison2(false);
+                    target.StackPoison3(true);
                 }
                 poisonCounter++;
             }
@@ -271,21 +297,26 @@ public class LazyBigus : Character
         {
             StopCoroutine(poisonResetCoroutine);
         }
-        poisonResetCoroutine = StartCoroutine(ResetPoisonAfterDelay());
+        poisonResetCoroutine = StartCoroutine(ResetPoisonAfterDelay(target));
     }
 
-    private IEnumerator ResetPoisonAfterDelay()
+    private IEnumerator ResetPoisonAfterDelay(Character target)
     {
         yield return new WaitForSeconds(10f); // Wait for 5 seconds
-        ResetPoisonStacks();
+        ResetPoisonStacks(target);
         poisonCounter = 0; // Reset the poison counter
     }
 
-    private void ResetPoisonStacks()
+    private void ResetPoisonStacks(Character target)
     {
-        enemy.StackPoison1(false);
-        enemy.StackPoison2(false);
-        enemy.StackPoison3(false);
+        if (target == null)
+        {
+            return;
+        }
+
+        target.StackPoison1(false);
+        target.StackPoison2(false);
+        target.StackPoison3(false);
     }
 
     public void BeamHit()
@@ -296,7 +327,7 @@ public class LazyBigus : Character
     public void StackPoison()
     {
 
-        AddPoison();
+        AddPoison(enemy);
 
     }
     #endregion

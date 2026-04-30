@@ -36,76 +36,55 @@ public class bombScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        int player1Layer = LayerMask.NameToLayer("Player1layer");
-        int player2Layer = LayerMask.NameToLayer("Player2Layer");
-
         if ((player == 0))
         {
-            if (other.gameObject.layer == player1Layer)
+            if (other.CompareTag("Player"))
             {
-                player = 1;
-                enemy = player2Layer;
                 playa = other.GetComponent<Character>();
-            }
-            if (other.gameObject.layer == player2Layer)
-            {
-                player = 2;
-                enemy = player1Layer;
-                playa = other.GetComponent<Character>();
+                if (playa == null)
+                {
+                    playa = other.GetComponentInParent<Character>();
+                }
+                if (playa != null)
+                {
+                    player = playa.PlayerId == "P1" ? 1 : playa.PlayerId == "P2" ? 2 : 3;
+                }
             }
 
             return;
         }
 
-        if (other.gameObject.layer == enemy && exploded && !dmgEnd && !damageDealt)
+        Character character = other.GetComponent<Character>();
+        if (character == null)
         {
-            Character character = other.GetComponent<Character>();
-            if (character != null)
-            {
-                TelemetryManager.Instance?.LogHitAttempt(playa.PlayerId, character.PlayerId, MoveType.Projectile);
-                character.SetIncomingDamageContext(playa.PlayerId, MoveType.Projectile, SourceType.Projectile);
+            character = other.GetComponentInParent<Character>();
+        }
+        bool validEnemy = character != null && character != playa;
 
-                character.TakeDamage(6, true);
-                damageDealt = true;
-            }
+        if (validEnemy && exploded && !dmgEnd && !damageDealt)
+        {
+            TelemetryManager.Instance?.LogHitAttempt(playa.PlayerId, character.PlayerId, MoveType.Projectile);
+            character.SetIncomingDamageContext(playa.PlayerId, MoveType.Projectile, SourceType.Projectile);
+
+            character.TakeDamage(6, true);
+            damageDealt = true;
         }
 
-        if (other.gameObject.layer == enemy && !exploded && !dmgEnd && !damageDealt)
+        if (validEnemy && !exploded && !dmgEnd && !damageDealt)
         {
+            Explode();
 
-            Character character = other.GetComponent<Character>();
-            if (character != null)
-            {
-                Explode();
+            TelemetryManager.Instance?.LogHitAttempt(playa.PlayerId, character.PlayerId, MoveType.Projectile);
+            character.SetIncomingDamageContext(playa.PlayerId, MoveType.Projectile, SourceType.Projectile);
 
-                TelemetryManager.Instance?.LogHitAttempt(playa.PlayerId, character.PlayerId, MoveType.Projectile);
-                character.SetIncomingDamageContext(playa.PlayerId, MoveType.Projectile, SourceType.Projectile);
-
-                character.TakeDamage(6, true);
-                damageDealt = true;
-            }
+            character.TakeDamage(6, true);
+            damageDealt = true;
         }
 
-        if (other.gameObject.layer != enemy && exploded && !dmgEnd && !jumpDone)
+        if (validEnemy && exploded && !dmgEnd && !jumpDone)
         {
-
-            Character[] characters = other.GetComponents<Character>();
-            Character activeCharacter = null;
-
-            foreach (Character charComponent in characters)
-            {
-                if (charComponent.isActiveAndEnabled)
-                {
-                    activeCharacter = charComponent;
-                    break; // Stop after finding the first active component
-                }
-            }
-
-            if (activeCharacter != null)
-            {
-                activeCharacter.Knockback(13f, 0.3333f, true);
-                jumpDone = true;
-            }
+            character.Knockback(13f, 0.3333f, true);
+            jumpDone = true;
         }
     }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Visvia : Character
 {
     private bool grabLandedThisCast = false;
+    private Character grabTarget;
     bool shotgunReady = true;
     float shotgunForce = 15f;
     float upwardsForce = 6f;
@@ -50,8 +51,9 @@ public class Visvia : Character
     override public void DealHeavyDamage()
     {
         Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemy);
 
-        if (hitEnemy != null)
+        if (target != null)
         {
 
             audioManager.PlaySFX(audioManager.katanaHit, 1f);
@@ -80,6 +82,7 @@ public class Visvia : Character
 
         // Telemetry: reset per-cast landing state (for Miss logging + avoid double HitAttempt)
         grabLandedThisCast = false;
+        grabTarget = null;
         blastCounter++;
         StartCoroutine(HeatCounter());
         UsingAbility(cooldown);
@@ -91,25 +94,31 @@ public class Visvia : Character
     public void GrabDmg()
     {
         Vector2 capsuleSize = new Vector2(7f, 0.5f); // Long in X-axis, thin in Y-axis
-        Collider2D hitEnemy = Physics2D.OverlapCapsule(grabPoint.position, capsuleSize, CapsuleDirection2D.Horizontal, 0f, enemyLayer);
+        Character target = grabTarget;
+        if (target == null || !target.isActiveAndEnabled)
+        {
+            Collider2D hitEnemy = Physics2D.OverlapCapsule(grabPoint.position, capsuleSize, CapsuleDirection2D.Horizontal, 0f, enemyLayer);
+            target = ResolveTargetFromHit(hitEnemy);
+            grabTarget = target;
+        }
 
-        if (hitEnemy != null)
+        if (target != null)
         {
             // Telemetry: log HitAttempt only once per cast (first time we connect)
             if (!grabLandedThisCast)
             {
-                TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
+                TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Special);
                 grabLandedThisCast = true;
             }
 
             // Telemetry: context before damage
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
+            target.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
 
             audioManager.PlaySFX(audioManager.stabHit, 2f);
-            enemy.StopPunching();
-            enemy.TakeDamage(grabDamage, true);
-            enemy.BreakCharge();
-            enemy.Knockback(12f, 0.3333f, true);
+            target.StopPunching();
+            target.TakeDamage(grabDamage, true);
+            target.BreakCharge();
+            target.Knockback(12f, 0.3333f, true);
         }
         else
         {
@@ -120,23 +129,29 @@ public class Visvia : Character
     public void GrabStartDmg()
     {
         Vector2 capsuleSize = new Vector2(7f, 0.5f); // Long in X-axis, thin in Y-axis
-        Collider2D hitEnemy = Physics2D.OverlapCapsule(grabPoint.position, capsuleSize, CapsuleDirection2D.Horizontal, 0f, enemyLayer);
+        Character target = grabTarget;
+        if (target == null || !target.isActiveAndEnabled)
+        {
+            Collider2D hitEnemy = Physics2D.OverlapCapsule(grabPoint.position, capsuleSize, CapsuleDirection2D.Horizontal, 0f, enemyLayer);
+            target = ResolveTargetFromHit(hitEnemy);
+            grabTarget = target;
+        }
 
-        if (hitEnemy != null)
+        if (target != null)
         {
             // Telemetry: log HitAttempt only once per cast (first time we connect)
             if (!grabLandedThisCast)
             {
-                TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
+                TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Special);
                 grabLandedThisCast = true;
             }
 
             // Telemetry: context before damage
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
+            target.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
 
-            enemy.StopPunching();
-            enemy.TakeDamage(grabDamage, true);
-            enemy.BreakCharge();
+            target.StopPunching();
+            target.TakeDamage(grabDamage, true);
+            target.BreakCharge();
             audioManager.PlaySFX(audioManager.katanaSwoosh, 2f);
         }
         else
@@ -156,6 +171,7 @@ public class Visvia : Character
         }
 
         OnCooldown(cooldown);
+        grabTarget = null;
         OverheatCheck();
     }
     #endregion
@@ -196,8 +212,9 @@ public class Visvia : Character
         // Deal damage in front of the player
         Vector2 attackPosition = attackPoint.position;
         Collider2D hit = Physics2D.OverlapCircle(attackPoint.position, shotgunRange, enemyLayer);
+        Character target = ResolveTargetFromHit(hit);
         
-        if (hit != null)
+        if (target != null)
         {
             TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
             enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
@@ -268,14 +285,11 @@ public class Visvia : Character
         while (elapsed < overheatDuration && !animator.GetBool("isDead"))
         {
             Collider2D hit = Physics2D.OverlapCircle(attackPoint.position, shotgunRange, enemyLayer);
-            if (hit != null)
+            Character target = ResolveTargetFromHit(hit);
+            if (target != null)
             {
-                Character target = hit.GetComponent<Character>();
-                if (target != null && target != this)
-                {
-                    target.TakeDamage(overheatDamage, false, false, false);
-
-                }
+                target.SetIncomingDamageContext(PlayerId, MoveType.PoisonTick, SourceType.Dot);
+                target.TakeDamage(overheatDamage, false, false, false);
             }
             ShowShotgunBlast(0.1f);
 

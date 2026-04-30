@@ -5,6 +5,8 @@ public class ProfileSelectorsUI : MonoBehaviour
 {
     public ProfileCarouselSelector p1Selector;
     public ProfileCarouselSelector p2Selector;
+    public ProfileCarouselSelector p3Selector;
+    public GameObject p3SelectionRoot;
 
     // mapping: UI index -> profileIndex (-2 guest, >=0 slot index)
     private readonly List<int> optionMap = new List<int>();
@@ -24,14 +26,22 @@ public class ProfileSelectorsUI : MonoBehaviour
 
         p1Selector.OnIndexChanged -= OnP1Changed;
         p2Selector.OnIndexChanged -= OnP2Changed;
+        if (p3Selector != null)
+            p3Selector.OnIndexChanged -= OnP3Changed;
 
         p1Selector.OnIndexChanged += OnP1Changed;
         p2Selector.OnIndexChanged += OnP2Changed;
+        if (p3Selector != null)
+            p3Selector.OnIndexChanged += OnP3Changed;
     }
 
     public void RefreshSelectors()
     {
         if (ProfileManager.I == null) return;
+
+        bool showP3 = GameModeSelectionState.RequiresThirdPlayerSelection;
+        if (p3SelectionRoot != null)
+            p3SelectionRoot.SetActive(showP3);
 
         optionMap.Clear();
         var names = new List<string>();
@@ -54,10 +64,14 @@ public class ProfileSelectorsUI : MonoBehaviour
         // Apply to selectors
         p1Selector.SetOptions(names);
         p2Selector.SetOptions(names);
+        if (p3Selector != null)
+            p3Selector.SetOptions(names);
 
         // Sync with current selection
         p1Selector.SetIndexWithoutNotify(FindOptionForPlayer(1));
         p2Selector.SetIndexWithoutNotify(FindOptionForPlayer(2));
+        if (showP3 && p3Selector != null)
+            p3Selector.SetIndexWithoutNotify(FindOptionForPlayer(3));
     }
 
     private int FindOptionForPlayer(int playerNum)
@@ -83,6 +97,7 @@ public class ProfileSelectorsUI : MonoBehaviour
 
     private void OnP1Changed(int index) => OnChanged(1, index);
     private void OnP2Changed(int index) => OnChanged(2, index);
+    private void OnP3Changed(int index) => OnChanged(3, index);
 
     private void OnChanged(int playerNum, int optionIndex)
     {
