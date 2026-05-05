@@ -319,6 +319,17 @@ public class Skipler : Character
     {
         cdTimer -= 2f;
     }
+
+    public override void TutorialRefreshQuickAttack()
+    {
+        if (dashing || ignoreMovement || isLightAttacking)
+        {
+            return;
+        }
+
+        lightReady = true;
+        QuickAttackIndicatorEnable();
+    }
     #endregion
 
     #region Idle
