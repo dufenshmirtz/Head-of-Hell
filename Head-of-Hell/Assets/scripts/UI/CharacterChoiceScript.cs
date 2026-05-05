@@ -215,49 +215,69 @@ public class CharacterChoiceScript : MonoBehaviour
 
     void ShowHoverBorder(Button button)
     {
-        Transform t = button.transform.Find("HoverBorder");
+        Transform t = FindChildByExactOrTrimmedName(button, "HoverBorder");
         if (t != null) t.gameObject.SetActive(true);
     }
 
     void HideHoverBorder(Button button)
     {
-        Transform t = button.transform.Find("HoverBorder");
+        Transform t = FindChildByExactOrTrimmedName(button, "HoverBorder");
         if (t != null) t.gameObject.SetActive(false);
     }
 
     void ShowP1Border(Button button)
     {
-        Transform t = button.transform.Find("P1Border");
+        Transform t = FindChildByExactOrTrimmedName(button, "P1Border");
         if (t != null) t.gameObject.SetActive(true);
     }
 
     void HideP1Border(Button button)
     {
-        Transform t = button.transform.Find("P1Border");
+        Transform t = FindChildByExactOrTrimmedName(button, "P1Border");
         if (t != null) t.gameObject.SetActive(false);
     }
 
     void ShowP2Border(Button button)
     {
-        Transform t = button.transform.Find("P2Border");
+        Transform t = FindChildByExactOrTrimmedName(button, "P2Border");
         if (t != null) t.gameObject.SetActive(true);
     }
 
     void HideP2Border(Button button)
     {
-        Transform t = button.transform.Find("P2Border");
+        Transform t = FindChildByExactOrTrimmedName(button, "P2Border");
         if (t != null) t.gameObject.SetActive(false);
     }
 
     void ShowP3Border(Button button)
     {
-        Transform t = button.transform.Find("P3Border");
+        Transform t = FindChildByExactOrTrimmedName(button, "P3Border");
         if (t != null) t.gameObject.SetActive(true);
     }
 
     void HideP3Border(Button button)
     {
-        Transform t = button.transform.Find("P3Border");
+        Transform t = FindChildByExactOrTrimmedName(button, "P3Border");
         if (t != null) t.gameObject.SetActive(false);
+    }
+
+    Transform FindChildByExactOrTrimmedName(Button button, string childName)
+    {
+        if (button == null)
+            return null;
+
+        Transform direct = button.transform.Find(childName);
+        if (direct != null)
+            return direct;
+
+        Transform parent = button.transform;
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Transform child = parent.GetChild(i);
+            if (child != null && child.name.Trim() == childName)
+                return child;
+        }
+
+        return null;
     }
 }

@@ -39,12 +39,13 @@ public class Rager : Character
 
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
             audioManager.PlaySFX(audioManager.explosion, audioManager.lessVol);
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
-            enemy.TakeDamage(heavyDamage, true);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Heavy);
+            target.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
+            target.TakeDamage(heavyDamage, true);
 
-            if (! enemy.isBlocking)
+            if (!target.isBlocking)
             {
-                enemy.Knockback(11f, 0.15f, true);
+                target.Knockback(11f, 0.15f, true);
             }
 
         }
@@ -75,10 +76,10 @@ public class Rager : Character
         if (target != null)
         {
             // Telemetry: combo special successfully connected (log once here)
-            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Special);
 
-            enemy.StopPunching();
-            enemy.BreakCharge();
+            target.StopPunching();
+            target.BreakCharge();
             cdbarimage.sprite = activeSprite;
 
             // dmg and sound (0 damage "confirm" hit)
@@ -142,7 +143,7 @@ public class Rager : Character
 
     public void FirstHit() // old and useless remove
     {
-        Character target = comboTarget != null ? comboTarget : enemy;
+        Character target = comboTarget != null ? comboTarget : GetCurrentCombatTarget();
         if (target == null)
         {
             return;
@@ -155,7 +156,7 @@ public class Rager : Character
 
     public void SecondHit() // old and useless remove
     {
-        Character target = comboTarget != null ? comboTarget : enemy;
+        Character target = comboTarget != null ? comboTarget : GetCurrentCombatTarget();
         if (target == null)
         {
             return;
@@ -168,7 +169,7 @@ public class Rager : Character
 
     public void ThirdHit()
     {
-        Character target = comboTarget != null ? comboTarget : enemy;
+        Character target = comboTarget != null ? comboTarget : GetCurrentCombatTarget();
         if (target == null)
         {
             ResetComboState(false);
@@ -209,9 +210,9 @@ public class Rager : Character
 
         if (target != null)
         {
-            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
-            enemy.TakeDamageNoAnimation(lightDamage, true, false);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Quick);
+            target.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
+            target.TakeDamageNoAnimation(lightDamage, true, false);
             audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
         }
         else
@@ -232,7 +233,7 @@ public class Rager : Character
 
     private void ResetComboState(bool restoreTargetState)
     {
-        Character target = comboTarget != null ? comboTarget : enemy;
+        Character target = comboTarget != null ? comboTarget : GetCurrentCombatTarget();
 
         if (restoreTargetState && target != null && target.isActiveAndEnabled)
         {

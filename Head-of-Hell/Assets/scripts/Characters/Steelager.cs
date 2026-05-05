@@ -45,18 +45,18 @@ public class Steelager : Character
         if (target != null)
         {
             audioManager.PlaySFX(audioManager.explosion, audioManager.lessVol);
-            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
-            enemy.TakeDamage(heavyDamage, true);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Heavy);
+            target.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
+            target.TakeDamage(heavyDamage, true);
 
             if(knocked){
-                enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
-                enemy.TakeDamageNoAnimation(comboDamage,false);
+                target.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
+                target.TakeDamageNoAnimation(comboDamage,false);
             }
 
-            if (!enemy.isBlocking)
+            if (!target.isBlocking)
             {
-                enemy.Knockback(11f, 0.15f, true);
+                target.Knockback(11f, 0.15f, true);
             }
 
         }
