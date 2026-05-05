@@ -552,6 +552,38 @@ public abstract class Character : MonoBehaviour
         }
     }
 
+    public virtual void TutorialRefreshQuickAttack()
+    {
+    }
+
+    public virtual void TutorialRefreshAbilityAndParry()
+    {
+        if (!casting && onCooldown)
+        {
+            if (cdCoroutine != null)
+            {
+                StopCoroutine(cdCoroutine);
+                cdCoroutine = null;
+            }
+
+            onCooldown = false;
+            cdTimer = 0f;
+            SetCooldownSliderValueSafe(1f);
+            SetCooldownSpriteSafe(ogSprite);
+
+            if (animator != null)
+            {
+                animator.SetBool("isUsingAbility", false);
+                animator.SetBool("Casting", false);
+            }
+        }
+
+        if (!counterIsOn && !casting)
+        {
+            canParry = true;
+        }
+    }
+
     public virtual void Update()
     {
         RefreshCombatTargetFromNearest();
@@ -2611,6 +2643,8 @@ public abstract class Character : MonoBehaviour
     public bool Parrying => counterIsOn;
     public bool HeavyAttacking => heavyAttacking;
     public bool LightAttacking => isLightAttacking;
+    public string LastIncomingAttackerId => incomingAttackerId;
+    public MoveType LastIncomingMoveType => incomingMoveType;
 
     // Optional: normalized ability cooldown (0=ready, 1=just used).
     // Store last used cooldown length so we can normalize.
