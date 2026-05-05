@@ -536,7 +536,7 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    private void SetCooldownSpriteSafe(Sprite sprite)
+    protected void SetCooldownSpriteSafe(Sprite sprite)
     {
         if (cdbarimage != null)
         {

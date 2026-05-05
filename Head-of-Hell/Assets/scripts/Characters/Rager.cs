@@ -80,7 +80,7 @@ public class Rager : Character
 
             target.StopPunching();
             target.BreakCharge();
-            cdbarimage.sprite = activeSprite;
+            SetCooldownSpriteSafe(activeSprite);
 
             // dmg and sound (0 damage "confirm" hit)
             target.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);

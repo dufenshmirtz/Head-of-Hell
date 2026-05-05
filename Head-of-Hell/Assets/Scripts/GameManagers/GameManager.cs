@@ -62,7 +62,14 @@ public class GameManager : MonoBehaviour
         if (p3Manager != null)
         {
             p3Manager.gameObject.SetActive(threePlayerMode);
+
+            if (threePlayerMode && !roundOn)
+            {
+                p3Manager.Pause();
+            }
         }
+
+        SetP3HudVisible(threePlayerMode);
 
         stageName = PlayerPrefs.GetString("SelectedStage", "Stage 1");
         if (stageName == "Stage 1")
@@ -174,6 +181,28 @@ public class GameManager : MonoBehaviour
         }
 
         ActivateIndicators();
+    }
+
+    private void SetP3HudVisible(bool visible)
+    {
+        string[] p3HudObjectNames =
+        {
+            "p3healthbar",
+            "p3CooldownBar",
+            "p3DamageCounter",
+            "QuickAttackIndicatorP3",
+            "P3ProfileName",
+            "P3Name"
+        };
+
+        foreach (string objectName in p3HudObjectNames)
+        {
+            GameObject hudObject = GameObject.Find(objectName);
+            if (hudObject != null)
+            {
+                hudObject.SetActive(visible);
+            }
+        }
     }
 
     void Awake()
