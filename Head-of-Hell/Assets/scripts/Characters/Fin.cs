@@ -41,13 +41,13 @@ public class Fin : Character
         if (target != null)
         {
             audioManager.PlaySFX(audioManager.heavyattack, 1f);
-            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
-            enemy.TakeDamage(heavyDamage, true);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Heavy);
+            target.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
+            target.TakeDamage(heavyDamage, true);
 
-            if (! enemy.isBlocking)
+            if (!target.isBlocking)
             {
-                enemy.Knockback(11f, 0.15f, true);
+                target.Knockback(11f, 0.15f, true);
             }
         }
         else
@@ -78,13 +78,13 @@ public class Fin : Character
         if (target != null)
         {
             // Telemetry: successful special interaction (no damage, but still a "hit")
-            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Special);
 
-            enemy.StopPunching();
-            enemy.BreakCharge();
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
-            enemy.TakeDamage(1,true,true,false);
-            enemy.Stun(flashStunDuration);
+            target.StopPunching();
+            target.BreakCharge();
+            target.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
+            target.TakeDamage(1,true,true,false);
+            target.Stun(flashStunDuration);
         }
         else
         {
@@ -209,8 +209,14 @@ public class Fin : Character
     {
         base.DealCounterDmg();
 
-        enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Melee);
-        enemy.TakeDamageNoAnimation(passiveDamage,false,false);
+        Character target = GetCurrentCombatTarget();
+        if (target == null)
+        {
+            return;
+        }
+
+        target.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Melee);
+        target.TakeDamageNoAnimation(passiveDamage,false,false);
     }
     #endregion
 

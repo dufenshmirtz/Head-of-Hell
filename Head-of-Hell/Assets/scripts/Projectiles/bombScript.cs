@@ -7,7 +7,6 @@ public class bombScript : MonoBehaviour
 {
     public Animator animator;
     int player;
-    int enemy;
     bool exploded = false;
     bool dmgEnd = false;
     bool damageDealt = false;
@@ -69,7 +68,7 @@ public class bombScript : MonoBehaviour
 
         if (isOwner && exploded && !dmgEnd && !jumpDone)
         {
-            // Steelager's passive: his own bomb launches him toward the current enemy.
+            // Steelager's passive: his own bomb launches him toward the closest opponent.
             Character closestEnemy = FindClosestEnemyForOwner();
             if (closestEnemy != null)
             {

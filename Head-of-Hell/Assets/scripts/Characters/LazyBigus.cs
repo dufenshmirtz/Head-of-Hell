@@ -14,13 +14,13 @@ public class LazyBigus : Character
     public GameObject beam;
     public BeamScript bScript;
     public BulletScript bulletScript;
-    bool beamHit=false;
     int beamDamage = 10;
     int beamPoisonDamage = 10; 
     int passiveDamage = 4;
     float resetBullet=2f;
     private readonly Dictionary<Character, int> poisonStacks = new Dictionary<Character, int>();
     private readonly Dictionary<Character, Coroutine> poisonResetCoroutines = new Dictionary<Character, Coroutine>();
+    private readonly HashSet<Character> beamTargetsHitThisCast = new HashSet<Character>();
 
     float spellTime = 1f;
 
@@ -49,13 +49,14 @@ public class LazyBigus : Character
         {
 
             audioManager.PlaySFX(audioManager.volchBiteSuccess, 1.5f);
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
-            enemy.TakeDamage(heavyDamage, true);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Heavy);
+            target.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
+            target.TakeDamage(heavyDamage, true);
             ToxicTouch(target);
 
-            if (! enemy.isBlocking)
+            if (!target.isBlocking)
             {
-                enemy.Knockback(11f, 0.15f, true);
+                target.Knockback(11f, 0.15f, true);
             }
 
         }
@@ -76,6 +77,7 @@ public class LazyBigus : Character
         beam.SetActive(true);
         bScript = beam.GetComponent<BeamScript>();
         bScript.playa = this;
+        beamTargetsHitThisCast.Clear();
         animator.SetTrigger("Spell");
         audioManager.PlaySFX(audioManager.beam, audioManager.doubleVol);
         ignoreDamage = true;
@@ -84,7 +86,8 @@ public class LazyBigus : Character
 
     public void BeamHitEnemy(Character target)
     {
-        if(!beamHit && target != null){
+        if (target != null && beamTargetsHitThisCast.Add(target))
+        {
             SetEnemy(target);
             target.SetIncomingDamageContext(PlayerId, MoveType.Projectile, SourceType.Projectile);
             target.TakeDamage(beamDamage,true);
@@ -93,17 +96,7 @@ public class LazyBigus : Character
             target.Knockback(13f, 0.5f, true);
             audioManager.PlaySFX(audioManager.beamHit, 1.8f);
             StartCoroutine(Poison(target, beamPoisonDamage/5,1f,5));
-            StartCoroutine(BeamDetectorReset());
         }
-    }
-
-    private IEnumerator BeamDetectorReset(){
-
-        beamHit=true;
-
-        yield return new WaitForSeconds(1f);
-
-        beamHit=false;
     }
 
     private IEnumerator Poison(Character target, int damageAmount, float interval, int times)
@@ -138,6 +131,7 @@ public class LazyBigus : Character
 
     public void BeamEnd()
     {
+         beamTargetsHitThisCast.Clear();
          OnCooldown(cooldown);
          IgnoreUpdate(false);
          stayDynamic();
@@ -211,15 +205,15 @@ public class LazyBigus : Character
 
         if (target != null)
         {
-            enemy.StopPunching();
-            if (!enemy.counterIsOn)
+            target.StopPunching();
+            if (!target.counterIsOn)
             {
-                enemy.BreakCharge();
+                target.BreakCharge();
             }
-            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Charge);
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Charge, SourceType.Melee);
-            enemy.TakeDamage(chargeDmg, false);
-            enemy.Knockback(13f, 0.4f, false);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Charge);
+            target.SetIncomingDamageContext(PlayerId, MoveType.Charge, SourceType.Melee);
+            target.TakeDamage(chargeDmg, false);
+            target.Knockback(13f, 0.4f, false);
             ToxicTouch(target);
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
             if (chargeHitSound != null)

@@ -409,6 +409,8 @@ public abstract class Character : MonoBehaviour
         enemy = characterChoiceHandler.CharacterChoice(2);
 
 
+        bool isThreePlayerMode = GameModeSelectionState.CurrentMode == SelectedGameMode.PvP_1v1v1;
+
         if (playerNum == 1)
         {
             playerString = "_P1";
@@ -420,7 +422,7 @@ public abstract class Character : MonoBehaviour
         else if (playerNum == 2)
         {
             playerString = "_P2";
-            if (controllerCount >= 1)
+            if (!isThreePlayerMode && controllerCount >= 1)
             {
                 controller = true;
             }
@@ -429,6 +431,10 @@ public abstract class Character : MonoBehaviour
         else if (playerNum == 3)
         {
             playerString = "_P3";
+            if (isThreePlayerMode && controllerCount >= 1)
+            {
+                controller = true;
+            }
         }
 
         animator = GetComponent<Animator>();
@@ -548,6 +554,8 @@ public abstract class Character : MonoBehaviour
 
     public virtual void Update()
     {
+        RefreshCombatTargetFromNearest();
+
         GroundedSafeguard();
         StaticSafeguard();
         //UpdateGroundedState(); in the future
@@ -1013,7 +1021,7 @@ public abstract class Character : MonoBehaviour
     {
         ignoreDamage = false;
         ignoreMovement = false;
-        if(enemy != null)
+        if (GetCurrentCombatTarget() != null)
         {
             EnemyAbilityEnable();
         }      
@@ -1056,13 +1064,16 @@ public abstract class Character : MonoBehaviour
 
     public void EnemyAbilityBlock()
     {
-        if (enemy == null) return;
-        enemy.AbilityDisabled();
+        Character target = GetCurrentCombatTarget();
+        if (target == null) return;
+        target.AbilityDisabled();
     }
 
     public void EnemyAbilityEnable()
     {
-        enemy.AbilityEnabled();
+        Character target = GetCurrentCombatTarget();
+        if (target == null) return;
+        target.AbilityEnabled();
     }
 
     public void AbilityDisabled()
@@ -1214,14 +1225,14 @@ public abstract class Character : MonoBehaviour
 
         if (target != null)
         {
-            enemy.StopPunching();
-            if (!enemy.counterIsOn) {
-                enemy.BreakCharge();
+            target.StopPunching();
+            if (!target.counterIsOn) {
+                target.BreakCharge();
             }
-            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Charge);
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Charge, SourceType.Melee);
-            enemy.TakeDamage(chargeDmg, false);
-            enemy.Knockback(13f, 0.4f, false);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Charge);
+            target.SetIncomingDamageContext(PlayerId, MoveType.Charge, SourceType.Melee);
+            target.TakeDamage(chargeDmg, false);
+            target.Knockback(13f, 0.4f, false);
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
             if (chargeHitSound != null)
             {
@@ -1596,12 +1607,15 @@ public abstract class Character : MonoBehaviour
 
     public Character GetEnemy()
     {
-        return enemy;
+        return GetCurrentCombatTarget();
     }
 
     public void SetEnemy(Character changeEnemy)
     {
-        enemy = changeEnemy;
+        if (IsValidCombatTarget(changeEnemy))
+        {
+            enemy = changeEnemy;
+        }
     }
 
     protected Character ResolveTargetFromHit(params Collider2D[] hits)
@@ -1689,6 +1703,51 @@ public abstract class Character : MonoBehaviour
             && !target.IsDead();
     }
 
+    protected Character GetNearestLivingOpponent()
+    {
+        if (gameManager == null)
+        {
+            return IsValidCombatTarget(enemy) ? enemy : null;
+        }
+
+        Character closestTarget = null;
+        float closestDistanceSq = float.MaxValue;
+
+        Character[] candidates =
+        {
+            gameManager.p1Manager != null ? gameManager.p1Manager.GetCurrentCharacter() : null,
+            gameManager.p2Manager != null ? gameManager.p2Manager.GetCurrentCharacter() : null,
+            gameManager.p3Manager != null ? gameManager.p3Manager.GetCurrentCharacter() : null
+        };
+
+        for (int i = 0; i < candidates.Length; i++)
+        {
+            Character candidate = candidates[i];
+            if (!IsValidCombatTarget(candidate))
+            {
+                continue;
+            }
+
+            float distanceSq = (candidate.transform.position - transform.position).sqrMagnitude;
+            if (distanceSq < closestDistanceSq)
+            {
+                closestDistanceSq = distanceSq;
+                closestTarget = candidate;
+            }
+        }
+
+        return closestTarget;
+    }
+
+    protected void RefreshCombatTargetFromNearest()
+    {
+        Character nearestTarget = GetNearestLivingOpponent();
+        if (nearestTarget != null)
+        {
+            enemy = nearestTarget;
+        }
+    }
+
     protected Character GetCurrentCombatTarget()
     {
         Character attacker = GetCharacterForPlayerId(incomingAttackerId);
@@ -1701,6 +1760,13 @@ public abstract class Character : MonoBehaviour
         if (IsValidCombatTarget(enemy))
         {
             return enemy;
+        }
+
+        Character nearestTarget = GetNearestLivingOpponent();
+        if (nearestTarget != null)
+        {
+            enemy = nearestTarget;
+            return nearestTarget;
         }
 
         return null;
@@ -1744,7 +1810,7 @@ public abstract class Character : MonoBehaviour
             return enemy;
         }
 
-        return null;
+        return GetNearestLivingOpponent();
     }
 
     public bool AmICasting()
@@ -1778,8 +1844,9 @@ public abstract class Character : MonoBehaviour
     // --- Telemetry helper ---
     protected float GetDistanceToEnemy()
     {
-        if (enemy == null || gameManager.trainingMode) return -1f;
-        return Vector2.Distance(transform.position, enemy.transform.position);
+        Character target = GetCurrentCombatTarget();
+        if (target == null || (gameManager != null && gameManager.trainingMode)) return -1f;
+        return Vector2.Distance(transform.position, target.transform.position);
     }
     virtual public void TakeDamage(int dmg, bool blockable, bool parryable = true, bool canCrit = true)
     {
@@ -1965,25 +2032,32 @@ public abstract class Character : MonoBehaviour
             return;
         }
 
+        Character target = GetCurrentCombatTarget();
+        if (target == null)
+        {
+            gameManager?.RoundEndTie(playerNum);
+            return;
+        }
+
         int winnerNum = (playerNum == 1) ? 2 : 1;   // ή: int winnerNum = enemy.playerNum;
-        enemy.Win();
-        enemy.stayStatic();
+        target.Win();
+        target.stayStatic();
 
         audioManager.StopMusic();
         audioManager.PlaySFX(audioManager.dearth, audioManager.doubleVol);
 
-        if (enemy.currHealth == maxHealth)
+        if (target.currHealth == maxHealth)
         {
             gameManager.RoundEndFlawless(winnerNum, P2Name);
-            KeepStats(P2Name,enemy.GetCharID(), P1Name.text,characterID);
+            KeepStats(P2Name, target.GetCharID(), P1Name.text, characterID);
         }
-        else if (enemy.currHealth <= 0)
+        else if (target.currHealth <= 0)
         {
             gameManager.RoundEndTie(playerNum);
         }
         else
         {
-            KeepStats(P2Name,enemy.GetCharID(), P1Name.text,characterID);
+            KeepStats(P2Name, target.GetCharID(), P1Name.text, characterID);
             gameManager.RoundEnd(winnerNum, P2Name);
         }
 
@@ -2007,7 +2081,8 @@ public abstract class Character : MonoBehaviour
     public void ActivateHealthBars()
     {
         SetHealthbarVisibleSafe(true);
-        enemy?.SetHealthbarVisibleSafe(true);
+        Character target = GetCurrentCombatTarget();
+        target?.SetHealthbarVisibleSafe(true);
     }
 
     virtual public void TakeDamageNoAnimation(int dmg, bool blockable, bool parryable = true)
@@ -2133,8 +2208,14 @@ public abstract class Character : MonoBehaviour
 
     public void DealDamageToEnemy(int amount)
     {
-        enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
-        enemy.TakeDamageNoAnimation(amount, false);
+        Character target = GetCurrentCombatTarget();
+        if (target == null)
+        {
+            return;
+        }
+
+        target.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
+        target.TakeDamageNoAnimation(amount, false);
     }
 
     public IEnumerator InterruptMovement(float time)
@@ -2243,12 +2324,13 @@ public abstract class Character : MonoBehaviour
 
     public bool IsEnemyClose()
     {
-        if (enemy == null)
+        Character target = GetCurrentCombatTarget();
+        if (target == null)
         {
             return false;
         }
 
-        return Vector3.Distance(this.transform.position, enemy.transform.position) <= 4f;
+        return Vector3.Distance(this.transform.position, target.transform.position) <= 4f;
     }
 
     public bool IsDead()
@@ -2382,7 +2464,7 @@ public abstract class Character : MonoBehaviour
 
     public void ChangeEnemy(Character newEnemy)
     {
-        enemy = newEnemy;
+        SetEnemy(newEnemy);
     }
 
     #endregion

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BeamScript : MonoBehaviour
@@ -6,7 +7,7 @@ public class BeamScript : MonoBehaviour
     public LazyBigus playa;
 
     private Collider2D beamCollider;
-    private bool hasHit;
+    private readonly HashSet<Character> hitTargets = new HashSet<Character>();
 
     private void Awake()
     {
@@ -15,7 +16,7 @@ public class BeamScript : MonoBehaviour
 
     private void OnEnable()
     {
-        hasHit = false;
+        hitTargets.Clear();
 
         if (beamCollider != null)
         {
@@ -56,8 +57,6 @@ public class BeamScript : MonoBehaviour
 
     private void TryHit(Collider2D collision)
     {
-        if (hasHit) return;
-
         if (collision.CompareTag("Player"))
         {
             Character target = GetCharacterFromCollider(collision);
@@ -65,8 +64,10 @@ public class BeamScript : MonoBehaviour
             {
                 return;
             }
-            hasHit = true;
-            playa.BeamHit(target);
+            if (hitTargets.Add(target))
+            {
+                playa.BeamHit(target);
+            }
         }
     }
 
@@ -96,9 +97,6 @@ public class BeamScript : MonoBehaviour
             0f
         );
 
-        Character closestTarget = null;
-        float closestDistanceSq = float.MaxValue;
-
         foreach (Collider2D hit in hits)
         {
             if (hit == beamCollider || !hit.CompareTag("Player"))
@@ -111,19 +109,10 @@ public class BeamScript : MonoBehaviour
             {
                 continue;
             }
-
-            float distanceSq = (target.transform.position - playa.transform.position).sqrMagnitude;
-            if (distanceSq < closestDistanceSq)
+            if (hitTargets.Add(target))
             {
-                closestDistanceSq = distanceSq;
-                closestTarget = target;
+                playa.BeamHit(target);
             }
-        }
-
-        if (closestTarget != null)
-        {
-            hasHit = true;
-            playa.BeamHit(closestTarget);
         }
     }
 

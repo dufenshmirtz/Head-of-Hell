@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -47,13 +48,13 @@ public class Lithra : Character
         {
             audioManager.PlaySFX(audioManager.bellPunch, 1.8f);
             audioManager.PlaySFX(audioManager.lightattack, 0.5f);
-            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Heavy);
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
-            enemy.TakeDamage(heavyDamage, true);
-            LuckyBell();
-            if (! enemy.isBlocking)
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Heavy);
+            target.SetIncomingDamageContext(PlayerId, MoveType.Heavy, SourceType.Melee);
+            target.TakeDamage(heavyDamage, true);
+            LuckyBell(target);
+            if (!target.isBlocking)
             {
-                enemy.Knockback(11f, 0.15f, true);
+                target.Knockback(11f, 0.15f, true);
             }
         }
         else
@@ -77,23 +78,28 @@ public class Lithra : Character
 
     public void DealBellDmg()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(bellPoint.position, attackRange * 2, enemyLayer);
-        Collider2D bellStunPoint = Physics2D.OverlapCircle(bellStunPointTransf.position, attackRange / 3, enemyLayer);
-        Character target = ResolveTargetFromHit(hitEnemy, bellStunPoint);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(bellPoint.position, attackRange * 2, enemyLayer);
+        Collider2D[] bellStunHits = Physics2D.OverlapCircleAll(bellStunPointTransf.position, attackRange / 3, enemyLayer);
+        List<Character> targets = ResolveTargetsFromHits(hitEnemies);
+        List<Character> stunTargets = ResolveTargetsFromHits(bellStunHits);
+        HashSet<Character> stunTargetSet = new HashSet<Character>(stunTargets);
 
-        if (target != null)
+        if (targets.Count > 0)
         {
-            // Telemetry: successful special interaction + context for damage
-            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Special);
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
-
-            enemy.StopPunching();
-            enemy.BreakCharge();
-            enemy.TakeDamage(bellDamage, true);
-
-            if (bellStunPoint != null)
+            for (int i = 0; i < targets.Count; i++)
             {
-                enemy.Stun(0.8f);
+                Character target = targets[i];
+                TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Special);
+                target.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
+
+                target.StopPunching();
+                target.BreakCharge();
+                target.TakeDamage(bellDamage, true);
+
+                if (stunTargetSet.Contains(target))
+                {
+                    target.Stun(0.8f);
+                }
             }
             audioManager.PlaySFX(audioManager.heavyattack, audioManager.heavyAttackVolume);
             audioManager.PlaySFX(audioManager.bellSpell, 1.5f);
@@ -173,12 +179,12 @@ public class Lithra : Character
             Character target = ResolveTargetFromHit(hitEnemy);
             if (target != null)
             {
-                TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Quick);
-                enemy.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
+                TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Quick);
+                target.SetIncomingDamageContext(PlayerId, MoveType.Quick, SourceType.Melee);
                 landed = true;
                 audioManager.PlaySFX(audioManager.bellDashHit, 1f);
-                enemy.TakeDamage(airSpinDamage, true);
-                enemy.Stun(0.5f);
+                target.TakeDamage(airSpinDamage, true);
+                target.Stun(0.5f);
 
                 // Calculate move direction again after hitting (keyboard or controller)
                 float moveDirection2 = input.GetKey(left) ? -1f : (input.GetKey(right) ? 1f : input.GetAxis("Horizontal" + playerString));
@@ -242,18 +248,18 @@ public class Lithra : Character
 
         if (target != null)
         {
-            enemy.StopPunching();
-            if (!enemy.counterIsOn)
+            target.StopPunching();
+            if (!target.counterIsOn)
             {
-                enemy.BreakCharge();
+                target.BreakCharge();
             }
-            TelemetryManager.Instance?.LogHitAttempt(PlayerId, enemy.PlayerId, MoveType.Charge);
-            enemy.SetIncomingDamageContext(PlayerId, MoveType.Charge, SourceType.Melee);
+            TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Charge);
+            target.SetIncomingDamageContext(PlayerId, MoveType.Charge, SourceType.Melee);
 
-            enemy.TakeDamage(chargeDmg, false);
-            LuckyBell();
+            target.TakeDamage(chargeDmg, false);
+            LuckyBell(target);
 
-            enemy.Knockback(13f, 0.4f, false);
+            target.Knockback(13f, 0.4f, false);
             audioManager.PlaySFX(audioManager.smash, audioManager.doubleVol);
             if (chargeHitSound != null)
             {
@@ -283,11 +289,11 @@ public class Lithra : Character
 
     #region Passive
 
-    void LuckyBell()
+    void LuckyBell(Character target)
     {
-        if (StunChance())
+        if (target != null && StunChance())
         {
-            enemy.Stun(0.8f);
+            target.Stun(0.8f);
         }
     }
     bool StunChance()
