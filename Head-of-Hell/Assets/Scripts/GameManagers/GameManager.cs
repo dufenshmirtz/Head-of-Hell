@@ -105,17 +105,23 @@ public class GameManager : MonoBehaviour
         // Profile telemetry
         var p1Profile = ProfileManager.I?.GetTelemetryIdentity(1) ?? ("NONE", "None");
         var p2Profile = ProfileManager.I?.GetTelemetryIdentity(2) ?? ("NONE", "None");
+        var p3Profile = ProfileManager.I?.GetTelemetryIdentity(3) ?? ("NONE", "None");
         if (p1ProfileNameText != null)
             p1ProfileNameText.text = p1Profile.name;
 
         if (p2ProfileNameText != null)
             p2ProfileNameText.text = p2Profile.name;
+
+        if (p3ProfileNameText != null)
+            p3ProfileNameText.text = threePlayerMode ? p3Profile.name : "";
         TelemetryManager.Instance?.SetMatchMeta(new TelemetryMatchMeta
         {
             p1ProfileId = p1Profile.id,
             p1ProfileName = p1Profile.name,
             p2ProfileId = p2Profile.id,
-            p2ProfileName = p2Profile.name
+            p2ProfileName = p2Profile.name,
+            p3ProfileId = threePlayerMode ? p3Profile.id : "",
+            p3ProfileName = threePlayerMode ? p3Profile.name : ""
         });
 
 
