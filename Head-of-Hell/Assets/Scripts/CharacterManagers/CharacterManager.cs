@@ -215,10 +215,10 @@ public class CharacterManager : MonoBehaviour
 
         if (mngr.trainingMode)
         {
-            while (characterTypeNames[randomIndex]=="Lupen")
-            {
-                randomIndex = UnityEngine.Random.Range(0, characterTypeNames.Length);
-            }
+            // while (characterTypeNames[randomIndex]=="Lupen")
+            // {
+            //     randomIndex = UnityEngine.Random.Range(0, characterTypeNames.Length);
+            // }
         }
 
         return characterTypeNames[randomIndex];

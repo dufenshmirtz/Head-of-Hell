@@ -6764,7 +6764,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 221568178}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd19557386e32f14d9047b5a9971820e, type: 3}
   m_Name: 
@@ -6818,7 +6818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 4
+  DecisionPeriod: 3
   TakeActionsBetweenDecisions: 0
 --- !u!114 &221568244
 MonoBehaviour:
@@ -21483,7 +21483,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &788998571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36377,7 +36377,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367423824}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd19557386e32f14d9047b5a9971820e, type: 3}
   m_Name: 
@@ -54227,6 +54227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2144866981}
   - component: {fileID: 2144866982}
+  - component: {fileID: 2144866983}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -54297,6 +54298,19 @@ MonoBehaviour:
   roundOn: 0
   trainingRoundOn: 0
   opponentDirector: {fileID: 0}
+  statsMode: 1
+--- !u!114 &2144866983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144866980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 017f104a13247b544a51f9f4ec3a07bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2147385444
 GameObject:
   m_ObjectHideFlags: 0

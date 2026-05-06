@@ -87,7 +87,7 @@ public class TrainingOpponentDirector : MonoBehaviour
 
     private readonly Dictionary<OpponentMode, OpponentStats> statsByMode = new Dictionary<OpponentMode, OpponentStats>();
 
-    // Ôï mode ðïõ Ýðáéîå ôï ôñÝ÷ïí/ôåëåõôáßï episode.
+    // ï¿½ï¿½ mode ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ episode.
     private OpponentMode episodeMode;
 
     private void Awake()
@@ -97,11 +97,11 @@ public class TrainingOpponentDirector : MonoBehaviour
         InitializeStats();
 
         // IMPORTANT:
-        // Äåí êÜíïõìå PrepareNextEpisode() åäþ.
-        // Ôï áñ÷éêü startup ôïõ ML-Agents ðñÝðåé íá âñåé ôï scene óå safe êáôÜóôáóç.
+        // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ PrepareNextEpisode() ï¿½ï¿½ï¿½.
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ startup ï¿½ï¿½ï¿½ ML-Agents ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ scene ï¿½ï¿½ safe ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
         ApplySafeStartupMode();
 
-        // Ôï safe startup mode èåùñåßôáé ôï ðñþôï active episode mode
+        // ï¿½ï¿½ safe startup mode ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ active episode mode
         episodeMode = currentMode;
     }
 
@@ -228,7 +228,7 @@ public class TrainingOpponentDirector : MonoBehaviour
         SelectNextMode();
         EvaluateScriptedSkill();
 
-        // Áõôü åßíáé ôï mode ðïõ èá ðáßîåé ôï ÍÅÏ episode
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ mode ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ episode
         episodeMode = currentMode;
 
         Debug.Log(
@@ -480,7 +480,7 @@ public class TrainingOpponentDirector : MonoBehaviour
 
     private void ApplyScriptedBotMode()
     {
-        // Ðñþôá óâÞíïõìå ML side ôïõ P2
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ML side ï¿½ï¿½ï¿½ P2
         if (decisionP2 != null)
         {
             decisionP2.enabled = false;
@@ -498,7 +498,7 @@ public class TrainingOpponentDirector : MonoBehaviour
             agentP2.enabled = false;
         }
 
-        // ÌåôÜ áíïßãïõìå ôï bot
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ bot
         if (botP2 != null)
         {
             botP2.enabled = true;
@@ -587,13 +587,13 @@ public class TrainingOpponentDirector : MonoBehaviour
     {
         if (episodeIndex >= phase4StartEpisode)
         {
-            scriptedWeight = 0.01f;
-            inference1Weight = 0.17f;
-            inference2Weight = 0.12f;
-            inference3Weight = 0.10f;
-            inference4Weight = 0.05f;
-            inference5Weight = 0.05f;
-            mirrorWeight = 0.50f;
+            scriptedWeight = 0.00f;
+            inference1Weight = 0.0f;
+            inference2Weight = 0.0f;
+            inference3Weight = 0.0f;
+            inference4Weight = 0.0f;
+            inference5Weight = 0.0f;
+            mirrorWeight = 1f;
         }
         else if (episodeIndex >= phase3StartEpisode)
         {
