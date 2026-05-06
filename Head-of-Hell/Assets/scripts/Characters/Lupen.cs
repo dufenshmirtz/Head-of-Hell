@@ -159,24 +159,54 @@ public class Lupen : Character
         wipDamage = wdmg;
         robberyCountter = rc;
         currHealth = currentHealth;
+        RestoreOriginalState();
         casting = false;
-        RemoveLastAttachedScript();
+        RemoveStolenForm();
         OnCooldown(cooldown);
     }
 
-    public void RemoveLastAttachedScript()
+    private void RestoreOriginalState()
     {
-        // Get all components attached to the GameObject
-        Component[] components = this.GetComponents<Component>();
+        ignoreUpdate = false;
+        ignoreDamage = false;
+        ignoreMovement = false;
+        knockable = true;
+        damageShield = false;
+        usingAbility = false;
+        canRotate = true;
+        chargeDisable = false;
+        stunned = false;
+        knocked = false;
 
-        // Ensure the GameObject has components beyond the Transform
-        if (components.Length > 1)
+        StopCHarge();
+        Unblock();
+        stayDynamic();
+        ActivateColliders();
+
+        if (rb != null)
         {
-            // Get the last component (excluding Transform, which is always first)
-            Component lastComponent = components[components.Length - 1];
+            rb.gravityScale = originalGravityScale;
+            rb.velocity = Vector2.zero;
+        }
 
-            // Destroy the last component
-            Destroy(lastComponent);
+        if (animator != null)
+        {
+            animator.SetBool("Casting", false);
+            animator.SetBool("Charging", false);
+            animator.SetBool("IsRunning", false);
+            animator.ResetTrigger("ChargedHit");
+            animator.ResetTrigger("tookDmg");
+        }
+    }
+
+    public void RemoveStolenForm()
+    {
+        if (stolenCharacter != null && stolenCharacter != this)
+        {
+            stolenCharacter.enabled = false;
+            stolenCharacter.StopAllCoroutines();
+            Destroy(stolenCharacter);
+            stolenCharacter = null;
 
             characterChoiceHandler.ChangeCharacter("Lupen");
             cEvents.ChangeCharacterEvents(2);
@@ -186,13 +216,10 @@ public class Lupen : Character
                 characterChoiceHandler.CharacterChoice(1).ChangeEnemy(currentTarget);
             }
             P1Name.text = "Lupen";
+            return;
+        }
 
-            Debug.Log($"Removed component: {lastComponent.GetType().Name}");
-        }
-        else
-        {
-            Debug.LogWarning("No scripts to remove on this GameObject.");
-        }
+        Debug.LogWarning("No stolen form was available to remove from Lupen.");
     }
 
     #endregion
