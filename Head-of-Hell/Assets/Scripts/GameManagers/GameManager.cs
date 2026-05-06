@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     private bool roundTelemetryClosed = false;
     static int player1Wins = 0;
     static int player2Wins = 0;
+    static int player3Wins = 0;
     public GameObject[] stages;
     string stageName;
     public TextMeshProUGUI winner;
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
     public AudioManager audioManager;
     public GameObject p1R1, p1R2, p1R3;
     public GameObject p2R1, p2R2, p2R3;
+    public GameObject p3R1, p3R2, p3R3;
     //static int p1Rounds = 0, p2Rounds = 0;
     bool tie = false;
     static string c1Name, c2Name;
@@ -369,6 +371,7 @@ public class GameManager : MonoBehaviour
         roundCounter = 1;
         player1Wins = 0;
         player2Wins = 0;
+        player3Wins = 0;
 
         audioManager.PlaySFX(audioManager.dramaticDrums, audioManager.doubleVol);
 
@@ -404,6 +407,13 @@ public class GameManager : MonoBehaviour
             Character p2 = p2Manager.GetCurrentCharacter();
             if (p2 != null)
                 p2.ApplyCustomRuleset(ruleset);
+        }
+
+        if (p3Manager != null)
+        {
+            Character p3 = p3Manager.GetCurrentCharacter();
+            if (p3 != null)
+                p3.ApplyCustomRuleset(ruleset);
         }
     }
 
@@ -562,9 +572,11 @@ public class GameManager : MonoBehaviour
         }
         else if (playerNum == 2)
         {
-            {
-                player2Wins++;
-            }
+            player2Wins++;
+        }
+        else if (playerNum == 3)
+        {
+            player3Wins++;
         }
         ActivateIndicators();
     }
@@ -592,6 +604,7 @@ public class GameManager : MonoBehaviour
             roundCounter = 1;
             player1Wins = 0;
             player2Wins = 0;
+            player3Wins = 0;
 
             audioManager.PlaySFX(audioManager.dramaticDrums, audioManager.doubleVol);
 
@@ -668,36 +681,16 @@ public class GameManager : MonoBehaviour
 
     void ActivateIndicators()
     {
-        if (player1Wins == 1)
-        {
-            p1R1.SetActive(true);
-        }
-        if (player2Wins == 1)
-        {
-            p2R1.SetActive(true);
-        }
-        if (player1Wins == 2)
-        {
-            p1R1.SetActive(true);
-            p1R2.SetActive(true);
-        }
-        if (player2Wins == 2)
-        {
-            p2R1.SetActive(true);
-            p2R2.SetActive(true);
-        }
-        if (player1Wins == 3)
-        {
-            p1R1.SetActive(true);
-            p1R2.SetActive(true);
-            p1R3.SetActive(true);
-        }
-        if (player2Wins == 3)
-        {
-            p2R1.SetActive(true);
-            p2R2.SetActive(true);
-            p2R3.SetActive(true);
-        }
+        SetRoundIndicators(p1R1, p1R2, p1R3, player1Wins);
+        SetRoundIndicators(p2R1, p2R2, p2R3, player2Wins);
+        SetRoundIndicators(p3R1, p3R2, p3R3, player3Wins);
+    }
+
+    private void SetRoundIndicators(GameObject round1, GameObject round2, GameObject round3, int wins)
+    {
+        if (round1 != null) round1.SetActive(wins >= 1);
+        if (round2 != null) round2.SetActive(wins >= 2);
+        if (round3 != null) round3.SetActive(wins >= 3);
     }
 
     public void CheckForRandomCharacters()
@@ -746,6 +739,7 @@ public class GameManager : MonoBehaviour
         roundCounter = 1;
         player1Wins = 0;
         player2Wins = 0;
+        player3Wins = 0;
 
         if (trainingMode)
         {
@@ -763,6 +757,7 @@ public class GameManager : MonoBehaviour
         roundCounter = 1;
         player1Wins = 0;
         player2Wins = 0;
+        player3Wins = 0;
     }
 
     // Training

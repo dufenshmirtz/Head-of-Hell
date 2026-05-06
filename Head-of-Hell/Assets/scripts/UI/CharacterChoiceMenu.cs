@@ -249,7 +249,6 @@ public class CharacterChoiceMenu : MonoBehaviour
             case 3:
                 ToggleChild(button, "P3", true);
                 cscript.SetPlayer3Picked(button);
-                // TODO(GamePlayScene): read Player3Choice and spawn a P3 CharacterManager in 1v1v1.
                 break;
         }
     }
