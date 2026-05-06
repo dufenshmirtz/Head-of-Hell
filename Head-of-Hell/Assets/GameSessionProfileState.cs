@@ -6,6 +6,8 @@ public static class GameSessionProfileState
     public static string ActiveP2ProfileName;
     public static string ActiveP3ProfileId;
     public static string ActiveP3ProfileName;
+    public static string ActiveP4ProfileId;
+    public static string ActiveP4ProfileName;
 
     public static string PendingP1ProfileId;
     public static string PendingP1ProfileName;
@@ -13,6 +15,8 @@ public static class GameSessionProfileState
     public static string PendingP2ProfileName;
     public static string PendingP3ProfileId;
     public static string PendingP3ProfileName;
+    public static string PendingP4ProfileId;
+    public static string PendingP4ProfileName;
 
     public static void BeginMatchFromPending()
     {
@@ -22,6 +26,8 @@ public static class GameSessionProfileState
         ActiveP2ProfileName = PendingP2ProfileName;
         ActiveP3ProfileId = PendingP3ProfileId;
         ActiveP3ProfileName = PendingP3ProfileName;
+        ActiveP4ProfileId = PendingP4ProfileId;
+        ActiveP4ProfileName = PendingP4ProfileName;
     }
 
     public static void CopyActiveToPending()
@@ -32,5 +38,7 @@ public static class GameSessionProfileState
         PendingP2ProfileName = ActiveP2ProfileName;
         PendingP3ProfileId = ActiveP3ProfileId;
         PendingP3ProfileName = ActiveP3ProfileName;
+        PendingP4ProfileId = ActiveP4ProfileId;
+        PendingP4ProfileName = ActiveP4ProfileName;
     }
 }

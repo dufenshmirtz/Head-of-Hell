@@ -32,7 +32,7 @@ public class BulletScript : MonoBehaviour
             {
                 character = other.GetComponentInParent<Character>();
             }
-            if (character == null || initiator == null || character == initiator)
+            if (character == null || initiator == null || !initiator.CanDamageTarget(character))
             {
                 return;
             }
