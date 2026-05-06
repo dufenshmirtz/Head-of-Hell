@@ -44,6 +44,7 @@ public abstract class Character : MonoBehaviour
             if (playerNum == 1) return "P1";
             if (playerNum == 2) return "P2";
             if (playerNum == 3) return "P3";
+            if (playerNum == 4) return "P4";
             return $"P{playerNum}";
         }
     }
@@ -409,33 +410,7 @@ public abstract class Character : MonoBehaviour
         enemy = characterChoiceHandler.CharacterChoice(2);
 
 
-        bool isThreePlayerMode = GameModeSelectionState.CurrentMode == SelectedGameMode.PvP_1v1v1;
-
-        if (playerNum == 1)
-        {
-            playerString = "_P1";
-            if (controllerCount >= 2)
-            {
-                controller = true;
-            }
-        }
-        else if (playerNum == 2)
-        {
-            playerString = "_P2";
-            if (!isThreePlayerMode && controllerCount >= 1)
-            {
-                controller = true;
-            }
-
-        }
-        else if (playerNum == 3)
-        {
-            playerString = "_P3";
-            if (isThreePlayerMode && controllerCount >= 1)
-            {
-                controller = true;
-            }
-        }
+        ConfigurePlayerInputMode();
 
         animator = GetComponent<Animator>();
 
@@ -458,16 +433,91 @@ public abstract class Character : MonoBehaviour
     // inside Character
     public IInputProvider GetInputProvider() => input;
 
+    public void RefreshSetupBindingsForRuntime()
+    {
+        if (characterSetup == null || characterChoiceHandler == null)
+            return;
+
+        enemyLayer = characterSetup.enemyLayer;
+        gameManager = characterSetup.gameManager;
+        rb = characterSetup.rb;
+        healthbar = characterSetup.healthbar;
+        P1Name = characterSetup.P1Name;
+        winner = characterSetup.winner;
+        playAgainButton = characterSetup.playAgainButton;
+        mainMenuButton = characterSetup.mainMenuButton;
+        saveReplayButton = characterSetup.saveReplayButton;
+        cooldownSlider = characterSetup.cooldownSlider;
+        damageCounter = characterSetup.damageCounter;
+        audioManager = characterSetup.audioManager;
+        quickAttackIndicator = characterSetup.quickAttackIndicator;
+        groundCheck = characterSetup.groundCheck;
+        playerNum = characterSetup.playerNum;
+        playerGroundLayers = enemyLayer;
+
+        if (P1Name != null)
+            P1Name.text = characterChoiceHandler.GetCharacterName(1);
+
+        P2Name = characterChoiceHandler.GetCharacterName(2);
+        enemy = characterChoiceHandler.CharacterChoice(2);
+
+        ConfigurePlayerInputMode();
+    }
+
+    private void ConfigurePlayerInputMode()
+    {
+        bool isThreePlayerMode = GameModeSelectionState.CurrentMode == SelectedGameMode.PvP_1v1v1;
+        bool isTwoVersusTwoMode = gameManager != null && gameManager.IsTwoVersusTwoMatch();
+
+        controller = false;
+
+        if (playerNum == 1)
+        {
+            playerString = "_P1";
+            if (!isTwoVersusTwoMode && controllerCount >= 2)
+            {
+                controller = true;
+            }
+            return;
+        }
+
+        if (playerNum == 2)
+        {
+            playerString = "_P2";
+            if (!isThreePlayerMode && !isTwoVersusTwoMode && controllerCount >= 1)
+            {
+                controller = true;
+            }
+            return;
+        }
+
+        if (playerNum == 3)
+        {
+            playerString = "_P3";
+            controller = controllerCount >= 1;
+            return;
+        }
+
+        if (playerNum == 4)
+        {
+            playerString = "_P4";
+            controller = controllerCount >= 2;
+        }
+    }
+
     int ControllerNum(int pNum)
     {
+        if (gameManager != null && gameManager.IsTwoVersusTwoMatch())
+        {
+            if (pNum == 3) return 1;
+            if (pNum == 4) return 2;
+            return 0;
+        }
+
         if (pNum == 1)
-        {
             return 2;
-        }
-        else
-        {
-            return 1;
-        }
+
+        return 1;
     }
 
     private float GetHorizontalInput()
@@ -1252,8 +1302,8 @@ public abstract class Character : MonoBehaviour
     public virtual void DealChargeDmg()
     {
         TelemetryManager.Instance?.LogAction(PlayerId, "ChargeRelease");
-        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
-        Character target = ResolveTargetFromHit(hitEnemy);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemies);
 
         if (target != null)
         {
@@ -1456,9 +1506,9 @@ public abstract class Character : MonoBehaviour
 
     public Collider2D HitEnemy()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
-        ResolveTargetFromHit(hitEnemy);
-        return hitEnemy;
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemies);
+        return target != null ? target.GetComponent<Collider2D>() : null;
     }
 
     virtual public void HeavyAttackStart()
@@ -1732,7 +1782,13 @@ public abstract class Character : MonoBehaviour
         return target != null
             && target != this
             && target.isActiveAndEnabled
+            && (gameManager == null || gameManager.AreCharactersOpponents(this, target))
             && !target.IsDead();
+    }
+
+    public bool CanDamageTarget(Character target)
+    {
+        return IsValidCombatTarget(target);
     }
 
     protected Character GetNearestLivingOpponent()
@@ -1749,7 +1805,8 @@ public abstract class Character : MonoBehaviour
         {
             gameManager.p1Manager != null ? gameManager.p1Manager.GetCurrentCharacter() : null,
             gameManager.p2Manager != null ? gameManager.p2Manager.GetCurrentCharacter() : null,
-            gameManager.p3Manager != null ? gameManager.p3Manager.GetCurrentCharacter() : null
+            gameManager.p3Manager != null ? gameManager.p3Manager.GetCurrentCharacter() : null,
+            gameManager.p4Manager != null ? gameManager.p4Manager.GetCurrentCharacter() : null
         };
 
         for (int i = 0; i < candidates.Length; i++)
@@ -1824,6 +1881,11 @@ public abstract class Character : MonoBehaviour
         if (playerId == "P3")
         {
             return gameManager.p3Manager != null ? gameManager.p3Manager.GetCurrentCharacter() : null;
+        }
+
+        if (playerId == "P4")
+        {
+            return gameManager.p4Manager != null ? gameManager.p4Manager.GetCurrentCharacter() : null;
         }
 
         return null;
@@ -2053,6 +2115,16 @@ public abstract class Character : MonoBehaviour
         knockable = false;
 
         ActivateHealthBars(); //In case they are hidden
+
+        if (gameManager != null && gameManager.IsTwoVersusTwoMatch())
+        {
+            audioManager.PlaySFX(audioManager.dearth, audioManager.doubleVol);
+            if (gameManager.HandleTeamDeath(this))
+            {
+                audioManager.StopMusic();
+            }
+            return;
+        }
 
         if (gameManager != null && gameManager.IsThreePlayerMatch())
         {
@@ -2624,6 +2696,7 @@ public abstract class Character : MonoBehaviour
     #region RL
     // --- Public read-only state for RL ---
     public bool IsGrounded => isGrounded;
+    public int GetPlayerNum() => playerNum;
     public bool IsBlocking => isBlocking;
     public bool IsCasting => casting;
     public bool IsStunned => stunned;

@@ -42,8 +42,8 @@ public class LazyBigus : Character
 
     override public void DealHeavyDamage()
     {
-        Collider2D hitEnemy = Physics2D.OverlapCircle( attackPoint.position,  attackRange,  enemyLayer);
-        Character target = ResolveTargetFromHit(hitEnemy);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemies);
 
         if (target != null)
         {
@@ -200,8 +200,8 @@ public class LazyBigus : Character
     public override void DealChargeDmg()
     {
         TelemetryManager.Instance?.LogAction(PlayerId, "ChargeRelease");
-        Collider2D hitEnemy = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
-        Character target = ResolveTargetFromHit(hitEnemy);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
+        Character target = ResolveTargetFromHit(hitEnemies);
 
         if (target != null)
         {

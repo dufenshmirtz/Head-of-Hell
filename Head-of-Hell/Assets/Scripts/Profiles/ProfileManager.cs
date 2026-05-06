@@ -13,6 +13,7 @@ public class ProfileManager : MonoBehaviour
     [SerializeField] private int selectedIndexP1 = NONE;
     [SerializeField] private int selectedIndexP2 = NONE;
     [SerializeField] private int selectedIndexP3 = NONE;
+    [SerializeField] private int selectedIndexP4 = NONE;
 
     [SerializeField] private ProfileData guestProfile;
 
@@ -70,6 +71,7 @@ public class ProfileManager : MonoBehaviour
             case 1: return selectedIndexP1;
             case 2: return selectedIndexP2;
             case 3: return selectedIndexP3;
+            case 4: return selectedIndexP4;
             default: return NONE;
         }
     }
@@ -104,6 +106,9 @@ public class ProfileManager : MonoBehaviour
             case 3:
                 selectedIndexP3 = index;
                 break;
+            case 4:
+                selectedIndexP4 = index;
+                break;
             default:
                 return;
         }
@@ -123,6 +128,9 @@ public class ProfileManager : MonoBehaviour
                 break;
             case 3:
                 selectedIndexP3 = GUEST;
+                break;
+            case 4:
+                selectedIndexP4 = GUEST;
                 break;
             default:
                 return;
@@ -160,6 +168,7 @@ public class ProfileManager : MonoBehaviour
         if (selectedIndexP1 == index) selectedIndexP1 = -1;
         if (selectedIndexP2 == index) selectedIndexP2 = -1;
         if (selectedIndexP3 == index) selectedIndexP3 = -1;
+        if (selectedIndexP4 == index) selectedIndexP4 = -1;
         Save();
     }
 

@@ -60,7 +60,7 @@ public class BeamScript : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             Character target = GetCharacterFromCollider(collision);
-            if (target == null || target == playa)
+            if (target == null || playa == null || !playa.CanDamageTarget(target))
             {
                 return;
             }
@@ -105,7 +105,7 @@ public class BeamScript : MonoBehaviour
             }
 
             Character target = GetCharacterFromCollider(hit);
-            if (target == null || target == playa)
+            if (target == null || playa == null || !playa.CanDamageTarget(target))
             {
                 continue;
             }

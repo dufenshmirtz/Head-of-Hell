@@ -17,6 +17,7 @@ public class CharacterChoiceScript : MonoBehaviour
     private Button p1PickedButton = null;
     private Button p2PickedButton = null;
     private Button p3PickedButton = null;
+    private Button p4PickedButton = null;
 
     void Start()
     {
@@ -28,6 +29,7 @@ public class CharacterChoiceScript : MonoBehaviour
             HideP1Border(btn);
             HideP2Border(btn);
             HideP3Border(btn);
+            HideP4Border(btn);
 
             EventTrigger trigger = btn.gameObject.GetComponent<EventTrigger>();
             if (trigger == null)
@@ -186,6 +188,21 @@ public class CharacterChoiceScript : MonoBehaviour
         }
     }
 
+    public void SetPlayer4Picked(Button button)
+    {
+        if (p4PickedButton != null)
+        {
+            HideP4Border(p4PickedButton);
+        }
+
+        p4PickedButton = button;
+
+        if (p4PickedButton != null)
+        {
+            ShowP4Border(p4PickedButton);
+        }
+    }
+
     public void ClearPlayer1Picked()
     {
         if (p1PickedButton != null)
@@ -210,6 +227,15 @@ public class CharacterChoiceScript : MonoBehaviour
         {
             HideP3Border(p3PickedButton);
             p3PickedButton = null;
+        }
+    }
+
+    public void ClearPlayer4Picked()
+    {
+        if (p4PickedButton != null)
+        {
+            HideP4Border(p4PickedButton);
+            p4PickedButton = null;
         }
     }
 
@@ -261,6 +287,19 @@ public class CharacterChoiceScript : MonoBehaviour
         if (t != null) t.gameObject.SetActive(false);
     }
 
+    void ShowP4Border(Button button)
+    {
+        EnsureP4Border(button);
+        Transform t = FindChildByExactOrTrimmedName(button, "P4Border");
+        if (t != null) t.gameObject.SetActive(true);
+    }
+
+    void HideP4Border(Button button)
+    {
+        Transform t = FindChildByExactOrTrimmedName(button, "P4Border");
+        if (t != null) t.gameObject.SetActive(false);
+    }
+
     Transform FindChildByExactOrTrimmedName(Button button, string childName)
     {
         if (button == null)
@@ -279,5 +318,19 @@ public class CharacterChoiceScript : MonoBehaviour
         }
 
         return null;
+    }
+
+    private void EnsureP4Border(Button button)
+    {
+        if (button == null || FindChildByExactOrTrimmedName(button, "P4Border") != null)
+            return;
+
+        Transform p3Border = FindChildByExactOrTrimmedName(button, "P3Border");
+        if (p3Border == null)
+            return;
+
+        Transform clone = Instantiate(p3Border, button.transform);
+        clone.name = "P4Border";
+        clone.gameObject.SetActive(false);
     }
 }
