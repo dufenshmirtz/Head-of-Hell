@@ -250,6 +250,10 @@ public abstract class Character : MonoBehaviour
     private static int spawnIndexP2 = -1;
 
     Coroutine flashRedCoroutine;
+    private SpriteRenderer[] flashedRenderers;
+    private Color[] flashedOriginalColors;
+    private bool deferCritFeedback;
+    private bool deferredCritFeedbackPending;
 
     Coroutine cdCoroutine;
 
@@ -2520,9 +2524,15 @@ public abstract class Character : MonoBehaviour
     {
         if (CriticalChance() && !gameManager.trainingMode && canCrit)
         {
-            FlashRed();
             TakeDamageNoAnimation(10,false);
-            audioManager.PlaySFX(audioManager.critical, 2.6f);
+            if (deferCritFeedback)
+            {
+                deferredCritFeedbackPending = true;
+            }
+            else
+            {
+                PlayCritFeedback();
+            }
         }
     }
     virtual protected bool CriticalChance()
@@ -2535,35 +2545,75 @@ public abstract class Character : MonoBehaviour
         if (flashRedCoroutine != null)
         {
             StopCoroutine(flashRedCoroutine);
+            RestoreFlashRedColors();
         }
 
         flashRedCoroutine = StartCoroutine(FlashRedCoroutine(0.3f));
     }
 
+    private void PlayCritFeedback()
+    {
+        FlashRed();
+        audioManager.PlaySFX(audioManager.critical, 2.6f);
+    }
+
+    public void BeginDeferredCritFeedback()
+    {
+        deferCritFeedback = true;
+        deferredCritFeedbackPending = false;
+    }
+
+    public void EndDeferredCritFeedback(bool playFeedback)
+    {
+        deferCritFeedback = false;
+
+        if (playFeedback && deferredCritFeedbackPending)
+        {
+            PlayCritFeedback();
+        }
+
+        deferredCritFeedbackPending = false;
+    }
+
     private IEnumerator FlashRedCoroutine(float duration)
     {
-        SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>(true);
+        flashedRenderers = GetComponentsInChildren<SpriteRenderer>(true);
 
-        if (renderers == null || renderers.Length == 0)
+        if (flashedRenderers == null || flashedRenderers.Length == 0)
             yield break;
 
-        Color[] originalColors = new Color[renderers.Length];
+        flashedOriginalColors = new Color[flashedRenderers.Length];
 
-        for (int i = 0; i < renderers.Length; i++)
+        for (int i = 0; i < flashedRenderers.Length; i++)
         {
-            originalColors[i] = renderers[i].color;
-            renderers[i].color = Color.red;
+            flashedOriginalColors[i] = flashedRenderers[i].color;
+            flashedRenderers[i].color = Color.red;
         }
 
         yield return new WaitForSeconds(duration);
 
-        for (int i = 0; i < renderers.Length; i++)
+        RestoreFlashRedColors();
+        flashRedCoroutine = null;
+    }
+
+    private void RestoreFlashRedColors()
+    {
+        if (flashedRenderers == null || flashedOriginalColors == null)
         {
-            if (renderers[i] != null)
-                renderers[i].color = originalColors[i];
+            return;
         }
 
-        flashRedCoroutine = null;
+        int count = Mathf.Min(flashedRenderers.Length, flashedOriginalColors.Length);
+        for (int i = 0; i < count; i++)
+        {
+            if (flashedRenderers[i] != null)
+            {
+                flashedRenderers[i].color = flashedOriginalColors[i];
+            }
+        }
+
+        flashedRenderers = null;
+        flashedOriginalColors = null;
     }
 
     public void ChangeEnemy(Character newEnemy)
