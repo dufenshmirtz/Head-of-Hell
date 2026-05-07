@@ -159,8 +159,8 @@ public class Lupen : Character
         wipDamage = wdmg;
         robberyCountter = rc;
         currHealth = currentHealth;
-        RestoreOriginalState();
         casting = false;
+        RestoreOriginalState();
         RemoveStolenForm();
         OnCooldown(cooldown);
     }
@@ -175,8 +175,19 @@ public class Lupen : Character
         usingAbility = false;
         canRotate = true;
         chargeDisable = false;
+        canCast = true;
         stunned = false;
         knocked = false;
+        isBlocking = false;
+        isStatic = false;
+        charging = false;
+        charged = false;
+        chargeAttackActive = false;
+        chargeReset = false;
+        KBCounter = 0f;
+        KBForce = 0f;
+        knockfromright = false;
+        knockbackXaxis = false;
 
         StopCHarge();
         Unblock();
@@ -191,9 +202,14 @@ public class Lupen : Character
 
         if (animator != null)
         {
+            animator.Rebind();
+            animator.Update(0f);
             animator.SetBool("Casting", false);
             animator.SetBool("Charging", false);
             animator.SetBool("IsRunning", false);
+            animator.SetBool("Crouch", false);
+            animator.SetBool("cWalk", false);
+            animator.SetBool("isUsingAbility", false);
             animator.ResetTrigger("ChargedHit");
             animator.ResetTrigger("tookDmg");
         }
@@ -209,11 +225,23 @@ public class Lupen : Character
             stolenCharacter = null;
 
             characterChoiceHandler.ChangeCharacter("Lupen");
-            cEvents.ChangeCharacterEvents(2);
+            Lupen activeLupen = characterChoiceHandler.GetCurrentCharacter() as Lupen;
+            if (activeLupen == null)
+            {
+                activeLupen = this;
+            }
+
+            activeLupen.enabled = true;
+            activeLupen.InitializeCharacter();
+            activeLupen.RefreshSetupBindingsForRuntime();
+            activeLupen.SetInput(GetInputProvider());
+            cEvents.SetCharacter(activeLupen);
+            characterChoiceHandler.NotifyCurrentCharacterChanged();
+
             Character currentTarget = GetCurrentCombatTarget();
             if (currentTarget != null)
             {
-                characterChoiceHandler.CharacterChoice(1).ChangeEnemy(currentTarget);
+                activeLupen.ChangeEnemy(currentTarget);
             }
             P1Name.text = "Lupen";
             return;

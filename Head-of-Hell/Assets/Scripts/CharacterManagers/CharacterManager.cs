@@ -462,6 +462,11 @@ public class CharacterManager : MonoBehaviour
     // Small helper so others don’t need to know about CharacterChoice(1)
     public Character GetCurrentCharacter() => character;
 
+    public void NotifyCurrentCharacterChanged()
+    {
+        OnCharacterChanged?.Invoke(character);
+    }
+
     public void ConfigureRuntimeClone(int newPlayerNum, CharacterManager newEnemyHandler, GameManager managerOverride)
     {
         playerNum = newPlayerNum;

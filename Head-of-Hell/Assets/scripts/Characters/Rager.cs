@@ -87,6 +87,7 @@ public class Rager : Character
             target.TakeDamage(0, true);
             audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
             comboTarget = target;
+            comboTarget.BeginDeferredCritFeedback();
 
             // playerState
             stayStatic();
@@ -98,7 +99,6 @@ public class Rager : Character
             comboTarget.blockBreaker();
             comboTarget.AbilityDisabled();
             comboTarget.Grabbed();
-
             animator.SetBool("ComboReady", true);
             spellHit = true;
         }
@@ -178,6 +178,7 @@ public class Rager : Character
 
         target.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
         target.TakeDamage(spellDamage2,true); //--here
+        target.EndDeferredCritFeedback(true);
         audioManager.PlaySFX(audioManager.klong, audioManager.doubleVol);
 
         // player state reset
@@ -234,6 +235,11 @@ public class Rager : Character
     private void ResetComboState(bool restoreTargetState)
     {
         Character target = comboTarget != null ? comboTarget : GetCurrentCombatTarget();
+
+        if (target != null && target.isActiveAndEnabled)
+        {
+            target.EndDeferredCritFeedback(false);
+        }
 
         if (restoreTargetState && target != null && target.isActiveAndEnabled)
         {
