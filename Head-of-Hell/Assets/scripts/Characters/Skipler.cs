@@ -204,6 +204,17 @@ public class Skipler : Character
 
     override protected void OnTriggerEnter2D(Collider2D other)
     {
+        Character collidedCharacter = GetCharacterFromCollider(other);
+
+        if (dashing
+            && gameManager != null
+            && gameManager.IsTwoVersusTwoMatch()
+            && collidedCharacter != null
+            && gameManager.ArePlayersTeammates(playerNum, collidedCharacter.GetPlayerNum()))
+        {
+            return;
+        }
+
         Character target = ResolveTargetFromHit(other);
         if (dashing && target != null && dashTargetsHit.Add(target))  //--here
         {

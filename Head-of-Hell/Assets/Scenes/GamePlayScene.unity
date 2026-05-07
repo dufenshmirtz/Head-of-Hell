@@ -1331,7 +1331,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1588322336008336028, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
-      value: 8320
+      value: 24960
       objectReference: {fileID: 0}
     - target: {fileID: 1588322336008336028, guid: ffb5788334799754a9ad80b9ea452c87, type: 3}
       propertyPath: m_IncludeLayers.m_Bits
@@ -6970,7 +6970,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 12215
+    m_Bits: 28599
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -26668,7 +26668,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7614724473534664062, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
-      value: 384
+      value: 24960
       objectReference: {fileID: 0}
     - target: {fileID: 7614724473534664062, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_IncludeLayers.m_Bits
@@ -26914,7 +26914,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 12215
+    m_Bits: 28599
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -39010,7 +39010,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 12215
+    m_Bits: 28599
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -41407,7 +41407,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7614724473534664062, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
-      value: 384
+      value: 24960
       objectReference: {fileID: 0}
     - target: {fileID: 7614724473534664062, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_IncludeLayers.m_Bits
@@ -48251,7 +48251,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7614724473534664062, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
-      value: 8448
+      value: 24960
       objectReference: {fileID: 0}
     - target: {fileID: 7614724473534664062, guid: 5d0f8707a8b207040a851941618dad6a, type: 3}
       propertyPath: m_IncludeLayers.m_Bits
