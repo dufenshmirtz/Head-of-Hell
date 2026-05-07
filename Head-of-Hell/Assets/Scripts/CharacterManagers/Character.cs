@@ -2303,7 +2303,9 @@ public abstract class Character : MonoBehaviour
         }
 
         if (damageCounter.gameObject.activeSelf) {
-            damage += int.Parse(damageCounter.text);
+            int currentDisplayedDamage = 0;
+            int.TryParse(damageCounter.text, out currentDisplayedDamage);
+            damage += currentDisplayedDamage;
         }
         damageCounter.text = damage.ToString();
         damageCounter.gameObject.SetActive(true);
