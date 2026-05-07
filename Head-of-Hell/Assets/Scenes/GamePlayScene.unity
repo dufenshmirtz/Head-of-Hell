@@ -3893,7 +3893,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 214.4, y: -186.48}
+  m_AnchoredPosition: {x: 214.7, y: -192}
   m_SizeDelta: {x: 96.4538, y: 88.6105}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &129802460
@@ -4058,7 +4058,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -209.59996, y: -186.48}
+  m_AnchoredPosition: {x: -209.59996, y: -192}
   m_SizeDelta: {x: 96.4538, y: 88.6105}
   m_Pivot: {x: 0.5000005, y: 0.49999994}
 --- !u!114 &137982197
@@ -14730,7 +14730,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 148.71, y: -186.48}
+  m_AnchoredPosition: {x: 148.70996, y: -192}
   m_SizeDelta: {x: 114.7, y: 17.0654}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &523902766
@@ -36354,7 +36354,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -302.99, y: -184.09}
+  m_AnchoredPosition: {x: -302.99, y: -192}
   m_SizeDelta: {x: 150.9264, y: 19.82}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1275631869
@@ -39960,7 +39960,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 306.13, y: -187.86}
+  m_AnchoredPosition: {x: 306.14, y: -192}
   m_SizeDelta: {x: 150.9264, y: 19.82}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1416349586
@@ -41731,7 +41731,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -93.87, y: 55.8784}
+  m_AnchoredPosition: {x: -101.97, y: 51.735}
   m_SizeDelta: {x: 167.1294, y: 17.651}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1459609556
@@ -49751,7 +49751,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -696.84, y: 55.878}
+  m_AnchoredPosition: {x: -694.89, y: 51.735}
   m_SizeDelta: {x: 167.1294, y: 17.651}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1705911135
@@ -52177,7 +52177,7 @@ GameObject:
   - component: {fileID: 1828896202}
   - component: {fileID: 1828896203}
   m_Layer: 5
-  m_Name: 'p4CooldownBar '
+  m_Name: p4CooldownBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52201,7 +52201,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -144.81, y: -182.71}
+  m_AnchoredPosition: {x: -144.81, y: -192}
   m_SizeDelta: {x: 114.7, y: 17.0654}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1828896203
