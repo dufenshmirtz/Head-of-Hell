@@ -51676,6 +51676,8 @@ MonoBehaviour:
   buttons:
   - {fileID: 1524814571}
   - {fileID: 1934192341}
+  - {fileID: 1394304879}
+  - {fileID: 261055740}
   - {fileID: 1247113694}
   sfx: {fileID: 344690514}
 --- !u!1 &1343716395
@@ -76748,8 +76750,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttons:
   - {fileID: 937619181}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1904087926}
+  - {fileID: 1312205676}
+  - {fileID: 798570140}
   sfx: {fileID: 344690514}
 --- !u!114 &2043734449
 MonoBehaviour:
