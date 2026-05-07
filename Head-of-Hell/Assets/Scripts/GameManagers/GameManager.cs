@@ -232,7 +232,7 @@ public class GameManager : MonoBehaviour
 
         foreach (string objectName in p3HudObjectNames)
         {
-            GameObject hudObject = GameObject.Find(objectName);
+            GameObject hudObject = FindHudObjectByTrimmedName(objectName);
             if (hudObject != null)
             {
                 hudObject.SetActive(visible);
@@ -254,12 +254,48 @@ public class GameManager : MonoBehaviour
 
         foreach (string objectName in p4HudObjectNames)
         {
-            GameObject hudObject = GameObject.Find(objectName);
+            GameObject hudObject = FindHudObjectByTrimmedName(objectName);
             if (hudObject != null)
             {
                 hudObject.SetActive(visible);
             }
         }
+    }
+
+    private GameObject FindHudObjectByTrimmedName(string objectName)
+    {
+        GameObject exactMatch = GameObject.Find(objectName);
+        if (exactMatch != null)
+        {
+            return exactMatch;
+        }
+
+        Transform[] allTransforms = Resources.FindObjectsOfTypeAll<Transform>();
+        for (int i = 0; i < allTransforms.Length; i++)
+        {
+            Transform candidate = allTransforms[i];
+            if (candidate == null)
+            {
+                continue;
+            }
+
+            if (candidate.hideFlags != HideFlags.None)
+            {
+                continue;
+            }
+
+            if (!candidate.gameObject.scene.IsValid())
+            {
+                continue;
+            }
+
+            if (candidate.name.Trim() == objectName)
+            {
+                return candidate.gameObject;
+            }
+        }
+
+        return null;
     }
 
     private void EnsureFourPlayerRuntimeSetup()
