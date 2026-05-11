@@ -32,6 +32,11 @@ public class CharacterManager : MonoBehaviour
     public Color ChibackColor;
     public Color LupenColor;
     public Color LupenSpiritColor;
+    public Color player1OutlineColor = new Color(0.96f, 0.18f, 0.18f, 1f);
+    public Color player2OutlineColor = new Color(0.20f, 0.52f, 1f, 1f);
+    public Color player3OutlineColor = new Color(0.12f, 0.86f, 0.36f, 1f);
+    public Color player4OutlineColor = new Color(1f, 0.85f, 0.18f, 1f);
+    [Range(0.5f, 4f)] public float outlineSize = 0.5f;
 
     // Animator Controllers
     public RuntimeAnimatorController SteelagerAnimatorController;
@@ -68,6 +73,10 @@ public class CharacterManager : MonoBehaviour
     public bool training = false;
 
     private CharacterAnimationEvents animEvents;
+    private SpriteRenderer rootSpriteRenderer;
+    private Material originalSpriteMaterial;
+    private MaterialPropertyBlock outlinePropertyBlock;
+    private static Material sharedOutlineMaterial;
 
     public GameManager mngr;
 
@@ -107,6 +116,9 @@ public class CharacterManager : MonoBehaviour
         }
 
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        rootSpriteRenderer = spriteRenderer;
+        if (rootSpriteRenderer != null)
+            originalSpriteMaterial = rootSpriteRenderer.sharedMaterial;
 
         animEvents = GetComponent<CharacterAnimationEvents>();
         if (animEvents == null)
@@ -198,6 +210,7 @@ public class CharacterManager : MonoBehaviour
         }
 
         OnCharacterReady?.Invoke(character);  // <-- tell listeners initial character exists
+        RefreshPlayerOutline();
     }
 
     void Start()
@@ -361,6 +374,7 @@ public class CharacterManager : MonoBehaviour
         }
 
         OnCharacterChanged?.Invoke(character); // <-- tell listeners we swapped
+        RefreshPlayerOutline();
     }
 
     public void ChangeCharacterTraining(String name)
@@ -456,6 +470,7 @@ public class CharacterManager : MonoBehaviour
         OnCharacterReady?.Invoke(character);  // <-- tell listeners initial character exists
 
         animEvents.SetCharacter(character);
+        RefreshPlayerOutline();
 
     }
 
@@ -484,6 +499,67 @@ public class CharacterManager : MonoBehaviour
         {
             character.RefreshSetupBindingsForRuntime();
         }
+
+        RefreshPlayerOutline();
+    }
+
+    private void RefreshPlayerOutline()
+    {
+        if (rootSpriteRenderer == null)
+            rootSpriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (rootSpriteRenderer == null)
+            return;
+
+        bool showOutline = GameModeSelectionState.CurrentMode == SelectedGameMode.PvP_1v1v1
+            || GameModeSelectionState.CurrentMode == SelectedGameMode.PvP_2v2;
+
+        if (!showOutline)
+        {
+            rootSpriteRenderer.sharedMaterial = originalSpriteMaterial;
+            rootSpriteRenderer.SetPropertyBlock(null);
+            return;
+        }
+
+        if (sharedOutlineMaterial == null)
+        {
+            Shader outlineShader = Shader.Find("HeadOfHell/PlayerSpriteOutline");
+            if (outlineShader == null)
+            {
+                Debug.LogWarning("[CharacterManager] Player outline shader was not found.");
+                return;
+            }
+
+            sharedOutlineMaterial = new Material(outlineShader);
+        }
+
+        if (outlinePropertyBlock == null)
+            outlinePropertyBlock = new MaterialPropertyBlock();
+
+        rootSpriteRenderer.sharedMaterial = sharedOutlineMaterial;
+        rootSpriteRenderer.GetPropertyBlock(outlinePropertyBlock);
+        outlinePropertyBlock.SetColor("_OutlineColor", GetOutlineColorForCurrentMode());
+        outlinePropertyBlock.SetFloat("_OutlineSize", outlineSize);
+        rootSpriteRenderer.SetPropertyBlock(outlinePropertyBlock);
+    }
+
+    private Color GetOutlineColorForCurrentMode()
+    {
+        if (GameModeSelectionState.CurrentMode == SelectedGameMode.PvP_2v2)
+        {
+            return (playerNum == 1 || playerNum == 3) ? player1OutlineColor : player2OutlineColor;
+        }
+
+        if (playerNum == 1)
+            return player1OutlineColor;
+        if (playerNum == 2)
+            return player2OutlineColor;
+        if (playerNum == 3)
+            return player3OutlineColor;
+        if (playerNum == 4)
+            return player4OutlineColor;
+
+        return Color.white;
     }
 
     public IEnumerator RerollRandomCharacter_TrainingOnly_Co()
