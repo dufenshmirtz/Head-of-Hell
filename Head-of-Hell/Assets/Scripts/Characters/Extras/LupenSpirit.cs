@@ -33,6 +33,9 @@ public class LupenSpirit : MonoBehaviour
 
     void Update()
     {
+        if (input == null) input = new KeyboardInputProvider();
+        if (animator == null) animator = GetComponent<Animator>();
+
         if (swapped && stolenCharacter == null)
         {
             ReturnControlToLupen(currentHealth);
@@ -49,7 +52,7 @@ public class LupenSpirit : MonoBehaviour
         }
 
         // If we swapped forms and the form dies, return to Lupen and die.
-        if (swapped)
+        if (swapped && stolenCharacter != null)
         {
             if (stolenCharacter.GetCurrentHealth() <= 0)
             {
@@ -59,7 +62,7 @@ public class LupenSpirit : MonoBehaviour
         }
 
         // If Lupen is currently in-form spell and the animation finished, return.
-        if (lupenInFormSpell && !animator.GetBool("Casting"))
+        if (lupenInFormSpell && stolenCharacter != null && animator != null && !animator.GetBool("Casting"))
         {
             ReturnControlToLupen(stolenCharacter.GetCurrentHealth());
         }
