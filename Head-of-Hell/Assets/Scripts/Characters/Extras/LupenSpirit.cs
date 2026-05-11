@@ -79,7 +79,7 @@ public class LupenSpirit : MonoBehaviour
             {
                 stolenCharacter.chargeDisable = true;
             }
-            StartCoroutine(SetLupenInFormSpellAfterDelay(1.7f));
+            StartCoroutine(SetLupenInFormSpellAfterDelay(GetReturnDelayForCurrentForm()));
         }
     }
 
@@ -123,6 +123,16 @@ public class LupenSpirit : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         lupenInFormSpell = true;
+    }
+
+    private float GetReturnDelayForCurrentForm()
+    {
+        if (stolenCharacter is Rager)
+        {
+            return 2.84f;
+        }
+
+        return 1.7f;
     }
 
     public void Action()
