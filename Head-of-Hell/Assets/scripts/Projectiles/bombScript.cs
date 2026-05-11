@@ -14,17 +14,28 @@ public class bombScript : MonoBehaviour
     Steelager steelager;
     AudioManager audioManager;
     bool jumpDone = false;
+    CapsuleCollider2D physicalCollider;
+    bool ownerPhysicalCollisionIgnored = false;
+    Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
         player = 0;
         audioManager = FindObjectOfType<AudioManager>(); // Find and assign the AudioManager
+        rb = GetComponent<Rigidbody2D>();
+        physicalCollider = GetComponent<CapsuleCollider2D>();
+        if (rb != null)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
 
         if (audioManager == null)
         {
             Debug.LogError("AudioManager not found in the scene!");
         }
+
+        IgnoreOwnerPhysicalCollision();
     }
 
     // Update is called once per frame
@@ -47,6 +58,7 @@ public class bombScript : MonoBehaviour
                 if (playa != null)
                 {
                     player = playa.PlayerId == "P1" ? 1 : playa.PlayerId == "P2" ? 2 : 3;
+                    IgnoreOwnerPhysicalCollision();
                 }
             }
 
@@ -99,6 +111,40 @@ public class bombScript : MonoBehaviour
             damageDealt = true;
         }
 
+    }
+
+    public void InitializeOwner(Character owner)
+    {
+        if (owner == null)
+        {
+            return;
+        }
+
+        playa = owner;
+        player = owner.PlayerId == "P1" ? 1 : owner.PlayerId == "P2" ? 2 : 3;
+        IgnoreOwnerPhysicalCollision();
+    }
+
+    private void IgnoreOwnerPhysicalCollision()
+    {
+        if (ownerPhysicalCollisionIgnored || playa == null || physicalCollider == null)
+        {
+            return;
+        }
+
+        Collider2D[] ownerColliders = playa.GetComponents<Collider2D>();
+        for (int i = 0; i < ownerColliders.Length; i++)
+        {
+            Collider2D ownerCollider = ownerColliders[i];
+            if (ownerCollider == null || ownerCollider == physicalCollider || ownerCollider.isTrigger)
+            {
+                continue;
+            }
+
+            Physics2D.IgnoreCollision(physicalCollider, ownerCollider, true);
+        }
+
+        ownerPhysicalCollisionIgnored = true;
     }
 
     private Character FindClosestEnemyForOwner()
