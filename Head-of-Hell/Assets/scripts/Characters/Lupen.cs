@@ -193,6 +193,7 @@ public class Lupen : Character
         Unblock();
         stayDynamic();
         ActivateColliders();
+        RestorePlatformSupportIfNeeded();
 
         if (rb != null)
         {
@@ -212,6 +213,32 @@ public class Lupen : Character
             animator.SetBool("isUsingAbility", false);
             animator.ResetTrigger("ChargedHit");
             animator.ResetTrigger("tookDmg");
+        }
+    }
+
+    private void RestorePlatformSupportIfNeeded()
+    {
+        if (feetTrigger == null)
+        {
+            return;
+        }
+
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        if (colliders == null || colliders.Length <= 3)
+        {
+            return;
+        }
+
+        int platformMask = LayerMask.GetMask("PlatformLayer");
+        if (platformMask == 0)
+        {
+            return;
+        }
+
+        if (feetTrigger.IsTouchingLayers(platformMask))
+        {
+            colliders[3].enabled = true;
+            isGrounded = true;
         }
     }
 
