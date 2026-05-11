@@ -152,13 +152,22 @@ public class Steelager : Character
     void ThrowBomb()
     {
         bombPrefab = resources.bomb;
-        bombPoint=resources.bombSpawner;
+        bombPoint = resources.bombSpawner;
         bombsParent = resources.trash;
 
         bombCharging = true;
         audioManager.PlaySFX(audioManager.fuse, audioManager.normalVol);
-        GameObject bomb = Instantiate(bombPrefab, bombPoint.position,  firePoint.rotation);
-        bomba=bomb.GetComponent<bombScript>();
+
+        Transform spawnTransform = bombPoint != null ? bombPoint : firePoint;
+        Quaternion spawnRotation = spawnTransform != null ? spawnTransform.rotation : transform.rotation;
+        Vector3 spawnPosition = spawnTransform != null ? spawnTransform.position : transform.position;
+
+        GameObject bomb = Instantiate(bombPrefab, spawnPosition, spawnRotation);
+        bomba = bomb.GetComponent<bombScript>();
+        if (bomba != null)
+        {
+            bomba.InitializeOwner(this);
+        }
         Rigidbody2D rb = bomb.GetComponent<Rigidbody2D>();
         bomb.transform.SetParent(bombsParent);
         StartCoroutine(ResetBomb());
