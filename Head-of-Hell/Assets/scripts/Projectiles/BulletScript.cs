@@ -8,9 +8,14 @@ public class BulletScript : MonoBehaviour
     private bool hasHit = false;
     private bool fireLogged = false;
 
-    public LazyBigus initiator;
+    public Character initiator;
 
     public void Init(LazyBigus owner)
+    {
+        Init((Character)owner);
+    }
+
+    public void Init(Character owner)
     {
         initiator = owner;
 
@@ -55,7 +60,12 @@ public class BulletScript : MonoBehaviour
                 );
 
                 character.TakeDamage(3, true);
-                initiator.StackPoison(character);
+
+                LazyBigus bigus = initiator as LazyBigus;
+                if (bigus != null)
+                {
+                    bigus.StackPoison(character);
+                }
             }
         }
     }

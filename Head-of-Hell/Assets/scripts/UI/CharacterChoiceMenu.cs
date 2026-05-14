@@ -84,6 +84,46 @@ public class CharacterChoiceMenu : MonoBehaviour
         currentPlayer = picksMade + 1;
     }
 
+    public void AssignCustomCharacterToCurrentPlayer(string customCharacterId)
+    {
+        if (picked)
+        {
+            return;
+        }
+
+        CustomCharacterData data = CustomCharacterStore.GetById(customCharacterId);
+        if (data == null)
+        {
+            Debug.LogWarning($"Custom character not found: {customCharacterId}");
+            return;
+        }
+
+        AssignCustomPick(currentPlayer, data);
+        picksMade++;
+
+        if (picksMade >= requiredPlayers)
+        {
+            picked = true;
+            cscript.BothPicked(true);
+
+            if (startButton != null)
+                startButton.gameObject.SetActive(true);
+
+            if (requiredPlayers == 2)
+            {
+                foreach (Button butt in characterButtons)
+                {
+                    if (!IsChosenButton(butt))
+                        butt.interactable = false;
+                }
+            }
+
+            return;
+        }
+
+        currentPlayer = picksMade + 1;
+    }
+
     void DeselectCharacter()
     {
         if (picksMade <= 0)
@@ -152,6 +192,17 @@ public class CharacterChoiceMenu : MonoBehaviour
         }
 
         SetChoiceLabel(currentPlayer, name);
+    }
+
+    public void HoveringCustom(string customCharacterId)
+    {
+        if (picked)
+        {
+            return;
+        }
+
+        CustomCharacterData data = CustomCharacterStore.GetById(customCharacterId);
+        SetChoiceLabel(currentPlayer, data != null ? data.displayName : "");
     }
 
     void CharacterSound(string name)
@@ -276,6 +327,12 @@ public class CharacterChoiceMenu : MonoBehaviour
                 cscript.SetPlayer4Picked(button);
                 break;
         }
+    }
+
+    private void AssignCustomPick(int playerNumber, CustomCharacterData data)
+    {
+        SetChoiceLabel(playerNumber, data.displayName);
+        PlayerPrefs.SetString($"Player{playerNumber}Choice", CustomCharacterSelection.EncodeChoice(data.id));
     }
 
     private void ClearPick(int playerNumber)

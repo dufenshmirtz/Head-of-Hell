@@ -29,6 +29,7 @@ public class characterInfoChoice : MonoBehaviour
 {
     public TextMeshProUGUI info;
     public TextMeshProUGUI title;
+    public CharacterSpecsBase[] characterSpecs;
     private string parentName;
     private CharacterList characterList;
     private CharacterLore characterLoreScript; // Reference to the CharacterLore script
@@ -103,18 +104,8 @@ public class characterInfoChoice : MonoBehaviour
 
         if (character != null)
         {
-            // Build the info string using the character's abilities
-            string characterInfo = $"~PASSIVE~\n{character.abilities.passive}\n";
-
-            if (!string.IsNullOrEmpty(character.abilities.quick_attack))
-            {
-                characterInfo += $"~QUICK ATTACK~\n{character.abilities.quick_attack}\n";
-            }
-
-            if (!string.IsNullOrEmpty(character.abilities.spell))
-            {
-                characterInfo += $"~SPELL~\n{character.abilities.spell}\n";
-            }
+            CharacterSpecsBase specs = FindSpecs(parentName);
+            string characterInfo = CharacterSpecsTextBuilder.BuildInfo(parentName, specs, character.abilities);
 
             // Set the info text
             info.text = characterInfo;
@@ -139,6 +130,39 @@ public class characterInfoChoice : MonoBehaviour
             info.text = "Error: Character info not found.";
             Debug.LogError("Error: Character info not found for " + parentName);
         }
+    }
+
+    private CharacterSpecsBase FindSpecs(string characterName)
+    {
+        if (characterSpecs == null)
+        {
+            return null;
+        }
+
+        string normalizedName = Normalize(characterName);
+        for (int i = 0; i < characterSpecs.Length; i++)
+        {
+            CharacterSpecsBase specs = characterSpecs[i];
+            if (specs == null)
+            {
+                continue;
+            }
+
+            string typeName = specs.GetType().Name.Replace("Specs", "");
+            if (Normalize(typeName) == normalizedName)
+            {
+                return specs;
+            }
+        }
+
+        return null;
+    }
+
+    private string Normalize(string value)
+    {
+        return string.IsNullOrWhiteSpace(value)
+            ? ""
+            : value.Replace(" ", "").Replace("_", "").ToLowerInvariant();
     }
 
     // Update is called once per frame

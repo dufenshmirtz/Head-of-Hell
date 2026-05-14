@@ -6,6 +6,9 @@ public class CharacterResources : MonoBehaviour
 {
     [Header("Character Specs")]
     public CharacterSpecsBase[] allCharacterSpecs;
+    public CharacterSpecsBase customCharacterFallbackSpecs;
+
+    private CharacterSpecsBase runtimeCustomCharacterSpecs;
 
     [Header("Resources")]
 
@@ -51,6 +54,11 @@ public class CharacterResources : MonoBehaviour
 
     public CharacterSpecsBase GetSpecsByID(int id)
     {
+        if (id == (int)CharacterType.Custom)
+        {
+            return GetCustomCharacterFallbackSpecs();
+        }
+
         if (id < 0 || id >= allCharacterSpecs.Length)
         {
             Debug.LogError("Invalid character ID: " + id);
@@ -58,6 +66,21 @@ public class CharacterResources : MonoBehaviour
         }
 
         return allCharacterSpecs[id];
+    }
+
+    private CharacterSpecsBase GetCustomCharacterFallbackSpecs()
+    {
+        if (customCharacterFallbackSpecs != null)
+        {
+            return customCharacterFallbackSpecs;
+        }
+
+        if (runtimeCustomCharacterSpecs == null)
+        {
+            runtimeCustomCharacterSpecs = ScriptableObject.CreateInstance<CustomCharacterSpecs>();
+        }
+
+        return runtimeCustomCharacterSpecs;
     }
 
     private void OnDrawGizmosSelected()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BeamScript : MonoBehaviour
 {
-    public LazyBigus playa;
+    public Character playa;
 
     private Collider2D beamCollider;
     private readonly HashSet<Character> hitTargets = new HashSet<Character>();
@@ -66,7 +66,7 @@ public class BeamScript : MonoBehaviour
             }
             if (hitTargets.Add(target))
             {
-                playa.BeamHit(target);
+                SendBeamHit(target);
             }
         }
     }
@@ -111,8 +111,24 @@ public class BeamScript : MonoBehaviour
             }
             if (hitTargets.Add(target))
             {
-                playa.BeamHit(target);
+                SendBeamHit(target);
             }
+        }
+    }
+
+    private void SendBeamHit(Character target)
+    {
+        LazyBigus bigus = playa as LazyBigus;
+        if (bigus != null)
+        {
+            bigus.BeamHit(target);
+            return;
+        }
+
+        Custom custom = playa as Custom;
+        if (custom != null)
+        {
+            custom.BeamHit(target);
         }
     }
 
