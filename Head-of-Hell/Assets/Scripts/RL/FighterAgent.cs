@@ -121,9 +121,9 @@ public class FighterAgent : Agent
     float passiveNearTimer = 0f;
 
     [Header("Anti Body-Push Cheese")]
-    float bodyPushRangeX = 0.48f;
-    float bodyPushRangeY = 0.75f;
-    float bodyPushGraceTime = 0.16f;
+    float bodyPushRangeX = 1.2f;
+    float bodyPushRangeY = 1f;
+    float bodyPushGraceTime = 0.5f;
     float bodyPushPenaltyPerSecond = -0.035f;
     float bodyPushBlockMultiplier = 1.7f;
     float bodyPushRealPressureGrace = 0.22f;
@@ -1460,7 +1460,7 @@ public class FighterAgent : Agent
 
             if (bodyPushTimer > bodyPushGraceTime)
             {
-                float penalty = bodyPushPenaltyPerSecond * dt;
+                float penalty = bodyPushPenaltyPerSecond;
 
                 if (blockingPush)
                     penalty *= bodyPushBlockMultiplier;
