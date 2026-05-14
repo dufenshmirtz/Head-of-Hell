@@ -114,6 +114,32 @@ public class FighterAgent : Agent
     float attackIntentRangeX = 1.10f;
     float attackIntentRangeY = 0.65f;
 
+    [Header("Punish / Parry Intelligence")]
+    float parryOpportunityBonus = +0.0012f;
+    float unsafeParryPenalty = -0.0010f;
+    float obviousPunishBonus = +0.0010f;
+    float missedPunishPenaltyPerSecond = -0.0006f;
+    float parryThreatRangeX = 1.55f;
+    float parryThreatRangeY = 0.85f;
+    float punishMeleeRangeX = 1.35f;
+    float punishRangeY = 0.85f;
+
+    [Header("Opponent Charge Response")]
+    float chargeResponseGraceTime = 0.35f;
+    float chargePunishSpecialBonus = +0.0025f;
+    float chargePunishAttackBonus = +0.0010f;
+    float chargeRunawayPenaltyPerSecond = -0.0025f;
+    float missedChargeSpecialPenaltyPerSecond = -0.0014f;
+    float chargeThreatRangeX = 1.15f;
+    float opponentChargeTimer = 0f;
+
+    [Header("Low Health Composure")]
+    float lowHealthThreshold01 = 0.32f;
+    float lowHealthPanicActionPenalty = -0.00045f;
+    float lowHealthUnsafeJumpPenalty = -0.00035f;
+    float lowHealthAimlessBlockPenaltyPerSecond = -0.0010f;
+    float lowHealthEdgeCampExtraPenalty = -0.00035f;
+
     [Header("Anti-Passivity")]
     float passiveNearGraceTime = 1.0f;
     float passiveNearPenaltyPerSecond = -0.0009f;
@@ -123,6 +149,7 @@ public class FighterAgent : Agent
     [Header("Anti Body-Push Cheese")]
     float bodyPushRangeX = 1.2f;
     float bodyPushRangeY = 1f;
+    float bodyPushContactTolerance = 0.03f;
     float bodyPushGraceTime = 0.5f;
     float bodyPushPenaltyPerSecond = -0.035f;
     float bodyPushBlockMultiplier = 1.7f;
@@ -131,7 +158,7 @@ public class FighterAgent : Agent
     float recentRealPressureTimer = 0f;
     float lastBodyPushAbsDx = 999f;
 
-    int lastHeavyAction = 0;
+    int lastPressureActionIntent = 0;
 
     bool chargeTrackingActive = false;
     int chargeStartOppHP = 0;
@@ -167,6 +194,8 @@ public class FighterAgent : Agent
     int consecutiveSameMoveStarts = 0;
 
     FighterAgent oppAgent;
+    Collider2D[] selfBodyColliders = new Collider2D[0];
+    Collider2D[] oppBodyColliders = new Collider2D[0];
 
     void Start()
     {
@@ -257,6 +286,7 @@ public class FighterAgent : Agent
         aiInput.SetKeys(leftK, rightK, upK, downK, lightK, heavyK, blockK, abilityK, chargeK, parryK);
 
         self.SetInput(aiInput);
+        selfBodyColliders = CollectBodyColliders(self);
 
         lastSelfHP = self.GetCurrentHealth();
 
@@ -269,7 +299,12 @@ public class FighterAgent : Agent
 
         if (opp != null)
         {
+            oppBodyColliders = CollectBodyColliders(opp);
             lastOppHP = opp.GetCurrentHealth();
+        }
+        else
+        {
+            oppBodyColliders = new Collider2D[0];
         }
 
         if (self != null && opp != null)
@@ -507,6 +542,11 @@ public class FighterAgent : Agent
         {
             actionMask.SetActionEnabled(8, 1, false);
         }
+
+        if (!self.CanCast)
+        {
+            actionMask.SetActionEnabled(8, 1, false);
+        }
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -533,6 +573,16 @@ public class FighterAgent : Agent
 
         int moveX = moveBranch == 0 ? -1 : (moveBranch == 1 ? 0 : 1);
         lastMoveX = moveX;
+
+        int currentActionIntent = GetActionIntent(jump, drop, light, heavy, blockHold, special, chargeMode, parry);
+        bool actionIntentStartedThisStep =
+            currentActionIntent != 0 &&
+            currentActionIntent != lastActionIntent;
+
+        int currentPressureActionIntent = GetPressureActionIntent(light, heavy, special, chargeMode, parry);
+        bool pressureActionStartedThisStep =
+            currentPressureActionIntent != 0 &&
+            currentPressureActionIntent != lastPressureActionIntent;
 
         var cmd = new AIInputProvider.Command
         {
@@ -574,13 +624,18 @@ public class FighterAgent : Agent
         ShapingRewards();
         BehaviorHygieneRewards(jump, drop, light, heavy, blockHold, special, chargeMode, parry);
         TacticalRangeRewards(light, heavy, special, chargeMode);
-        OffensiveIntentRewards(jump, drop, light, heavy, blockHold, special, chargeMode, parry);
+        OffensiveIntentRewards(actionIntentStartedThisStep);
         DirectionalHygieneRewards(moveX, light, special);
         PressureRewards(moveX, blockHold);
-        PassivityPenalty(light, heavy, special, chargeMode, parry, blockHold);
-        BodyPushCheesePenalty(moveX, light, heavy, special, chargeMode, parry, blockHold);
+        PassivityPenalty(pressureActionStartedThisStep, parry, blockHold);
+        BodyPushCheesePenalty(moveX, pressureActionStartedThisStep, blockHold);
+        SmartOpportunityRewards(moveX, currentActionIntent, actionIntentStartedThisStep, currentPressureActionIntent, pressureActionStartedThisStep);
+        OpponentChargeResponseRewards(moveX, currentPressureActionIntent, pressureActionStartedThisStep);
+        LowHealthComposureRewards(currentActionIntent, actionIntentStartedThisStep, jump, blockHold, parry);
         ChargeSpamPenalty(chargeMode);
         ChargeReleaseOutcomePenalty(chargeMode);
+
+        lastPressureActionIntent = currentPressureActionIntent;
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -652,6 +707,7 @@ public class FighterAgent : Agent
         }
 
         lastActionIntent = 0;
+        lastPressureActionIntent = 0;
         consecutiveActionChanges = 0;
 
         edgeStayTimer = 0f;
@@ -693,9 +749,9 @@ public class FighterAgent : Agent
         blockHoldTimer = 0f;
         lastStartedIntent = 0;
         consecutiveSameMoveStarts = 0;
+        opponentChargeTimer = 0f;
 
         passiveNearTimer = 0f;
-        lastHeavyAction = 0;
 
         bodyPushTimer = 0f;
         recentRealPressureTimer = 0f;
@@ -886,6 +942,36 @@ public class FighterAgent : Agent
         return 0;
     }
 
+    int GetPressureActionIntent(int light, int heavy, int special, int chargeMode, int parry)
+    {
+        if (parry == 1)
+        {
+            return 5;
+        }
+
+        if (chargeMode != 0)
+        {
+            return 4;
+        }
+
+        if (special == 1)
+        {
+            return 3;
+        }
+
+        if (heavy == 1)
+        {
+            return 2;
+        }
+
+        if (light == 1)
+        {
+            return 1;
+        }
+
+        return 0;
+    }
+
     bool IsStrictMelee(ReachType reachType)
     {
         return reachType == ReachType.Melee;
@@ -904,11 +990,13 @@ public class FighterAgent : Agent
         }
 
         float absDx = Mathf.Abs(opp.transform.position.x - self.transform.position.x);
+        float absDy = Mathf.Abs(opp.transform.position.y - self.transform.position.y);
+        bool bodyPushContact = IsBodyPushContact(absDx, absDy);
 
         float approachStartDistance = usefulRangeMaxX + approachStartMargin;
         bool farFromOpponent = absDx > approachStartDistance;
 
-        if (farFromOpponent && absDx < lastAbsDx)
+        if (farFromOpponent && absDx < lastAbsDx && !bodyPushContact)
         {
             AddReward(approachBonus);
             rewardDebugger?.LogApproachReward(approachBonus);
@@ -995,6 +1083,283 @@ public class FighterAgent : Agent
         float facingSign = Mathf.Sign(self.transform.localScale.x);
 
         return facingSign == oppDirSign;
+    }
+
+    Collider2D[] CollectBodyColliders(Character character)
+    {
+        if (character == null)
+        {
+            return new Collider2D[0];
+        }
+
+        return character.GetComponentsInChildren<Collider2D>(true);
+    }
+
+    bool IsUsableBodyCollider(Collider2D collider)
+    {
+        return
+            collider != null &&
+            collider.enabled &&
+            collider.gameObject.activeInHierarchy &&
+            !collider.isTrigger;
+    }
+
+    bool AreBodyCollidersTouching()
+    {
+        if (selfBodyColliders == null || oppBodyColliders == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < selfBodyColliders.Length; i++)
+        {
+            Collider2D selfCollider = selfBodyColliders[i];
+            if (!IsUsableBodyCollider(selfCollider))
+            {
+                continue;
+            }
+
+            for (int j = 0; j < oppBodyColliders.Length; j++)
+            {
+                Collider2D oppCollider = oppBodyColliders[j];
+                if (!IsUsableBodyCollider(oppCollider))
+                {
+                    continue;
+                }
+
+                ColliderDistance2D distance = selfCollider.Distance(oppCollider);
+                if (distance.isOverlapped || distance.distance <= bodyPushContactTolerance)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    bool IsBodyPushContact(float absDx, float absDy)
+    {
+        bool inConfiguredRange =
+            absDx <= bodyPushRangeX &&
+            absDy <= bodyPushRangeY;
+
+        return inConfiguredRange || AreBodyCollidersTouching();
+    }
+
+    bool HasRealActivePressure()
+    {
+        return
+            self != null &&
+            (
+                self.LightAttacking ||
+                self.HeavyAttacking ||
+                self.IsCasting ||
+                self.IsCharging ||
+                self.IsCharged ||
+                self.Parrying
+            );
+    }
+
+    float GetSelfHealth01()
+    {
+        if (self == null)
+        {
+            return 1f;
+        }
+
+        float maxHealth = Mathf.Max(1f, self.maxHealth);
+        return Mathf.Clamp01(self.GetCurrentHealth() / maxHealth);
+    }
+
+    float GetLowHealthPressure01()
+    {
+        float health01 = GetSelfHealth01();
+        if (health01 >= lowHealthThreshold01)
+        {
+            return 0f;
+        }
+
+        return Mathf.Clamp01((lowHealthThreshold01 - health01) / lowHealthThreshold01);
+    }
+
+    bool IsOpponentFacingSelf()
+    {
+        if (self == null || opp == null)
+        {
+            return true;
+        }
+
+        float relX = self.transform.position.x - opp.transform.position.x;
+        if (Mathf.Abs(relX) < 0.05f)
+        {
+            return true;
+        }
+
+        return Mathf.Sign(opp.transform.localScale.x) == Mathf.Sign(relX);
+    }
+
+    ReachType GetOpponentLightReachType()
+    {
+        return oppAgent != null ? oppAgent.lightReachType : ReachType.Melee;
+    }
+
+    ReachType GetOpponentSpecialReachType()
+    {
+        return oppAgent != null ? oppAgent.specialReachType : ReachType.Melee;
+    }
+
+    float GetReachRangeX(ReachType reachType)
+    {
+        switch (reachType)
+        {
+            case ReachType.Dash:
+                return 3.2f;
+            case ReachType.Ranged:
+                return 7.0f;
+            case ReachType.Global:
+                return relXScale;
+            default:
+                return punishMeleeRangeX;
+        }
+    }
+
+    bool IsWithinReachType(ReachType reachType, float absDx, float absDy, bool requireFacing)
+    {
+        if (reachType == ReachType.Global)
+        {
+            return absDy <= relYScale;
+        }
+
+        if (requireFacing && !IsFacingOpponent())
+        {
+            return false;
+        }
+
+        return absDx <= GetReachRangeX(reachType) && absDy <= punishRangeY;
+    }
+
+    bool IsOpponentReachThreat(ReachType reachType, float absDx, float absDy)
+    {
+        if (reachType == ReachType.Global)
+        {
+            return absDy <= relYScale;
+        }
+
+        if (!IsOpponentFacingSelf())
+        {
+            return false;
+        }
+
+        float rangeX = reachType == ReachType.Melee ? parryThreatRangeX : GetReachRangeX(reachType);
+        return absDx <= rangeX && absDy <= parryThreatRangeY;
+    }
+
+    bool IsParryOpportunity(float absDx, float absDy)
+    {
+        if (opp == null)
+        {
+            return false;
+        }
+
+        bool lightThreat = opp.LightAttacking && IsOpponentReachThreat(GetOpponentLightReachType(), absDx, absDy);
+        bool heavyThreat = opp.HeavyAttacking && IsOpponentFacingSelf() && absDx <= parryThreatRangeX && absDy <= parryThreatRangeY;
+        bool specialThreat = opp.IsCasting && IsOpponentReachThreat(GetOpponentSpecialReachType(), absDx, absDy);
+        bool chargedThreat = opp.IsCharged && IsOpponentFacingSelf() && absDx <= chargeThreatRangeX && absDy <= parryThreatRangeY;
+
+        return lightThreat || heavyThreat || specialThreat || chargedThreat;
+    }
+
+    bool IsSpecialReady()
+    {
+        return
+            self != null &&
+            self.CanCast &&
+            !self.OnAbilityCD &&
+            !self.SpecialDisabled &&
+            !self.IsCasting &&
+            !self.IsCharging;
+    }
+
+    bool IsOpponentVulnerableForPunish()
+    {
+        return
+            opp != null &&
+            !opp.Parrying &&
+            (
+                opp.IsCharging ||
+                opp.IsCharged ||
+                opp.HeavyAttacking ||
+                opp.IsCasting ||
+                opp.IsStunned ||
+                opp.IsKnocked
+            );
+    }
+
+    bool IsObviousPunishOpportunity(float absDx, float absDy)
+    {
+        if (!IsOpponentVulnerableForPunish())
+        {
+            return false;
+        }
+
+        if (absDy > punishRangeY && specialReachType != ReachType.Global)
+        {
+            return false;
+        }
+
+        if (absDx <= punishMeleeRangeX && IsFacingOpponent())
+        {
+            return true;
+        }
+
+        return IsSpecialReady() && IsWithinReachType(specialReachType, absDx, absDy, true);
+    }
+
+    bool IsOffensivePressureIntent(int pressureIntent)
+    {
+        return
+            pressureIntent == 1 ||
+            pressureIntent == 2 ||
+            pressureIntent == 3 ||
+            pressureIntent == 4;
+    }
+
+    bool IsOffensivePressureIntentInReach(int pressureIntent, float absDx, float absDy)
+    {
+        if (!IsOffensivePressureIntent(pressureIntent))
+        {
+            return false;
+        }
+
+        if (pressureIntent == 3)
+        {
+            return IsWithinReachType(specialReachType, absDx, absDy, true);
+        }
+
+        if (pressureIntent == 1)
+        {
+            return IsWithinReachType(lightReachType, absDx, absDy, true);
+        }
+
+        return IsFacingOpponent() && absDx <= punishMeleeRangeX && absDy <= punishRangeY;
+    }
+
+    bool IsOpponentImmediateThreat(float absDx, float absDy)
+    {
+        if (IsParryOpportunity(absDx, absDy))
+        {
+            return true;
+        }
+
+        bool chargeThreat =
+            opp != null &&
+            (opp.IsCharging || opp.IsCharged) &&
+            IsOpponentFacingSelf() &&
+            absDx <= chargeThreatRangeX &&
+            absDy <= parryThreatRangeY;
+
+        return chargeThreat;
     }
 
     void DirectionalHygieneRewards(int moveX, int light, int special)
@@ -1112,6 +1477,12 @@ public class FighterAgent : Agent
             rewardDebugger?.LogLossReward(rewardLoss);
             return;
         }
+    }
+
+    public void ApplySafetyResetPenalty(float penalty)
+    {
+        AddReward(penalty);
+        rewardDebugger?.LogSafetyResetPenalty(penalty);
     }
 
     void ChargeSpamPenalty(int chargeMode)
@@ -1240,10 +1611,12 @@ public class FighterAgent : Agent
         bool outsideCloseRange =
             absDx > usefulRangeMaxX + 0.2f;
 
-        if (outsideCloseRange && movingToward)
+        bool tooCloseBodyPushZone = IsBodyPushContact(absDx, absDy);
+
+        if (outsideCloseRange && movingToward && !tooCloseBodyPushZone)
         {
             AddReward(forwardPressureBonus);
-            rewardDebugger?.LogApproachReward(forwardPressureBonus);
+            rewardDebugger?.LogForwardPressureReward(forwardPressureBonus);
         }
 
         bool goodPressureDistance =
@@ -1251,30 +1624,22 @@ public class FighterAgent : Agent
             absDx <= closePressureRangeX &&
             absDy <= closePressureRangeY;
 
-        bool tooCloseBodyPushZone =
-            absDx <= bodyPushRangeX &&
-            absDy <= bodyPushRangeY;
-
-        bool doingRealPressure =
-            self.LightAttacking ||
-            self.HeavyAttacking ||
-            self.IsCasting ||
-            self.IsCharging ||
-            self.IsCharged ||
-            self.Parrying;
+        bool doingRealPressure = HasRealActivePressure();
 
         if (goodPressureDistance && movingToward && blockHold == 0 && (!tooCloseBodyPushZone || doingRealPressure))
         {
             AddReward(closePressureBonus);
+            rewardDebugger?.LogClosePressureReward(closePressureBonus);
         }
 
         if (closeEnoughToPressure && movingAway)
         {
             AddReward(retreatFromCloseRangePenalty);
+            rewardDebugger?.LogRetreatFromClosePenalty(retreatFromCloseRangePenalty);
         }
     }
 
-    void OffensiveIntentRewards(int jump, int drop, int light, int heavy, int blockHold, int special, int chargeMode, int parry)
+    void OffensiveIntentRewards(bool actionIntentStartedThisStep)
     {
         if (self == null || opp == null)
         {
@@ -1296,23 +1661,216 @@ public class FighterAgent : Agent
             absDy <= attackIntentRangeY &&
             facingOpponent;
 
-        bool nonMovementAction =
-            jump == 1 ||
-            drop == 1 ||
-            light == 1 ||
-            heavy == 1 ||
-            blockHold == 1 ||
-            special == 1 ||
-            chargeMode != 0 ||
-            parry == 1;
+        bool usefulIntent =
+            actionIntentStartedThisStep ||
+            HasRealActivePressure();
 
-        if (inCloseRange && nonMovementAction)
+        if (inCloseRange && usefulIntent)
         {
             AddReward(usefulIntentBonus);
+            rewardDebugger?.LogUsefulIntentReward(usefulIntentBonus);
         }
     }
 
-    void PassivityPenalty(int light, int heavy, int special, int chargeMode, int parry, int blockHold)
+    void SmartOpportunityRewards(
+        int moveX,
+        int currentActionIntent,
+        bool actionIntentStartedThisStep,
+        int currentPressureActionIntent,
+        bool pressureActionStartedThisStep)
+    {
+        if (self == null || opp == null)
+        {
+            return;
+        }
+
+        if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
+        {
+            return;
+        }
+
+        float dt = GetSafeDeltaTime();
+        float dx = opp.transform.position.x - self.transform.position.x;
+        float absDx = Mathf.Abs(dx);
+        float absDy = Mathf.Abs(opp.transform.position.y - self.transform.position.y);
+        int towardOpponent = dx >= 0f ? 1 : -1;
+        bool idleOrBackingOff =
+            moveX == 0 ||
+            (moveX != 0 && moveX == -towardOpponent);
+
+        bool parryStarted =
+            actionIntentStartedThisStep &&
+            currentActionIntent == 7;
+
+        bool parryOpportunity = IsParryOpportunity(absDx, absDy);
+
+        if (parryStarted)
+        {
+            if (parryOpportunity)
+            {
+                AddReward(parryOpportunityBonus);
+                rewardDebugger?.LogParryOpportunityReward(parryOpportunityBonus);
+            }
+            else
+            {
+                AddReward(unsafeParryPenalty);
+                rewardDebugger?.LogUnsafeParryPenalty(unsafeParryPenalty);
+            }
+        }
+
+        bool obviousPunish = IsObviousPunishOpportunity(absDx, absDy);
+        bool punishStarted =
+            pressureActionStartedThisStep &&
+            IsOffensivePressureIntentInReach(currentPressureActionIntent, absDx, absDy);
+
+        if (obviousPunish && punishStarted)
+        {
+            AddReward(obviousPunishBonus);
+            rewardDebugger?.LogObviousPunishReward(obviousPunishBonus);
+        }
+        else if (obviousPunish && !HasRealActivePressure() && idleOrBackingOff)
+        {
+            float penalty = missedPunishPenaltyPerSecond * dt;
+            AddReward(penalty);
+            rewardDebugger?.LogMissedPunishPenalty(penalty);
+        }
+    }
+
+    void OpponentChargeResponseRewards(int moveX, int currentPressureActionIntent, bool pressureActionStartedThisStep)
+    {
+        if (self == null || opp == null)
+        {
+            return;
+        }
+
+        if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
+        {
+            return;
+        }
+
+        bool opponentCharging = opp.IsCharging || opp.IsCharged;
+        if (!opponentCharging)
+        {
+            opponentChargeTimer = 0f;
+            return;
+        }
+
+        float dt = GetSafeDeltaTime();
+        opponentChargeTimer += dt;
+
+        float dx = opp.transform.position.x - self.transform.position.x;
+        float absDx = Mathf.Abs(dx);
+        float absDy = Mathf.Abs(opp.transform.position.y - self.transform.position.y);
+
+        int towardOpponent = dx >= 0f ? 1 : -1;
+        bool movingAway = moveX != 0 && moveX == -towardOpponent;
+
+        bool specialReady = IsSpecialReady();
+        bool specialCanReach = specialReady && IsWithinReachType(specialReachType, absDx, absDy, true);
+        bool specialStarted = pressureActionStartedThisStep && currentPressureActionIntent == 3;
+
+        if (specialStarted && specialCanReach)
+        {
+            AddReward(chargePunishSpecialBonus);
+            rewardDebugger?.LogChargePunishReward(chargePunishSpecialBonus);
+            return;
+        }
+
+        bool attackPunishStarted =
+            pressureActionStartedThisStep &&
+            IsOffensivePressureIntentInReach(currentPressureActionIntent, absDx, absDy);
+
+        if (attackPunishStarted)
+        {
+            AddReward(chargePunishAttackBonus);
+            rewardDebugger?.LogChargePunishReward(chargePunishAttackBonus);
+            return;
+        }
+
+        if (opponentChargeTimer <= chargeResponseGraceTime || HasRealActivePressure())
+        {
+            return;
+        }
+
+        if (specialCanReach)
+        {
+            float penalty = missedChargeSpecialPenaltyPerSecond * dt;
+            AddReward(penalty);
+            rewardDebugger?.LogMissedChargeSpecialPenalty(penalty);
+        }
+
+        if (movingAway && absDx > chargeThreatRangeX)
+        {
+            float penalty = chargeRunawayPenaltyPerSecond * dt;
+            AddReward(penalty);
+            rewardDebugger?.LogChargeRunawayPenalty(penalty);
+        }
+    }
+
+    void LowHealthComposureRewards(int currentActionIntent, bool actionIntentStartedThisStep, int jump, int blockHold, int parry)
+    {
+        if (self == null || opp == null)
+        {
+            return;
+        }
+
+        if (GameManager.instance == null || !GameManager.instance.trainingRoundOn)
+        {
+            return;
+        }
+
+        float lowHealthPressure = GetLowHealthPressure01();
+        if (lowHealthPressure <= 0f)
+        {
+            return;
+        }
+
+        float dt = GetSafeDeltaTime();
+        float absDx = Mathf.Abs(opp.transform.position.x - self.transform.position.x);
+        float absDy = Mathf.Abs(opp.transform.position.y - self.transform.position.y);
+
+        bool immediateThreat = IsOpponentImmediateThreat(absDx, absDy);
+        bool obviousPunish = IsObviousPunishOpportunity(absDx, absDy);
+
+        if (actionIntentStartedThisStep && consecutiveActionChanges >= mashChangeThreshold && !immediateThreat && !obviousPunish)
+        {
+            float penalty = lowHealthPanicActionPenalty * lowHealthPressure;
+            AddReward(penalty);
+            rewardDebugger?.LogLowHealthPanicPenalty(penalty);
+        }
+
+        if (actionIntentStartedThisStep && currentActionIntent == 1 && jump == 1 && !immediateThreat && !obviousPunish)
+        {
+            float penalty = lowHealthUnsafeJumpPenalty * lowHealthPressure;
+            AddReward(penalty);
+            rewardDebugger?.LogLowHealthPanicPenalty(penalty);
+        }
+
+        if (blockHold == 1 && !immediateThreat && !obviousPunish && absDx > punishMeleeRangeX)
+        {
+            float penalty = lowHealthAimlessBlockPenaltyPerSecond * dt * lowHealthPressure;
+            AddReward(penalty);
+            rewardDebugger?.LogLowHealthPanicPenalty(penalty);
+        }
+
+        if (actionIntentStartedThisStep && currentActionIntent == 7 && !IsParryOpportunity(absDx, absDy))
+        {
+            float penalty = lowHealthPanicActionPenalty * lowHealthPressure;
+            AddReward(penalty);
+            rewardDebugger?.LogLowHealthPanicPenalty(penalty);
+        }
+
+        bool nearEdge = Mathf.Abs(self.transform.position.x) >= edgeZoneX;
+        bool opponentCharging = opp.IsCharging || opp.IsCharged;
+        if (nearEdge && !immediateThreat && !obviousPunish && !opponentCharging)
+        {
+            float penalty = lowHealthEdgeCampExtraPenalty * lowHealthPressure;
+            AddReward(penalty);
+            rewardDebugger?.LogLowHealthPanicPenalty(penalty);
+        }
+    }
+
+    void PassivityPenalty(bool pressureActionStartedThisStep, int parry, int blockHold)
     {
         if (self == null || opp == null)
         {
@@ -1334,10 +1892,8 @@ public class FighterAgent : Agent
             absDy <= closePressureRangeY;
 
         bool offensiveAction =
-            (light == 1) ||
-            (heavy == 1) ||
-            (special == 1) ||
-            (chargeMode != 0);
+            pressureActionStartedThisStep ||
+            HasRealActivePressure();
 
         bool defensiveAction =
             (blockHold == 1) ||
@@ -1357,6 +1913,7 @@ public class FighterAgent : Agent
                 }
 
                 AddReward(penalty);
+                rewardDebugger?.LogPassiveNearPenalty(penalty);
             }
         }
         else
@@ -1369,7 +1926,7 @@ public class FighterAgent : Agent
         }
     }
 
-    void BodyPushCheesePenalty(int moveX, int light, int heavy, int special, int chargeMode, int parry, int blockHold)
+    void BodyPushCheesePenalty(int moveX, bool pressureActionStartedThisStep, int blockHold)
     {
         if (self == null || opp == null)
             return;
@@ -1393,30 +1950,15 @@ public class FighterAgent : Agent
             moveX != 0 &&
             moveX == -towardOpponent;
 
-        bool veryClose =
-            absDx <= bodyPushRangeX &&
-            absDy <= bodyPushRangeY;
+        bool veryClose = IsBodyPushContact(absDx, absDy);
 
         bool distanceClosing =
             veryClose &&
             absDx < lastBodyPushAbsDx - 0.005f;
 
-        bool actionStartedThisStep =
-            light == 1 ||
-            heavy == 1 ||
-            special == 1 ||
-            chargeMode != 0 ||
-            parry == 1;
+        bool realActivePressure = HasRealActivePressure();
 
-        bool realActivePressure =
-            self.LightAttacking ||
-            self.HeavyAttacking ||
-            self.IsCasting ||
-            self.IsCharging ||
-            self.IsCharged ||
-            self.Parrying;
-
-        if (actionStartedThisStep || realActivePressure)
+        if (pressureActionStartedThisStep || realActivePressure)
         {
             recentRealPressureTimer = bodyPushRealPressureGrace;
             bodyPushTimer = 0f;
@@ -1460,18 +2002,13 @@ public class FighterAgent : Agent
 
             if (bodyPushTimer > bodyPushGraceTime)
             {
-                float penalty = bodyPushPenaltyPerSecond;
+                float penalty = bodyPushPenaltyPerSecond * dt;
 
                 if (blockingPush)
                     penalty *= bodyPushBlockMultiplier;
 
-                Debug.Log(
-                    $"[BODY PUSH] {playerSuffix} penalty={penalty:F5} " +
-                    $"dx={absDx:F2} dy={absDy:F2} moveX={moveX} block={blockHold} " +
-                    $"walk={walkBodyPush} blockPush={blockingPush} idle={idleBodyPush} physics={physicsBodyPush}"
-                );
-
                 AddReward(penalty);
+                rewardDebugger?.LogBodyPushPenalty(penalty);
             }
         }
         else

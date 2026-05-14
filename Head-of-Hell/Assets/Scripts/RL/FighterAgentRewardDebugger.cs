@@ -20,6 +20,20 @@ public class FighterAgentRewardDebugger : MonoBehaviour
     private float epAirJumpPenaltyTotal;
     private float epEdgeCampPenaltyTotal;
     private float epApproachRewardTotal;
+    private float epForwardPressureRewardTotal;
+    private float epClosePressureRewardTotal;
+    private float epRetreatFromClosePenaltyTotal;
+    private float epUsefulIntentRewardTotal;
+    private float epPassiveNearPenaltyTotal;
+    private float epBodyPushPenaltyTotal;
+    private float epParryOpportunityRewardTotal;
+    private float epUnsafeParryPenaltyTotal;
+    private float epObviousPunishRewardTotal;
+    private float epMissedPunishPenaltyTotal;
+    private float epChargePunishRewardTotal;
+    private float epMissedChargeSpecialPenaltyTotal;
+    private float epChargeRunawayPenaltyTotal;
+    private float epLowHealthPanicPenaltyTotal;
     private float epExtremeFarHeavyPenaltyTotal;
     private float epExtremeFarChargePenaltyTotal;
     private float epFarMeleeLightPenaltyTotal;
@@ -30,6 +44,7 @@ public class FighterAgentRewardDebugger : MonoBehaviour
     private float epRepeatSameMovePenaltyTotal;
     private float epChargeSpamPenaltyTotal;
     private float epEmptyChargeReleasePenaltyTotal;
+    private float epSafetyResetPenaltyTotal;
     private float epWinRewardTotal;
     private float epLossRewardTotal;
 
@@ -43,6 +58,20 @@ public class FighterAgentRewardDebugger : MonoBehaviour
     private int epAirJumpPenaltyCount;
     private int epEdgeCampPenaltyCount;
     private int epApproachRewardCount;
+    private int epForwardPressureRewardCount;
+    private int epClosePressureRewardCount;
+    private int epRetreatFromClosePenaltyCount;
+    private int epUsefulIntentRewardCount;
+    private int epPassiveNearPenaltyCount;
+    private int epBodyPushPenaltyCount;
+    private int epParryOpportunityRewardCount;
+    private int epUnsafeParryPenaltyCount;
+    private int epObviousPunishRewardCount;
+    private int epMissedPunishPenaltyCount;
+    private int epChargePunishRewardCount;
+    private int epMissedChargeSpecialPenaltyCount;
+    private int epChargeRunawayPenaltyCount;
+    private int epLowHealthPanicPenaltyCount;
     private int epExtremeFarHeavyPenaltyCount;
     private int epExtremeFarChargePenaltyCount;
     private int epFarMeleeLightPenaltyCount;
@@ -53,6 +82,7 @@ public class FighterAgentRewardDebugger : MonoBehaviour
     private int epRepeatSameMovePenaltyCount;
     private int epChargeSpamPenaltyCount;
     private int epEmptyChargeReleasePenaltyCount;
+    private int epSafetyResetPenaltyCount;
     private int epWinRewardCount;
     private int epLossRewardCount;
 
@@ -131,6 +161,90 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         epApproachRewardCount++;
     }
 
+    public void LogForwardPressureReward(float value)
+    {
+        epForwardPressureRewardTotal += value;
+        epForwardPressureRewardCount++;
+    }
+
+    public void LogClosePressureReward(float value)
+    {
+        epClosePressureRewardTotal += value;
+        epClosePressureRewardCount++;
+    }
+
+    public void LogRetreatFromClosePenalty(float value)
+    {
+        epRetreatFromClosePenaltyTotal += value;
+        epRetreatFromClosePenaltyCount++;
+    }
+
+    public void LogUsefulIntentReward(float value)
+    {
+        epUsefulIntentRewardTotal += value;
+        epUsefulIntentRewardCount++;
+    }
+
+    public void LogPassiveNearPenalty(float value)
+    {
+        epPassiveNearPenaltyTotal += value;
+        epPassiveNearPenaltyCount++;
+    }
+
+    public void LogBodyPushPenalty(float value)
+    {
+        epBodyPushPenaltyTotal += value;
+        epBodyPushPenaltyCount++;
+    }
+
+    public void LogParryOpportunityReward(float value)
+    {
+        epParryOpportunityRewardTotal += value;
+        epParryOpportunityRewardCount++;
+    }
+
+    public void LogUnsafeParryPenalty(float value)
+    {
+        epUnsafeParryPenaltyTotal += value;
+        epUnsafeParryPenaltyCount++;
+    }
+
+    public void LogObviousPunishReward(float value)
+    {
+        epObviousPunishRewardTotal += value;
+        epObviousPunishRewardCount++;
+    }
+
+    public void LogMissedPunishPenalty(float value)
+    {
+        epMissedPunishPenaltyTotal += value;
+        epMissedPunishPenaltyCount++;
+    }
+
+    public void LogChargePunishReward(float value)
+    {
+        epChargePunishRewardTotal += value;
+        epChargePunishRewardCount++;
+    }
+
+    public void LogMissedChargeSpecialPenalty(float value)
+    {
+        epMissedChargeSpecialPenaltyTotal += value;
+        epMissedChargeSpecialPenaltyCount++;
+    }
+
+    public void LogChargeRunawayPenalty(float value)
+    {
+        epChargeRunawayPenaltyTotal += value;
+        epChargeRunawayPenaltyCount++;
+    }
+
+    public void LogLowHealthPanicPenalty(float value)
+    {
+        epLowHealthPanicPenaltyTotal += value;
+        epLowHealthPanicPenaltyCount++;
+    }
+
     public void LogExtremeFarHeavyPenalty(float value)
     {
         epExtremeFarHeavyPenaltyTotal += value;
@@ -191,6 +305,12 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         epEmptyChargeReleasePenaltyCount++;
     }
 
+    public void LogSafetyResetPenalty(float value)
+    {
+        epSafetyResetPenaltyTotal += value;
+        epSafetyResetPenaltyCount++;
+    }
+
     public void LogWinReward(float value)
     {
         epWinRewardTotal += value;
@@ -236,6 +356,20 @@ public class FighterAgentRewardDebugger : MonoBehaviour
             epAirJumpPenaltyTotal +
             epEdgeCampPenaltyTotal +
             epApproachRewardTotal +
+            epForwardPressureRewardTotal +
+            epClosePressureRewardTotal +
+            epRetreatFromClosePenaltyTotal +
+            epUsefulIntentRewardTotal +
+            epPassiveNearPenaltyTotal +
+            epBodyPushPenaltyTotal +
+            epParryOpportunityRewardTotal +
+            epUnsafeParryPenaltyTotal +
+            epObviousPunishRewardTotal +
+            epMissedPunishPenaltyTotal +
+            epChargePunishRewardTotal +
+            epMissedChargeSpecialPenaltyTotal +
+            epChargeRunawayPenaltyTotal +
+            epLowHealthPanicPenaltyTotal +
             epExtremeFarHeavyPenaltyTotal +
             epExtremeFarChargePenaltyTotal +
             epFarMeleeLightPenaltyTotal +
@@ -246,6 +380,7 @@ public class FighterAgentRewardDebugger : MonoBehaviour
             epRepeatSameMovePenaltyTotal +
             epChargeSpamPenaltyTotal +
             epEmptyChargeReleasePenaltyTotal +
+            epSafetyResetPenaltyTotal +
             epWinRewardTotal +
             epLossRewardTotal;
 
@@ -265,11 +400,25 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         AppendLine(sb, "Loss", epLossRewardTotal, epLossRewardCount);
         AppendLine(sb, "Step", epStepPenaltyTotal, epStepPenaltyCount);
         AppendLine(sb, "Spacing", epSpacingRewardTotal, epSpacingCount);
-        AppendLine(sb, "Stack", epStackPenaltyTotal, epStackPenaltyCount);
+        AppendLine(sb, "VerticalCheese", epStackPenaltyTotal, epStackPenaltyCount);
         AppendLine(sb, "Mash", epMashPenaltyTotal, epMashPenaltyCount);
         AppendLine(sb, "AirJump", epAirJumpPenaltyTotal, epAirJumpPenaltyCount);
         AppendLine(sb, "EdgeCamp", epEdgeCampPenaltyTotal, epEdgeCampPenaltyCount);
         AppendLine(sb, "Approach", epApproachRewardTotal, epApproachRewardCount);
+        AppendLine(sb, "ForwardPressure", epForwardPressureRewardTotal, epForwardPressureRewardCount);
+        AppendLine(sb, "ClosePressure", epClosePressureRewardTotal, epClosePressureRewardCount);
+        AppendLine(sb, "RetreatFromClose", epRetreatFromClosePenaltyTotal, epRetreatFromClosePenaltyCount);
+        AppendLine(sb, "UsefulIntent", epUsefulIntentRewardTotal, epUsefulIntentRewardCount);
+        AppendLine(sb, "PassiveNear", epPassiveNearPenaltyTotal, epPassiveNearPenaltyCount);
+        AppendLine(sb, "BodyPush", epBodyPushPenaltyTotal, epBodyPushPenaltyCount);
+        AppendLine(sb, "ParryOpportunity", epParryOpportunityRewardTotal, epParryOpportunityRewardCount);
+        AppendLine(sb, "UnsafeParry", epUnsafeParryPenaltyTotal, epUnsafeParryPenaltyCount);
+        AppendLine(sb, "ObviousPunish", epObviousPunishRewardTotal, epObviousPunishRewardCount);
+        AppendLine(sb, "MissedPunish", epMissedPunishPenaltyTotal, epMissedPunishPenaltyCount);
+        AppendLine(sb, "ChargePunish", epChargePunishRewardTotal, epChargePunishRewardCount);
+        AppendLine(sb, "MissedChargeSpecial", epMissedChargeSpecialPenaltyTotal, epMissedChargeSpecialPenaltyCount);
+        AppendLine(sb, "ChargeRunaway", epChargeRunawayPenaltyTotal, epChargeRunawayPenaltyCount);
+        AppendLine(sb, "LowHealthPanic", epLowHealthPanicPenaltyTotal, epLowHealthPanicPenaltyCount);
         AppendLine(sb, "ExtremeFarHeavy", epExtremeFarHeavyPenaltyTotal, epExtremeFarHeavyPenaltyCount);
         AppendLine(sb, "ExtremeFarCharge", epExtremeFarChargePenaltyTotal, epExtremeFarChargePenaltyCount);
         AppendLine(sb, "FarMeleeLight", epFarMeleeLightPenaltyTotal, epFarMeleeLightPenaltyCount);
@@ -280,6 +429,7 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         AppendLine(sb, "RepeatSameMove", epRepeatSameMovePenaltyTotal, epRepeatSameMovePenaltyCount);
         AppendLine(sb, "ChargeSpam", epChargeSpamPenaltyTotal, epChargeSpamPenaltyCount);
         AppendLine(sb, "EmptyChargeRelease", epEmptyChargeReleasePenaltyTotal, epEmptyChargeReleasePenaltyCount);
+        AppendLine(sb, "SafetyReset", epSafetyResetPenaltyTotal, epSafetyResetPenaltyCount);
 
         Debug.Log(sb.ToString());
     }
@@ -305,6 +455,20 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         epAirJumpPenaltyTotal = 0f;
         epEdgeCampPenaltyTotal = 0f;
         epApproachRewardTotal = 0f;
+        epForwardPressureRewardTotal = 0f;
+        epClosePressureRewardTotal = 0f;
+        epRetreatFromClosePenaltyTotal = 0f;
+        epUsefulIntentRewardTotal = 0f;
+        epPassiveNearPenaltyTotal = 0f;
+        epBodyPushPenaltyTotal = 0f;
+        epParryOpportunityRewardTotal = 0f;
+        epUnsafeParryPenaltyTotal = 0f;
+        epObviousPunishRewardTotal = 0f;
+        epMissedPunishPenaltyTotal = 0f;
+        epChargePunishRewardTotal = 0f;
+        epMissedChargeSpecialPenaltyTotal = 0f;
+        epChargeRunawayPenaltyTotal = 0f;
+        epLowHealthPanicPenaltyTotal = 0f;
         epExtremeFarHeavyPenaltyTotal = 0f;
         epExtremeFarChargePenaltyTotal = 0f;
         epFarMeleeLightPenaltyTotal = 0f;
@@ -315,6 +479,7 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         epRepeatSameMovePenaltyTotal = 0f;
         epChargeSpamPenaltyTotal = 0f;
         epEmptyChargeReleasePenaltyTotal = 0f;
+        epSafetyResetPenaltyTotal = 0f;
         epWinRewardTotal = 0f;
         epLossRewardTotal = 0f;
 
@@ -327,6 +492,20 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         epAirJumpPenaltyCount = 0;
         epEdgeCampPenaltyCount = 0;
         epApproachRewardCount = 0;
+        epForwardPressureRewardCount = 0;
+        epClosePressureRewardCount = 0;
+        epRetreatFromClosePenaltyCount = 0;
+        epUsefulIntentRewardCount = 0;
+        epPassiveNearPenaltyCount = 0;
+        epBodyPushPenaltyCount = 0;
+        epParryOpportunityRewardCount = 0;
+        epUnsafeParryPenaltyCount = 0;
+        epObviousPunishRewardCount = 0;
+        epMissedPunishPenaltyCount = 0;
+        epChargePunishRewardCount = 0;
+        epMissedChargeSpecialPenaltyCount = 0;
+        epChargeRunawayPenaltyCount = 0;
+        epLowHealthPanicPenaltyCount = 0;
         epExtremeFarHeavyPenaltyCount = 0;
         epExtremeFarChargePenaltyCount = 0;
         epFarMeleeLightPenaltyCount = 0;
@@ -337,6 +516,7 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         epRepeatSameMovePenaltyCount = 0;
         epChargeSpamPenaltyCount = 0;
         epEmptyChargeReleasePenaltyCount = 0;
+        epSafetyResetPenaltyCount = 0;
         epWinRewardCount = 0;
         epLossRewardCount = 0;
     }
