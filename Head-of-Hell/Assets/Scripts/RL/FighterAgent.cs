@@ -62,7 +62,7 @@ public class FighterAgent : Agent
     [Header("Range Logic")]
     float extremeFarThreshold = 8.5f;
     float extremeFarHeavyPenalty = -0.0007f;
-    float extremeFarChargePenalty = -0.001f;
+    float extremeFarChargePenalty = -0.0009f;
     float approachBonus = +0.00065f;
     float approachStartMargin = 0.75f;
     float farMeleeLightPenalty = -0.00035f;
@@ -74,7 +74,7 @@ public class FighterAgent : Agent
 
     int freeConsecutiveCharges = 4;
     float repeatedChargePenaltyBase = -0.0001f;
-    float repeatedChargePenaltyStep = -0.0003f;
+    float repeatedChargePenaltyStep = -0.0001f;
     float repeatedChargePenaltyCap = -0.0006f;
     float chargeChainDecaySeconds = 0.9f;
 
