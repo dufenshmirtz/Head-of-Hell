@@ -6936,11 +6936,11 @@ MonoBehaviour:
   ChibackColor: {r: 1, g: 1, b: 1, a: 1}
   LupenColor: {r: 1, g: 1, b: 1, a: 1}
   LupenSpiritColor: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
-  player1OutlineColor: {r: 0.96, g: 0.18, b: 0.18, a: 1}
-  player2OutlineColor: {r: 0.2, g: 0.52, b: 1, a: 1}
-  player3OutlineColor: {r: 0.12, g: 0.86, b: 0.36, a: 1}
-  player4OutlineColor: {r: 1, g: 0.85, b: 0.18, a: 1}
-  outlineSize: 0.5
+  player1OutlineColor: {r: 0.96, g: 0.18, b: 0.18, a: 0.29411766}
+  player2OutlineColor: {r: 0.2, g: 0.52, b: 1, a: 0.39215687}
+  player3OutlineColor: {r: 0.12156863, g: 0.85882354, b: 0.36078432, a: 0.39215687}
+  player4OutlineColor: {r: 1, g: 0.85, b: 0.18, a: 0.39215687}
+  outlineSize: 0.8
   SteelagerAnimatorController: {fileID: 9100000, guid: bd34ee43096dbcc438b20dbac8fff3b0, type: 2}
   FinAnimatorController: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
   RagerAnimatorController: {fileID: 9100000, guid: f71edc3b937f70a43934b1b47dee5d0a, type: 2}
@@ -26890,11 +26890,11 @@ MonoBehaviour:
   ChibackColor: {r: 1, g: 1, b: 1, a: 1}
   LupenColor: {r: 1, g: 1, b: 1, a: 1}
   LupenSpiritColor: {r: 0.67058825, g: 0.67058825, b: 0.67058825, a: 1}
-  player1OutlineColor: {r: 0.96, g: 0.18, b: 0.18, a: 1}
-  player2OutlineColor: {r: 0.2, g: 0.52, b: 1, a: 1}
-  player3OutlineColor: {r: 0.12, g: 0.86, b: 0.36, a: 1}
-  player4OutlineColor: {r: 1, g: 0.85, b: 0.18, a: 1}
-  outlineSize: 0.5
+  player1OutlineColor: {r: 0.96, g: 0.18, b: 0.18, a: 0.39215687}
+  player2OutlineColor: {r: 0.2, g: 0.52, b: 1, a: 0.39215687}
+  player3OutlineColor: {r: 0.12156863, g: 0.85882354, b: 0.36078432, a: 0.39215687}
+  player4OutlineColor: {r: 1, g: 0.85, b: 0.18, a: 0.39215687}
+  outlineSize: 0.8
   SteelagerAnimatorController: {fileID: 9100000, guid: bd34ee43096dbcc438b20dbac8fff3b0, type: 2}
   FinAnimatorController: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
   RagerAnimatorController: {fileID: 9100000, guid: f71edc3b937f70a43934b1b47dee5d0a, type: 2}
@@ -38986,11 +38986,11 @@ MonoBehaviour:
   ChibackColor: {r: 1, g: 1, b: 1, a: 1}
   LupenColor: {r: 1, g: 1, b: 1, a: 1}
   LupenSpiritColor: {r: 0.67058825, g: 0.67058825, b: 0.67058825, a: 1}
-  player1OutlineColor: {r: 0.96, g: 0.18, b: 0.18, a: 1}
-  player2OutlineColor: {r: 0.2, g: 0.52, b: 1, a: 1}
-  player3OutlineColor: {r: 0.12, g: 0.86, b: 0.36, a: 1}
-  player4OutlineColor: {r: 1, g: 0.85, b: 0.18, a: 1}
-  outlineSize: 0.5
+  player1OutlineColor: {r: 0.9607843, g: 0.18039216, b: 0.18039216, a: 0.39215687}
+  player2OutlineColor: {r: 0.2, g: 0.52156866, b: 1, a: 0.3529412}
+  player3OutlineColor: {r: 0.12, g: 0.86, b: 0.36, a: 0.39215687}
+  player4OutlineColor: {r: 1, g: 0.85, b: 0.18, a: 0.39215687}
+  outlineSize: 0.8
   SteelagerAnimatorController: {fileID: 9100000, guid: bd34ee43096dbcc438b20dbac8fff3b0, type: 2}
   FinAnimatorController: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
   RagerAnimatorController: {fileID: 9100000, guid: f71edc3b937f70a43934b1b47dee5d0a, type: 2}
@@ -41576,11 +41576,11 @@ MonoBehaviour:
   ChibackColor: {r: 1, g: 1, b: 1, a: 1}
   LupenColor: {r: 1, g: 1, b: 1, a: 1}
   LupenSpiritColor: {r: 0.67058825, g: 0.67058825, b: 0.67058825, a: 1}
-  player1OutlineColor: {r: 0.96, g: 0.18, b: 0.18, a: 1}
-  player2OutlineColor: {r: 0.2, g: 0.52, b: 1, a: 1}
-  player3OutlineColor: {r: 0.12, g: 0.86, b: 0.36, a: 1}
-  player4OutlineColor: {r: 1, g: 0.85, b: 0.18, a: 1}
-  outlineSize: 0.5
+  player1OutlineColor: {r: 0.96, g: 0.18, b: 0.18, a: 0.39215687}
+  player2OutlineColor: {r: 0.2, g: 0.52, b: 1, a: 0.39215687}
+  player3OutlineColor: {r: 0.12, g: 0.86, b: 0.36, a: 0.39215687}
+  player4OutlineColor: {r: 1, g: 0.85, b: 0.18, a: 0.39215687}
+  outlineSize: 0.8
   SteelagerAnimatorController: {fileID: 9100000, guid: bd34ee43096dbcc438b20dbac8fff3b0, type: 2}
   FinAnimatorController: {fileID: 9100000, guid: 9a5ce3a335588a2468b9949c17340e17, type: 2}
   RagerAnimatorController: {fileID: 9100000, guid: f71edc3b937f70a43934b1b47dee5d0a, type: 2}

@@ -36,7 +36,7 @@ public class CharacterManager : MonoBehaviour
     public Color player2OutlineColor = new Color(0.20f, 0.52f, 1f, 1f);
     public Color player3OutlineColor = new Color(0.12f, 0.86f, 0.36f, 1f);
     public Color player4OutlineColor = new Color(1f, 0.85f, 0.18f, 1f);
-    [Range(0.5f, 4f)] public float outlineSize = 0.5f;
+    [Range(0.5f, 4f)] public float outlineSize = 1f;
 
     // Animator Controllers
     public RuntimeAnimatorController SteelagerAnimatorController;
@@ -77,6 +77,7 @@ public class CharacterManager : MonoBehaviour
     private Material originalSpriteMaterial;
     private MaterialPropertyBlock outlinePropertyBlock;
     private static Material sharedOutlineMaterial;
+    private const float PlayerOutlineAlpha = 75f / 255f;
 
     public GameManager mngr;
 
@@ -547,19 +548,27 @@ public class CharacterManager : MonoBehaviour
     {
         if (GameModeSelectionState.CurrentMode == SelectedGameMode.PvP_2v2)
         {
-            return (playerNum == 1 || playerNum == 3) ? player1OutlineColor : player2OutlineColor;
+            Color teamColor = (playerNum == 1 || playerNum == 3) ? player1OutlineColor : player2OutlineColor;
+            teamColor.a = PlayerOutlineAlpha;
+            return teamColor;
         }
 
         if (playerNum == 1)
-            return player1OutlineColor;
+            return WithOutlineAlpha(player1OutlineColor);
         if (playerNum == 2)
-            return player2OutlineColor;
+            return WithOutlineAlpha(player2OutlineColor);
         if (playerNum == 3)
-            return player3OutlineColor;
+            return WithOutlineAlpha(player3OutlineColor);
         if (playerNum == 4)
-            return player4OutlineColor;
+            return WithOutlineAlpha(player4OutlineColor);
 
-        return Color.white;
+        return WithOutlineAlpha(Color.white);
+    }
+
+    private static Color WithOutlineAlpha(Color color)
+    {
+        color.a = PlayerOutlineAlpha;
+        return color;
     }
 
     public IEnumerator RerollRandomCharacter_TrainingOnly_Co()
