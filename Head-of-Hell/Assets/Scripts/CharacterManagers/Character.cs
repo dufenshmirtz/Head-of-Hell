@@ -256,6 +256,8 @@ public abstract class Character : MonoBehaviour
     private bool deferredCritFeedbackPending;
 
     Coroutine cdCoroutine;
+    private Character abilityBlockedTarget;
+    private int abilityDisableLockCount = 0;
 
     
 
@@ -1107,10 +1109,7 @@ public abstract class Character : MonoBehaviour
     {
         ignoreDamage = false;
         ignoreMovement = false;
-        if (GetCurrentCombatTarget() != null)
-        {
-            EnemyAbilityEnable();
-        }      
+        EnemyAbilityEnable();
         knockable = true;
         SetCooldownSpriteSafe(ogSprite);
         animator.SetBool("isUsingAbility", false);
@@ -1120,26 +1119,26 @@ public abstract class Character : MonoBehaviour
         stayDynamic();
         cdTimer = cd;
         onCooldown = true;
+        if (cdCoroutine != null)
+        {
+            StopCoroutine(cdCoroutine);
+        }
         cdCoroutine = StartCoroutine(AbilityCooldown(cd));
     }
 
     public IEnumerator AbilityCooldown(float duration)
     {
-        if(cdCoroutine == null)
+        while (cdTimer > 0f)
         {
-            // cdTimer already set in OnCooldown()
-            while (cdTimer > 0f)
-            {
-                cdTimer -= Time.deltaTime;
-                UpdateCooldownSlider(duration);
-                yield return null; // next frame
-            }
-
-            onCooldown = false;
-            cdTimer = 0f;
-            cdCoroutine = null;
+            cdTimer -= Time.deltaTime;
             UpdateCooldownSlider(duration);
-        }  
+            yield return null;
+        }
+
+        onCooldown = false;
+        cdTimer = 0f;
+        cdCoroutine = null;
+        UpdateCooldownSlider(duration);
     }
 
     void UpdateCooldownSlider(float duration)
@@ -1152,24 +1151,35 @@ public abstract class Character : MonoBehaviour
     {
         Character target = GetCurrentCombatTarget();
         if (target == null) return;
+        abilityBlockedTarget = target;
         target.AbilityDisabled();
     }
 
     public void EnemyAbilityEnable()
     {
-        Character target = GetCurrentCombatTarget();
+        Character target = abilityBlockedTarget;
         if (target == null) return;
         target.AbilityEnabled();
+        if (abilityBlockedTarget == target)
+        {
+            abilityBlockedTarget = null;
+        }
     }
 
     public void AbilityDisabled()
     {
+        abilityDisableLockCount++;
         canCast = false;
     }
 
     public void AbilityEnabled()
     {
-        canCast = true;
+        if (abilityDisableLockCount > 0)
+        {
+            abilityDisableLockCount--;
+        }
+
+        canCast = abilityDisableLockCount <= 0;
     }
 
     public void UsingAbility(float cd)
@@ -2873,6 +2883,9 @@ public abstract class Character : MonoBehaviour
         ignoreDamage = false;
         counterDone = false;
         counterIsOn = false;
+        abilityBlockedTarget = null;
+        abilityDisableLockCount = 0;
+        canCast = true;
         canParry = true;
         charging = false;
         charged = false;

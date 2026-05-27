@@ -11,7 +11,14 @@ public class Rager : Character
     //Lightattack
     int lightDamage = 4;
     bool spellHit = false;
+    bool spellCastActive = false;
     Character comboTarget;
+    Character spellLockedTarget;
+    bool comboGrabConsumed = false;
+    bool comboStartedConsumed = false;
+    bool finalHitConsumed = false;
+    int remainingComboTicks = 0;
+    Coroutine comboDamageCoroutine;
 
     float spellTime = 2.84f;
 
@@ -62,19 +69,48 @@ public class Rager : Character
     #region Spell
     override public void Spell()
     {
+        if (spellCastActive)
+        {
+            return;
+        }
+
+        spellCastActive = true;
         TelemetryManager.Instance?.LogAction(PlayerId, "Special");
+        comboGrabConsumed = false;
+        comboStartedConsumed = false;
+        finalHitConsumed = false;
+        remainingComboTicks = spellDamage1;
         UsingAbility(cooldown);
+        stayStatic();
+        ignoreUpdate = true;
+        canRotate = false;
+        if (rb != null)
+        {
+            rb.velocity = new Vector2(0f, rb.velocity.y);
+        }
         animator.SetTrigger("Spell");
         StartCoroutine(SpellSafety(spellTime,cooldown));
     }
 
     public void DealComboDmg()
     {
+        if (!spellCastActive)
+        {
+            return;
+        }
+
+        if (comboGrabConsumed)
+        {
+            return;
+        }
+
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
         Character target = ResolveTargetFromHit(hitEnemies);
 
         if (target != null)
         {
+            comboGrabConsumed = true;
+
             // Telemetry: combo special successfully connected (log once here)
             TelemetryManager.Instance?.LogHitAttempt(PlayerId, target.PlayerId, MoveType.Special);
 
@@ -84,10 +120,17 @@ public class Rager : Character
 
             // dmg and sound (0 damage "confirm" hit)
             target.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
-            target.TakeDamage(0, true);
+            target.TakeDamage(0, true, true, false);
             audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
             comboTarget = target;
             comboTarget.BeginDeferredCritFeedback();
+
+            if (spellLockedTarget != null && spellLockedTarget != comboTarget)
+            {
+                spellLockedTarget.AbilityEnabled();
+            }
+
+            spellLockedTarget = comboTarget;
 
             // playerState
             stayStatic();
@@ -115,12 +158,31 @@ public class Rager : Character
 
     public void Startcombo()
     {
-        if (spellHit)
+        if (!spellCastActive)
         {
-            animator.SetTrigger("Combo");
-
-            StartCoroutine(DealComboDamageOverTime(2f, spellDamage1));
+            return;
         }
+
+        if (!spellHit)
+        {
+            return;
+        }
+
+        if (comboStartedConsumed)
+        {
+            //Debug.Log($"[RagerSpell] Cast {currentSpellCastId} ignored duplicate combo start for {PlayerId}.");
+            return;
+        }
+
+        comboStartedConsumed = true;
+        animator.SetTrigger("Combo");
+
+        if (comboDamageCoroutine != null)
+        {
+            StopCoroutine(comboDamageCoroutine);
+        }
+
+        comboDamageCoroutine = StartCoroutine(DealComboDamageOverTime(2f, spellDamage1));
     }
 
     private IEnumerator DealComboDamageOverTime(float totalDuration, int totalHits)
@@ -131,44 +193,39 @@ public class Rager : Character
 
         for (int i = 0; i < totalHits; i++)
         {
-            if (comboTarget != null && comboTarget.isActiveAndEnabled)
+            if (comboTarget != null && comboTarget.isActiveAndEnabled && remainingComboTicks > 0)
             {
                 // Telemetry: context before each tick (no extra HitAttempt spam)
                 comboTarget.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
                 comboTarget.TakeDamage(1, false, false, false);
+                remainingComboTicks--;
             }
             yield return new WaitForSeconds(delayBetweenHits); // Wait before the next hit
         }
+
+        comboDamageCoroutine = null;
     }
 
-    public void FirstHit() // old and useless remove
+    public void FirstHit() // legacy animation event: keep as no-op to avoid extra spell damage
     {
-        Character target = comboTarget != null ? comboTarget : GetCurrentCombatTarget();
-        if (target == null)
-        {
-            return;
-        }
-
-        target.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
-        target.TakeDamage(hit1Damage, true); //--here
-        audioManager.PlaySFX(audioManager.lightattack, audioManager.lightAttackVolume);
     }
 
-    public void SecondHit() // old and useless remove
+    public void SecondHit() // legacy animation event: keep as no-op to avoid extra spell damage
     {
-        Character target = comboTarget != null ? comboTarget : GetCurrentCombatTarget();
-        if (target == null)
-        {
-            return;
-        }
-
-        target.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
-        target.TakeDamage(hit2Damage, true); //--here
-        audioManager.PlaySFX(audioManager.heavyattack, audioManager.lightAttackVolume);
     }
 
     public void ThirdHit()
     {
+        if (!spellCastActive)
+        {
+            return;
+        }
+
+        if (finalHitConsumed)
+        {
+            return;
+        }
+
         Character target = comboTarget != null ? comboTarget : GetCurrentCombatTarget();
         if (target == null)
         {
@@ -176,8 +233,9 @@ public class Rager : Character
             return;
         }
 
+        finalHitConsumed = true;
         target.SetIncomingDamageContext(PlayerId, MoveType.Special, SourceType.Spell);
-        target.TakeDamage(spellDamage2,true); //--here
+        target.TakeDamage(spellDamage2,true);
         target.EndDeferredCritFeedback(true);
         audioManager.PlaySFX(audioManager.klong, audioManager.doubleVol);
 
@@ -188,7 +246,7 @@ public class Rager : Character
 
         // enemy state
         target.stayDynamic();
-        target.AbilityEnabled();
+        ReleaseSpellLock();
         target.moveSpeed = OGMoveSpeed;
         target.Knockback(8f, .25f, false);
 
@@ -241,21 +299,43 @@ public class Rager : Character
             target.EndDeferredCritFeedback(false);
         }
 
+        ReleaseSpellLock();
+
         if (restoreTargetState && target != null && target.isActiveAndEnabled)
         {
             target.stayDynamic();
-            target.AbilityEnabled();
             target.moveSpeed = OGMoveSpeed;
         }
 
         spellHit = false;
+        spellCastActive = false;
         comboTarget = null;
+        comboGrabConsumed = false;
+        comboStartedConsumed = false;
+        finalHitConsumed = false;
+        remainingComboTicks = 0;
+        if (comboDamageCoroutine != null)
+        {
+            StopCoroutine(comboDamageCoroutine);
+            comboDamageCoroutine = null;
+        }
         stayDynamic();
         ignoreUpdate = false;
         canRotate = true;
         ResetQuickPunch();
         animator.SetBool("ComboReady", false);
         OnCooldown(cooldown);
+    }
+
+    private void ReleaseSpellLock()
+    {
+        if (spellLockedTarget == null)
+        {
+            return;
+        }
+
+        spellLockedTarget.AbilityEnabled();
+        spellLockedTarget = null;
     }
 
     #region ChargeAttack
