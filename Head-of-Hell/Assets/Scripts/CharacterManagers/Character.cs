@@ -530,15 +530,27 @@ public abstract class Character : MonoBehaviour
         // Running animations...
         if (Mathf.Abs(moveDirection) > 0.1f && !isStatic)
         {
-            if (ignoreMovement || knocked) return;
+            if (ignoreMovement || knocked)
+            {
+                animator.SetBool("IsRunning", false);
+                animator.SetBool("cWalk", false);
+                return;
+            }
 
-            if (isGrounded)
+            if (isBlocking)
+            {
+                animator.SetBool("IsRunning", false);
+                animator.SetBool("cWalk", isGrounded);
+            }
+            else if (isGrounded)
             {
                 animator.SetBool("IsRunning", true);
+                animator.SetBool("cWalk", false);
             }
             else
             {
                 animator.SetBool("IsRunning", false);
+                animator.SetBool("cWalk", false);
                 animator.SetTrigger("Jump");
             }
 
@@ -1243,6 +1255,7 @@ public abstract class Character : MonoBehaviour
 
         animator.SetTrigger("critsi");
         animator.SetBool("Crouch", true);
+        animator.SetBool("IsRunning", false);
         PlayerBlock(true);
         isBlocking = true;
         ResetQuickPunch();
@@ -1264,6 +1277,11 @@ public abstract class Character : MonoBehaviour
 
     public void PlayerBlock(bool blck)
     {
+        if (blck && animator != null)
+        {
+            animator.SetBool("IsRunning", false);
+        }
+
         isBlocking = blck;
     }
 

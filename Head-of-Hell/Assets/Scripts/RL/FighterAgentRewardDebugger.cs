@@ -27,6 +27,10 @@ public class FighterAgentRewardDebugger : MonoBehaviour
     private float epDashNoDirectionPenaltyTotal;
     private float epWrongFacingSpecialPenaltyTotal;
     private float epBlockHoldPenaltyTotal;
+    private float epBlockStartPenaltyTotal;
+    private float epAimlessBlockPenaltyTotal;
+    private float epBlockedAdvancePenaltyTotal;
+    private float epBlockInsteadParryPenaltyTotal;
     private float epRepeatSameMovePenaltyTotal;
     private float epChargeSpamPenaltyTotal;
     private float epEmptyChargeReleasePenaltyTotal;
@@ -50,6 +54,10 @@ public class FighterAgentRewardDebugger : MonoBehaviour
     private int epDashNoDirectionPenaltyCount;
     private int epWrongFacingSpecialPenaltyCount;
     private int epBlockHoldPenaltyCount;
+    private int epBlockStartPenaltyCount;
+    private int epAimlessBlockPenaltyCount;
+    private int epBlockedAdvancePenaltyCount;
+    private int epBlockInsteadParryPenaltyCount;
     private int epRepeatSameMovePenaltyCount;
     private int epChargeSpamPenaltyCount;
     private int epEmptyChargeReleasePenaltyCount;
@@ -173,6 +181,30 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         epBlockHoldPenaltyCount++;
     }
 
+    public void LogBlockStartPenalty(float value)
+    {
+        epBlockStartPenaltyTotal += value;
+        epBlockStartPenaltyCount++;
+    }
+
+    public void LogAimlessBlockPenalty(float value)
+    {
+        epAimlessBlockPenaltyTotal += value;
+        epAimlessBlockPenaltyCount++;
+    }
+
+    public void LogBlockedAdvancePenalty(float value)
+    {
+        epBlockedAdvancePenaltyTotal += value;
+        epBlockedAdvancePenaltyCount++;
+    }
+
+    public void LogBlockInsteadParryPenalty(float value)
+    {
+        epBlockInsteadParryPenaltyTotal += value;
+        epBlockInsteadParryPenaltyCount++;
+    }
+
     public void LogRepeatSameMovePenalty(float value)
     {
         epRepeatSameMovePenaltyTotal += value;
@@ -243,6 +275,10 @@ public class FighterAgentRewardDebugger : MonoBehaviour
             epDashNoDirectionPenaltyTotal +
             epWrongFacingSpecialPenaltyTotal +
             epBlockHoldPenaltyTotal +
+            epBlockStartPenaltyTotal +
+            epAimlessBlockPenaltyTotal +
+            epBlockedAdvancePenaltyTotal +
+            epBlockInsteadParryPenaltyTotal +
             epRepeatSameMovePenaltyTotal +
             epChargeSpamPenaltyTotal +
             epEmptyChargeReleasePenaltyTotal +
@@ -277,6 +313,10 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         AppendLine(sb, "DashNoDirection", epDashNoDirectionPenaltyTotal, epDashNoDirectionPenaltyCount);
         AppendLine(sb, "WrongFacingSpecial", epWrongFacingSpecialPenaltyTotal, epWrongFacingSpecialPenaltyCount);
         AppendLine(sb, "BlockHold", epBlockHoldPenaltyTotal, epBlockHoldPenaltyCount);
+        AppendLine(sb, "BlockStart", epBlockStartPenaltyTotal, epBlockStartPenaltyCount);
+        AppendLine(sb, "AimlessBlock", epAimlessBlockPenaltyTotal, epAimlessBlockPenaltyCount);
+        AppendLine(sb, "BlockedAdvance", epBlockedAdvancePenaltyTotal, epBlockedAdvancePenaltyCount);
+        AppendLine(sb, "BlockInsteadParry", epBlockInsteadParryPenaltyTotal, epBlockInsteadParryPenaltyCount);
         AppendLine(sb, "RepeatSameMove", epRepeatSameMovePenaltyTotal, epRepeatSameMovePenaltyCount);
         AppendLine(sb, "ChargeSpam", epChargeSpamPenaltyTotal, epChargeSpamPenaltyCount);
         AppendLine(sb, "EmptyChargeRelease", epEmptyChargeReleasePenaltyTotal, epEmptyChargeReleasePenaltyCount);
@@ -312,6 +352,10 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         epDashNoDirectionPenaltyTotal = 0f;
         epWrongFacingSpecialPenaltyTotal = 0f;
         epBlockHoldPenaltyTotal = 0f;
+        epBlockStartPenaltyTotal = 0f;
+        epAimlessBlockPenaltyTotal = 0f;
+        epBlockedAdvancePenaltyTotal = 0f;
+        epBlockInsteadParryPenaltyTotal = 0f;
         epRepeatSameMovePenaltyTotal = 0f;
         epChargeSpamPenaltyTotal = 0f;
         epEmptyChargeReleasePenaltyTotal = 0f;
@@ -334,6 +378,10 @@ public class FighterAgentRewardDebugger : MonoBehaviour
         epDashNoDirectionPenaltyCount = 0;
         epWrongFacingSpecialPenaltyCount = 0;
         epBlockHoldPenaltyCount = 0;
+        epBlockStartPenaltyCount = 0;
+        epAimlessBlockPenaltyCount = 0;
+        epBlockedAdvancePenaltyCount = 0;
+        epBlockInsteadParryPenaltyCount = 0;
         epRepeatSameMovePenaltyCount = 0;
         epChargeSpamPenaltyCount = 0;
         epEmptyChargeReleasePenaltyCount = 0;
