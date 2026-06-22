@@ -28,8 +28,8 @@ public class FighterAgent : Agent
     KeyCode upK, downK, leftK, rightK, lightK, heavyK, blockK, abilityK, chargeK, parryK;
 
     [Header("Main Rewards")]
-    float rewardDamageDealt = +0.01f;
-    float rewardDamageTaken = -0.007f;
+    float rewardDamageDealt = +0.012f;
+    float rewardDamageTaken = -0.006f;
     float rewardWin = +1.0f;
     float rewardLoss = -1.0f;
     float stepPenalty = -0.0001f;
@@ -50,6 +50,8 @@ public class FighterAgent : Agent
     float mashPenalty = -0.0003f;
     float airJumpPenalty = -0.0008f;
     float edgeCampPenalty = -0.0007f;
+    float edgeCampPenaltyStackPerSecond = -0.00025f;
+    float edgeCampPenaltyCap = -0.002f;
     int mashChangeThreshold = 3;
     float edgeZoneX = 8f;
     float edgeGraceTime = 1.75f;
@@ -150,9 +152,9 @@ public class FighterAgent : Agent
     float bodyPushRangeX = 1.2f;
     float bodyPushRangeY = 1f;
     float bodyPushContactTolerance = 0.03f;
-    float bodyPushGraceTime = 0.5f;
-    float bodyPushPenaltyPerSecond = -0.035f;
-    float bodyPushBlockMultiplier = 1.7f;
+    float bodyPushGraceTime = 0.25f;
+    float bodyPushPenaltyPerSecond = -0.045f;
+    float bodyPushBlockMultiplier = 2.0f;
     float bodyPushRealPressureGrace = 0.22f;
     float bodyPushTimer = 0f;
     float recentRealPressureTimer = 0f;
@@ -571,6 +573,11 @@ public class FighterAgent : Agent
         int chargeMode = actions.DiscreteActions[7];
         int parry = actions.DiscreteActions[8];
 
+        if (light == 1 || heavy == 1 || special == 1 || chargeMode != 0 || parry == 1)
+        {
+            blockHold = 0;
+        }
+
         int moveX = moveBranch == 0 ? -1 : (moveBranch == 1 ? 0 : 1);
         lastMoveX = moveX;
 
@@ -882,8 +889,12 @@ public class FighterAgent : Agent
 
                 if (edgeStayTimer > edgeGraceTime)
                 {
-                    AddReward(edgeCampPenalty);
-                    rewardDebugger?.LogEdgeCampPenalty(edgeCampPenalty);
+                    float extraEdgeTime = edgeStayTimer - edgeGraceTime;
+                    float penalty = edgeCampPenalty + edgeCampPenaltyStackPerSecond * extraEdgeTime;
+                    penalty = Mathf.Max(penalty, edgeCampPenaltyCap);
+
+                    AddReward(penalty);
+                    rewardDebugger?.LogEdgeCampPenalty(penalty);
                 }
             }
             else

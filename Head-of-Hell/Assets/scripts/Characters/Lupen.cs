@@ -88,6 +88,7 @@ public class Lupen : Character
     override public void Spell()
     {
         TelemetryManager.Instance?.LogAction(PlayerId, "Special");
+        Unblock();
         stayStatic();
         spirit.healthbar = healthbar;
         spirit.maxHealth = maxHealth;

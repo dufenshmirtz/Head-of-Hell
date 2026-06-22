@@ -183,7 +183,7 @@ public class Fin : Character
         ignoreDamage = false;
         knockable = true;
         isRolling = false;
-        isBlocking = false;
+        Unblock();
 
         StartCoroutine(ResetRoll());
     }

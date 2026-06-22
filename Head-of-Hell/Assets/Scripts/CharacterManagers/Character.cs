@@ -223,6 +223,8 @@ public abstract class Character : MonoBehaviour
     //helpers
     public bool isLightAttacking=false;
     public bool heavyAttacking=false;
+    [SerializeField] private float blockReentryLockoutSeconds = 0.18f;
+    private float blockReentryLockoutTimer = 0f;
 
     //new grounded logic experiement
     private Transform groundCheck;
@@ -448,6 +450,8 @@ public abstract class Character : MonoBehaviour
     {
         GroundedSafeguard();
         StaticSafeguard();
+        TickBlockReentryLockout();
+        SyncBlockStateWithCombatState();
         //UpdateGroundedState(); in the future
         //self knockback mechanic
         if (knockable)
@@ -494,7 +498,7 @@ public abstract class Character : MonoBehaviour
             rb.velocity = new Vector2(0, rb.velocity.y);
 
             animator.SetBool("cWalk", false);
-            isBlocking = false;
+            ClearBlockState();
             animator.SetTrigger("tookDmg");
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Hurt"))
             {
@@ -567,6 +571,14 @@ public abstract class Character : MonoBehaviour
 
         float v = input.GetAxis("Vertical" + playerString);
         bool axisUp = v > 0.5f;
+        bool heavyPressed = input.GetKeyDown(heavyAttack) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 2"));
+        bool blockPressed = input.GetKeyDown(block) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 5"));
+        bool blockReleased = input.GetKeyUp(block) || (controller && Input.GetKeyUp("joystick "+ControllerNum(playerNum)+" button 5"));
+        bool chargePressed = input.GetKeyDown(charge) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 1"));
+        bool lightPressed = input.GetKeyDown(lightAttack) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 0"));
+        bool abilityPressed = input.GetKeyDown(ability) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 3"));
+        bool parryPressed = input.GetKeyDown(parry) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 4"));
+        bool nonBlockActionPressed = heavyPressed || chargePressed || lightPressed || abilityPressed || parryPressed;
 
         // Jumping
         if (input.GetKeyDown(up) || (axisUp && !jumpAxisHeld))
@@ -579,38 +591,38 @@ public abstract class Character : MonoBehaviour
         jumpAxisHeld = axisUp;
 
         // Heavy Punching
-        if (input.GetKeyDown(heavyAttack) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 2")))
+        if (heavyPressed)
         {
             if (!heavyDisable && !casting)
             {
-                Unblock();
+                ExitBlockForAction();
                 heavyAttacking=true;
                 HeavyAttack();
             }
         }
 
         //Blocking
-        if (input.GetKeyDown(block) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 5")))
+        if (blockPressed)
         {
-            if (!blockDisable && !casting)
+            if (CanStartBlock() && !nonBlockActionPressed)
             {
                 Block();
             }
         }
-        else if (input.GetKeyUp(block) || (controller && Input.GetKeyUp("joystick "+ControllerNum(playerNum)+" button 5")))
+        else if (blockReleased)
         {
-            if (!blockDisable && !casting)
+            if (!casting)
             {
                 Unblock();
             }
         }
 
         //ChargeAttack
-        if (input.GetKeyDown(charge) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 1")))
+        if (chargePressed)
         {
             if (isGrounded && !chargeDisable && !casting && !charging)
             {
-                Unblock();
+                ExitBlockForAction();
                 ChargeAttack();
             }
 
@@ -626,30 +638,32 @@ public abstract class Character : MonoBehaviour
         }
 
         //LightAttack
-        if (input.GetKeyDown(lightAttack) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 0")))
+        if (lightPressed)
         {
             if (!quickDisable && !casting)
             {
+                ExitBlockForAction();
                 LightAttack();
                 StartCoroutine(ResetLightAttackIndicator());
             }
         }
 
         //Spells
-        if (input.GetKeyDown(ability) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 3")))
+        if (abilityPressed)
         {
             if (!onCooldown && canCast && !casting && !specialDisable)
             {
+                ExitBlockForAction();
                 Spell();
             }
         }
 
         //Parry
-        if (input.GetKeyDown(parry) || (controller && Input.GetKeyDown("joystick "+ControllerNum(playerNum)+" button 4")))
+        if (parryPressed)
         {
             if (canParry && canCast && !casting)
             {
-                Unblock();
+                ExitBlockForAction();
                 Parry();
             }
         }
@@ -982,7 +996,7 @@ public abstract class Character : MonoBehaviour
         EnemyAbilityBlock();
         animator.SetBool("isUsingAbility", true);
         cdbarimage.sprite = activeSprite;
-        isBlocking = false;
+        ClearBlockState();
         UpdateCooldownSlider(cd);
 
         lastAbilityCD = cd; //ML
@@ -1235,36 +1249,109 @@ public abstract class Character : MonoBehaviour
     #region Block
     public void Block()
     {
-        TelemetryManager.Instance?.LogAction(PlayerId, "BlockStart");
-        if (blockDisabled)
+        if (!CanStartBlock())
         {
+            ClearBlockState();
             return;
         }
 
+        TelemetryManager.Instance?.LogAction(PlayerId, "BlockStart");
         animator.SetTrigger("critsi");
+        animator.SetBool("cWalk", false);
         animator.SetBool("Crouch", true);
-        PlayerBlock(true);
         isBlocking = true;
         ResetQuickPunch();
     }
     public void Unblock()
     {
-        TelemetryManager.Instance?.LogAction(PlayerId, "BlockEnd");
-        animator.SetBool("cWalk", false);
-        animator.SetBool("Crouch", false);
-        isBlocking = false;
+        if (isBlocking)
+        {
+            TelemetryManager.Instance?.LogAction(PlayerId, "BlockEnd");
+        }
+
+        ClearBlockState();
 
         ResetQuickPunch();
     }
 
     public void blockBreaker()
     {
-        isBlocking = false;
+        ClearBlockState();
     }
 
     public void PlayerBlock(bool blck)
     {
-        isBlocking = blck;
+        if (blck)
+        {
+            isBlocking = true;
+        }
+        else
+        {
+            ClearBlockState();
+        }
+    }
+
+    private bool CanStartBlock()
+    {
+        return
+            !blockDisable &&
+            !blockDisabled &&
+            !casting &&
+            !charging &&
+            !chargeAttackActive &&
+            !heavyAttacking &&
+            !isLightAttacking &&
+            !isRolling &&
+            !counterIsOn &&
+            !stunned &&
+            !knocked &&
+            !isStatic &&
+            !ignoreUpdate &&
+            blockReentryLockoutTimer <= 0f;
+    }
+
+    private void SyncBlockStateWithCombatState()
+    {
+        if (!isBlocking)
+        {
+            return;
+        }
+
+        if (!CanStartBlock())
+        {
+            ClearBlockState();
+        }
+    }
+
+    private void ClearBlockState()
+    {
+        if (animator != null)
+        {
+            animator.SetBool("cWalk", false);
+            animator.SetBool("Crouch", false);
+        }
+
+        isBlocking = false;
+    }
+
+    private void ExitBlockForAction()
+    {
+        Unblock();
+        blockReentryLockoutTimer = Mathf.Max(blockReentryLockoutTimer, blockReentryLockoutSeconds);
+    }
+
+    private void TickBlockReentryLockout()
+    {
+        if (blockReentryLockoutTimer <= 0f)
+        {
+            return;
+        }
+
+        blockReentryLockoutTimer -= Time.deltaTime;
+        if (blockReentryLockoutTimer < 0f)
+        {
+            blockReentryLockoutTimer = 0f;
+        }
     }
 
     protected void ClearChargeState()
@@ -1396,6 +1483,7 @@ public abstract class Character : MonoBehaviour
 
         animator.SetTrigger("counterHit");
         audioManager.PlaySFX(audioManager.counterSucces, 1.5f);
+        enemy.BreakCharge();
         enemy.stayStatic();
         stayStatic();
         ignoreCounterOff = true;
@@ -1449,10 +1537,10 @@ public abstract class Character : MonoBehaviour
         ignoreDamage = false;
         knockable = true;
         casting = false;
-        isBlocking = false;
+        ClearBlockState();
+        blockReentryLockoutTimer = 0f;
 
         animator.SetBool("Casting", false);
-        animator.SetBool("Crouch", false);
         animator.SetBool("IsRunning", false);
 
         stayDynamic();
@@ -2326,7 +2414,7 @@ public abstract class Character : MonoBehaviour
 
         // Core flags
         ignoreUpdate = false;
-        isBlocking = false;
+        ClearBlockState();
         casting = false;
         stunned = false;
         knocked = false;
@@ -2341,6 +2429,7 @@ public abstract class Character : MonoBehaviour
         canParry = true;
         charging = false;
         charged = false;
+        blockReentryLockoutTimer = 0f;
         ActivateColliders();
     }
 
