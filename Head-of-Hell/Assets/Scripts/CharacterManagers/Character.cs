@@ -642,6 +642,7 @@ public abstract class Character : MonoBehaviour
         {
             if (!quickDisable && !casting)
             {
+                Unblock();
                 LightAttack();
                 StartCoroutine(ResetLightAttackIndicator());
             }
@@ -652,6 +653,7 @@ public abstract class Character : MonoBehaviour
         {
             if (!onCooldown && canCast && !casting && !specialDisable)
             {
+                Unblock();
                 Spell();
             }
         }
@@ -1414,6 +1416,7 @@ public abstract class Character : MonoBehaviour
 
         animator.SetTrigger("counterHit");
         audioManager.PlaySFX(audioManager.counterSucces, 1.5f);
+        enemy.BreakCharge();
         enemy.stayStatic();
         stayStatic();
         ignoreCounterOff = true;

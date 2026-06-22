@@ -6776,7 +6776,6 @@ MonoBehaviour:
   selfManager: {fileID: 221568179}
   enemyManager: {fileID: 1367423825}
   playerSuffix: _P1
-  emptyReleasedChargePenalty: -0.0004
 --- !u!114 &221568216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6819,7 +6818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 4
+  DecisionPeriod: 3
   TakeActionsBetweenDecisions: 0
 --- !u!114 &221568244
 MonoBehaviour:
@@ -36390,7 +36389,6 @@ MonoBehaviour:
   selfManager: {fileID: 1367423825}
   enemyManager: {fileID: 221568179}
   playerSuffix: _P2
-  emptyReleasedChargePenalty: -0.0004
 --- !u!114 &1367423862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36433,7 +36431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 4
+  DecisionPeriod: 3
   TakeActionsBetweenDecisions: 0
 --- !u!114 &1367423890
 MonoBehaviour:

@@ -36,8 +36,8 @@ public class PvEMLBotRuntimeSetup : MonoBehaviour
 
         if (PvESelectionState.IsRLAgentDemo && PvESelectionState.IsRLAgentDemoAgentVsAgent)
         {
-            SetupMLAgent(p1, p2);
-            SetupMLAgent(p2, p1);
+            SetupMLAgent(p1, p2, PvESelectionState.RLAgentDemoAgent1Difficulty);
+            SetupMLAgent(p2, p1, PvESelectionState.RLAgentDemoAgent2Difficulty);
             return;
         }
 
@@ -53,7 +53,7 @@ public class PvEMLBotRuntimeSetup : MonoBehaviour
     {
         GameObject humanObj = enemyManager.gameObject;
 
-        if (!SetupMLAgent(botManager, enemyManager))
+        if (!SetupMLAgent(botManager, enemyManager, PvESelectionState.SelectedDifficulty))
         {
             return;
         }
@@ -85,7 +85,7 @@ public class PvEMLBotRuntimeSetup : MonoBehaviour
         }
     }
 
-    bool SetupMLAgent(CharacterManager agentManager, CharacterManager enemyManager)
+    bool SetupMLAgent(CharacterManager agentManager, CharacterManager enemyManager, PvEDifficulty difficulty)
     {
         GameObject agentObj = agentManager.gameObject;
 
@@ -111,11 +111,11 @@ public class PvEMLBotRuntimeSetup : MonoBehaviour
             return false;
         }
 
-        NNModel selectedModel = GetModelFromDifficulty(PvESelectionState.SelectedDifficulty);
+        NNModel selectedModel = GetModelFromDifficulty(difficulty);
 
         if (selectedModel == null)
         {
-            Debug.LogError($"PvE ML Setup: No model assigned for difficulty {PvESelectionState.SelectedDifficulty}.");
+            Debug.LogError($"PvE ML Setup: No model assigned for difficulty {difficulty}.");
             return false;
         }
 
@@ -136,7 +136,7 @@ public class PvEMLBotRuntimeSetup : MonoBehaviour
         ml.ClearInput();
 
         Debug.Log(
-            $"ML Agent Enabled on Player {agentManager.playerNum} | Difficulty: {PvESelectionState.SelectedDifficulty} | Model: {selectedModel.name}"
+            $"ML Agent Enabled on Player {agentManager.playerNum} | Difficulty: {difficulty} | Model: {selectedModel.name}"
         );
 
         return true;

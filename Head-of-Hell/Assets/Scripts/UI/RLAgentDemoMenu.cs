@@ -42,7 +42,8 @@ public class RLAgentDemoMenu : MonoBehaviour
     [Header("Menu Text")]
     [SerializeField] private string titleText = "RL Agent Thesis Demo";
     [SerializeField] private string infoText = "This demo allows the user to play against the final reinforcement learning agent developed for the thesis. The model was trained with PPO using Unity ML-Agents.";
-    [SerializeField] private string difficultyLabel = "Agent Difficulty: ";
+    [SerializeField] private string agent1ModelLabel = "Agent 1 Level: ";
+    [SerializeField] private string agent2ModelLabel = "Agent 2 Level: ";
     [SerializeField] private string player1CharacterLabel = "Player 1 Character: ";
     [SerializeField] private string agentCharacterLabel = "Agent Character: ";
     [SerializeField] private string playVsAgentButtonText = "Play vs Final RL Agent";
@@ -56,10 +57,12 @@ public class RLAgentDemoMenu : MonoBehaviour
     [SerializeField] private string controlsBodyText = "Move: A / D\nJump: W    Drop: S\nQuick Attack: U    Heavy Attack: I\nBlock: O    Special: P    Charge: J\n\nWin by reducing the agent to 0 HP. The demo uses the default 100 HP, one-round ruleset and the normal arena.\n\nDuring a match, press Enter to restart quickly after or during gameplay.\nPress Backspace during a demo match to return to this demo menu.";
     [SerializeField] private string controlsBackButtonText = "Back";
 
-    private PvEDifficulty selectedDifficulty;
+    private PvEDifficulty selectedAgent1Difficulty;
+    private PvEDifficulty selectedAgent2Difficulty;
     private int selectedPlayer1CharacterIndex = 3;
-    private int selectedAgentCharacterIndex = 0;
-    private TMP_Text difficultyText;
+    private int selectedAgentCharacterIndex = 4;
+    private TMP_Text agent1ModelText;
+    private TMP_Text agent2ModelText;
     private TMP_Text player1CharacterText;
     private TMP_Text agentCharacterText;
     private GameObject controlsPanel;
@@ -67,7 +70,8 @@ public class RLAgentDemoMenu : MonoBehaviour
 
     private void Awake()
     {
-        selectedDifficulty = defaultDifficulty;
+        selectedAgent1Difficulty = defaultDifficulty;
+        selectedAgent2Difficulty = defaultDifficulty;
     }
 
     private void Start()
@@ -79,15 +83,6 @@ public class RLAgentDemoMenu : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-        {
-            ChangeDifficulty(-1);
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-        {
-            ChangeDifficulty(1);
-        }
-
         if (controlsPanel != null && controlsPanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
         {
             controlsPanel.SetActive(false);
@@ -123,51 +118,64 @@ public class RLAgentDemoMenu : MonoBehaviour
             new Vector2(960f, 80f),
             FontStyles.Normal);
 
-        difficultyText = CreateText(
+        agent1ModelText = CreateText(
             root,
-            "DifficultyText",
+            "Agent1ModelText",
             "",
-            31,
-            new Color(0.95f, 0.9f, 0.76f, 1f),
-            new Vector2(0f, 88f),
-            new Vector2(760f, 56f),
+            24,
+            new Color(0.9f, 0.84f, 0.7f, 1f),
+            new Vector2(-430f, 88f),
+            new Vector2(460f, 42f),
             FontStyles.Bold);
-        RefreshDifficultyText();
 
-        CreateButton(root, "PreviousDifficultyButton", "<", new Vector2(-250f, 88f), new Vector2(72f, 52f), () => ChangeDifficulty(-1));
-        CreateButton(root, "NextDifficultyButton", ">", new Vector2(250f, 88f), new Vector2(72f, 52f), () => ChangeDifficulty(1));
+        CreateButton(root, "PreviousAgent1ModelButton", "<", new Vector2(-720f, 88f), new Vector2(56f, 40f), () => ChangeAgent1Difficulty(-1));
+        CreateButton(root, "NextAgent1ModelButton", ">", new Vector2(-140f, 88f), new Vector2(56f, 40f), () => ChangeAgent1Difficulty(1));
+
+        agent2ModelText = CreateText(
+            root,
+            "Agent2ModelText",
+            "",
+            24,
+            new Color(0.9f, 0.84f, 0.7f, 1f),
+            new Vector2(430f, 88f),
+            new Vector2(460f, 42f),
+            FontStyles.Bold);
+
+        CreateButton(root, "PreviousAgent2ModelButton", "<", new Vector2(140f, 88f), new Vector2(56f, 40f), () => ChangeAgent2Difficulty(-1));
+        CreateButton(root, "NextAgent2ModelButton", ">", new Vector2(720f, 88f), new Vector2(56f, 40f), () => ChangeAgent2Difficulty(1));
+        RefreshAgentModelTexts();
 
         player1CharacterText = CreateText(
             root,
             "Player1CharacterText",
             "",
-            28,
+            24,
             new Color(0.9f, 0.84f, 0.7f, 1f),
-            new Vector2(0f, 22f),
-            new Vector2(700f, 48f),
+            new Vector2(-430f, 18f),
+            new Vector2(460f, 42f),
             FontStyles.Bold);
 
-        CreateButton(root, "PreviousPlayer1CharacterButton", "<", new Vector2(-250f, 22f), new Vector2(64f, 46f), () => ChangePlayer1Character(-1));
-        CreateButton(root, "NextPlayer1CharacterButton", ">", new Vector2(250f, 22f), new Vector2(64f, 46f), () => ChangePlayer1Character(1));
+        CreateButton(root, "PreviousPlayer1CharacterButton", "<", new Vector2(-720f, 18f), new Vector2(56f, 40f), () => ChangePlayer1Character(-1));
+        CreateButton(root, "NextPlayer1CharacterButton", ">", new Vector2(-140f, 18f), new Vector2(56f, 40f), () => ChangePlayer1Character(1));
 
         agentCharacterText = CreateText(
             root,
             "AgentCharacterText",
             "",
-            28,
+            24,
             new Color(0.9f, 0.84f, 0.7f, 1f),
-            new Vector2(0f, -38f),
-            new Vector2(700f, 48f),
+            new Vector2(430f, 18f),
+            new Vector2(460f, 42f),
             FontStyles.Bold);
 
-        CreateButton(root, "PreviousAgentCharacterButton", "<", new Vector2(-250f, -38f), new Vector2(64f, 46f), () => ChangeAgentCharacter(-1));
-        CreateButton(root, "NextAgentCharacterButton", ">", new Vector2(250f, -38f), new Vector2(64f, 46f), () => ChangeAgentCharacter(1));
+        CreateButton(root, "PreviousAgentCharacterButton", "<", new Vector2(140f, 18f), new Vector2(56f, 40f), () => ChangeAgentCharacter(-1));
+        CreateButton(root, "NextAgentCharacterButton", ">", new Vector2(720f, 18f), new Vector2(56f, 40f), () => ChangeAgentCharacter(1));
         RefreshCharacterTexts();
 
-        playButton = CreateButton(root, "PlayButton", playVsAgentButtonText, new Vector2(0f, -112f), new Vector2(430f, 56f), StartDemo);
-        CreateButton(root, "AgentVsAgentButton", agentVsAgentButtonText, new Vector2(0f, -180f), new Vector2(430f, 56f), StartAgentVsAgentDemo);
-        CreateButton(root, "ControlsButton", controlsButtonText, new Vector2(0f, -248f), new Vector2(430f, 52f), ToggleControls);
-        CreateButton(root, "QuitButton", quitButtonText, new Vector2(0f, -312f), new Vector2(430f, 52f), QuitDemo);
+        playButton = CreateButton(root, "PlayButton", playVsAgentButtonText, new Vector2(0f, -78f), new Vector2(430f, 56f), StartDemo);
+        CreateButton(root, "AgentVsAgentButton", agentVsAgentButtonText, new Vector2(0f, -146f), new Vector2(430f, 56f), StartAgentVsAgentDemo);
+        CreateButton(root, "ControlsButton", controlsButtonText, new Vector2(0f, -212f), new Vector2(430f, 52f), ToggleControls);
+        CreateButton(root, "QuitButton", quitButtonText, new Vector2(0f, -274f), new Vector2(430f, 52f), QuitDemo);
 
         CreateText(
             root,
@@ -175,7 +183,7 @@ public class RLAgentDemoMenu : MonoBehaviour
             footerText,
             22,
             new Color(0.68f, 0.62f, 0.54f, 1f),
-            new Vector2(0f, -380f),
+            new Vector2(0f, -360f),
             new Vector2(1000f, 48f),
             FontStyles.Normal);
 
@@ -317,22 +325,33 @@ public class RLAgentDemoMenu : MonoBehaviour
         rect.offsetMax = Vector2.zero;
     }
 
-    private void ChangeDifficulty(int direction)
+    private void ChangeAgent1Difficulty(int direction)
     {
-        int current = (int)selectedDifficulty;
+        int current = (int)selectedAgent1Difficulty;
         current = (current + direction + DifficultyLabels.Length) % DifficultyLabels.Length;
-        selectedDifficulty = (PvEDifficulty)current;
-        RefreshDifficultyText();
+        selectedAgent1Difficulty = (PvEDifficulty)current;
+        RefreshAgentModelTexts();
     }
 
-    private void RefreshDifficultyText()
+    private void ChangeAgent2Difficulty(int direction)
     {
-        if (difficultyText == null)
+        int current = (int)selectedAgent2Difficulty;
+        current = (current + direction + DifficultyLabels.Length) % DifficultyLabels.Length;
+        selectedAgent2Difficulty = (PvEDifficulty)current;
+        RefreshAgentModelTexts();
+    }
+
+    private void RefreshAgentModelTexts()
+    {
+        if (agent1ModelText != null)
         {
-            return;
+            agent1ModelText.text = agent1ModelLabel + DifficultyLabels[(int)selectedAgent1Difficulty];
         }
 
-        difficultyText.text = difficultyLabel + DifficultyLabels[(int)selectedDifficulty];
+        if (agent2ModelText != null)
+        {
+            agent2ModelText.text = agent2ModelLabel + DifficultyLabels[(int)selectedAgent2Difficulty];
+        }
     }
 
     private void ChangePlayer1Character(int direction)
@@ -356,13 +375,18 @@ public class RLAgentDemoMenu : MonoBehaviour
     {
         if (player1CharacterText != null)
         {
-            player1CharacterText.text = player1CharacterLabel + CharacterNames[selectedPlayer1CharacterIndex];
+            player1CharacterText.text = player1CharacterLabel + GetCharacterDisplayName(selectedPlayer1CharacterIndex);
         }
 
         if (agentCharacterText != null)
         {
-            agentCharacterText.text = agentCharacterLabel + CharacterNames[selectedAgentCharacterIndex];
+            agentCharacterText.text = agentCharacterLabel + GetCharacterDisplayName(selectedAgentCharacterIndex);
         }
+    }
+
+    private string GetCharacterDisplayName(int characterIndex)
+    {
+        return "Character " + characterIndex;
     }
 
     private void StartDemo()
@@ -383,7 +407,9 @@ public class RLAgentDemoMenu : MonoBehaviour
         PvESelectionState.IsRLAgentDemo = true;
         PvESelectionState.IsRLAgentDemoAgentVsAgent = agentVsAgent;
         PvESelectionState.SelectedBotType = PvEBotType.MLAgent;
-        PvESelectionState.SelectedDifficulty = selectedDifficulty;
+        PvESelectionState.SelectedDifficulty = selectedAgent2Difficulty;
+        PvESelectionState.RLAgentDemoAgent1Difficulty = selectedAgent1Difficulty;
+        PvESelectionState.RLAgentDemoAgent2Difficulty = selectedAgent2Difficulty;
         PvESelectionState.SelectedBotSide = PvEBotSide.Player2;
         RLAgentDemoModelOverrides.Set(beginnerModel, intermediateModel, expertModel);
 

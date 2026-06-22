@@ -20,10 +20,11 @@ After building, run the standalone executable normally. No Unity Editor, Python 
 How to play against the agent
 -----------------------------
 1. Launch the build.
-2. Pick the RL agent difficulty with the left/right arrows or the on-screen arrows.
+2. Pick Agent 1 Level and Agent 2 Level with their on-screen arrows.
 3. Pick the Player 1 character and the Agent character with the on-screen arrows.
-4. Select "Play vs Final RL Agent" for human vs agent, or "Watch Agent vs Agent" to let both players run the selected difficulty model.
-5. In human vs agent, Player 1 is human-controlled and Player 2 is controlled by the selected trained RL model through ML-Agents inference.
+4. Select "Play vs Final RL Agent" for human vs agent, or "Watch Agent vs Agent" to let both players run inference.
+5. In human vs agent, Player 1 is human-controlled and Player 2 uses Agent 2 Level.
+6. In agent vs agent, Player 1 uses Agent 1 Level and Player 2 uses Agent 2 Level.
 
 Controls
 --------
@@ -46,4 +47,8 @@ The demo applies the default gameplay rules: 100 HP, one round, normal arena, no
 Technical note
 --------------
 This demo allows the user to play against the final reinforcement learning agent developed for the thesis. The model was trained with PPO using Unity ML-Agents. The demo selects PvE ML Agent mode, fixes the bot to Player 2, and uses BehaviorParameters in InferenceOnly mode.
-Agent-vs-agent mode uses the same selected difficulty model for both players and does not run training.
+Agent-vs-agent mode can use different selected model slots for Player 1 and Player 2 and does not run training.
+
+Disclaimer
+--------------
+As the game is still in development many animations are missing or are incomplete.
