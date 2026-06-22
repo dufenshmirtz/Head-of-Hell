@@ -35,6 +35,10 @@ public class PvEBotSetupUI : MonoBehaviour
         if (!PvESelectionState.IsPvE)
             PvESelectionState.IsPvE = true;
 
+        PvESelectionState.IsRLAgentDemo = false;
+        PvESelectionState.IsRLAgentDemoAgentVsAgent = false;
+        RLAgentDemoModelOverrides.Clear();
+
         // Δεν θεωρούμε preselected τα defaults.
         botSelected = false;
         difficultySelected = false;

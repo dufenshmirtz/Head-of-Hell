@@ -34,9 +34,15 @@ public class PvEMLBotRuntimeSetup : MonoBehaviour
             return;
         }
 
+        if (PvESelectionState.IsRLAgentDemo && PvESelectionState.IsRLAgentDemoAgentVsAgent)
+        {
+            SetupMLAgent(p1, p2);
+            SetupMLAgent(p2, p1);
+            return;
+        }
+
         CharacterManager botManager =
             PvESelectionState.SelectedBotSide == PvEBotSide.Player1 ? p1 : p2;
-
         CharacterManager humanManager =
             PvESelectionState.SelectedBotSide == PvEBotSide.Player1 ? p2 : p1;
 
@@ -45,57 +51,20 @@ public class PvEMLBotRuntimeSetup : MonoBehaviour
 
     void SetupMLBot(CharacterManager botManager, CharacterManager enemyManager)
     {
-        GameObject botObj = botManager.gameObject;
         GameObject humanObj = enemyManager.gameObject;
 
-        // BOT SIDE
-        FighterAgent ml = botObj.GetComponent<FighterAgent>();
-        if (ml == null)
+        if (!SetupMLAgent(botManager, enemyManager))
         {
-            Debug.LogError($"PvE ML Setup: No FighterAgent found on Player {botManager.playerNum}.");
             return;
         }
-
-        Unity.MLAgents.DecisionRequester decision = botObj.GetComponent<Unity.MLAgents.DecisionRequester>();
-        BehaviorParameters behavior = botObj.GetComponent<BehaviorParameters>();
-        SimpleBotController scripted = botObj.GetComponent<SimpleBotController>();
-
-        if (scripted != null)
-        {
-            scripted.enabled = false;
-        }
-
-        if (behavior == null)
-        {
-            Debug.LogError($"PvE ML Setup: No BehaviorParameters found on Player {botManager.playerNum}.");
-            return;
-        }
-
-        NNModel selectedModel = GetModelFromDifficulty(PvESelectionState.SelectedDifficulty);
-
-        if (selectedModel == null)
-        {
-            Debug.LogError($"PvE ML Setup: No model assigned for difficulty {PvESelectionState.SelectedDifficulty}.");
-            return;
-        }
-
-        ml.selfManager = botManager;
-        ml.enemyManager = enemyManager;
-
-        behavior.Model = selectedModel;
-        behavior.BehaviorType = useInferenceOnly ? BehaviorType.InferenceOnly : BehaviorType.Default;
-
-        ml.enabled = true;
-
-        if (decision != null)
-        {
-            decision.enabled = true;
-        }
-
-        ml.ForceRebind();
-        ml.ClearInput();
 
         // HUMAN SIDE
+        Character humanCharacter = enemyManager.GetCurrentCharacter();
+        if (humanCharacter != null)
+        {
+            humanCharacter.SetInput(new KeyboardInputProvider());
+        }
+
         FighterAgent humanML = humanObj.GetComponent<FighterAgent>();
         if (humanML != null)
         {
@@ -114,14 +83,76 @@ public class PvEMLBotRuntimeSetup : MonoBehaviour
         {
             humanScripted.enabled = false;
         }
+    }
+
+    bool SetupMLAgent(CharacterManager agentManager, CharacterManager enemyManager)
+    {
+        GameObject agentObj = agentManager.gameObject;
+
+        FighterAgent ml = agentObj.GetComponent<FighterAgent>();
+        if (ml == null)
+        {
+            Debug.LogError($"PvE ML Setup: No FighterAgent found on Player {agentManager.playerNum}.");
+            return false;
+        }
+
+        Unity.MLAgents.DecisionRequester decision = agentObj.GetComponent<Unity.MLAgents.DecisionRequester>();
+        BehaviorParameters behavior = agentObj.GetComponent<BehaviorParameters>();
+        SimpleBotController scripted = agentObj.GetComponent<SimpleBotController>();
+
+        if (scripted != null)
+        {
+            scripted.enabled = false;
+        }
+
+        if (behavior == null)
+        {
+            Debug.LogError($"PvE ML Setup: No BehaviorParameters found on Player {agentManager.playerNum}.");
+            return false;
+        }
+
+        NNModel selectedModel = GetModelFromDifficulty(PvESelectionState.SelectedDifficulty);
+
+        if (selectedModel == null)
+        {
+            Debug.LogError($"PvE ML Setup: No model assigned for difficulty {PvESelectionState.SelectedDifficulty}.");
+            return false;
+        }
+
+        ml.selfManager = agentManager;
+        ml.enemyManager = enemyManager;
+
+        behavior.Model = selectedModel;
+        behavior.BehaviorType = useInferenceOnly ? BehaviorType.InferenceOnly : BehaviorType.Default;
+
+        ml.enabled = true;
+
+        if (decision != null)
+        {
+            decision.enabled = true;
+        }
+
+        ml.ForceRebind();
+        ml.ClearInput();
 
         Debug.Log(
-            $"ML Bot Enabled on Player {botManager.playerNum} | Difficulty: {PvESelectionState.SelectedDifficulty} | Model: {selectedModel.name}"
+            $"ML Agent Enabled on Player {agentManager.playerNum} | Difficulty: {PvESelectionState.SelectedDifficulty} | Model: {selectedModel.name}"
         );
+
+        return true;
     }
 
     NNModel GetModelFromDifficulty(PvEDifficulty difficulty)
     {
+        if (PvESelectionState.IsRLAgentDemo)
+        {
+            NNModel demoModel = RLAgentDemoModelOverrides.GetModel(difficulty);
+            if (demoModel != null)
+            {
+                return demoModel;
+            }
+        }
+
         switch (difficulty)
         {
             case PvEDifficulty.Easy:

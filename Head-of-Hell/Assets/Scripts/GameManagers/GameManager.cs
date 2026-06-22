@@ -522,11 +522,30 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (PvESelectionState.IsRLAgentDemo && Input.GetKeyDown(KeyCode.Backspace))
+        {
+            ReturnToRLAgentDemoMenu();
+            return;
+        }
+
         // Restart anytime during normal gameplay (not training)
         if (!trainingMode && Input.GetKeyDown(KeyCode.Return))
         {
             QuickRestart();
         }
+    }
+
+    private void ReturnToRLAgentDemoMenu()
+    {
+        tie = false;
+        gameEnd = false;
+        roundCounter = 1;
+        player1Wins = 0;
+        player2Wins = 0;
+        Time.timeScale = 1f;
+
+        TelemetryManager.Instance?.EndSession("ReturnedToRLAgentDemoMenu");
+        SceneManager.LoadScene("RLAgentDemo");
     }
 
     private void QuickRestart()

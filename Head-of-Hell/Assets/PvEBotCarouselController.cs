@@ -12,6 +12,9 @@ public class PvEBotCarouselController : MonoBehaviour
     private void Start()
     {
         PvESelectionState.IsPvE = true;
+        PvESelectionState.IsRLAgentDemo = false;
+        PvESelectionState.IsRLAgentDemoAgentVsAgent = false;
+        RLAgentDemoModelOverrides.Clear();
 
         botSelector.SetOptions(new List<string>
         {
