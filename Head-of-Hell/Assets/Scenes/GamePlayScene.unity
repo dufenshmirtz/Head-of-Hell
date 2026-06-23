@@ -367,6 +367,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 12
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -4886,6 +4887,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   mirrorFireAttackPoint: {fileID: 689308824}
   fireAttackPoint: {fileID: 2133402719}
 --- !u!1 &174624792
@@ -5523,6 +5525,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 8
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
@@ -7789,6 +7792,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 16
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1522488523}
@@ -9821,6 +9825,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 12
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -10754,6 +10759,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -12679,6 +12685,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 16
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1670223497}
@@ -14445,6 +14452,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 8
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
@@ -15416,6 +15424,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 16
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 343137453}
@@ -17780,6 +17789,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -20705,6 +20715,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 569739573}
   bulletSpeed: 35
@@ -21525,7 +21536,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   easyModel: {fileID: 5022602860645237092, guid: 69b4b92f57c4793468cae954c66fd9ff, type: 3}
   mediumModel: {fileID: 5022602860645237092, guid: 799190f388963d64ebc935068459c5b2, type: 3}
-  hardModel: {fileID: 5022602860645237092, guid: 7c067f183879a4042a450a565cee4b25, type: 3}
+  hardModel: {fileID: 5022602860645237092, guid: 9a537d825ba807d40bf838b1dedc10c2, type: 3}
   useInferenceOnly: 1
 --- !u!1 &790769231
 GameObject:
@@ -23932,6 +23943,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 20
 --- !u!1001 &882995806
 PrefabInstance:
@@ -24306,6 +24318,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 12
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -27697,6 +27710,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
 --- !u!1 &1020480611
 GameObject:
   m_ObjectHideFlags: 0
@@ -30653,6 +30667,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
 --- !u!1 &1169185177
 GameObject:
   m_ObjectHideFlags: 0
@@ -30897,6 +30912,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 20
 --- !u!1 &1185634414
 GameObject:
@@ -31733,6 +31749,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 12
   ascendAccelPerSec: 18
   maxAscendSpeed: 4
@@ -32550,6 +32567,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 20
 --- !u!114 &1228552612
 MonoBehaviour:
@@ -32877,6 +32895,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -33356,6 +33375,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   airSpinSpeed: 5
   jumpBackForce: 5
   lightAttackDuration: 0.5
@@ -34487,6 +34507,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   mirrorFireAttackPoint: {fileID: 1079567584}
   fireAttackPoint: {fileID: 1505197450}
 --- !u!114 &1300380414
@@ -35042,6 +35063,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 16
   bombPrefab: {fileID: 8044127190314468886, guid: 12a806996d0172c49a7223f1f5862617, type: 3}
   bombPoint: {fileID: 1100786215}
@@ -38368,6 +38390,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
 --- !u!114 &1478511390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39759,6 +39782,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   mirrorFireAttackPoint: {fileID: 79255834}
   fireAttackPoint: {fileID: 1247528379}
 --- !u!114 &1531342472
@@ -41859,6 +41883,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1881472743}
   bulletSpeed: 35
@@ -42355,6 +42380,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 1943892085}
   bulletSpeed: 35
@@ -44819,6 +44845,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   bulletPrefab: {fileID: 1238680649580817127, guid: 9839da958df59ed42a034c5c9427e321, type: 3}
   firePoint: {fileID: 461525617}
   bulletSpeed: 35
@@ -46465,6 +46492,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 20
 --- !u!114 &1753174034
 MonoBehaviour:
@@ -50059,6 +50087,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 8
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
@@ -51114,6 +51143,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   mirrorFireAttackPoint: {fileID: 1584761535}
   fireAttackPoint: {fileID: 1839956112}
 --- !u!1 &2018083340
@@ -51721,6 +51751,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
   cooldown: 8
   skiplerPoint: {fileID: 0}
   skiplerDouble: {fileID: 0}
@@ -54842,6 +54873,7 @@ MonoBehaviour:
   spawn: {fileID: 0}
   isLightAttacking: 0
   heavyAttacking: 0
+  blockReentryLockoutSeconds: 0.18
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
