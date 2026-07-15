@@ -21523,9 +21523,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c0fb849f7c381e46a684d5bb170e433, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  easyModel: {fileID: 5022602860645237092, guid: 69b4b92f57c4793468cae954c66fd9ff, type: 3}
-  mediumModel: {fileID: 5022602860645237092, guid: b64c02a4b6959904dab0ff284d5094d9, type: 3}
-  hardModel: {fileID: 5022602860645237092, guid: 1c09822b4a043fc4b90dbb97ec59222e, type: 3}
+  easyModel: {fileID: 5022602860645237092, guid: 5ddfaf1825817dd4db3ab5185e2c004d, type: 3}
+  mediumModel: {fileID: 5022602860645237092, guid: df6dceac224de114b833aba8d618195d, type: 3}
+  hardModel: {fileID: 5022602860645237092, guid: af3efaf8de8d6fa4b82eef91f84fb4d4, type: 3}
   useInferenceOnly: 1
 --- !u!1 &790769231
 GameObject:

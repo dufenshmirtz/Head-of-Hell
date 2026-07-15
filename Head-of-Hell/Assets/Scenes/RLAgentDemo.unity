@@ -259,10 +259,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3b2a4f6c8e14f7ab9d43d1c2a5e6b70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultDifficulty: 2
-  beginnerModel: {fileID: 5022602860645237092, guid: 2c00af0f9787ef9499d6341e0c5b7955, type: 3}
-  intermediateModel: {fileID: 5022602860645237092, guid: 9a537d825ba807d40bf838b1dedc10c2, type: 3}
-  expertModel: {fileID: 5022602860645237092, guid: df6dceac224de114b833aba8d618195d, type: 3}
+  defaultDifficulty: 1
+  beginnerModel: {fileID: 5022602860645237092, guid: 5ddfaf1825817dd4db3ab5185e2c004d, type: 3}
+  intermediateModel: {fileID: 5022602860645237092, guid: df6dceac224de114b833aba8d618195d, type: 3}
+  expertModel: {fileID: 5022602860645237092, guid: af3efaf8de8d6fa4b82eef91f84fb4d4, type: 3}
   titleText: RL Agent Thesis Demo
   infoText: This demo allows the user to play against the final reinforcement learning
     agent developed for the thesis. There is also Agent vs Agent Option The model

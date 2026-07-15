@@ -13,9 +13,9 @@ public class RLAgentDemoMenu : MonoBehaviour
 
     private static readonly string[] DifficultyLabels =
     {
-        "Beginner",
-        "Intermediate",
-        "Expert"
+        "AgentSmith2.0",
+        "AgentSmith2.2",
+        "AgentSmith3.2"
     };
 
     private static readonly string[] CharacterNames =
@@ -50,7 +50,7 @@ public class RLAgentDemoMenu : MonoBehaviour
     [SerializeField] private string agentVsAgentButtonText = "Watch Agent vs Agent";
     [SerializeField] private string controlsButtonText = "Controls";
     [SerializeField] private string quitButtonText = "Quit";
-    [SerializeField] private string footerText = "Player 1 is human. Player 2 is ML-Agent inference only. No Python, mlagents-learn, or training mode is used.";
+    [SerializeField] private string footerText = "Player 1 is human or ML-Agent. Player 2 is ML-Agent inference only.";
 
     [Header("Controls Text")]
     [SerializeField] private string controlsTitleText = "Controls";
@@ -59,8 +59,8 @@ public class RLAgentDemoMenu : MonoBehaviour
 
     private PvEDifficulty selectedAgent1Difficulty;
     private PvEDifficulty selectedAgent2Difficulty;
-    private int selectedPlayer1CharacterIndex = 3;
-    private int selectedAgentCharacterIndex = 4;
+    private int selectedPlayer1CharacterIndex = 6;
+    private int selectedAgentCharacterIndex = 3;
     private TMP_Text agent1ModelText;
     private TMP_Text agent2ModelText;
     private TMP_Text player1CharacterText;
