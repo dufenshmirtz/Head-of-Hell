@@ -7,7 +7,6 @@ public class bombScript : MonoBehaviour
 {
     public Animator animator;
     int player;
-    int enemy;
     bool exploded = false;
     bool dmgEnd = false;
     bool damageDealt = false;
@@ -15,17 +14,28 @@ public class bombScript : MonoBehaviour
     Steelager steelager;
     AudioManager audioManager;
     bool jumpDone = false;
+    CapsuleCollider2D physicalCollider;
+    bool ownerPhysicalCollisionIgnored = false;
+    Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
         player = 0;
         audioManager = FindObjectOfType<AudioManager>(); // Find and assign the AudioManager
+        rb = GetComponent<Rigidbody2D>();
+        physicalCollider = GetComponent<CapsuleCollider2D>();
+        if (rb != null)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
 
         if (audioManager == null)
         {
             Debug.LogError("AudioManager not found in the scene!");
         }
+
+        IgnoreOwnerPhysicalCollision();
     }
 
     // Update is called once per frame
@@ -36,77 +46,134 @@ public class bombScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        int player1Layer = LayerMask.NameToLayer("Player1layer");
-        int player2Layer = LayerMask.NameToLayer("Player2Layer");
-
         if ((player == 0))
         {
-            if (other.gameObject.layer == player1Layer)
+            if (other.CompareTag("Player"))
             {
-                player = 1;
-                enemy = player2Layer;
                 playa = other.GetComponent<Character>();
-            }
-            if (other.gameObject.layer == player2Layer)
-            {
-                player = 2;
-                enemy = player1Layer;
-                playa = other.GetComponent<Character>();
+                if (playa == null)
+                {
+                    playa = other.GetComponentInParent<Character>();
+                }
+                if (playa != null)
+                {
+                    player = playa.PlayerId == "P1" ? 1 : playa.PlayerId == "P2" ? 2 : 3;
+                    IgnoreOwnerPhysicalCollision();
+                }
             }
 
             return;
         }
 
-        if (other.gameObject.layer == enemy && exploded && !dmgEnd && !damageDealt)
+        Character character = other.GetComponent<Character>();
+        if (character == null)
         {
-            Character character = other.GetComponent<Character>();
-            if (character != null)
-            {
-                TelemetryManager.Instance?.LogHitAttempt(playa.PlayerId, character.PlayerId, MoveType.Projectile);
-                character.SetIncomingDamageContext(playa.PlayerId, MoveType.Projectile, SourceType.Projectile);
+            character = other.GetComponentInParent<Character>();
+        }
+        if (character == null)
+        {
+            return;
+        }
 
-                character.TakeDamage(6, true);
-                damageDealt = true;
+        bool isOwner = character == playa;
+        bool validEnemy = !isOwner;
+
+        if (isOwner && exploded && !dmgEnd && !jumpDone)
+        {
+            // Steelager's passive: his own bomb launches him toward the closest opponent.
+            Character closestEnemy = FindClosestEnemyForOwner();
+            if (closestEnemy != null)
+            {
+                character.SetEnemy(closestEnemy);
+            }
+            character.Knockback(13f, 0.3333f, true);
+            jumpDone = true;
+            return;
+        }
+
+        if (validEnemy && exploded && !dmgEnd && !damageDealt)
+        {
+            TelemetryManager.Instance?.LogHitAttempt(playa.PlayerId, character.PlayerId, MoveType.Projectile);
+            character.SetIncomingDamageContext(playa.PlayerId, MoveType.Projectile, SourceType.Projectile);
+
+            character.TakeDamage(6, true);
+            damageDealt = true;
+        }
+
+        if (validEnemy && !exploded && !dmgEnd && !damageDealt)
+        {
+            Explode();
+
+            TelemetryManager.Instance?.LogHitAttempt(playa.PlayerId, character.PlayerId, MoveType.Projectile);
+            character.SetIncomingDamageContext(playa.PlayerId, MoveType.Projectile, SourceType.Projectile);
+
+            character.TakeDamage(6, true);
+            damageDealt = true;
+        }
+
+    }
+
+    public void InitializeOwner(Character owner)
+    {
+        if (owner == null)
+        {
+            return;
+        }
+
+        playa = owner;
+        player = owner.PlayerId == "P1" ? 1 : owner.PlayerId == "P2" ? 2 : 3;
+        IgnoreOwnerPhysicalCollision();
+    }
+
+    private void IgnoreOwnerPhysicalCollision()
+    {
+        if (ownerPhysicalCollisionIgnored || playa == null || physicalCollider == null)
+        {
+            return;
+        }
+
+        Collider2D[] ownerColliders = playa.GetComponents<Collider2D>();
+        for (int i = 0; i < ownerColliders.Length; i++)
+        {
+            Collider2D ownerCollider = ownerColliders[i];
+            if (ownerCollider == null || ownerCollider == physicalCollider || ownerCollider.isTrigger)
+            {
+                continue;
+            }
+
+            Physics2D.IgnoreCollision(physicalCollider, ownerCollider, true);
+        }
+
+        ownerPhysicalCollisionIgnored = true;
+    }
+
+    private Character FindClosestEnemyForOwner()
+    {
+        if (playa == null)
+        {
+            return null;
+        }
+
+        Character[] characters = FindObjectsOfType<Character>();
+        Character closest = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (Character candidate in characters)
+        {
+            if (candidate == null || candidate == playa || !candidate.isActiveAndEnabled || candidate.IsDead())
+            {
+                continue;
+            }
+
+            float distance = Vector2.Distance(playa.transform.position, candidate.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closest = candidate;
             }
         }
 
-        if (other.gameObject.layer == enemy && !exploded && !dmgEnd && !damageDealt)
-        {
-
-            Character character = other.GetComponent<Character>();
-            if (character != null)
-            {
-                Explode();
-
-                TelemetryManager.Instance?.LogHitAttempt(playa.PlayerId, character.PlayerId, MoveType.Projectile);
-                character.SetIncomingDamageContext(playa.PlayerId, MoveType.Projectile, SourceType.Projectile);
-
-                character.TakeDamage(6, true);
-                damageDealt = true;
-            }
-        }
-
-        if (other.gameObject.layer != enemy && exploded && !dmgEnd && !jumpDone)
-        {
-
-            Character[] characters = other.GetComponents<Character>();
-            Character activeCharacter = null;
-
-            foreach (Character charComponent in characters)
-            {
-                if (charComponent.isActiveAndEnabled)
-                {
-                    activeCharacter = charComponent;
-                    break; // Stop after finding the first active component
-                }
-            }
-
-            if (activeCharacter != null)
-            {
-                activeCharacter.Knockback(13f, 0.3333f, true);
-                jumpDone = true;
-            }
-        }
+        return closest;
     }
 
     public void Explode()

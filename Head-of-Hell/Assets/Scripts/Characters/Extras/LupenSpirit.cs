@@ -33,34 +33,38 @@ public class LupenSpirit : MonoBehaviour
 
     void Update()
     {
+        if (input == null) input = new KeyboardInputProvider();
+        if (animator == null) animator = GetComponent<Animator>();
+
+        if (swapped && stolenCharacter == null)
+        {
+            ReturnControlToLupen(currentHealth);
+            return;
+        }
+
         if (!healthswap) // set stolen char health once we’ve swapped
         {
-            stolenCharacter.SetCurrentHealth(currentHealth);
-            healthswap = true;
+            if (stolenCharacter != null)
+            {
+                stolenCharacter.SetCurrentHealth(currentHealth);
+                healthswap = true;
+            }
         }
 
         // If we swapped forms and the form dies, return to Lupen and die.
-        if (swapped)
+        if (swapped && stolenCharacter != null)
         {
             if (stolenCharacter.GetCurrentHealth() <= 0)
             {
-                lupen.enabled = true;
-                lupenInFormSpell = false;
-                swapped = false;
-                currentHealth = stolenCharacter.GetCurrentHealth();
-                lupen.ReturnToLupen(whipDamage, robberyCounter, currentHealth);
+                ReturnControlToLupen(stolenCharacter.GetCurrentHealth());
                 lupen.Die();
             }
         }
 
         // If Lupen is currently in-form spell and the animation finished, return.
-        if (lupenInFormSpell && !animator.GetBool("Casting"))
+        if (lupenInFormSpell && stolenCharacter != null && animator != null && !animator.GetBool("Casting"))
         {
-            lupen.enabled = true;
-            lupenInFormSpell = false;
-            swapped = false;
-            currentHealth = stolenCharacter.GetCurrentHealth();
-            lupen.ReturnToLupen(whipDamage, robberyCounter, currentHealth);
+            ReturnControlToLupen(stolenCharacter.GetCurrentHealth());
         }
 
         // *** INPUT: use provider instead of Input. ***
@@ -68,18 +72,70 @@ public class LupenSpirit : MonoBehaviour
         bool abilityPressed =
             (input.GetKeyDown(ability) || (controller && input.GetButtonDown("Spell" + playerString))) && lupen.isActiveAndEnabled == false;
 
-        if (abilityPressed && lupen.isActiveAndEnabled == false && !enemy.AmICasting() && spammingCheck==true)
+        Character currentTarget = stolenCharacter != null ? stolenCharacter.GetEnemy() : enemy;
+        bool targetIsCasting = currentTarget != null && currentTarget.AmICasting();
+
+        if (abilityPressed && lupen.isActiveAndEnabled == false && !targetIsCasting && spammingCheck==true)
         {
             spammingCheck = false;
-            stolenCharacter.chargeDisable = true;
-            StartCoroutine(SetLupenInFormSpellAfterDelay(1.7f));
+            if (stolenCharacter != null)
+            {
+                stolenCharacter.chargeDisable = true;
+            }
+            StartCoroutine(SetLupenInFormSpellAfterDelay(GetReturnDelayForCurrentForm()));
         }
+    }
+
+    private void ReturnControlToLupen(int healthAfterForm)
+    {
+        if (lupen == null)
+        {
+            return;
+        }
+
+        currentHealth = healthAfterForm;
+        lupenInFormSpell = false;
+        swapped = false;
+        spammingCheck = false;
+
+        Character currentTarget = stolenCharacter != null ? stolenCharacter.GetEnemy() : enemy;
+
+        if (stolenCharacter != null)
+        {
+            stolenCharacter.Casting(false);
+            stolenCharacter.IgnoreMovement(false);
+            stolenCharacter.IgnoreUpdate(false);
+            stolenCharacter.StopCHarge();
+            stolenCharacter.Unblock();
+            stolenCharacter.stayDynamic();
+            stolenCharacter.enabled = false;
+            stolenCharacter.StopAllCoroutines();
+        }
+
+        lupen.enabled = true;
+        lupen.SetInput(input);
+        if (currentTarget != null)
+        {
+            lupen.ChangeEnemy(currentTarget);
+        }
+
+        lupen.ReturnToLupen(whipDamage, robberyCounter, currentHealth);
     }
 
     private IEnumerator SetLupenInFormSpellAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         lupenInFormSpell = true;
+    }
+
+    private float GetReturnDelayForCurrentForm()
+    {
+        if (stolenCharacter is Rager)
+        {
+            return 2.84f;
+        }
+
+        return 1.7f;
     }
 
     public void Action()
