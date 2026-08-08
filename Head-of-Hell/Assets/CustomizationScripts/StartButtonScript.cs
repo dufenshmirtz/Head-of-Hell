@@ -27,6 +27,11 @@ public class StartButtonScript : MonoBehaviour
         // Check if the ruleset is "Default" and apply settings
         if (setting.text == "Default")
         {
+            RulesetManager.Instance.SetRulesetNum(-1);
+            RulesetSelectionState.SelectDefault();
+            CustomRulesetScreenManager.selectedSlot = -1;
+            CustomRulesetScreenManager.currentRuleset = null;
+
             CustomRuleset ruleset = new CustomRuleset();
             ruleset.health = 100;
             ruleset.powerupsEnabled = false;
@@ -48,7 +53,12 @@ public class StartButtonScript : MonoBehaviour
             PlayerPrefs.Save();
         }
 
-        // Load the game scene (replace "GameScene" with your actual scene name)
+        // TODO(GamePlayScene 1v1v1):
+        // - Add SpawnPointP3 / third CharacterManager hookup
+        // - Add P3 health UI
+        // - Add last-alive winner logic
+        // - Extend telemetry meta with p3 fields
+        // Current phase only stores the 1v1v1 selection data before scene load.
         SceneManager.LoadScene(1);
     }
 }

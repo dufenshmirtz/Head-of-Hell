@@ -70,3 +70,15 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# ML-Agents generated timer logs
+/[Aa]ssets/ML-Agents/Timers/
+/[Aa]ssets/ML-Agents/Timers.meta
+
+# ML-Agents training outputs. Keep the curated portfolio/training run.
+/[Aa]ssets/[Rr]esults/*
+!/[Aa]ssets/[Rr]esults/hoh_run1.meta
+!/[Aa]ssets/[Rr]esults/hoh_run1/
+!/[Aa]ssets/[Rr]esults/hoh_run1/**
+/[Aa]ssets/[Rr]esults/hoh_run1/run_logs/timers.json
+/[Aa]ssets/[Rr]esults/hoh_run1/run_logs/timers.json.meta

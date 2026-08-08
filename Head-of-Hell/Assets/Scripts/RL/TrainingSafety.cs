@@ -322,8 +322,8 @@ public class TrainingSafety : MonoBehaviour
         {
             float penalty = GetPenaltyForReason(reason);
 
-            if (penalizeP1 && agentP1) agentP1.AddReward(penalty);
-            if (penalizeP2 && agentP2) agentP2.AddReward(penalty);
+            if (penalizeP1 && agentP1) agentP1.ApplySafetyResetPenalty(penalty);
+            if (penalizeP2 && agentP2) agentP2.ApplySafetyResetPenalty(penalty);
         }
 
         ResetTimers();

@@ -1,10 +1,41 @@
-using UnityEngine;
+using System;
+using System.Collections.Generic;
+using Unity.Barracuda;
 using Unity.MLAgents;
 using Unity.MLAgents.Policies;
-using Unity.Barracuda;
+using UnityEngine;
+
+
 
 public class TrainingOpponentDirector : MonoBehaviour
 {
+    [Serializable]
+    public class OpponentStats
+    {
+        public int episodes;
+        public int winsP1;
+        public int winsP2;
+        public int draws;
+
+        public float WinRateP1
+        {
+            get
+            {
+                if (episodes <= 0) return 0f;
+                return (float)winsP1 / episodes;
+            }
+        }
+
+        public float WinRateP2
+        {
+            get
+            {
+                if (episodes <= 0) return 0f;
+                return (float)winsP2 / episodes;
+            }
+        }
+    }
+
     [Header("Core References")]
     public GameManager gameManager;
 
@@ -23,6 +54,8 @@ public class TrainingOpponentDirector : MonoBehaviour
     public NNModel inferenceModel1;
     public NNModel inferenceModel2;
     public NNModel inferenceModel3;
+    public NNModel inferenceModel4;
+    public NNModel inferenceModel5;
 
     [Header("Progressive Mixing Phases")]
     [SerializeField] private int phase2StartEpisode = 3000;
@@ -30,10 +63,12 @@ public class TrainingOpponentDirector : MonoBehaviour
     [SerializeField] private int phase4StartEpisode = 7000;
 
     [Header("Current Weights (debug)")]
-    [Range(0f, 1f)] public float scriptedWeight = 0.55f;
+    [Range(0f, 1f)] public float scriptedWeight = 0.25f;
     [Range(0f, 1f)] public float inference1Weight = 0.15f;
-    [Range(0f, 1f)] public float inference2Weight = 0.10f;
-    [Range(0f, 1f)] public float inference3Weight = 0.10f;
+    [Range(0f, 1f)] public float inference2Weight = 0.15f;
+    [Range(0f, 1f)] public float inference3Weight = 0.15f;
+    [Range(0f, 1f)] public float inference4Weight = 0.10f;
+    [Range(0f, 1f)] public float inference5Weight = 0.10f;
     [Range(0f, 1f)] public float mirrorWeight = 0.10f;
 
     [Header("Scripted Curriculum")]
@@ -46,16 +81,72 @@ public class TrainingOpponentDirector : MonoBehaviour
     [SerializeField] private int episodeIndex = 0;
     public float currentScriptedSkill = 0.35f;
 
+    [Header("Training Stats")]
+    [SerializeField] private bool printStatsEveryEpisode = true;
+    [SerializeField] private int printSummaryEveryNEpisodes = 25;
+
+    private readonly Dictionary<OpponentMode, OpponentStats> statsByMode = new Dictionary<OpponentMode, OpponentStats>();
+
+    // Το mode που έπαιξε το τρέχον/τελευταίο episode.
+    private OpponentMode episodeMode;
+
     private void Awake()
     {
         episodeIndex = 0;
         ValidateReferences();
-        PrepareNextEpisode();
+        InitializeStats();
+
+        // IMPORTANT:
+        // Δεν κάνουμε PrepareNextEpisode() εδώ.
+        // Το αρχικό startup του ML-Agents πρέπει να βρει το scene σε safe κατάσταση.
+        ApplySafeStartupMode();
+
+        // Το safe startup mode θεωρείται το πρώτο active episode mode
+        episodeMode = currentMode;
+    }
+
+    private void InitializeStats()
+    {
+        foreach (OpponentMode mode in Enum.GetValues(typeof(OpponentMode)))
+        {
+            if (!statsByMode.ContainsKey(mode))
+            {
+                statsByMode.Add(mode, new OpponentStats());
+            }
+        }
+    }
+
+    private void ApplySafeStartupMode()
+    {
+        currentMode = OpponentMode.ScriptedBot;
+        currentScriptedSkill = EvaluateScriptedSkill();
+
+        if (CanApplyScriptedMode())
+        {
+            ApplyScriptedBotMode();
+        }
+        else if (CanApplyMirrorMode())
+        {
+            Debug.LogWarning("[TrainingOpponentDirector] Safe startup fallback to MirrorSelfPlay.");
+            currentMode = OpponentMode.MirrorSelfPlay;
+            ApplyMirrorMode();
+        }
+        else
+        {
+            Debug.LogError("[TrainingOpponentDirector] Could not apply any safe startup mode.");
+        }
     }
 
     public OpponentMode SelectNextMode()
     {
-        float total = scriptedWeight + inference1Weight + inference2Weight + inference3Weight + mirrorWeight;
+        float total =
+            scriptedWeight +
+            inference1Weight +
+            inference2Weight +
+            inference3Weight +
+            inference4Weight +
+            inference5Weight +
+            mirrorWeight;
 
         if (total <= 0f)
         {
@@ -64,7 +155,7 @@ public class TrainingOpponentDirector : MonoBehaviour
             return currentMode;
         }
 
-        float r = Random.value * total;
+        float r = UnityEngine.Random.value * total;
 
         if (r < scriptedWeight)
         {
@@ -73,7 +164,6 @@ public class TrainingOpponentDirector : MonoBehaviour
         }
 
         r -= scriptedWeight;
-
         if (r < inference1Weight)
         {
             currentMode = OpponentMode.InferenceModel1;
@@ -81,7 +171,6 @@ public class TrainingOpponentDirector : MonoBehaviour
         }
 
         r -= inference1Weight;
-
         if (r < inference2Weight)
         {
             currentMode = OpponentMode.InferenceModel2;
@@ -89,10 +178,23 @@ public class TrainingOpponentDirector : MonoBehaviour
         }
 
         r -= inference2Weight;
-
         if (r < inference3Weight)
         {
             currentMode = OpponentMode.InferenceModel3;
+            return currentMode;
+        }
+
+        r -= inference3Weight;
+        if (r < inference4Weight)
+        {
+            currentMode = OpponentMode.InferenceModel4;
+            return currentMode;
+        }
+
+        r -= inference4Weight;
+        if (r < inference5Weight)
+        {
+            currentMode = OpponentMode.InferenceModel5;
             return currentMode;
         }
 
@@ -109,6 +211,12 @@ public class TrainingOpponentDirector : MonoBehaviour
 
     public void PrepareNextEpisode()
     {
+        if (gameManager == null)
+        {
+            Debug.LogWarning("[TrainingOpponentDirector] PrepareNextEpisode aborted: gameManager is null.");
+            return;
+        }
+
         if (!gameManager.trainingMode)
         {
             return;
@@ -120,9 +228,12 @@ public class TrainingOpponentDirector : MonoBehaviour
         SelectNextMode();
         EvaluateScriptedSkill();
 
+        // Αυτό είναι το mode που θα παίξει το ΝΕΟ episode
+        episodeMode = currentMode;
+
         Debug.Log(
             $"[TrainingOpponentDirector] Episode {episodeIndex} | OpponentMode={currentMode} | " +
-            $"Weights=({scriptedWeight:F2}, {inference1Weight:F2}, {inference2Weight:F2}, {inference3Weight:F2}, {mirrorWeight:F2}) | " +
+            $"Weights=({scriptedWeight:F2}, {inference1Weight:F2}, {inference2Weight:F2}, {inference3Weight:F2}, {inference4Weight:F2}, {inference5Weight:F2}, {mirrorWeight:F2}) | " +
             $"ScriptedSkill={currentScriptedSkill:F2}"
         );
 
@@ -134,80 +245,208 @@ public class TrainingOpponentDirector : MonoBehaviour
         switch (currentMode)
         {
             case OpponentMode.ScriptedBot:
-            {
-                if (CanApplyScriptedMode())
                 {
-                    ApplyScriptedBotMode();
+                    if (CanApplyScriptedMode())
+                    {
+                        ApplyScriptedBotMode();
+                    }
+                    else if (CanApplyMirrorMode())
+                    {
+                        Debug.LogWarning("[TrainingOpponentDirector] Scripted mode unavailable. Falling back to MirrorSelfPlay.");
+                        currentMode = OpponentMode.MirrorSelfPlay;
+                        episodeMode = currentMode;
+                        ApplyMirrorMode();
+                    }
+                    else
+                    {
+                        Debug.LogError("[TrainingOpponentDirector] Scripted and Mirror modes unavailable.");
+                    }
+                    break;
                 }
-                else
-                {
-                    Debug.LogWarning("[TrainingOpponentDirector] Scripted mode unavailable. Falling back to MirrorSelfPlay.");
-                    currentMode = OpponentMode.MirrorSelfPlay;
-                    ApplyMirrorMode();
-                }
-                break;
-            }
 
             case OpponentMode.InferenceModel1:
-            {
-                if (CanApplyInferenceMode(inferenceModel1))
                 {
-                    ApplyInferenceMode(inferenceModel1);
+                    if (CanApplyInferenceMode(inferenceModel1))
+                    {
+                        ApplyInferenceMode(inferenceModel1);
+                    }
+                    else
+                    {
+                        FallbackFromInference("InferenceModel1");
+                    }
+                    break;
                 }
-                else
-                {
-                    Debug.LogWarning("[TrainingOpponentDirector] InferenceModel1 unavailable. Falling back to ScriptedBot.");
-                    currentMode = OpponentMode.ScriptedBot;
-                    ApplyScriptedBotMode();
-                }
-                break;
-            }
 
             case OpponentMode.InferenceModel2:
-            {
-                if (CanApplyInferenceMode(inferenceModel2))
                 {
-                    ApplyInferenceMode(inferenceModel2);
+                    if (CanApplyInferenceMode(inferenceModel2))
+                    {
+                        ApplyInferenceMode(inferenceModel2);
+                    }
+                    else
+                    {
+                        FallbackFromInference("InferenceModel2");
+                    }
+                    break;
                 }
-                else
-                {
-                    Debug.LogWarning("[TrainingOpponentDirector] InferenceModel2 unavailable. Falling back to ScriptedBot.");
-                    currentMode = OpponentMode.ScriptedBot;
-                    ApplyScriptedBotMode();
-                }
-                break;
-            }
 
             case OpponentMode.InferenceModel3:
-            {
-                if (CanApplyInferenceMode(inferenceModel3))
                 {
-                    ApplyInferenceMode(inferenceModel3);
+                    if (CanApplyInferenceMode(inferenceModel3))
+                    {
+                        ApplyInferenceMode(inferenceModel3);
+                    }
+                    else
+                    {
+                        FallbackFromInference("InferenceModel3");
+                    }
+                    break;
                 }
-                else
+
+            case OpponentMode.InferenceModel4:
                 {
-                    Debug.LogWarning("[TrainingOpponentDirector] InferenceModel3 unavailable. Falling back to ScriptedBot.");
-                    currentMode = OpponentMode.ScriptedBot;
-                    ApplyScriptedBotMode();
+                    if (CanApplyInferenceMode(inferenceModel4))
+                    {
+                        ApplyInferenceMode(inferenceModel4);
+                    }
+                    else
+                    {
+                        FallbackFromInference("InferenceModel4");
+                    }
+                    break;
                 }
-                break;
-            }
+
+            case OpponentMode.InferenceModel5:
+                {
+                    if (CanApplyInferenceMode(inferenceModel5))
+                    {
+                        ApplyInferenceMode(inferenceModel5);
+                    }
+                    else
+                    {
+                        FallbackFromInference("InferenceModel5");
+                    }
+                    break;
+                }
 
             case OpponentMode.MirrorSelfPlay:
-            {
-                if (CanApplyMirrorMode())
                 {
-                    ApplyMirrorMode();
+                    if (CanApplyMirrorMode())
+                    {
+                        ApplyMirrorMode();
+                    }
+                    else if (CanApplyScriptedMode())
+                    {
+                        Debug.LogWarning("[TrainingOpponentDirector] Mirror mode unavailable. Falling back to ScriptedBot.");
+                        currentMode = OpponentMode.ScriptedBot;
+                        episodeMode = currentMode;
+                        ApplyScriptedBotMode();
+                    }
+                    else
+                    {
+                        Debug.LogError("[TrainingOpponentDirector] Mirror and Scripted modes unavailable.");
+                    }
+                    break;
                 }
-                else
-                {
-                    Debug.LogWarning("[TrainingOpponentDirector] Mirror mode unavailable. Falling back to ScriptedBot.");
-                    currentMode = OpponentMode.ScriptedBot;
-                    ApplyScriptedBotMode();
-                }
-                break;
-            }
         }
+    }
+
+    private void FallbackFromInference(string modeName)
+    {
+        Debug.LogWarning($"[TrainingOpponentDirector] {modeName} unavailable. Falling back.");
+
+        if (CanApplyScriptedMode())
+        {
+            currentMode = OpponentMode.ScriptedBot;
+            episodeMode = currentMode;
+            ApplyScriptedBotMode();
+        }
+        else if (CanApplyMirrorMode())
+        {
+            currentMode = OpponentMode.MirrorSelfPlay;
+            episodeMode = currentMode;
+            ApplyMirrorMode();
+        }
+        else
+        {
+            Debug.LogError($"[TrainingOpponentDirector] No valid fallback available from {modeName}.");
+        }
+    }
+
+    public void RecordEpisodeResult(int winnerPlayerNum)
+    {
+        if (!statsByMode.ContainsKey(episodeMode))
+        {
+            statsByMode[episodeMode] = new OpponentStats();
+        }
+
+        OpponentStats stats = statsByMode[episodeMode];
+        stats.episodes++;
+
+        if (winnerPlayerNum == 1)
+        {
+            stats.winsP1++;
+        }
+        else if (winnerPlayerNum == 2)
+        {
+            stats.winsP2++;
+        }
+        else
+        {
+            stats.draws++;
+        }
+
+        if (printStatsEveryEpisode)
+        {
+            Debug.Log(
+                $"[OpponentStats] Mode={episodeMode} | " +
+                $"Episodes={stats.episodes} | P1Wins={stats.winsP1} | P2Wins={stats.winsP2} | Draws={stats.draws} | " +
+                $"P1WinRate={stats.WinRateP1:P2}"
+            );
+        }
+
+        int totalEpisodesRecorded = GetTotalRecordedEpisodes();
+        if (printSummaryEveryNEpisodes > 0 && totalEpisodesRecorded % printSummaryEveryNEpisodes == 0)
+        {
+            PrintAllStats();
+        }
+    }
+
+    private int GetTotalRecordedEpisodes()
+    {
+        int total = 0;
+        foreach (var kvp in statsByMode)
+        {
+            total += kvp.Value.episodes;
+        }
+        return total;
+    }
+
+    public void PrintAllStats()
+    {
+        Debug.Log("========== TRAINING OPPONENT STATS ==========");
+
+        foreach (var kvp in statsByMode)
+        {
+            OpponentMode mode = kvp.Key;
+            OpponentStats s = kvp.Value;
+
+            Debug.Log(
+                $"Mode={mode} | Episodes={s.episodes} | " +
+                $"P1Wins={s.winsP1} | P2Wins={s.winsP2} | Draws={s.draws} | " +
+                $"P1WinRate={s.WinRateP1:P2}"
+            );
+        }
+    }
+
+    public OpponentStats GetStatsForMode(OpponentMode mode)
+    {
+        if (!statsByMode.ContainsKey(mode))
+        {
+            statsByMode[mode] = new OpponentStats();
+        }
+
+        return statsByMode[mode];
     }
 
     public void RebindAfterCharacterSwap()
@@ -241,18 +480,7 @@ public class TrainingOpponentDirector : MonoBehaviour
 
     private void ApplyScriptedBotMode()
     {
-        if (botP2 != null)
-        {
-            botP2.enabled = true;
-            botP2.SetSkill(currentScriptedSkill);
-        }
-
-        if (agentP2 != null)
-        {
-            agentP2.ClearInput();
-            agentP2.enabled = false;
-        }
-
+        // Πρώτα σβήνουμε ML side του P2
         if (decisionP2 != null)
         {
             decisionP2.enabled = false;
@@ -263,6 +491,19 @@ public class TrainingOpponentDirector : MonoBehaviour
             behaviorP2.BehaviorType = BehaviorType.Default;
             behaviorP2.Model = null;
         }
+
+        if (agentP2 != null)
+        {
+            agentP2.ClearInput();
+            agentP2.enabled = false;
+        }
+
+        // Μετά ανοίγουμε το bot
+        if (botP2 != null)
+        {
+            botP2.enabled = true;
+            botP2.SetSkill(currentScriptedSkill);
+        }
     }
 
     private void ApplyMirrorMode()
@@ -272,15 +513,15 @@ public class TrainingOpponentDirector : MonoBehaviour
             botP2.enabled = false;
         }
 
+        if (decisionP2 != null)
+        {
+            decisionP2.enabled = false;
+        }
+
         if (agentP2 != null)
         {
             agentP2.ClearInput();
-            agentP2.enabled = true;
-        }
-
-        if (decisionP2 != null)
-        {
-            decisionP2.enabled = true;
+            agentP2.enabled = false;
         }
 
         if (behaviorP2 != null)
@@ -288,24 +529,41 @@ public class TrainingOpponentDirector : MonoBehaviour
             behaviorP2.BehaviorType = BehaviorType.Default;
             behaviorP2.Model = null;
         }
+
+        if (decisionP2 != null)
+        {
+            decisionP2.enabled = true;
+        }
+
+        if (agentP2 != null)
+        {
+            agentP2.enabled = true;
+        }
     }
 
     private void ApplyInferenceMode(NNModel model)
     {
+        if (model == null)
+        {
+            Debug.LogWarning("[TrainingOpponentDirector] ApplyInferenceMode called with null model.");
+            FallbackFromInference("NullModel");
+            return;
+        }
+
         if (botP2 != null)
         {
             botP2.enabled = false;
         }
 
+        if (decisionP2 != null)
+        {
+            decisionP2.enabled = false;
+        }
+
         if (agentP2 != null)
         {
             agentP2.ClearInput();
-            agentP2.enabled = true;
-        }
-
-        if (decisionP2 != null)
-        {
-            decisionP2.enabled = true;
+            agentP2.enabled = false;
         }
 
         if (behaviorP2 != null)
@@ -313,40 +571,58 @@ public class TrainingOpponentDirector : MonoBehaviour
             behaviorP2.Model = model;
             behaviorP2.BehaviorType = BehaviorType.InferenceOnly;
         }
+
+        if (decisionP2 != null)
+        {
+            decisionP2.enabled = true;
+        }
+
+        if (agentP2 != null)
+        {
+            agentP2.enabled = true;
+        }
     }
 
     private void UpdateProgressiveWeights()
     {
         if (episodeIndex >= phase4StartEpisode)
         {
-            scriptedWeight = 0.05f;
-            inference1Weight = 0.25f;
-            inference2Weight = 0.10f;
+            scriptedWeight = 0.01f;
+            inference1Weight = 0.17f;
+            inference2Weight = 0.12f;
             inference3Weight = 0.10f;
+            inference4Weight = 0.05f;
+            inference5Weight = 0.05f;
             mirrorWeight = 0.50f;
         }
         else if (episodeIndex >= phase3StartEpisode)
         {
             scriptedWeight = 0.05f;
-            inference1Weight = 0.35f;
+            inference1Weight = 0.20f;
             inference2Weight = 0.10f;
             inference3Weight = 0.10f;
+            inference4Weight = 0.05f;
+            inference5Weight = 0.10f;
             mirrorWeight = 0.40f;
         }
         else if (episodeIndex >= phase2StartEpisode)
         {
-            scriptedWeight = 0.20f;
-            inference1Weight = 0.20f;
-            inference2Weight = 0.20f;
+            scriptedWeight = 0.10f;
+            inference1Weight = 0.15f;
+            inference2Weight = 0.15f;
             inference3Weight = 0.15f;
+            inference4Weight = 0.10f;
+            inference5Weight = 0.10f;
             mirrorWeight = 0.25f;
         }
         else
         {
-            scriptedWeight = 0.30f;
+            scriptedWeight = 0.15f;
             inference1Weight = 0.15f;
-            inference2Weight = 0.20f;
-            inference3Weight = 0.25f;
+            inference2Weight = 0.15f;
+            inference3Weight = 0.15f;
+            inference4Weight = 0.15f;
+            inference5Weight = 0.15f;
             mirrorWeight = 0.10f;
         }
     }
@@ -407,6 +683,16 @@ public class TrainingOpponentDirector : MonoBehaviour
         {
             Debug.LogWarning("[TrainingOpponentDirector] Missing inferenceModel3 reference.");
         }
+
+        if (inferenceModel4 == null)
+        {
+            Debug.LogWarning("[TrainingOpponentDirector] Missing inferenceModel4 reference.");
+        }
+
+        if (inferenceModel5 == null)
+        {
+            Debug.LogWarning("[TrainingOpponentDirector] Missing inferenceModel5 reference.");
+        }
     }
 
     private bool CanApplyScriptedMode()
@@ -416,12 +702,17 @@ public class TrainingOpponentDirector : MonoBehaviour
 
     private bool CanApplyInferenceMode(NNModel model)
     {
-        return agentP2 != null && decisionP2 != null && behaviorP2 != null && model != null;
+        return agentP2 != null &&
+               decisionP2 != null &&
+               behaviorP2 != null &&
+               model != null;
     }
 
     private bool CanApplyMirrorMode()
     {
-        return agentP2 != null && decisionP2 != null && behaviorP2 != null;
+        return agentP2 != null &&
+               decisionP2 != null &&
+               behaviorP2 != null;
     }
 
     public OpponentMode GetCurrentMode()
@@ -434,6 +725,11 @@ public class TrainingOpponentDirector : MonoBehaviour
         return currentMode.ToString();
     }
 
+    public string GetEpisodeModeName()
+    {
+        return episodeMode.ToString();
+    }
+
     public bool IsScriptedMode()
     {
         return currentMode == OpponentMode.ScriptedBot;
@@ -443,7 +739,9 @@ public class TrainingOpponentDirector : MonoBehaviour
     {
         return currentMode == OpponentMode.InferenceModel1
             || currentMode == OpponentMode.InferenceModel2
-            || currentMode == OpponentMode.InferenceModel3;
+            || currentMode == OpponentMode.InferenceModel3
+            || currentMode == OpponentMode.InferenceModel4
+            || currentMode == OpponentMode.InferenceModel5;
     }
 
     public bool IsMirrorMode()

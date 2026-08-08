@@ -4,5 +4,7 @@ public enum OpponentMode
     InferenceModel1,
     InferenceModel2,
     InferenceModel3,
+    InferenceModel4,
+    InferenceModel5,
     MirrorSelfPlay
 }
