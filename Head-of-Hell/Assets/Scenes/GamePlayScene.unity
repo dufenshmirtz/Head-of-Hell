@@ -22534,8 +22534,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   easyModel: {fileID: 5022602860645237092, guid: e3ab67d9ce3baf64ea95dc4993f6bc63, type: 3}
-  mediumModel: {fileID: 5022602860645237092, guid: 9a537d825ba807d40bf838b1dedc10c2, type: 3}
-  hardModel: {fileID: 5022602860645237092, guid: df6dceac224de114b833aba8d618195d, type: 3}
+  mediumModel: {fileID: 5022602860645237092, guid: df6dceac224de114b833aba8d618195d, type: 3}
+  hardModel: {fileID: 5022602860645237092, guid: af3efaf8de8d6fa4b82eef91f84fb4d4, type: 3}
   useInferenceOnly: 1
 --- !u!1 &790769231
 GameObject:
