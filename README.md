@@ -84,6 +84,10 @@ The repository includes two kinds of AI-related material:
 
 Generated ML-Agents training outputs are intentionally not treated like normal source files. The preserved `Assets/results/hoh_run1/` folder is the curated training run kept for project history and portfolio context. Other generated result runs should stay out of Git unless the team deliberately decides otherwise.
 
+For a focused academic/portfolio view of the reinforcement-learning work, see the companion thesis repository:
+
+- [RL-Agent Thesis](https://github.com/dufenshmirtz/RL-Agent-Thesis)
+
 ## Development Notes
 
 - This is a Unity project in progress, so generated folders such as `Library/`, `Temp/`, `Obj/`, `Logs/`, `UserSettings/`, build outputs, and ML-Agents timer logs should stay out of Git.
