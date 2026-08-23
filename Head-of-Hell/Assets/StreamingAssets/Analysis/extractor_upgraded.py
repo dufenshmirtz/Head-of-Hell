@@ -131,6 +131,77 @@ def normalize_rate(count: float, duration: float) -> float:
     return count / duration
 
 
+def as_optional_float(x) -> Optional[float]:
+    try:
+        if x is None or x == "":
+            return None
+        return float(x)
+    except Exception:
+        return None
+
+
+def build_effective_damage_map(events: List[Dict[str, Any]]) -> Dict[int, float]:
+    groups: Dict[Tuple[Any, ...], List[Tuple[int, Dict[str, Any], float]]] = {}
+
+    for idx, e in enumerate(events):
+        if not isinstance(e, dict):
+            continue
+
+        etype = e.get("eventType") or e.get("type")
+        if etype != "DamageApplied":
+            continue
+
+        raw_damage = max(0.0, as_float(e.get("actualDamage") or e.get("finalDamage") or 0.0))
+        defender = e.get("defenderId") or e.get("defender") or ""
+        frame = e.get("frame")
+        t = as_optional_float(e.get("t"))
+
+        if defender and frame not in (None, ""):
+            key = ("frame", defender, str(frame))
+        elif defender and t is not None:
+            key = ("time", defender, round(t, 3))
+        else:
+            key = ("event", idx)
+
+        groups.setdefault(key, []).append((idx, e, raw_damage))
+
+    effective_damage_by_index: Dict[int, float] = {}
+
+    for entries in groups.values():
+        valid_hp_entries = [
+            (idx, e, raw_damage)
+            for idx, e, raw_damage in entries
+            if as_optional_float(e.get("hpDefenderBefore")) is not None
+            and as_optional_float(e.get("hpDefenderAfter")) is not None
+        ]
+
+        if not valid_hp_entries:
+            for idx, _e, raw_damage in entries:
+                effective_damage_by_index[idx] = raw_damage
+            continue
+
+        group_before = max(
+            max(0.0, as_float(e.get("hpDefenderBefore")))
+            for _idx, e, _raw_damage in valid_hp_entries
+        )
+        group_after = min(
+            max(0.0, as_float(e.get("hpDefenderAfter")))
+            for _idx, e, _raw_damage in valid_hp_entries
+        )
+        group_effective_damage = max(0.0, group_before - group_after)
+        group_raw_damage = sum(raw_damage for _idx, _e, raw_damage in entries)
+
+        if group_raw_damage <= 1e-9:
+            for idx, _e, _raw_damage in entries:
+                effective_damage_by_index[idx] = 0.0
+            continue
+
+        for idx, _e, raw_damage in entries:
+            effective_damage_by_index[idx] = group_effective_damage * (raw_damage / group_raw_damage)
+
+    return effective_damage_by_index
+
+
 def ratio(num: float, den: float) -> float:
     if den <= 1e-9:
         return 0.0
@@ -262,7 +333,9 @@ def extract_round_features(doc: Dict[str, Any], filename: str) -> List[Dict[str,
                 "hits_landed": 0,
             }
 
-    for e in events:
+    effective_damage_by_event = build_effective_damage_map(events)
+
+    for event_index, e in enumerate(events):
         etype = e.get("eventType") or e.get("type")
 
         if etype == "Action":
@@ -319,7 +392,8 @@ def extract_round_features(doc: Dict[str, Any], filename: str) -> List[Dict[str,
         elif etype == "DamageApplied":
             attacker = e.get("attackerId")
             defender = e.get("defenderId")
-            dmg = as_float(e.get("actualDamage") or e.get("finalDamage") or 0.0)
+            raw_dmg = as_float(e.get("actualDamage") or e.get("finalDamage") or 0.0)
+            dmg = effective_damage_by_event.get(event_index, max(0.0, raw_dmg))
             blocked = bool(e.get("blocked") or e.get("wasBlocked") or False)
             dodged = bool(e.get("dodged") or e.get("wasDodged") or False)
 
@@ -330,7 +404,7 @@ def extract_round_features(doc: Dict[str, Any], filename: str) -> List[Dict[str,
             if attacker:
                 ensure(attacker)
                 agg[attacker]["damage_dealt"] += dmg
-                if dmg > 0 and not is_dot:
+                if raw_dmg > 0 and not is_dot:
                     agg[attacker]["hits_landed"] += 1
 
             if defender:
