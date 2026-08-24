@@ -17,7 +17,6 @@ ACTION_CATEGORY_MAP = {
     "Quick": "attack",
     "Heavy": "attack",
     "Special": "attack",
-    "ChargeStart": "attack",
     "ChargeRelease": "attack",
 
     "Dash": "mobility",
@@ -25,15 +24,19 @@ ACTION_CATEGORY_MAP = {
     "Jump": "mobility",
     "MoveLeft": "mobility",
     "MoveRight": "mobility",
-    "MoveStop": "mobility",
     "DropPlatform": "mobility",
 
-    "BlockStart": "defense",
     "BlockHold": "defense",
     "Parry": "defense",
-    "ParryAttempt": "defense",
     "Dodge": "defense",
-    "Roll": "defense",
+}
+
+IGNORED_ACTION_TYPES = {
+    "ChargeStart",
+    "MoveStop",
+    "Roll",
+    "BlockStart",
+    "BlockEnd",
 }
 
 ACTION_SUBTYPE_MAP = {
@@ -71,6 +74,7 @@ FEATURE_COLS = [
     "projectile_rate",
     "risk_index",
     "parry_rate",
+    "parry_attempt_rate",
 ]
 
 
@@ -295,6 +299,8 @@ def extract_round_features(doc: Dict[str, Any], filename: str) -> List[Dict[str,
     winner_id = infer_winner_id(meta)
 
     p1_profile_id, p1_profile_name, p2_profile_id, p2_profile_name = infer_profile_info(meta)
+    p1_character = str(meta.get("p1Character") or "").strip().lower()
+    p2_character = str(meta.get("p2Character") or "").strip().lower()
 
     def identity_for_slot(slot_id: str):
         if slot_id == p1_seat:
@@ -307,6 +313,28 @@ def extract_round_features(doc: Dict[str, Any], filename: str) -> List[Dict[str,
         if profile_id and profile_id not in ("GUEST", "NONE", "UNKNOWN"):
             return profile_id
         return slot_id
+
+    def character_for_slot(slot_id: str) -> str:
+        if slot_id == p1_seat:
+            return p1_character
+        if slot_id == p2_seat:
+            return p2_character
+        return ""
+
+    def special_hit_counted_from_attempt(attacker_id: str, move_type: str) -> bool:
+        return (
+            move_type == "Special"
+            and character_for_slot(attacker_id) in {"rager", "visvia"}
+        )
+
+    def is_special_damage_counted_from_attempt(attacker_id: str, move_type: str, source_type: str) -> bool:
+        return (
+            special_hit_counted_from_attempt(attacker_id, move_type)
+            and source_type == "Spell"
+        )
+
+    def is_damage_only_move(move_type: str, source_type: str) -> bool:
+        return move_type == "PassiveBonus"
 
     agg: Dict[str, Dict[str, float]] = {}
 
@@ -323,6 +351,7 @@ def extract_round_features(doc: Dict[str, Any], filename: str) -> List[Dict[str,
                 "actions_charge": 0,
                 "actions_projectile": 0,
                 "actions_parry": 0,
+                "actions_parry_attempt": 0,
                 "hit_attempts": 0,
                 "misses": 0,
                 "damage_dealt": 0.0,
@@ -344,12 +373,17 @@ def extract_round_features(doc: Dict[str, Any], filename: str) -> List[Dict[str,
                 continue
 
             ensure(pid)
-            agg[pid]["actions_total"] += 1
 
             action_type = e.get("actionType") or e.get("action") or ""
+            if action_type in IGNORED_ACTION_TYPES:
+                continue
+
+            agg[pid]["actions_total"] += 1
 
             if action_type == "Parry":
                 agg[pid]["actions_parry"] += 1
+            elif action_type == "ParryAttempt":
+                agg[pid]["actions_parry_attempt"] += 1
             cat = ACTION_CATEGORY_MAP.get(action_type, None)
             if cat == "attack":
                 agg[pid]["actions_attack"] += 1
@@ -378,8 +412,15 @@ def extract_round_features(doc: Dict[str, Any], filename: str) -> List[Dict[str,
             ensure(attacker)
             agg[attacker]["hit_attempts"] += 1
 
-            _move = e.get("moveType") or ""
-            _ = MOVE_SUBTYPE_MAP.get(_move, None)
+            move_type = str(e.get("moveType") or "").strip()
+            _ = MOVE_SUBTYPE_MAP.get(move_type, None)
+
+            defender = e.get("defenderId") or e.get("targetId")
+            if special_hit_counted_from_attempt(attacker, move_type):
+                agg[attacker]["hits_landed"] += 1
+                if defender:
+                    ensure(defender)
+                    agg[defender]["hits_received"] += 1
 
         elif etype == "Miss":
             attacker = e.get("attackerId") or e.get("playerId")
@@ -400,17 +441,22 @@ def extract_round_features(doc: Dict[str, Any], filename: str) -> List[Dict[str,
             move_type = str(e.get("moveType", "")).strip()
             source_type = str(e.get("sourceType", "")).strip()
             is_dot = (move_type == "PoisonTick") or (source_type == "Dot")
+            count_as_hit = (
+                not is_dot
+                and not is_damage_only_move(move_type, source_type)
+                and not is_special_damage_counted_from_attempt(attacker, move_type, source_type)
+            )
 
             if attacker:
                 ensure(attacker)
                 agg[attacker]["damage_dealt"] += dmg
-                if raw_dmg > 0 and not is_dot:
+                if raw_dmg > 0 and count_as_hit:
                     agg[attacker]["hits_landed"] += 1
 
             if defender:
                 ensure(defender)
                 agg[defender]["damage_taken"] += dmg
-                if not is_dot:
+                if count_as_hit:
                     agg[defender]["hits_received"] += 1
                     if blocked:
                         agg[defender]["blocked_hits_as_defender"] += 1
@@ -422,7 +468,7 @@ def extract_round_features(doc: Dict[str, Any], filename: str) -> List[Dict[str,
             ensure(pid)
 
     rows: List[Dict[str, Any]] = []
-    MIN_ACTIONS = 25
+    MIN_ACTIONS = 10
     MIN_DURATION = 5
     INVALID_PROFILES = {"GUEST", "UNKNOWN", "", "NONE", None}
 
@@ -449,6 +495,7 @@ def extract_round_features(doc: Dict[str, Any], filename: str) -> List[Dict[str,
         charge_rate = ratio(a["actions_charge"], a["actions_total"])
         projectile_rate = ratio(a["actions_projectile"], a["actions_total"])
         parry_rate = ratio(a["actions_parry"], a["actions_total"])
+        parry_attempt_rate = ratio(a["actions_parry_attempt"], a["actions_total"])
         total_offensive_outcomes = a["hits_landed"] + a["misses"]
         hit_rate = ratio(a["hits_landed"], total_offensive_outcomes)
         miss_rate = ratio(a["misses"], total_offensive_outcomes)
@@ -461,7 +508,7 @@ def extract_round_features(doc: Dict[str, Any], filename: str) -> List[Dict[str,
 
         risk_index = (
             0.20 * miss_rate +
-            0.40 * parry_rate +
+            0.40 * parry_attempt_rate +
             0.40 * charge_rate
         )
 
@@ -511,6 +558,7 @@ def extract_round_features(doc: Dict[str, Any], filename: str) -> List[Dict[str,
             "projectile_rate": projectile_rate,
             "risk_index": risk_index,
             "parry_rate": parry_rate,
+            "parry_attempt_rate": parry_attempt_rate,
         })
 
     return rows
@@ -590,7 +638,7 @@ def run_extractor(
     if bad_files:
         print(f"[INFO] Bad files skipped: {bad_files}")
 
-    MIN_MATCHES_PER_PROFILE = 5
+    MIN_MATCHES_PER_PROFILE = 3
     profile_match_counts = df_round.groupby("profile_id").size().reset_index(name="match_count")
 
     print("\n--- profile_match_counts ---")

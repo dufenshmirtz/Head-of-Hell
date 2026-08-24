@@ -111,6 +111,10 @@ def classify_style(row: pd.Series) -> str:
 # Style computation
 # --------------------------------------------------
 def compute_style_axes_from_profile_df(df: pd.DataFrame) -> pd.DataFrame:
+    out = df.copy()
+    if "ema_parry_attempt_rate" not in out.columns and "ema_parry_rate" in out.columns:
+        out["ema_parry_attempt_rate"] = out["ema_parry_rate"]
+
     required = [
         "ema_attack_rate",
         "ema_mobility_rate",
@@ -126,10 +130,9 @@ def compute_style_axes_from_profile_df(df: pd.DataFrame) -> pd.DataFrame:
         "ema_special_rate",
         "ema_charge_rate",
         "ema_parry_rate",
+        "ema_parry_attempt_rate",
     ]
-    validate_required_columns(df, required)
-
-    out = df.copy()
+    validate_required_columns(out, required)
 
     for col in required:
         out[col] = pd.to_numeric(out[col], errors="coerce").fillna(0.0)
@@ -161,7 +164,7 @@ def compute_style_axes_from_profile_df(df: pd.DataFrame) -> pd.DataFrame:
     out["Risk"] = (
         0.20 * out["ema_miss_rate"]
         + 0.20 * out["norm_ema_dps_taken"]
-        + 0.30 * out["ema_parry_rate"]
+        + 0.30 * out["ema_parry_attempt_rate"]
         + 0.30 * out["ema_charge_rate"]
     )
 
@@ -179,6 +182,10 @@ def compute_style_axes_from_profile_df(df: pd.DataFrame) -> pd.DataFrame:
 # Aggregation
 # --------------------------------------------------
 def build_profile_summary(df: pd.DataFrame) -> pd.DataFrame:
+    work = df.copy()
+    if "parry_attempt_rate" not in work.columns and "parry_rate" in work.columns:
+        work["parry_attempt_rate"] = work["parry_rate"]
+
     required = [
         "match_id",
         "profile_id",
@@ -200,10 +207,9 @@ def build_profile_summary(df: pd.DataFrame) -> pd.DataFrame:
         "special_rate",
         "charge_rate",
         "parry_rate",
+        "parry_attempt_rate",
     ]
-    validate_required_columns(df, required)
-
-    work = df.copy()
+    validate_required_columns(work, required)
 
     work["profile_id"] = work["profile_id"].fillna("UNKNOWN_PROFILE").astype(str)
     work["profile_name"] = work["profile_name"].fillna("UNKNOWN").astype(str)
@@ -226,6 +232,7 @@ def build_profile_summary(df: pd.DataFrame) -> pd.DataFrame:
         "special_rate",
         "charge_rate",
         "parry_rate",
+        "parry_attempt_rate",
     ]
     for col in numeric_cols:
         work[col] = pd.to_numeric(work[col], errors="coerce").fillna(0.0)
@@ -260,6 +267,7 @@ def build_profile_summary(df: pd.DataFrame) -> pd.DataFrame:
             ema_special_rate=("special_rate", "mean"),
             ema_charge_rate=("charge_rate", "mean"),
             ema_parry_rate=("parry_rate", "mean"),
+            ema_parry_attempt_rate=("parry_attempt_rate", "mean"),
         )
         .reset_index()
     )
