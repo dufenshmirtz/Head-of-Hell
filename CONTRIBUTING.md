@@ -1,6 +1,6 @@
 # Contributing
 
-This repository is still in active game development. Keep documentation cleanup, repository cleanup, asset changes, and gameplay changes separate whenever possible so the team can review each kind of change safely.
+This repository is in active game development. Keep documentation, repository cleanup, asset changes, and gameplay changes separate whenever possible.
 
 ## Unity Version
 
@@ -12,10 +12,10 @@ Open the Unity project from the `Head-of-Hell/` folder, not from the repository 
 
 - Use descriptive commit titles.
 - Add commit descriptions when the title alone does not explain the change.
-- Before merging a feature branch, update it with the latest main branch.
-- Consult the project lead before merging into the main branch.
+- Update feature branches with the latest default branch before merging.
+- Consult the project lead before merging into the default branch.
 - Do not rewrite shared history unless everyone affected understands the consequences.
-- Avoid mixing game logic changes with documentation or repository-cleanup commits.
+- Keep game logic changes separate from documentation or repository-cleanup commits.
 
 ## Coding Notes
 
@@ -27,13 +27,13 @@ These conventions are adapted from the original README's coding manifesto:
 - Opening braces for functions should go below the function declaration when matching the existing style.
 - Place comments above functions when they explain purpose or behavior.
 - Use inline comments only when they clarify code that would otherwise be hard to read.
-- Remove temporary test prints before committing.
+- Remove local test prints before committing.
 - Use test-only print statements for local debugging and `Debug.Log`, `Debug.LogWarning`, or `Debug.LogError` for meaningful runtime diagnostics.
 - Avoid vague counter names when a more descriptive name would make the code easier to understand.
 
 ## Repository Hygiene
 
-Do not commit generated Unity folders or local editor state:
+Generated Unity folders and local editor state are excluded from version control:
 
 - `Library/`
 - `Temp/`
@@ -46,14 +46,8 @@ Do not commit generated Unity folders or local editor state:
 - ML-Agents timer logs
 - local analysis outputs
 
-Generated ML-Agents result folders should normally stay out of Git. The exception is the curated `Head-of-Hell/Assets/results/hoh_run1/` run, which is intentionally kept for project history and portfolio context.
+The selected ML-Agents training run is stored at `Head-of-Hell/Assets/results/hoh_run1/`.
 
-Curated trained agents under `Head-of-Hell/Assets/SuccessfulAgents/` are project assets. Do not remove or rename them during cleanup without confirming with the team. This includes `AgentSmith3.2.onnx`.
+Curated trained agents are stored under `Head-of-Hell/Assets/SuccessfulAgents/`, including `AgentSmith3.2.onnx`.
 
-Large binary files, trained models, videos, audio files, and generated builds should be reviewed before committing. Use Git LFS when the team decides a large binary asset should remain in the repository.
-
-## Audio, Art, And License Review
-
-Some audio/music files are temporary placeholders for development and testing. Keep them available for the team, but do not treat them as cleared public-release assets until their licenses and credits are confirmed.
-
-Before public release or CV promotion, update `CREDITS.md` with third-party assets, music, sound effects, fonts, model sources, and tool credits.
+Git LFS is used for selected large binary assets and media files.
