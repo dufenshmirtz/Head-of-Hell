@@ -1,14 +1,32 @@
 # D.I.E.N.A.M.O.
 
-D.I.E.N.A.M.O. is a work-in-progress 2D Unity arena fighter by XLR8. The project focuses on fast local matches, character-specific abilities, custom match rules, player profiles, replays, telemetry, and experimental AI opponents trained with Unity ML-Agents.
+D.I.E.N.A.M.O. is a 2D Unity arena fighter by XLR8. The project focuses on fast local matches, character-specific abilities, custom match rules, player profiles, replays, telemetry, and AI opponents trained with Unity ML-Agents.
 
-This repository is still named `Head-of-Hell` in several folders because the game was developed under that working title. The intended public game name is `D.I.E.N.A.M.O.`
+The repository folder still uses `Head-of-Hell` in some paths because the game was originally developed under that working title. The intended public game name is `D.I.E.N.A.M.O.`
 
 ## Current Status
 
-This game is in active development. Balance, menus, art, audio, AI behavior, project settings, and internal naming are not final.
+D.I.E.N.A.M.O. is in active development and already includes playable local PvP and PvE flows, character selection, match customization, replays, profile data, and trained-agent integration.
 
-The repository is being cleaned up for portfolio/CV review, so the documentation is intentionally honest about unfinished areas while highlighting the systems that already exist.
+## Media
+
+| Gameplay | Ability Use |
+| --- | --- |
+| ![Gameplay screenshot](media/screenshots/gameplay-1.png) | ![Ability use screenshot](media/screenshots/ability-used.png) |
+
+| Player Profile Analysis | Match Tutorial Overlay |
+| --- | --- |
+| ![Player profile analysis](media/screenshots/player-profile-agent-smith-light-1.png) | ![Annotated arena view](media/screenshots/arena-guide.png) |
+
+Gameplay clips:
+
+- [Human vs Agent - Round 1](media/videos/human-vs-agent-round-1.mp4)
+- [Human vs Agent - Round 2](media/videos/human-vs-agent-round-2.mp4)
+
+Animated samples:
+
+- [Game Tutorial](media/gifs/game-tutorial.gif)
+- [Decision Complexity Sample](media/gifs/decision-complexity-sample.gif)
 
 ## Project Highlights
 
@@ -29,6 +47,10 @@ The repository is being cleaned up for portfolio/CV review, so the documentation
 |-- README.md
 |-- CREDITS.md
 |-- CONTRIBUTING.md
+|-- media/
+|   |-- gifs/
+|   |-- screenshots/
+|   `-- videos/
 |-- .gitattributes
 `-- Head-of-Hell/
     |-- .gitignore
@@ -65,7 +87,7 @@ The configured build scenes are:
 - Unity Input System `1.7.0`
 - Unity ML-Agents `2.0.2`
 - TextMeshPro
-- Git LFS for selected large media formats (`.mp3`, `.mp4`)
+- Git LFS for selected large media formats (`.mp3`, `.mp4`, `.gif`)
 
 ## Gameplay Overview
 
@@ -75,33 +97,27 @@ Match setup includes character selection, stage selection, and optional custom r
 
 Controls are assigned through player and character setup in the Unity scenes. The tutorial reads the active key bindings when prompting the player.
 
-## AI And Training Notes
+## AI And Training
 
 The repository includes two kinds of AI-related material:
 
 - Runtime/experimental AI code under `Assets/Scripts/RL/`.
 - Curated trained ONNX agents under `Assets/SuccessfulAgents/`, including `AgentSmith3.2.onnx`.
 
-Generated ML-Agents training outputs are intentionally not treated like normal source files. The preserved `Assets/results/hoh_run1/` folder is the curated training run kept for project history and portfolio context. Other generated result runs should stay out of Git unless the team deliberately decides otherwise.
+The preserved `Assets/results/hoh_run1/` folder contains the selected ML-Agents training run kept with the project.
 
-## Development Notes
+For the reinforcement-learning thesis materials and playable agent demo, see the companion repository:
 
-- This is a Unity project in progress, so generated folders such as `Library/`, `Temp/`, `Obj/`, `Logs/`, `UserSettings/`, build outputs, and ML-Agents timer logs should stay out of Git.
-- Large binary assets, trained models, builds, videos, and audio files should be reviewed before committing. Git LFS is already configured for `.mp3` and `.mp4`; additional binary formats can be added later if needed.
-- Some internal names still use `HoH`, `Head-of-Hell`, or `DefaultCompany`. Those can be aligned with `D.I.E.N.A.M.O.` when the team is ready to touch Unity settings and serialized scene/project data.
-- Some scripts and folders are experimental, obsolete, or temporary. They should be audited carefully before deletion because active development is still ongoing.
+- [RL-Agent Thesis](https://github.com/dufenshmirtz/RL-Agent-Thesis)
 
-## Before Linking This Repository In A CV
+## Repository Notes
 
-- Add screenshots, gameplay clips, or a short demo build once the current gameplay state is stable.
-- Finish the third-party asset, music, sound-effect, font, and model-license audit.
-- Decide whether the project will stay proprietary or receive an explicit open-source license.
-- Expand `CREDITS.md` with more specific implementation credits when the team is ready.
-- Align visible project metadata with `D.I.E.N.A.M.O.` when it is safe to touch Unity settings.
-- Keep cleanup changes separate from gameplay changes so reviewers can understand the development history.
+- Unity-generated cache folders and build outputs are excluded from version control.
+- Some paths still use `HoH` or `Head-of-Hell` because those names were part of the original project structure.
+- Runtime-trained agents are stored in `Head-of-Hell/Assets/SuccessfulAgents/`.
 
 ## Credits And License
 
 Team credits are listed in `CREDITS.md`.
 
-No open-source license has been selected yet. Unless a `LICENSE` file is added, the code, assets, models, audio, and other project materials are not licensed for reuse.
+No open-source license has been selected. Unless a `LICENSE` file is added, the code, assets, models, audio, and other project materials are not licensed for reuse.

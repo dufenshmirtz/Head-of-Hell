@@ -1,2 +1,10 @@
 *.mp3 filter=lfs diff=lfs merge=lfs -text
 *.mp4 filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+Head-of-Hell/Assets/StreamingAssets/Analysis/build/** linguist-generated=true
+Head-of-Hell/Assets/StreamingAssets/Analysis/dist/** linguist-generated=true
+Head-of-Hell/Assets/StreamingAssets/Analysis/out/** linguist-generated=true
+Head-of-Hell/Assets/StreamingAssets/Analysis/out_elo/** linguist-generated=true
+Head-of-Hell/Assets/StreamingAssets/Analysis/style_out/** linguist-generated=true
+Head-of-Hell/Assets/StreamingAssets/Analysis/style_maps/** linguist-generated=true
+Head-of-Hell/Assets/StreamingAssets/Analysis/player_style_maps/** linguist-generated=true

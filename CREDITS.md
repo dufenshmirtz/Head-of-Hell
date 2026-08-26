@@ -4,7 +4,7 @@
 
 ## Team Roles
 
-These roles are preserved from the original repository README and lightly cleaned for public readability:
+These roles are preserved from the original repository README:
 
 - Graphics and lore moderator: Giannis Chrysomallis
 - Graphics designer: Giorgos Benas
@@ -14,8 +14,6 @@ These roles are preserved from the original repository README and lightly cleane
 
 ## Project Contribution Areas
 
-The exact implementation breakdown should be confirmed by the team before public release. Current contribution areas include:
-
 - Gameplay design and local arena-fighter systems
 - Character design, character-specific abilities, and balance iteration
 - UI menus, player setup, profile flows, and tutorial flow
@@ -23,21 +21,15 @@ The exact implementation breakdown should be confirmed by the team before public
 - Replay recording and playback systems
 - Match telemetry and profile analysis tooling
 - Scripted bot and Unity ML-Agents experimentation
-- Art, animation, lore, sound effects, and temporary audio integration
+- Art, animation, lore, sound effects, and audio integration
 - Testing, playtesting, production support, and repository maintenance
 
-## AI And Model Notes
+## AI And Models
 
-The repository includes trained ONNX agents under `Head-of-Hell/Assets/SuccessfulAgents/`, including `AgentSmith3.2.onnx`. These are project assets and should not be reused outside this repository unless the project team gives permission.
+The repository includes trained ONNX agents under `Head-of-Hell/Assets/SuccessfulAgents/`, including `AgentSmith3.2.onnx`.
 
-The preserved `Head-of-Hell/Assets/results/hoh_run1/` training run is kept for project history and portfolio context. Other generated training runs are intentionally excluded from version control.
+The preserved `Head-of-Hell/Assets/results/hoh_run1/` training run is kept with the project.
 
-## Third-Party Asset And License Notes
+## License
 
-The third-party asset, font, music, sound-effect, model, and tool-license audit is still pending.
-
-Some music/audio files may be temporary development placeholders used for local testing. Do not assume they are cleared for redistribution, commercial use, or public release until the audit is complete.
-
-Until that audit is complete, assume that project assets are not available for reuse outside this repository.
-
-No open-source license has been selected yet. Unless a `LICENSE` file is added, the code, assets, models, audio, and other project materials are not licensed for reuse.
+No open-source license has been selected. Unless a `LICENSE` file is added, the code, assets, models, audio, and other project materials are not licensed for reuse.
