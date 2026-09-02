@@ -14,7 +14,7 @@ D.I.E.N.A.M.O. is in active development and already includes playable local PvP 
 | --- | --- |
 | ![Gameplay screenshot](media/screenshots/gameplay-1.png) | ![Ability use screenshot](media/screenshots/ability-used.png) |
 
-| Player Profile Analysis | Match Tutorial Overlay |
+| Player Profile Analysis | Match Overlay |
 | --- | --- |
 | ![Player profile analysis](media/screenshots/player-profile-agent-smith-light-1.png) | ![Annotated arena view](media/screenshots/arena-guide.png) |
 
