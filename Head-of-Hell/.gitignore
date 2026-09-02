@@ -82,3 +82,25 @@ crashlytics-build.properties
 !/[Aa]ssets/[Rr]esults/hoh_run1/**
 /[Aa]ssets/[Rr]esults/hoh_run1/run_logs/timers.json
 /[Aa]ssets/[Rr]esults/hoh_run1/run_logs/timers.json.meta
+
+# Python and PyInstaller-generated analysis artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/__pycache__/
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/__pycache__.meta
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/build/
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/build.meta
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/dist/
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/dist.meta
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/out/
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/out.meta
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/out_elo/
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/out_elo.meta
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/player_style_maps/
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/player_style_maps.meta
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/style_maps/
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/style_maps.meta
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/style_out/
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/style_out.meta

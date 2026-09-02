@@ -1,5 +1,0 @@
-profile_id,profile_name,style_label,matches_count,elo_rating,win_rate,hit_rate,miss_rate,avg_damage_dealt,avg_damage_taken,aggression_raw,defense_raw,mobility_raw,risk_raw,aggression,defense,mobility,risk,Aggression,Defense,Mobility,Risk,Aggression_norm,Defense_norm,Mobility_norm,Risk_norm,miss_rate_norm
-7b2d5b56-fb33-42ca-bb1c-ca8c3f246947,Saleaz,Defensive,50,1491.03,0.4,0.5008,0.4792,74.14,94.6,0.177,0.2848,0.5057,0.1952,0.0,1.0,0.5448,0.3045,0.177,0.2848,0.5057,0.1952,0.0,1.0,0.5448,0.3045,1.0
-a227ee27-cce6-458c-8465-49ed718d5bd9,ass,Aggressive-Risky,1,1500.0,0.5,1.0,0.0,84.5,84.5,0.4231,0.0227,0.4604,0.3131,0.7941,0.0,0.358,1.0,0.4231,0.0227,0.4604,0.3131,0.7941,0.0,0.358,1.0,0.0
-a227ee27-cce6-458c-8465-49ed718d5bd9,ceas,Aggressive,1,1500.0,0.0,0.8889,0.1111,110.0,0.0,0.4869,0.1377,0.3736,0.1436,1.0,0.4387,0.0,0.0,0.4869,0.1377,0.3736,0.1436,1.0,0.4387,0.0,0.0,0.2318447412353923
-7a3deb71-1a5e-4b42-a2d4-2fe4129134a1,koutaliaris,Mobile,50,1510.45,0.56,0.6399,0.3601,93.3,79.26,0.2033,0.246,0.616,0.1507,0.0847,0.8519,1.0,0.0422,0.2033,0.246,0.616,0.1507,0.0847,0.8519,1.0,0.0422,0.7514607679465776
