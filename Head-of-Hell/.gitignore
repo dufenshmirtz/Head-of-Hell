@@ -104,3 +104,7 @@ __pycache__/
 /[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/style_maps.meta
 /[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/style_out/
 /[Aa]ssets/[Ss]treaming[Aa]ssets/[Aa]nalysis/style_out.meta
+
+# Runtime-generated profile analysis data
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Pp]rofile[Aa]nalysis/profile_analysis.json
+/[Aa]ssets/[Ss]treaming[Aa]ssets/[Pp]rofile[Aa]nalysis/profile_analysis.json.meta

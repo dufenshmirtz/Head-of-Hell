@@ -121,3 +121,5 @@ For the reinforcement-learning thesis materials and playable agent demo, see the
 Team credits are listed in `CREDITS.md`.
 
 No open-source license has been selected. Unless a `LICENSE` file is added, the code, assets, models, audio, and other project materials are not licensed for reuse.
+
+Some music used during development is temporary placeholder material. That music is not owned by XLR8 or the D.I.E.N.A.M.O. project team and is not licensed for reuse.
